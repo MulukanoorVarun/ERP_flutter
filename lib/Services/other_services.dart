@@ -68,17 +68,17 @@ HeaderValues() async {
 //   return status;
 // }
 //
-// // toast(text) {
-// //     Fluttertoast.showToast(
-// //       msg: text,
-// //       toastLength: Toast.LENGTH_LONG,
-// //       gravity: ToastGravity.BOTTOM,
-// //       timeInSecForIosWeb: 1,
-// //       backgroundColor: Colors.grey,
-// //       textColor: Colors.white,
-// //       fontSize: 16.0
-// //   );
-// // }
+toast(text) {
+    Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.grey,
+      textColor: Colors.white,
+      fontSize: 16.0
+  );
+}
 //
 // toast(context,text) {
 //
@@ -94,50 +94,50 @@ HeaderValues() async {
 //   );
 // }
 //
-// Future<bool> CheckNetwork() async {
-//   var connectivityResult = await Connectivity().checkConnectivity();
-//   if (connectivityResult == ConnectivityResult.mobile ||
-//       connectivityResult == ConnectivityResult.wifi) {
-//     print("onnetwork");
-//     return true;
-//     // setLoader(true);
-//     // if (!mounted) return;
-//     // splashApiService(context, sessionId)
-//     //     .then((data) => {
-//     //   if (data != null)
-//     //     {
-//     //       if (data.error == 0)
-//     //         {
-//     //           _preferenceService.saveString(
-//     //               "walletAvailable", data.userWalletAvailable),
-//     //           _preferenceService.saveInt(
-//     //               "isAuctionAvailable", data.isAuctionsAvailable),
-//     //           Navigator.push(
-//     //               context,
-//     //               SlideRightRoute(
-//     //                   page: const Dashboard(
-//     //                     pageNum: 0,
-//     //                   ))),
-//     //         }
-//     //       else
-//     //         {showToast(data.message)},
-//     //       setState(() {}),
-//     //     },
-//     //   setLoader(false),
-//     // })
-//     //     .timeout(const Duration(seconds: connectionTimeOut), onTimeout: () {
-//     //   setLoader(false);
-//     //   throw TimeoutException(timeOutError);
-//     // }).catchError((err) {
-//     //   setLoader(false);
-//     //   showToast(err.toString());
-//     // });
-//   } else {
-//     print("networkgone");
-//     return false;
-//     // setConnectivityStatus(false);
-//   }
-// }
+Future<bool> CheckNetwork() async {
+  var connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.mobile ||
+      connectivityResult == ConnectivityResult.wifi) {
+    print("onnetwork");
+    return true;
+    // setLoader(true);
+    // if (!mounted) return;
+    // splashApiService(context, sessionId)
+    //     .then((data) => {
+    //   if (data != null)
+    //     {
+    //       if (data.error == 0)
+    //         {
+    //           _preferenceService.saveString(
+    //               "walletAvailable", data.userWalletAvailable),
+    //           _preferenceService.saveInt(
+    //               "isAuctionAvailable", data.isAuctionsAvailable),
+    //           Navigator.push(
+    //               context,
+    //               SlideRightRoute(
+    //                   page: const Dashboard(
+    //                     pageNum: 0,
+    //                   ))),
+    //         }
+    //       else
+    //         {showToast(data.message)},
+    //       setState(() {}),
+    //     },
+    //   setLoader(false),
+    // })
+    //     .timeout(const Duration(seconds: connectionTimeOut), onTimeout: () {
+    //   setLoader(false);
+    //   throw TimeoutException(timeOutError);
+    // }).catchError((err) {
+    //   setLoader(false);
+    //   showToast(err.toString());
+    // });
+  } else {
+    print("networkgone");
+    return false;
+    // setConnectivityStatus(false);
+  }
+}
 //
 // createdynamic_link(type,id,productName) async {
 //   String Link = "https://nutsby.com/product_details/$id/$productName";

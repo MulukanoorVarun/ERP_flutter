@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
+import 'Dashboard.dart';
 import 'Login.dart';
 
 class Splash extends StatefulWidget {
@@ -22,10 +23,10 @@ class _SplashState extends State<Splash>{
   }
 
   validate_and_run() async {
-    var tokenAvailable= await PreferenceService().getString("access_token");
+    var tokenAvailable= await PreferenceService().getString("token");
     if (tokenAvailable != null) {
-      // Navigator.push(context,
-      //     MaterialPageRoute(builder: (context) => const Dashboard()));
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) =>  Dashboard()));
     } else {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) =>  Login()));
