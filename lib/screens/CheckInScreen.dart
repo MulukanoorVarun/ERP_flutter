@@ -143,37 +143,43 @@ class _CheckInScreenState extends State<CheckInScreen> {
       setState(() {
         _image = File(galleryImage!.path);
         image_picked = 1;
-      //  CheckIn();
+        CheckIn();
       });
     } catch (e) {
       debugPrint("mmmm: ${e.toString()}");
     }
   }
+  String? empId;
+  String? sessionId;
+  Future<void> CheckIn() async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
+    try {
+      print(empId);
+      print(sessionId);
+      print(location);
+      print(latlongs);
+      print(_image);
+        // await UserApi.CheckInApi(empId,sessionId,location,latlongs,_image).then((data) => {
+        //   if (data != null)
+        //     {
+        //       setState(() {
+        //         if (data.error == 0) {
+        //
+        //         } else {
+        //           print(data.error.toString());
+        //         }
+        //       })
+        //     }
+        //   else
+        //     {
+        //       print("Something went wrong, Please try again.")}
+        // });
 
-  // Future<void> CheckIn() async {
-  //   try {
-  //       await UserApi.CheckInApi(empId,sessionId,location,latlongs,_image).then((data) => {
-  //         if (data != null)
-  //           {
-  //             setState(() {
-  //               if (data.error == 0) {
-  //                 Navigator.push(
-  //                     context,
-  //                     MaterialPageRoute(
-  //                         builder: (context) => Dashboard()));
-  //               } else {
-  //                 print(data.error.toString());
-  //               }
-  //             })
-  //           }
-  //         else
-  //           {print("Something went wrong, Please try again.")}
-  //       });
-  //
-  //   } on Exception catch (e) {
-  //     print("$e");
-  //   }
-  // }
+    } on Exception catch (e) {
+      print("$e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

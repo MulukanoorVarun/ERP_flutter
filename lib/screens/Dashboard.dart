@@ -83,7 +83,7 @@ class _DashboardState extends State<Dashboard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 50),
+                        SizedBox(height: 25),
                         Text(
                             DateFormat.yMMMMd().format(DateTime.now()),
                           style: GoogleFonts.ubuntu(
@@ -98,6 +98,7 @@ class _DashboardState extends State<Dashboard> {
                         SizedBox(height: 10),
                         Text(
                           "$username",
+                          maxLines: 2,
                           style: GoogleFonts.ubuntu(
                             textStyle: TextStyle(
                               fontSize: FontConstant.Size20,

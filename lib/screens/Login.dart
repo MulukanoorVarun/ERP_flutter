@@ -246,15 +246,15 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width:200,
+                  width:180,
                   height: 45,
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                  margin: EdgeInsets.only(right:5.0),
                   decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius: BorderRadius.circular(10.0)),
                   child:Text('$deviceId',style: GoogleFonts.ubuntu(
                     textStyle: TextStyle(
                       color: Colors.black,
-                      fontSize: FontConstant.Size20,
+                      fontSize: FontConstant.Size18,
 
                     ),
                   ),)
@@ -267,7 +267,7 @@ class _LoginState extends State<Login> {
                       Navigator.pop(context);
                       toast(context,"Device ID has been copied!");
                     },
-                    child: Icon(Icons.file_copy,color: Colors.grey,),
+                    child: Icon(Icons.file_copy,color: Colors.grey,size: 22,),
                   ),
                 ),
                 Spacer(),
@@ -277,7 +277,7 @@ class _LoginState extends State<Login> {
                         Share.share(
                             "$deviceId");
                       },
-                      child: Icon(Icons.share),
+                      child: Icon(Icons.share,size: 22),
                     )
                 ),
               ],

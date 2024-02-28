@@ -7,6 +7,8 @@ import 'package:GenERP/models/VersionsResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
+import '../models/CheckInResponse.dart';
+import '../models/CheckOutResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
@@ -104,6 +106,65 @@ class UserApi {
         print(res.body);
 
         return LogoutResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+
+  static Future<CheckInResponse?> CheckInApi(empId,sessioId,location,latlngs,File_a) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (sessioId).toString(),
+        'location': (location).toString(),
+        'posit': (latlngs).toString(),
+      };
+      final header = await getheader();
+      var res;
+      if (File_a != null) {
+        res = await postImage(data, checkInapi, header, File_a);
+        res = jsonDecode(res);
+      } else {
+        res = await post(data, checkInapi, header);
+        res = jsonDecode(res.body);
+      }
+      if (res != null) {
+        return CheckInResponse.fromJson(res);
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<CheckOutResponse?> CheckOutApi(empId,sessioId,location,latlngs,File_a) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (sessioId).toString(),
+        'location': (location).toString(),
+        'posit': (latlngs).toString(),
+      };
+      final header = await getheader();
+      var res;
+      if (File_a != null) {
+        res = await postImage(data, checkOutapi, header, File_a);
+        res = jsonDecode(res);
+      } else {
+        res = await post(data, checkInapi, header);
+        res = jsonDecode(res.body);
+      }
+      if (res != null) {
+        return CheckOutResponse.fromJson(res);
       } else {
         print("Null Response");
         return null;

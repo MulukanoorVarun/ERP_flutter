@@ -7,6 +7,8 @@ const getLoginStatus = "${baseUrl}auth/login";
 const getDashboardStatus = "${baseUrl}home/emp_dashboard";
 const loadProfileDetails = "${baseUrl}home/emp_profile";
 const getLogoutStatus = "${baseUrl}home/logout";
+const checkInapi = "${baseUrl}home/attendance_check_in";
+const checkOutapi = "${baseUrl}home/attendance_check_out";
 
 
 // const profile_details = "${baseUrl}profile_details";
