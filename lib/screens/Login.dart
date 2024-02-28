@@ -2,18 +2,16 @@ import 'dart:io';
 
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/Dashboard.dart';
-import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/splash.dart';
+import 'package:android_id/android_id.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
+import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -28,113 +26,136 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
-  String? deviceId = "";
-  String? _tokenId;
-  String? _deviceDetails;
+  String deviceId = "";
+  String _tokenId = "";
+  String _deviceDetails = "";
   bool? _passwordVisible = false;
   bool? _exit;
+  var _validateEmail;
+  var _validatepassword;
+  var _androidId = 'Unknown';
+  static const _androidIdPlugin = AndroidId();
 
-  final RegExp _emailPattern = RegExp(
-      r'^([\w.\-]+)@([\w\-]+)((\.(\w){2,63}){1,3})$'
-  );
+  final RegExp _emailPattern =
+      RegExp(r'^([\w.\-]+)@([\w\-]+)((\.(\w){2,63}){1,3})$');
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-  }
-  Future<String?> _getId() async {
-    var deviceInfo = DeviceInfoPlugin();
-    if (Platform.isIOS) { // import 'dart:io'
-      var iosDeviceInfo = await deviceInfo.iosInfo;
-      print(iosDeviceInfo.toString());
-      return iosDeviceInfo.identifierForVendor; // unique ID on iOS
-    } else if(Platform.isAndroid) {
-      var androidDeviceInfo = await deviceInfo.androidInfo;
-      print(androidDeviceInfo.toString());
-      return androidDeviceInfo.id; // unique ID on Android
+    if (Platform.isAndroid) {
+      _initAndroidId();
+    } else {
+      _getId();
     }
+  }
+
+  Future<String?> _getId() async {
+    var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
+    var iosDeviceInfo = await deviceInfo.iosInfo;
+    deviceId = iosDeviceInfo.identifierForVendor!;
+  }
+
+  Future<void> _initAndroidId() async {
+    String androidId;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    // We also handle the message potentially returning null.
+    try {
+      androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
+      deviceId = androidId;
+      print("littu" + deviceId);
+    } on PlatformException {
+      androidId = 'Failed to get Android ID.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() => _androidId = androidId);
   }
 
   Future<void> LoginApiFunction() async {
-    // print(validCharacters.hasMatch(namee.text));
+    try {
+      print(email.text);
+      print(password.text);
+      print(_tokenId);
+      print(deviceId);
+      print(_deviceDetails);
 
-    // if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text))
-    // {
-    //   _validateEmail = "*Please Enter Valid Email Address.";
-    //   toast(context, "please User Valid Email");
-    // } else if (namee.text.isEmpty || validName.hasMatch(namee.text) != true) {
-    //   _validateName = "*Please Enter a Valid Name";
-    //   toast(context, "Please Enter Name Correctly");
-    // }
-    if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text)) {
-      setState(() {
-        // _validateEmail = "*Please Enter a Valid Email Address";
-        // print(_validateEmail);
-      });
-      // toast(context,"Please Enter Valid Email");
-    } else {
-      // _validateEmail = "";
-    }
-    if (password.text.isEmpty) {
-      setState(() {
-        // _validateName = "*Please Enter Your Name";
-        // print(_validateName);
-      });
-      // toast(context,"Please Enter Name Correctly");
-    } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text) &&
-        password.text.isNotEmpty) {
-      setState(() {
-        // _validateName.isEmpty;
-        // _validateName = "";
-        // _validateEmail = "*Please Enter a Valid Email Address";
-        // print(_validateEmail);
-      });
-    } else if ((email.text.isNotEmpty) && password.text.isEmpty) {
-      setState(() {
-        // _validateEmail.isEmpty;
-        // _validateEmail = "";
-        // _validateName = "*Please Enter Your Name";
-        // print(_validateName + "kjfjk");
-      });
-    } else {
-      // _validateName = "";
-      // _validateEmail = " ";
-      // toast(otp);
-      String? fcmToken = " ";
-      if (Platform.isAndroid) {
-        // toast(context,"Android");
-        // platformname = "Android";
-        // fcmToken = await FirebaseMessaging.instance.getToken();
-      } else if (Platform.isIOS) {
-        // toast(context,"ios");
-        // platformname = "iOS";
-        // fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+      if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text)) {
+        setState(() {
+          _validateEmail = "*Please Enter a Valid Email Address";
+          print(_validateEmail);
+        });
+      } else {
+        _validateEmail = "";
       }
+      if (password.text.isEmpty) {
+        setState(() {
+          _validatepassword = "*Please Enter Your Password";
+          print(_validatepassword);
+        });
+      } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text) &&
+          password.text.isNotEmpty) {
+        setState(() {
+          // _validateName.isEmpty;
+          // _validateName = "";
+          // _validateEmail = "*Please Enter a Valid Email Address";
+          // print(_validateEmail);
+        });
+      } else if ((email.text.isNotEmpty) && password.text.isEmpty) {
+        setState(() {
+          // _validateEmail.isEmpty;
+          // _validateEmail = "";
+          // _validateName = "*Please Enter Your Name";
+          // print(_validateName + "kjfjk");
+        });
+      } else {
+        _validatepassword = "";
+        _validateEmail = " ";
 
-      await UserApi.LoginFunctionApi(email.text,password.text,_tokenId.toString(),deviceId.toString(),_deviceDetails.toString())
-          .then((data) => {
-        if (data != null)
-          {
-
-            setState(() {
-              if (data.error == "0") {
-                PreferenceService().saveString("token", data.sessionId.toString());
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>  Dashboard()));
-              } else {
-                print(data.error.toString());
-              }
-            })
-          }
-        else
-          {print( "Something went wrong, Please try again.")}
-      });
+        String? fcmToken = " ";
+        if (Platform.isAndroid) {
+          // toast(context,"Android");
+          // platformname = "Android";
+          // fcmToken = await FirebaseMessaging.instance.getToken();
+        } else if (Platform.isIOS) {
+          // toast(context,"ios");
+          // platformname = "iOS";
+          // fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+        }
+        await UserApi.LoginFunctionApi(
+                email.text,
+                password.text,
+                _tokenId.toString() ?? "",
+                deviceId.toString() ?? "",
+                _deviceDetails.toString() ?? "")
+            .then((data) => {
+                  if (data != null)
+                    {
+                      setState(() {
+                        if (data.error == 0) {
+                          PreferenceService()
+                              .saveString("Session_id", data.sessionId!);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Splash()));
+                        } else {
+                          print(data.error.toString());
+                        }
+                      })
+                    }
+                  else
+                    {print("Something went wrong, Please try again.")}
+                });
+      }
+    } on Exception catch (e) {
+      print("$e");
     }
   }
-
 
   Future<bool> _onBackPressed() async {
     return await showDialog<bool>(
@@ -193,134 +214,185 @@ class _LoginState extends State<Login> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return WillPopScope(onWillPop: _onBackPressed, child: Scaffold(
-      resizeToAvoidBottomInset: true,
-      backgroundColor: Colors.white,
-      body: Container(
-        child: Expanded(
-            child: Column(children: [
-              Container(
-                margin: EdgeInsets.only(top: 50.0),
-                alignment: Alignment.center,
-                child: Image(
-                  alignment: Alignment.center,
-                  height: 200,
-                  width: 200,
-                  image: AssetImage("assets/images/ic_login.png"),
-                ),
-              ),
-              SizedBox(
-                height: 15.0,
-              ),
-              Padding(
-                padding: EdgeInsets.all(5.0),
-                child: Text(
-                  "Sign In",
-                  style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                          color: ColorConstant.erp_appColor,
-                          fontSize: FontConstant.Size25,
-                          decoration: TextDecoration.underline)),
-                ),
-              ),
-              SizedBox(height: 10.0,),
-              Container(
-                height: 45,
-                alignment: Alignment.center,
-                margin:EdgeInsets.only(left:15.0,right:15.0),
-                child: TextFormField(
-                  controller: email,
-                  cursorColor: ColorConstant.black,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hintText: "Enter Email",
-                    hintStyle: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                          fontSize: FontConstant.Size15,
-                          color: ColorConstant.Textfield,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    filled: true,
-                    fillColor: ColorConstant.edit_bg_color,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 1, color: ColorConstant.edit_bg_color),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 1, color: ColorConstant.edit_bg_color),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 1, color: ColorConstant.edit_bg_color),
+    return WillPopScope(
+        onWillPop: _onBackPressed,
+        child: Scaffold(
+            resizeToAvoidBottomInset: true,
+            backgroundColor: Colors.white,
+            body: SingleChildScrollView(
+              physics: FixedExtentScrollPhysics(),
+              child: Container(
+                child: Expanded(
+                    child: Column(children: [
+                  Container(
+                    margin: EdgeInsets.only(top: 50.0),
+                    alignment: Alignment.center,
+                    child: Image(
+                      alignment: Alignment.center,
+                      height: 200,
+                      width: 200,
+                      image: AssetImage("assets/images/ic_login.png"),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 15.0,),
-              Container(
-                height: 45,
-                alignment: Alignment.center,
-                margin:EdgeInsets.only(left:15.0,right:15.0),
-                child: TextFormField(
-                  controller: password,
-                  cursorColor: ColorConstant.black,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    hintText: "Enter Password",
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        (_passwordVisible!) ? Icons.visibility : Icons.visibility_off,
+                  SizedBox(
+                    height: 15.0,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5.0),
+                    child: Text(
+                      "Sign In",
+                      style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: ColorConstant.erp_appColor,
+                              fontSize: FontConstant.Size25,
+                              decoration: TextDecoration.underline)),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  Container(
+                    height: 45,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      controller: email,
+                      cursorColor: ColorConstant.black,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: "Enter Email",
+                        hintStyle: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              fontSize: FontConstant.Size15,
+                              color: ColorConstant.Textfield,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        filled: true,
+                        fillColor: ColorConstant.edit_bg_color,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                              width: 1, color: ColorConstant.edit_bg_color),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                              width: 1, color: ColorConstant.edit_bg_color),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide:
+                              BorderSide(width: 1, color: ColorConstant.red),
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !(_passwordVisible!);
-                        });
-                      },
-                    ),
-                    hintStyle: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                          fontSize: FontConstant.Size15,
-                          color: ColorConstant.Textfield,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    filled: true,
-                    fillColor: ColorConstant.edit_bg_color,
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 0, color: ColorConstant.edit_bg_color),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 0, color: ColorConstant.edit_bg_color),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                          width: 0, color: ColorConstant.edit_bg_color),
+                      minLines: 1,
                     ),
                   ),
-                ),
-              ),
-              SizedBox(height: 25.0,),
-              Container(
-                  child: InkWell(
-                    onTap: (){
-                      // LoginApiFunction();
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
-
+                  if (_validateEmail != null) ...[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(top: 2.5, bottom: 2.5,left:25),
+                      child: Text(
+                        _validateEmail,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.red,
+                            fontSize: FontConstant.Size10,
+                          ),
+                        ),
+                      ),
+                    )
+                  ] else ...[
+                    SizedBox(
+                      height: 15.0,
+                    ),
+                  ],
+                  Container(
+                    height: 45,
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      controller: password,
+                      obscureText: !(_passwordVisible!),
+                      cursorColor: ColorConstant.black,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        hintText: "Enter Password",
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            (_passwordVisible!)
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !(_passwordVisible!);
+                            });
+                          },
+                        ),
+                        hintStyle: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              fontSize: FontConstant.Size15,
+                              color: ColorConstant.Textfield,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        filled: true,
+                        fillColor: ColorConstant.edit_bg_color,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                              width: 0, color: ColorConstant.edit_bg_color),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                              width: 0, color: ColorConstant.edit_bg_color),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                          borderSide: BorderSide(
+                              width: 0, color: ColorConstant.edit_bg_color),
+                        ),
+                      ),
+                      minLines: 1,
+                    ),
+                  ),
+                  if (_validatepassword != null) ...[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(top: 2.5, bottom: 2.5,left:25),
+                      child: Text(
+                        _validatepassword,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                            color: Colors.red,
+                            fontSize: FontConstant.Size10,
+                          ),
+                        ),
+                      ),
+                    )
+                  ] else ...[
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                  ],
+                  Container(
+                      child: InkWell(
+                    onTap: () {
+                      LoginApiFunction();
+                      // Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
                     },
                     child: Container(
                       alignment: Alignment.center,
                       height: 45,
                       width: screenWidth,
-                      margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                      decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(30.0), ),
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      decoration: BoxDecoration(
+                        color: ColorConstant.erp_appColor,
+                        borderRadius: BorderRadius.circular(30.0),
+                      ),
                       child: Text(
                         "Login",
                         textAlign: TextAlign.center,
@@ -328,34 +400,37 @@ class _LoginState extends State<Login> {
                           textStyle: TextStyle(
                             color: ColorConstant.white,
                             fontSize: FontConstant.Size20,
-                          ),),
+                          ),
+                        ),
                       ),
                     ),
-                  )
-              ),
-              SizedBox(height: 60.0,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  InkWell(
-                    onTap: (){
-
-                    },
-                    child: SvgPicture.asset("assets/images/ic_mobile_mobile.svg",width: 40,height: 40),
+                  )),
+                  SizedBox(
+                    height: 60.0,
                   ),
-
-                ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: SvgPicture.asset(
+                            "assets/images/ic_mobile_mobile.svg",
+                            width: 40,
+                            height: 40),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 100),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Image(
+                      image: AssetImage("assets/images/poweredby.png"),
+                      width: 80,
+                      height: 40,
+                    ),
+                  )
+                ])),
               ),
-              SizedBox(height: 100),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image(image: AssetImage("assets/images/poweredby.png"),width: 80,height: 40,),
-              )
-
-
-            ])),
-      ),
-    ));
-
+            )));
   }
 }

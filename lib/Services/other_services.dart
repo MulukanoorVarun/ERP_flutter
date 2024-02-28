@@ -21,17 +21,29 @@ import 'package:fluttertoast/fluttertoast.dart';
 //   return b;
 // }
 
-
-HeaderValues() async {
-  Map<String, String> ValueArray = {
-    "client-id":"37662aa448b2ac44dcf400df14f965f4b8852cb3"
-  };
-  final accessToken = await PreferenceService().getString("access_token");
-  if(accessToken!="" && accessToken!=null)
-    {
-      ValueArray['Authorization']="Bearer $accessToken";
-    }
-  return ValueArray;
+//
+// HeaderValues() async {
+//   Map<String, String> ValueArray = {
+//     "client-id":"37662aa448b2ac44dcf400df14f965f4b8852cb3"
+//   };
+//   final accessToken = await PreferenceService().getString("access_token");
+//   if(accessToken!="" && accessToken!=null)
+//     {
+//       ValueArray['Authorization']="Bearer $accessToken";
+//     }
+//   return ValueArray;
+// }
+getheader() async {
+  // CartCountFun();
+  final Ssessionid = await PreferenceService().getString("token");
+  // print("Akash ${Ssessionid} Mohan");
+  // var pincode = await PreferenceService().getString('PostCode');
+  // if (pincode == null) {
+  //   pincode = "500038";
+  // }
+  // print("Akash ${pincode} Mohan");
+  // Map<String, String> a = {authorization: Ssessionid!, "postcode": pincode!};
+  // return a;
 }
 //
 //
