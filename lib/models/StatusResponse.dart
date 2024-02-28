@@ -9,6 +9,10 @@ class StatusResponse {
   String? name;
   String? emailId;
   List<String>? permissions;
+  int? attStatus;
+  String? appRequestAutostart;
+  String? notificationsCount;
+  int? sessionExists;
 
   StatusResponse(
       {this.error,
@@ -20,7 +24,11 @@ class StatusResponse {
         this.userId,
         this.name,
         this.emailId,
-        this.permissions});
+        this.permissions,
+        this.attStatus,
+        this.appRequestAutostart,
+        this.notificationsCount,
+        this.sessionExists});
 
   StatusResponse.fromJson(Map<String, dynamic> json) {
     error = json['error'];
@@ -33,6 +41,10 @@ class StatusResponse {
     name = json['name'];
     emailId = json['email_id'];
     permissions = json['permissions'].cast<String>();
+    attStatus = json['att_status'];
+    appRequestAutostart = json['app_request_autostart'];
+    notificationsCount = json['notifications_count'];
+    sessionExists = json['session_exists'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +59,10 @@ class StatusResponse {
     data['name'] = this.name;
     data['email_id'] = this.emailId;
     data['permissions'] = this.permissions;
+    data['att_status'] = this.attStatus;
+    data['app_request_autostart'] = this.appRequestAutostart;
+    data['notifications_count'] = this.notificationsCount;
+    data['session_exists'] = this.sessionExists;
     return data;
   }
 }

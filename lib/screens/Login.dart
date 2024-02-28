@@ -4,6 +4,7 @@ import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:android_id/android_id.dart';
+import 'package:click_to_copy/click_to_copy.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:share_plus/share_plus.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -49,6 +51,8 @@ class _LoginState extends State<Login> {
       _getId();
     }
   }
+
+
 
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
@@ -137,8 +141,18 @@ class _LoginState extends State<Login> {
                     {
                       setState(() {
                         if (data.error == 0) {
-                          PreferenceService()
-                              .saveString("Session_id", data.sessionId!);
+                          PreferenceService().saveInt("loginStatus", 1);
+                          PreferenceService().saveString("UserId", data.userId!);
+                          PreferenceService().saveString("UserName", data.name!);
+                          PreferenceService().saveString("UserEmail", data.emailId!);
+                          PreferenceService().saveString("Session_id", data.sessionId!);
+                          print(data.userId);
+                          print(data.name);
+                          print(data.emailId);
+                          print(data.sessionId);
+                          var roles = data.permissions!.toString();
+                          PreferenceService().saveString("roles", roles);
+
                           Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -208,6 +222,70 @@ class _LoginState extends State<Login> {
         false;
   }
 
+  Future DeviceDialogue() async {
+    return await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0)
+            ),
+            title: Align(
+              alignment: Alignment.center,
+              child:Text('Device ID',style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size25,
+                  fontWeight: FontWeight.w500,
+                    decoration: TextDecoration.underline
+                ),
+              ),)
+            ),
+            content: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width:200,
+                  height: 45,
+                  alignment: Alignment.center,
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                  decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius: BorderRadius.circular(10.0)),
+                  child:Text('$deviceId',style: GoogleFonts.ubuntu(
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: FontConstant.Size20,
+
+                    ),
+                  ),)
+                ),
+                Spacer(),
+                Container(
+                  child: InkWell(
+                    onTap: () async {
+                      await ClickToCopy.copy(deviceId.trim());
+                      Navigator.pop(context);
+                      toast(context,"Device ID has been copied!");
+                    },
+                    child: Icon(Icons.file_copy,color: Colors.grey,),
+                  ),
+                ),
+                Spacer(),
+                Container(
+                    child: InkWell(
+                      onTap: (){
+                        Share.share(
+                            "$deviceId");
+                      },
+                      child: Icon(Icons.share),
+                    )
+                ),
+              ],
+            ),
+          ),
+          barrierDismissible: true,
+        ) ??
+        false;
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
@@ -220,7 +298,7 @@ class _LoginState extends State<Login> {
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
-              physics: FixedExtentScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               child: Container(
                 child: Expanded(
                     child: Column(children: [
@@ -381,8 +459,8 @@ class _LoginState extends State<Login> {
                   Container(
                       child: InkWell(
                     onTap: () {
-                      //LoginApiFunction();
-                       Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
+                      LoginApiFunction();
+                      //  Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
                     },
                     child: Container(
                       alignment: Alignment.center,
@@ -412,7 +490,9 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          DeviceDialogue();
+                        },
                         child: SvgPicture.asset(
                             "assets/images/ic_mobile_mobile.svg",
                             width: 40,
@@ -432,5 +512,11 @@ class _LoginState extends State<Login> {
                 ])),
               ),
             )));
+  }
+  @override
+  void dispose() {
+    email.dispose();
+    password.dispose();
+    super.dispose();
   }
 }

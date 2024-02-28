@@ -1,11 +1,15 @@
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
+import 'package:GenERP/models/LogoutDialogue.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Services/user_api.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/storage.dart';
 import 'UpdatePassword.dart';
 
 class Profile extends StatefulWidget {
@@ -16,10 +20,78 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  var username = "";
+  var email = "";
+  var loginStatus = 0;
+  var curdate = "";
+  var empId = "";
+  var session = "";
+  var profileImage = "";
+  var company = "";
+  var branch = "";
+  var designation = "";
+  var mobile_num = "";
+  var latestversion = "";
+  var releaseNotes = "";
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    ProfileApiFunction();
+    VersionApiFunction();
+  }
+
+  Future<void> ProfileApiFunction() async {
+    try {
+      loginStatus = await PreferenceService().getInt("loginStatus") ?? 0;
+      empId = await PreferenceService().getString("UserId") ?? "";
+      username = await PreferenceService().getString("UserName") ?? "";
+      email = await PreferenceService().getString("UserEmail") ?? "";
+      session = await PreferenceService().getString("Session_id") ?? "";
+      await UserApi.ProfileFunctionApi(empId ?? "", session ?? "")
+          .then((data) => {
+                if (data != null)
+                  {
+                    setState(() {
+                      if (data.sessionExists == 1) {
+                        profileImage = data.profilePic ?? "";
+                        company = data.company ?? "";
+                        branch = data.branchName ?? "";
+                        designation = data.designation ?? "";
+                        mobile_num = data.mobileNo ?? "";
+                      } else if (data.sessionExists == 0) {
+                        PreferenceService().clearPreferences();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Splash()));
+                        print(data.toString());
+                      }
+                    })
+                  }
+                else
+                  {print("Something went wrong, Please try again.")}
+              });
+    } on Exception catch (e) {
+      print("$e");
+    }
+  }
+
+  Future<void> VersionApiFunction() async {
+    try {
+      await UserApi.versionApi().then((data) => {
+            if (data != null)
+              {
+                setState(() {
+                  latestversion = data.latestVersion ?? "";
+                  releaseNotes = data.releaseNotes ?? "";
+                })
+              }
+            else
+              {print("Something went wrong, Please try again.")}
+          });
+    } on Exception catch (e) {
+      print("$e");
+    }
   }
 
   @override
@@ -83,29 +155,82 @@ class _ProfileState extends State<Profile> {
           // color: ColorConstant.erp_appColor,
           child: Stack(
             children: [
+              Positioned(
+                top: -50,
+                right: 10,
+                left: 10,
+                child: Container(
+                  alignment: Alignment.topCenter,
+                  child: (profileImage.isNotEmpty)
+                      ? Image(
+                          image: NetworkImage(profileImage),
+                          fit: BoxFit.fitWidth,
+                        )
+                      : Image(
+                          image: AssetImage("assets/images/default_pic.jpeg"),
+                        ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0))),
+                ),
+              ),
               Container(
                 alignment: Alignment.topCenter,
-
-                child: Image(
-                  image: AssetImage("assets/images/default_pic.jpeg"),
-                  fit: BoxFit.fitWidth,
-                ),
+                child: SvgPicture.asset("assets/images/top_bar_profile.svg",
+                    width: screenWidth, fit: BoxFit.fill),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30.0),
                         topRight: Radius.circular(30.0))),
               ),
               Container(
-                alignment: Alignment.topCenter,
-                child: SvgPicture.asset("assets/images/top_bar_profile.svg",
-                    width: screenWidth, fit: BoxFit.fill),
-              ),
-              Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.12, left: 10.0),
-                  child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage:
-                          AssetImage("assets/images/default_pic.jpeg"))),
+                  child: (profileImage.isNotEmpty)
+                      ? CircleAvatar(
+                          radius: 50,
+                          backgroundImage: NetworkImage(profileImage))
+                      : CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              AssetImage("assets/images/default_pic.jpeg"),
+                        )),
+              Container(
+                margin: EdgeInsets.only(
+                    top: screenHeight * 0.15, left: screenWidth * 0.3),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "$username",
+                        maxLines: 2,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size20,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        "$email",
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size15,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               Container(
                   margin: EdgeInsets.only(top: screenHeight * 0.23),
                   alignment: Alignment.bottomCenter,
@@ -114,79 +239,193 @@ class _ProfileState extends State<Profile> {
                       SvgPicture.asset("assets/images/bottom_bar_profile.svg",
                           width: screenWidth, fit: BoxFit.fill),
                       Positioned(
-                        top: 50,
-                        // Adjust the position of the text as needed
-                        left: 25,
-                        // You can also adjust left, right, or center as needed
-                        right: 0,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              "Company",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    color: ColorConstant.grey_153,
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                            Text(
-                              "Branch",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    color: ColorConstant.grey_153,
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                            Text(
-                              "Designation",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    color: ColorConstant.grey_153,
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                            Text(
-                              "Employee Id",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    color: ColorConstant.grey_153,
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                            Text(
-                              "Mobile Number",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    color: ColorConstant.grey_153,
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Positioned(
-                          bottom: 25,
+                          top: 50,
                           // Adjust the position of the text as needed
-                          left: 0,
+                          left: 25,
                           // You can also adjust left, right, or center as needed
                           right: 0,
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 50,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Company",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$company",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Branch",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$branch",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Designation*",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    width: screenWidth * 0.5,
+                                    child: Text(
+                                      "$designation",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Employee Id",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    width: 150,
+                                    child: Text(
+                                      "$empId",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    width: 150,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Mobile Number",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$mobile_num",
+                                      textAlign: TextAlign.start,
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
+                      Positioned(
+                          bottom: 100,
+                          left: 50,
+                          right: 50,
                           child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdatePassword()));
+                            onTap: () async {
+                              var res = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return LogoutDialogue();
+                                },
+                              );
                             },
                             child: Container(
                               alignment: Alignment.center,
@@ -204,6 +443,25 @@ class _ProfileState extends State<Profile> {
                                     color: ColorConstant.white,
                                     fontSize: FontConstant.Size20,
                                   ),
+                                ),
+                              ),
+                            ),
+                          )),
+                      Positioned(
+                          bottom: 50,
+                          left: 50,
+                          right: 50,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 45,
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: Text(
+                              "Version $releaseNotes",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  color: ColorConstant.grey_153,
+                                  fontSize: FontConstant.Size15,
                                 ),
                               ),
                             ),

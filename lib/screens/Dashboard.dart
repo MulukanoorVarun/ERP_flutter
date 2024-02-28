@@ -1,11 +1,16 @@
+import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/attendance_screen.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
+import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/storage.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -15,10 +20,47 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  var username="";
+  var email="";
+  var loginStatus=0;
+  var curdate="";
+  var empId="";
+  var session="";
+  var online_status = 0;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    DashboardApiFunction();
+  }
+
+  Future<void> DashboardApiFunction() async {
+    try{
+      loginStatus= await PreferenceService().getInt("loginStatus")??0;
+      empId= await PreferenceService().getString("UserId")??"";
+      username = await PreferenceService().getString("UserName")??"";
+      email = await PreferenceService().getString("UserEmail")??"";
+      session = await PreferenceService().getString("Session_id")??"";
+    await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
+      if (data != null)
+        {
+          setState(() {
+            if (data.sessionExists == 1) {
+              online_status = data.attStatus??0;
+
+            } else if (data.sessionExists == 0) {
+              PreferenceService().clearPreferences();
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
+              print(data.toString());
+            }
+          })
+        }
+      else
+        {print("Something went wrong, Please try again.")}
+    });
+        }on Exception catch (e) {
+      print("$e");
+    }
   }
 
   @override
@@ -41,9 +83,9 @@ class _DashboardState extends State<Dashboard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 20),
+                        SizedBox(height: 50),
                         Text(
-                          "27th February 24",
+                            DateFormat.yMMMMd().format(DateTime.now()),
                           style: GoogleFonts.ubuntu(
                             textStyle: TextStyle(
                               fontSize: FontConstant.Size13,
@@ -55,7 +97,7 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          "Varun.m - GENIT",
+                          "$username",
                           style: GoogleFonts.ubuntu(
                             textStyle: TextStyle(
                               fontSize: FontConstant.Size20,
@@ -66,6 +108,7 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         SizedBox(height: 10),
+                        (online_status==0)?
                         Row(
                           children: [
                             Container(
@@ -81,8 +124,31 @@ class _DashboardState extends State<Dashboard> {
                               "Offline",
                               style: GoogleFonts.ubuntu(
                                 textStyle: TextStyle(
-                                  fontSize: FontConstant.Size18,
-                                  fontWeight: FontWeight.w500,
+                                  fontSize: FontConstant.Size15,
+                                  fontWeight: FontWeight.w400,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ):Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.green,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Text(
+                              "Online",
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  fontSize: FontConstant.Size15,
+                                  fontWeight: FontWeight.w400,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 color: Colors.white,
@@ -98,16 +164,30 @@ class _DashboardState extends State<Dashboard> {
                       children: [
                         Padding(padding: EdgeInsets.only(top: 30)),
                         Row(children: [
-                          SvgPicture.asset(
+                          Container(
+                            child: InkWell(
+                              onTap: (){
+                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                              },
+                              child:SvgPicture.asset(
                             "assets/images/qr_scanner.svg",
                             height: 35,
                             width: 35,
                           ),
+                                ),
+                              ),
                           SizedBox(width: 20),
-                          SvgPicture.asset(
-                            "assets/images/profile_icon.svg",
-                            height: 30,
-                            width: 35,
+                          Container(
+                            child: InkWell(
+                              onTap: (){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                              },
+                              child:SvgPicture.asset(
+                                "assets/images/profile_icon.svg",
+                                height: 30,
+                                width: 35,
+                              ) ,
+                            ),
                           ),
                           SizedBox(width: 10),
                         ]),

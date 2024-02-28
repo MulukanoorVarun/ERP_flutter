@@ -1,5 +1,9 @@
 import 'dart:convert';
+import 'package:GenERP/models/DashboardResponse.dart';
+import 'package:GenERP/models/LogoutResponse.dart';
+import 'package:GenERP/models/ProfileResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
+import 'package:GenERP/models/VersionsResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
@@ -9,22 +13,22 @@ import 'other_services.dart';
 
 
 class UserApi {
-  // static Future<NetBankingBanksModel?> NetBankingBanksApi(header) async {
-  //   try {
-  //     final res = await get(NetBankingBanksApiName, header);
-  //     if (res != null) {
-  //       // print(res.body);
-  //       return NetBankingBanksModel.fromJson(jsonDecode(res.body));
-  //     } else {
-  //       print("Null Response");
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     debugPrint('hello bev=bug $e ');
-  //     return null;
-  //   }
-  // }
-  //
+  static Future<VersionsResponse?> versionApi() async {
+    try {
+      final res = await post({}, getUpdateStatus, {});
+      if (res != null) {
+        print(res.body);
+
+        return VersionsResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
   static Future<StatusResponse?> LoginFunctionApi(email,password,token,deviceID,deviceInfo) async {
     try {
       Map<String, String> data = {
@@ -49,8 +53,71 @@ class UserApi {
     }
   }
 
+  static Future<DashboardResponse?> DashboardFunctionApi(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data, getDashboardStatus, {});
+      if (res != null) {
+        print(res.body);
 
-  // static Future<CartTotalModel?> CartTotalCountsApi() async {
+        return DashboardResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<ProfileResponse?> ProfileFunctionApi(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data, loadProfileDetails, {});
+      if (res != null) {
+        print(res.body);
+
+        return ProfileResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+  static Future<LogoutResponse?> LogoutFunctionApi(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data, getLogoutStatus, {});
+      if (res != null) {
+        print(res.body);
+
+        return LogoutResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+
+
+// static Future<CartTotalModel?> CartTotalCountsApi() async {
   //   try {
   //     final header = await HeaderValues();
   //     final res = await post({}, CartTotalCountsApiName, header);

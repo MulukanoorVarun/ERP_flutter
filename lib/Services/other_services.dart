@@ -80,31 +80,31 @@ getheader() async {
 //   return status;
 // }
 //
-toast(text) {
-    Fluttertoast.showToast(
-      msg: text,
-      toastLength: Toast.LENGTH_LONG,
-      gravity: ToastGravity.BOTTOM,
-      timeInSecForIosWeb: 1,
-      backgroundColor: Colors.grey,
-      textColor: Colors.white,
-      fontSize: 16.0
-  );
-}
-//
-// toast(context,text) {
-//
-//   // OwnToast(context, text, "0");
-//   Fluttertoast.showToast(
+// toast(text) {
+//     Fluttertoast.showToast(
 //       msg: text,
 //       toastLength: Toast.LENGTH_LONG,
 //       gravity: ToastGravity.BOTTOM,
 //       timeInSecForIosWeb: 1,
-//       backgroundColor: ColorConstant.DarkOrange,
+//       backgroundColor: Colors.black,
 //       textColor: Colors.white,
 //       fontSize: 16.0
 //   );
 // }
+//
+toast(context,text) {
+
+  // OwnToast(context, text, "0");
+  Fluttertoast.showToast(
+      msg: text,
+      toastLength: Toast.LENGTH_LONG,
+      gravity: ToastGravity.BOTTOM,
+      timeInSecForIosWeb: 1,
+      backgroundColor: Colors.black45,
+      textColor: Colors.white,
+      fontSize: 15.0,
+  );
+}
 //
 Future<bool> CheckNetwork() async {
   var connectivityResult = await Connectivity().checkConnectivity();
