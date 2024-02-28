@@ -381,8 +381,8 @@ class _LoginState extends State<Login> {
                   Container(
                       child: InkWell(
                     onTap: () {
-                      LoginApiFunction();
-                      // Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
+                      //LoginApiFunction();
+                       Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
                     },
                     child: Container(
                       alignment: Alignment.center,
