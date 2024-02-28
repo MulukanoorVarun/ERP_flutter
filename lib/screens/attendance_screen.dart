@@ -1,4 +1,5 @@
 import 'package:GenERP/screens/CheckInScreen.dart';
+import 'package:GenERP/screens/CheckOutScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -78,7 +79,7 @@ class _AttendanceState extends State<Attendance> {
                         children: [
                           InkWell(
                             onTap: (){
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
                             },
                             child:Container(
                               alignment: Alignment.center,

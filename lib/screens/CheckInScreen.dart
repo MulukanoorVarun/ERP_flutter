@@ -160,21 +160,21 @@ class _CheckInScreenState extends State<CheckInScreen> {
       print(location);
       print(latlongs);
       print(_image);
-        // await UserApi.CheckInApi(empId,sessionId,location,latlongs,_image).then((data) => {
-        //   if (data != null)
-        //     {
-        //       setState(() {
-        //         if (data.error == 0) {
-        //
-        //         } else {
-        //           print(data.error.toString());
-        //         }
-        //       })
-        //     }
-        //   else
-        //     {
-        //       print("Something went wrong, Please try again.")}
-        // });
+        await UserApi.CheckInApi(empId,sessionId,location,latlongs,_image).then((data) => {
+          if (data != null)
+            {
+              setState(() {
+                if (data.error == 0) {
+
+                } else {
+                  print(data.error.toString());
+                }
+              })
+            }
+          else
+            {
+              print("Something went wrong, Please try again.")}
+        });
 
     } on Exception catch (e) {
       print("$e");

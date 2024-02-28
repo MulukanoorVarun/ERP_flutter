@@ -92,6 +92,7 @@ dependencies:
   android_id: ^0.3.6
   click_to_copy: ^0.0.1
   flutter_sharing_intent: ^1.1.1
+  web_socket_channel: ^2.4.0
 
 
 dev_dependencies:

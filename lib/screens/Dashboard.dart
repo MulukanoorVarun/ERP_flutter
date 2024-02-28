@@ -6,11 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
+
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -20,6 +23,8 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
+  // final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
   var username="";
   var email="";
   var loginStatus=0;
@@ -27,8 +32,10 @@ class _DashboardState extends State<Dashboard> {
   var empId="";
   var session="";
   var online_status = 0;
+
+
   @override
-  void initState() {
+  void initState()  {
     // TODO: implement initState
     super.initState();
     DashboardApiFunction();
@@ -41,6 +48,7 @@ class _DashboardState extends State<Dashboard> {
       username = await PreferenceService().getString("UserName")??"";
       email = await PreferenceService().getString("UserEmail")??"";
       session = await PreferenceService().getString("Session_id")??"";
+
     await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
       if (data != null)
         {
@@ -67,7 +75,6 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: ColorConstant.edit_bg_color,
-      // Set your desired height here
       body:SafeArea(
         child: Container(
           color:ColorConstant.erp_appColor,
@@ -246,7 +253,9 @@ class _DashboardState extends State<Dashboard> {
                     ),
                       ),
                       SizedBox(height: 15,),
-                      Container(
+                      InkWell(
+
+                      child:Container(
                         height: 80,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -275,6 +284,7 @@ class _DashboardState extends State<Dashboard> {
                           ],
                         ),
 
+                      ),
                       ),
                       SizedBox(height: 15,),
 

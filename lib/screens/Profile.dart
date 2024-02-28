@@ -4,10 +4,12 @@ import 'package:GenERP/models/LogoutDialogue.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../Services/user_api.dart';
+import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import 'UpdatePassword.dart';
@@ -74,6 +76,109 @@ class _ProfileState extends State<Profile> {
     } on Exception catch (e) {
       print("$e");
     }
+  }
+
+  Future<void> LogoutApiFunction() async {
+    print("lohi");
+    try{
+      await UserApi.LogoutFunctionApi(empId??"",session??"").then((data) => {
+        if (data != null)
+          {
+            setState(() {
+              if (data.error == 0) {
+                PreferenceService().clearPreferences();
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Splash()));
+              } else {
+                print(data.toString());
+              }
+            })
+          }
+        else
+          {print("Something went wrong, Please try again.")}
+      });
+    }on Exception catch (e) {
+      print("$e");
+    }
+  }
+  Future LogoutDialogue() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+        ),
+        elevation: 20,
+        shadowColor: Colors.black,
+        title: Align(
+            alignment: Alignment.topLeft,
+            child:Text('Confirm Log Out',style: GoogleFonts.ubuntu(
+              textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size22,
+                fontWeight: FontWeight.w200
+              ),
+            ),)
+        ),
+        content: Container(
+                width:400,
+                height: 75,
+                alignment: Alignment.center,
+                child:Text('$username you are signing out from  $appName app on this device ',
+                  maxLines:4,style: GoogleFonts.ubuntu(
+                  textStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: FontConstant.Size18,
+                    fontWeight: FontWeight.w100
+
+                  ),
+                ),)
+
+        ),
+        actions: [
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white70),
+            ),
+            onPressed: () =>
+            {
+              print("littu"),
+              LogoutApiFunction()
+            },
+
+            child: Text(
+              "LOG OUT",
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: ColorConstant.black,
+                  fontWeight: FontWeight.w100,
+                  fontSize: FontConstant.Size15,
+                ),
+              ),
+            ),
+          ),
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white),
+            ),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              "CANCEL",
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: ColorConstant.black,
+                  fontWeight: FontWeight.w100,
+                  fontSize: FontConstant.Size15,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      barrierDismissible: false,
+    ) ??
+        false;
   }
 
   Future<void> VersionApiFunction() async {
@@ -262,7 +367,7 @@ class _ProfileState extends State<Profile> {
                                         textStyle: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ),
                                   ),
@@ -294,7 +399,7 @@ class _ProfileState extends State<Profile> {
                                         textStyle: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ),
                                   ),
@@ -326,7 +431,7 @@ class _ProfileState extends State<Profile> {
                                         textStyle: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ),
                                   ),
@@ -360,7 +465,7 @@ class _ProfileState extends State<Profile> {
                                         textStyle: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ),
                                   ),
@@ -393,7 +498,7 @@ class _ProfileState extends State<Profile> {
                                         textStyle: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
-                                            fontWeight: FontWeight.w500),
+                                            fontWeight: FontWeight.w300),
                                       ),
                                     ),
                                   ),
@@ -419,13 +524,8 @@ class _ProfileState extends State<Profile> {
                           left: 50,
                           right: 50,
                           child: InkWell(
-                            onTap: () async {
-                              var res = await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return LogoutDialogue();
-                                },
-                              );
+                            onTap: ()  {
+                              LogoutDialogue();
                             },
                             child: Container(
                               alignment: Alignment.center,

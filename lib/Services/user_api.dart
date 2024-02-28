@@ -12,7 +12,6 @@ import '../models/CheckOutResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
-  static String? get getLogoutStatus => null;
 
   static Future<VersionsResponse?> versionApi() async {
     try {
@@ -101,7 +100,7 @@ class UserApi {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
       };
-      final res = await post(data, getLogoutStatus!, {});
+      final res = await post(data, getLogoutStatus, {});
       if (res != null) {
         print(res.body);
 
@@ -128,13 +127,14 @@ class UserApi {
       final header = await getheader();
       var res;
       if (File_a != null) {
-        res = await postImage(data, checkInapi, header, File_a);
+        res = await postImage(data, checkInapi, {}, File_a);
         res = jsonDecode(res);
       } else {
-        res = await post(data, checkInapi, header);
+        res = await post(data, checkInapi, {});
         res = jsonDecode(res.body);
       }
       if (res != null) {
+        print(res);
         return CheckInResponse.fromJson(res);
       } else {
         print("Null Response");
@@ -153,17 +153,15 @@ class UserApi {
         'session_id': (sessioId).toString(),
         'location': (location).toString(),
         'posit': (latlngs).toString(),
+        'check_out_pic':File_a.toString()
       };
-      final header = await getheader();
       var res;
+
       if (File_a != null) {
-        res = await postImage(data, checkOutapi, header, File_a);
-        res = jsonDecode(res);
-      } else {
-        res = await post(data, checkInapi, header);
-        res = jsonDecode(res.body);
-      }
-      if (res != null) {
+
+          res = await postImage(data, checkOutapi, {}, File_a);
+          res = jsonDecode(res);
+
         return CheckOutResponse.fromJson(res);
       } else {
         print("Null Response");

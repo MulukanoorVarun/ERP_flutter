@@ -6,6 +6,7 @@ var validName = RegExp(r'^[a-zA-Z ]+$');
 // var PhonePeSaltKey="099eb0cd-02cf-4e2a-8aca-3e6c6aff0399";
 // var PhonePeSaltIndex="1";
 var AppId="in.webgrid.generp";
+var appName = "GEN ERP";
 double subtextSize = 10;
 const imageQuality = 50;
 // List<String> Sort_by = ["Default","Popularity","Newest First","Price:Low to High","Price:High to Low","Discount:Low to High","Discount:High to Low","Average Rating"];

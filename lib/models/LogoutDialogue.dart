@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
+import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import '../screens/splash.dart';
@@ -68,82 +69,70 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
     Size size = MediaQuery.of(context).size;
     return AlertDialog(
       backgroundColor:   ColorConstant.Fillcolor,
-      title: Text('Notify on Product Avaiable',style: GoogleFonts.ubuntu(
-          textStyle: TextStyle(
-              fontSize: FontConstant.Size15,
-              fontWeight: FontWeight.bold,
-              overflow: TextOverflow.ellipsis),
-          color: Colors.black)),
-      content:SizedBox(
-        height: 200,
-        width: size.width,
-        child:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Divider(thickness: 0.5,color: Colors.grey,),
-            const SizedBox(height: 5,),
-            Container(
-              child: Text("We are thrilled to let you know when the product is available. Stay tuned for the good news! Have a good day :)",
-                  style: TextStyle(fontSize: FontConstant.Size15,color: Colors.grey),maxLines: 4,textAlign: TextAlign.justify),
+      title: Align(
+          alignment: Alignment.topLeft,
+          child:Text('Confirm Log Out',style: GoogleFonts.ubuntu(
+            textStyle: TextStyle(
+                color: Colors.black,
+                fontSize: FontConstant.Size22,
+                fontWeight: FontWeight.w200
             ),
-            const SizedBox(height: 5,),
-            const Divider(thickness: 0.5,color: Colors.grey,),
-            const SizedBox(height: 5,),
-            Container(
-              alignment: Alignment.bottomRight,
-              child: InkWell(
-                onTap: () async {
-                  setState(() {
+          ),)
+      ),
+      content: Container(
+          width:400,
+          height: 75,
+          alignment: Alignment.center,
+          child:Text('$username you are signing out from  $appName app on this device ',
+            maxLines:4,style: GoogleFonts.ubuntu(
+              textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size18,
+                  fontWeight: FontWeight.w100
 
-                  });
-                  // var res= await showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return RequestSubmittedDialogue();
-                  //   },
-                  // );
-                  // if(res){
-                  //   isLoading = true;
-                  // }else{
-                  //   toast(context, "it's false");
-                  // }
-
-
-                },
-                child:
-                Container(
-                  width: 145,
-                  height: 35,
-                  // padding:,
-                  decoration: BoxDecoration(
-                      borderRadius:
-                      BorderRadius.circular(
-                          5),
-                      color: Colors
-                          .orange),
-                  child: const Row(
-                    mainAxisAlignment:
-                    MainAxisAlignment
-                        .center,
-                    children: [
-                      Text(
-                        "Click Here!",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500),
-                      )
-                    ],
-                  ),
-                ),
               ),
-            )
-
-
-          ],
-        ),
+            ),)
 
       ),
-
+      actions: [
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            overlayColor: MaterialStateProperty.all(Colors.white70),
+          ),
+          onPressed: () {
+            print("pressed");
+            LogoutApiFunction();
+          },
+          child: Text(
+            "LOG OUT",
+            style: GoogleFonts.ubuntu(
+              textStyle: TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+              ),
+            ),
+          ),
+        ),
+        TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(Colors.white),
+            overlayColor: MaterialStateProperty.all(Colors.white),
+          ),
+          onPressed: () => Navigator.of(context).pop(false),
+          child: Text(
+            "CANCEL",
+            style: GoogleFonts.ubuntu(
+              textStyle: TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+              ),
+            ),
+          ),
+        ),
+      ],
 
     );
   }
