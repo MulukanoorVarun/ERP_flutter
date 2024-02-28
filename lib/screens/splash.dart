@@ -23,8 +23,8 @@ class _SplashState extends State<Splash>{
   }
 
   validate_and_run() async {
-    var tokenAvailable= await PreferenceService().getString("token");
-    if (tokenAvailable != null) {
+    var SessionAvailable= await PreferenceService().getString("Session_id");
+    if (SessionAvailable != null) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) =>  Dashboard()));
     } else {

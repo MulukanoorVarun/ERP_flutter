@@ -34,8 +34,7 @@ class UserApi {
         'device_id': (deviceID).toString(),
         'device_details': (deviceInfo).toString()
       };
-      final header = await HeaderValues();
-      final res = await post(data, getLoginStatus,header);
+      final res = await post(data, getLoginStatus, {});
       if (res != null) {
         print(res.body);
 
