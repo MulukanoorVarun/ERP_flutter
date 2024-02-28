@@ -1,3 +1,4 @@
+import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -304,13 +305,13 @@ class _AddAccountState extends State<AddAccount>{
                       Container(
                           child: InkWell(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>GenTracker()));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                             },
                             child: Container(
                               alignment: Alignment.center,
                               height: 45,
                               margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                              decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(30.0), ),
+                              decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(30.0),),
                               child: Text(
                                 "SAVE",
                                 textAlign: TextAlign.center,
