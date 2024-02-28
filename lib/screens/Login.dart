@@ -240,6 +240,7 @@ class _LoginState extends State<Login> {
                 ),
               ),)
             ),
+
             content: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
