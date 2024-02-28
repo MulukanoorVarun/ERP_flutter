@@ -9,10 +9,9 @@ import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
-
-
-
 class UserApi {
+  static String? get getLogoutStatus => null;
+
   static Future<VersionsResponse?> versionApi() async {
     try {
       final res = await post({}, getUpdateStatus, {});
@@ -100,7 +99,7 @@ class UserApi {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
       };
-      final res = await post(data, getLogoutStatus, {});
+      final res = await post(data, getLogoutStatus!, {});
       if (res != null) {
         print(res.body);
 

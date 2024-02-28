@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:ui';
+import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:GenERP/screens/Dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
@@ -10,6 +12,7 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
 import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
@@ -17,17 +20,22 @@ import 'package:url_launcher/url_launcher.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
+import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
+import '../Utils/storage.dart';
+import 'CheckOutScreen.dart';
+import 'LocationService.dart';
 
 class CheckInScreen extends StatefulWidget {
   const CheckInScreen({Key? key}) : super(key: key);
-
   @override
   State<CheckInScreen> createState() => _CheckInScreenState();
 }
 
 class _CheckInScreenState extends State<CheckInScreen> {
+  final ImagePicker _picker = ImagePicker();
+  late LocationService locationService;
   TextEditingController location = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
@@ -44,9 +52,13 @@ class _CheckInScreenState extends State<CheckInScreen> {
   bool isLocationEnabled = false;
   bool hasLocationPermission = false;
   Timer? _timer;
+  File? _image;
+  var image_picked = 0;
+
   @override
   void initState() {
     _getLocationPermission();
+    locationService = LocationService();
     super.initState();
   }
 
@@ -119,6 +131,49 @@ class _CheckInScreenState extends State<CheckInScreen> {
     Navigator.pop(context, true);
     return true;
   }
+
+  _imgFromCamera() async {
+    // Capture a photo
+    try {
+      final XFile? galleryImage = await _picker.pickImage(
+        source: ImageSource.camera,
+        imageQuality: imageQuality,
+      );
+      print("added");
+      setState(() {
+        _image = File(galleryImage!.path);
+        image_picked = 1;
+      //  CheckIn();
+      });
+    } catch (e) {
+      debugPrint("mmmm: ${e.toString()}");
+    }
+  }
+
+  // Future<void> CheckIn() async {
+  //   try {
+  //       await UserApi.CheckInApi(empId,sessionId,location,latlongs,_image).then((data) => {
+  //         if (data != null)
+  //           {
+  //             setState(() {
+  //               if (data.error == 0) {
+  //                 Navigator.push(
+  //                     context,
+  //                     MaterialPageRoute(
+  //                         builder: (context) => Dashboard()));
+  //               } else {
+  //                 print(data.error.toString());
+  //               }
+  //             })
+  //           }
+  //         else
+  //           {print("Something went wrong, Please try again.")}
+  //       });
+  //
+  //   } on Exception catch (e) {
+  //     print("$e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -254,8 +309,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                               child:InkWell(
-                                onTap: (){
-                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
+                                onTap: () async {
+                                  _imgFromCamera();
                                 },
                                 child:Container(
                                   alignment: Alignment.center,
