@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "329382566569",
+    "project_id": "generp-fe09d",
+    "storage_bucket": "generp-fe09d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329382566569:android:26dc8519537b04deff67b8",
+        "android_client_info": {
+          "package_name": "in.webgrid.generp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329382566569-8jbs6iqbaqbp5ntkhb1ai5bs3g4kkm95.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329382566569-8jbs6iqbaqbp5ntkhb1ai5bs3g4kkm95.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -25,11 +25,20 @@ class UserApi {
   //   }
   // }
   //
-  static Future<StatusResponse?> LoginFunctionApi() async {
+  static Future<StatusResponse?> LoginFunctionApi(email,password,token,deviceID,deviceInfo) async {
     try {
+      Map<String, String> data = {
+        'email_id': (email).toString(),
+        'password': (password).toString(),
+        'token_id': (token).toString(),
+        'device_id': (deviceID).toString(),
+        'device_details': (deviceInfo).toString()
+      };
       final header = await HeaderValues();
-      final res = await post({}, getLoginStatus,header);
+      final res = await post(data, getLoginStatus,header);
       if (res != null) {
+        print(res.body);
+
         return StatusResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
@@ -40,6 +49,7 @@ class UserApi {
       return null;
     }
   }
+
 
   // static Future<CartTotalModel?> CartTotalCountsApi() async {
   //   try {

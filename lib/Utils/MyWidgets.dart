@@ -78,7 +78,7 @@ sha256Encode(credentials) {
 
 AppBar appBar(BuildContext context, String title) {
   return AppBar(
-    backgroundColor: Colors.white,
+    backgroundColor: ColorConstant.erp_appColor,
     elevation: 0,
     title: Container(
         child: Row(
@@ -90,7 +90,7 @@ AppBar appBar(BuildContext context, String title) {
             child: Text(title,
                 textAlign: TextAlign.left,
                 style: GoogleFonts.ubuntu(
-                  color: ColorConstant.accent_color,
+                  color: ColorConstant.white,
                   fontSize: FontConstant.Size18,
                   fontWeight: FontWeight.w500,
                 )),
@@ -112,7 +112,7 @@ AppBar appBar(BuildContext context, String title) {
         onTap: () => Navigator.pop(context, true),
         child: const Icon(
           Icons.arrow_back_ios,
-          color: Colors.black,
+          color: Colors.white,
           size: 24.0,
         ),
       ),
