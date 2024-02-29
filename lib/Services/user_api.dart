@@ -7,6 +7,7 @@ import 'package:GenERP/models/VersionsResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
+import '../models/AttendanceListResponse.dart';
 import '../models/CheckInResponse.dart';
 import '../models/CheckOutResponse.dart';
 import 'api_calls.dart';
@@ -163,6 +164,27 @@ class UserApi {
           res = jsonDecode(res);
 
         return CheckOutResponse.fromJson(res);
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+
+  static Future<AttendanceDashboard?>AttendanceListApi(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data,attendanceListapi, {});
+      if (res != null) {
+        print(res.body);
+        return AttendanceDashboard.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;

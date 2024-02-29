@@ -35,7 +35,6 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
-  late StopLocationService stoplocationService;
   TextEditingController location = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
@@ -58,7 +57,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   void initState() {
     _getLocationPermission();
-    stoplocationService = StopLocationService();
     super.initState();
   }
 
@@ -164,7 +162,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           {
             setState(() {
               if (data.error == 0) {
-
+                BackgroundLocation.stopLocationService();
               } else {
                 print(data.error.toString());
               }
@@ -315,8 +313,6 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   child:InkWell(
                                     onTap: (){
                                       _imgFromCamera();
-                                     // stoplocationService.stopLocationService();
-                                    //  Navigator.push(context,MaterialPageRoute(builder: (context)=>LocationService()));
                                     },
                                     child:Container(
                                       alignment: Alignment.center,

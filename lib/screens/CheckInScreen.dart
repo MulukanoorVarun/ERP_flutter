@@ -26,6 +26,8 @@ import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import 'CheckOutScreen.dart';
 import 'LocationService.dart';
+import 'background_service.dart';
+
 
 class CheckInScreen extends StatefulWidget {
   const CheckInScreen({Key? key}) : super(key: key);
@@ -35,7 +37,7 @@ class CheckInScreen extends StatefulWidget {
 
 class _CheckInScreenState extends State<CheckInScreen> {
   final ImagePicker _picker = ImagePicker();
-  late LocationService locationService;
+ // late LocationService locationService;
   TextEditingController location = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
@@ -58,7 +60,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   @override
   void initState() {
     _getLocationPermission();
-    locationService = LocationService();
+  //  locationService = LocationService();
     super.initState();
   }
 
@@ -165,7 +167,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
             {
               setState(() {
                 if (data.error == 0) {
-
+                  BackgroundLocation.startLocationService();
                 } else {
                   print(data.error.toString());
                 }
@@ -316,7 +318,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                               child:InkWell(
                                 onTap: () async {
-                                  _imgFromCamera();
+                                  BackgroundLocation.stopLocationService();
+                                 // _imgFromCamera();
                                 },
                                 child:Container(
                                   alignment: Alignment.center,

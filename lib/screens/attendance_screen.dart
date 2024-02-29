@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/storage.dart';
+import '../models/AttendanceListResponse.dart';
 
 class Attendance extends StatefulWidget {
   const Attendance({Key? key}) : super(key: key);
@@ -16,11 +19,41 @@ class Attendance extends StatefulWidget {
 }
 
 class _AttendanceState extends State<Attendance> {
+  List<AttHistory> attHistory=[];
+  int attStatus=0;
   @override
   void initState() {
+    getAttendanceList();
     super.initState();
-
   }
+
+  String? empId;
+  String? sessionId;
+  Future<void> getAttendanceList() async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
+    try {
+      print(empId);
+      print(sessionId);
+      await UserApi.AttendanceListApi(empId,sessionId).then((data) => {
+        if (data != null)
+          {
+            setState(() {
+              attHistory=data.attHistory!;
+              attStatus=data.attStatus!;
+            })
+          }
+        else
+          {
+            print("Something went wrong, Please try again.")}
+      });
+
+    } on Exception catch (e) {
+      print("$e");
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +110,10 @@ class _AttendanceState extends State<Attendance> {
                       padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
                       child: Column(// Set max height constraints
                         children: [
+                          if(attStatus==0)...[
                           InkWell(
                             onTap: (){
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
+                              Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
                             },
                             child:Container(
                               alignment: Alignment.center,
@@ -101,10 +135,36 @@ class _AttendanceState extends State<Attendance> {
                                       color: ColorConstant.white,
                                     ),
                                   ),
-
-
                             ),
                           ),
+                          ]else...[
+                            InkWell(
+                              onTap: (){
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
+                              },
+                              child:Container(
+                                alignment: Alignment.center,
+                                height: 55,
+                                width: screenWidth,
+                                margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.erp_appColor,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                child:Text(
+                                  "Check Out",
+                                  style: GoogleFonts.ubuntu(
+                                    textStyle: TextStyle(
+                                      fontSize: FontConstant.Size20,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    color: ColorConstant.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                           SizedBox(height: 15,),
 
                           Row(
@@ -143,7 +203,7 @@ class _AttendanceState extends State<Attendance> {
 
                           Expanded(
                             child: GridView.builder(
-                                itemCount: 3,
+                                itemCount: attHistory.length,
                                 gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: (MediaQuery.of(context).size.width < 600)
@@ -187,8 +247,9 @@ class _AttendanceState extends State<Attendance> {
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
+                                                  SizedBox(width: 5,),
                                                   Text(
-                                                    " 27 Feb 24",
+                                                    "${attHistory[index].date}",
                                                     style: GoogleFonts.ubuntu(
                                                       textStyle: TextStyle(
                                                         fontSize: FontConstant.Size15,
@@ -215,8 +276,9 @@ class _AttendanceState extends State<Attendance> {
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
+                                                  SizedBox(width: 5,),
                                                   Text(
-                                                    " ",
+                                                    "${attHistory[index].checkInTime}",
                                                     style: GoogleFonts.ubuntu(
                                                       textStyle: TextStyle(
                                                         fontSize: FontConstant.Size15,
@@ -244,8 +306,9 @@ class _AttendanceState extends State<Attendance> {
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
+                                                  SizedBox(width: 5,),
                                                   Text(
-                                                    "",
+                                                    "${attHistory[index].checkOutTime}",
                                                     style: GoogleFonts.ubuntu(
                                                       textStyle: TextStyle(
                                                         fontSize: FontConstant.Size15,

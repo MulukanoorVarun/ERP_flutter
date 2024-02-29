@@ -9,6 +9,7 @@ const loadProfileDetails = "${baseUrl}home/emp_profile";
 const getLogoutStatus = "${baseUrl}home/logout";
 const checkInapi = "${baseUrl}home/attendance_check_in";
 const checkOutapi = "${baseUrl}home/attendance_check_out";
+const attendanceListapi = "${baseUrl}home/attendance_dashboard";
 
 
 // const profile_details = "${baseUrl}profile_details";
