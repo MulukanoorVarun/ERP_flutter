@@ -124,8 +124,8 @@ class UserApi {
         'session_id': (sessioId).toString(),
         'location': (location).toString(),
         'posit': (latlngs).toString(),
+        'check_in_pic':File_a.toString()
       };
-      final header = await getheader();
       var res;
       if (File_a != null) {
         res = await postImage(data, checkInapi, {}, File_a);

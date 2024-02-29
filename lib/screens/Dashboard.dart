@@ -1,4 +1,5 @@
 import 'package:GenERP/screens/Profile.dart';
+import 'package:GenERP/screens/WebERP.dart';
 import 'package:GenERP/screens/attendance_screen.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,7 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/api_names.dart';
 import '../Utils/storage.dart';
 
 
@@ -24,7 +26,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
-  // final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
+  final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
   var username="";
   var email="";
   var loginStatus=0;
@@ -32,7 +34,7 @@ class _DashboardState extends State<Dashboard> {
   var empId="";
   var session="";
   var online_status = 0;
-
+  var webPageUrl = "";
 
   @override
   void initState()  {
@@ -48,6 +50,15 @@ class _DashboardState extends State<Dashboard> {
       username = await PreferenceService().getString("UserName")??"";
       email = await PreferenceService().getString("UserEmail")??"";
       session = await PreferenceService().getString("Session_id")??"";
+      if (await PreferenceService().getString("redirectUrl") == null) {
+        webPageUrl =
+        "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
+      } else {
+        webPageUrl =
+        "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
+      }
+
+      print("session"+session);
 
     await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
       if (data != null)
@@ -254,6 +265,12 @@ class _DashboardState extends State<Dashboard> {
                       ),
                       SizedBox(height: 15,),
                       InkWell(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                          );
+                        },
 
                       child:Container(
                         height: 80,
@@ -285,6 +302,13 @@ class _DashboardState extends State<Dashboard> {
                         ),
 
                       ),
+
+                      ),
+                      StreamBuilder(
+                        stream: channel.stream,
+                        builder: (context, snapshot) {
+                          return Text(snapshot.hasData ? '${snapshot.data}' : '');
+                        },
                       ),
                       SizedBox(height: 15,),
 

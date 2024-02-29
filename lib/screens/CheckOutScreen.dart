@@ -35,7 +35,7 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
-  TextEditingController location = TextEditingController();
+  TextEditingController _locationController = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
@@ -154,10 +154,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     try {
       print(empId);
       print(sessionId);
-      print(location);
+      print(_locationController.text);
       print(latlongs);
       print(_image);
-      await UserApi.CheckOutApi(empId,sessionId,location,latlongs,_image).then((data) => {
+      await UserApi.CheckOutApi(empId,sessionId,_locationController.text,latlongs,_image).then((data) => {
         if (data != null)
           {
             setState(() {
@@ -276,7 +276,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                     height: 50,
                                     width: 320,
                                     child:TextFormField(
-                                      controller: location,
+                                      controller: _locationController,
                                       cursorColor: ColorConstant.black,
                                       keyboardType: TextInputType.text,
                                       decoration: InputDecoration(
