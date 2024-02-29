@@ -13,8 +13,10 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/MyWidgets.dart';
 import '../Utils/api_names.dart';
 import '../Utils/storage.dart';
+import 'Login.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -35,6 +37,7 @@ class _DashboardState extends State<Dashboard> {
   var session="";
   var online_status = 0;
   var webPageUrl = "";
+  bool isLoading = true;
 
   @override
   void initState()  {
@@ -65,11 +68,11 @@ class _DashboardState extends State<Dashboard> {
         {
           setState(() {
             if (data.sessionExists == 1) {
+              isLoading = false;
               online_status = data.attStatus??0;
-
             } else if (data.sessionExists == 0) {
               PreferenceService().clearPreferences();
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
               print(data.toString());
             }
           })
@@ -82,246 +85,268 @@ class _DashboardState extends State<Dashboard> {
     }
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      DashboardApiFunction();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: ColorConstant.edit_bg_color,
-      body:SafeArea(
-        child: Container(
-          color:ColorConstant.erp_appColor,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topCenter,
-                color: ColorConstant.erp_appColor,
-                height: MediaQuery.of(context).size.height * 0.20,
-                child: Row(
+          body:(isLoading)?Loaders():
+           SafeArea(
+              child: Container(
+                color:ColorConstant.erp_appColor,
+                child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 25),
-                        Text(
-                            DateFormat.yMMMMd().format(DateTime.now()),
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size13,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            color: Colors.grey,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        Text(
-                          "$username",
-                          maxLines: 2,
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size20,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        (online_status==0)?
-                        Row(
-                          children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.orangeAccent,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Offline",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.ellipsis,
+                    Container(
+                      alignment: Alignment.topCenter,
+                      color: ColorConstant.erp_appColor,
+                      height: MediaQuery.of(context).size.height * 0.20,
+                      child: Row(
+                        children: [
+                          Padding(padding: EdgeInsets.only(left: 20)),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 25),
+                              Text(
+                                DateFormat.yMMMMd().format(DateTime.now()),
+                                style: GoogleFonts.ubuntu(
+                                  textStyle: TextStyle(
+                                    fontSize: FontConstant.Size13,
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  color: Colors.grey,
                                 ),
-                                color: Colors.white,
                               ),
-                            ),
-                          ],
-                        ):Row(
-                          children: [
-                            Container(
-                              width: 20,
-                              height: 20,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.green,
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              "Online",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.ellipsis,
+                              SizedBox(height: 10),
+                              Text(
+                                "$username",
+                                maxLines: 2,
+                                style: GoogleFonts.ubuntu(
+                                  textStyle: TextStyle(
+                                    fontSize: FontConstant.Size20,
+                                    fontWeight: FontWeight.bold,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  color: Colors.white,
                                 ),
-                                color: Colors.white,
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 20), // Added SizedBox for spacing
-                      ],
+                              SizedBox(height: 10),
+                              (online_status==0)?
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.orangeAccent,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Offline",
+                                    style: GoogleFonts.ubuntu(
+                                      textStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ):Row(
+                                children: [
+                                  Container(
+                                    width: 20,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Online",
+                                    style: GoogleFonts.ubuntu(
+                                      textStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 20), // Added SizedBox for spacing
+                            ],
+                          ),
+                          Spacer(),
+                          Column(
+                            children: [
+                              Padding(padding: EdgeInsets.only(top: 30)),
+                              Row(children: [
+                                Container(
+                                  child: InkWell(
+                                    onTap: (){
+                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                                    },
+                                    child:SvgPicture.asset(
+                                      "assets/images/qr_scanner.svg",
+                                      height: 35,
+                                      width: 35,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 20),
+                                Container(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                                      if(res==true){
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        DashboardApiFunction();
+                                      }
+                                    },
+                                    child:SvgPicture.asset(
+                                      "assets/images/profile_icon.svg",
+                                      height: 30,
+                                      width: 35,
+                                    ) ,
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                              ]),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    Spacer(),
-                    Column(
-                      children: [
-                        Padding(padding: EdgeInsets.only(top: 30)),
-                        Row(children: [
-                          Container(
-                            child: InkWell(
-                              onTap: (){
-                                // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
-                              },
-                              child:SvgPicture.asset(
-                            "assets/images/qr_scanner.svg",
-                            height: 35,
-                            width: 35,
+                    Expanded(
+                      child: Container(
+                        width: double.infinity, // Set width to fill parent width
+                        decoration: BoxDecoration(
+                          color: ColorConstant.edit_bg_color,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
                           ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                        child: Column(// Set max height constraints
+                          children: [
+                            Container(child: InkWell(
+                              onTap: () async {
+                                var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
+
+                                if(res == true){
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  DashboardApiFunction();
+                                }
+                              },
+                              child:Container(
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.0),
                                 ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset(
+                                      "assets/checkin_out_icon.svg",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    SizedBox(width: 15,),
+                                    Text(
+                                      "Check In/Out",
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                          fontSize: FontConstant.Size20,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
                               ),
-                          SizedBox(width: 20),
-                          Container(
-                            child: InkWell(
-                              onTap: (){
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                            ),),
+                            SizedBox(height: 15,),
+                            Container(child: InkWell(
+                              onTap: () async {
+                                var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                );
+                                if(res == true){
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  DashboardApiFunction();
+                                }
                               },
-                              child:SvgPicture.asset(
-                                "assets/images/profile_icon.svg",
-                                height: 30,
-                                width: 35,
-                              ) ,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                        ]),
-                      ],
+
+                              child:Container(
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset(
+                                      "assets/checkin_out_icon.svg",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    SizedBox(width: 15,),
+                                    Text(
+                                      "ERP",
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                          fontSize: FontConstant.Size20,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              ),
+
+                            ),),
+                            SizedBox(height: 15,),
+                          ],
+                        ),
+
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity, // Set width to fill parent width
-                  decoration: BoxDecoration(
-                    color: ColorConstant.edit_bg_color,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                  ),
-                  padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                  child: Column(// Set max height constraints
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
-                        },
-                  child:Container(
-                    height: 80,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10,),
-                        SvgPicture.asset(
-                          "assets/checkin_out_icon.svg",
-                          height: 50,
-                          width: 50,
-                        ),
-                        SizedBox(width: 15,),
-                        Text(
-                          "Check In/Out",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size20,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            color: ColorConstant.erp_appColor,
-                          ),
-                        ),
-                      ],
-                    ),
+              )
+          )
 
-                    ),
-                      ),
-                      SizedBox(height: 15,),
-                      InkWell(
-                        onTap: (){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
-                          );
-                        },
-
-                      child:Container(
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Row(
-                          children: [
-                            SizedBox(width: 10,),
-                            SvgPicture.asset(
-                              "assets/checkin_out_icon.svg",
-                              height: 50,
-                              width: 50,
-                            ),
-                            SizedBox(width: 15,),
-                            Text(
-                              "ERP",
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  fontSize: FontConstant.Size20,
-                                  fontWeight: FontWeight.bold,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                color: ColorConstant.erp_appColor,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                      ),
-
-                      ),
-                      StreamBuilder(
-                        stream: channel.stream,
-                        builder: (context, snapshot) {
-                          return Text(snapshot.hasData ? '${snapshot.data}' : '');
-                        },
-                      ),
-                      SizedBox(height: 15,),
-
-                    ],
-                  ),
-
-                ),
-              ),
-            ],
-          ),
-        )
-      )
-
-    );
+      );
   }
 }

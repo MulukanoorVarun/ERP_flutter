@@ -412,26 +412,16 @@ AppBar StoreLocaterBar(BuildContext context, String title) {
 
 Loaders() {
   return Container(
-    color: ColorConstant.white,
+    color: Colors.white.withOpacity(0.7),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        // Container(
-        //   height: 70,
-        //   child: Text("nutsby",style: GoogleFonts.ubuntu(
-        //       textStyle: TextStyle(
-        //           decorationThickness: 0,
-        //           fontSize: FontConstant.Size60,
-        //           fontWeight: FontWeight.bold ),
-        //       color: ColorConstant.DarkOrange),),
-        // ),
-
-        const SpinKitSpinningLines(
-          color: Colors.orange,
+        const SpinKitRing(
+          color: Color(0xFF011842),
+          lineWidth: 4,
           // duration: Duration(seconds: 2),
           size: 50,
-          lineWidth: 2,
         ),
         const SizedBox(
           height: 15,
@@ -439,13 +429,14 @@ Loaders() {
         SizedBox(
           width: 200,
           child: Text(
-            " “You don't have to be good at it, you just have to do it.”",
+            "Please wait.......",
+            textAlign: TextAlign.center,
             style: GoogleFonts.ubuntu(
                 textStyle: TextStyle(
                     decorationThickness: 0,
                     fontSize: FontConstant.Size15,
                     fontWeight: FontWeight.normal),
-                color: ColorConstant.black.withOpacity(0.4)),
+                color: ColorConstant.erp_appColor),
           ),
         ),
 

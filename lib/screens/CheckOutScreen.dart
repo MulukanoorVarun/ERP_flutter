@@ -54,6 +54,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
   var image_picked = 0;
+  bool isLoading = true;
   @override
   void initState() {
     _getLocationPermission();
@@ -78,7 +79,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         return;
       }
     }
-
+    isLoading = false;
     permissionGranted = (await location.hasPermission());
     if (permissionGranted == PermissionStatus) {
       permissionGranted = (await location.requestPermission());
@@ -162,6 +163,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           {
             setState(() {
               if (data.error == 0) {
+                isLoading = false;
                 BackgroundLocation.stopLocationService();
               } else {
                 print(data.error.toString());
@@ -182,7 +184,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     Size size = MediaQuery.of(context).size;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SafeArea(
+      body:(isLoading)?Loaders(): SafeArea(
         child: Container(
           color: ColorConstant.erp_appColor,
           child: Column(

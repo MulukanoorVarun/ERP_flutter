@@ -117,25 +117,29 @@ class UserApi {
   }
 
 
-  static Future<CheckInResponse?> CheckInApi(empId,sessioId,location,latlngs,File_a) async {
+  static Future<CheckInResponse?> CheckInApi(empId,sessioId,location,latlngs, check_in_pic) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (sessioId).toString(),
-        'location': (location).toString(),
         'posit': (latlngs).toString(),
-        'check_in_pic':File_a.toString()
+        'location': (location).toString(),
+        'check_in_pic':check_in_pic
       };
+      print("${empId}, ${sessioId},${location},${latlngs},${check_in_pic}");
       var res;
-      if (File_a != null) {
-        res = await postImage(data, checkInapi, {}, File_a);
+      if (check_in_pic != null) {
+        res = await postImage2(data,{}, checkInapi, check_in_pic);
         res = jsonDecode(res);
+        print(res.body);
       } else {
         res = await post(data, checkInapi, {});
         res = jsonDecode(res.body);
+        print(res.body);
       }
       if (res != null) {
         print(res);
+        print(res.body);
         return CheckInResponse.fromJson(res);
       } else {
         print("Null Response");
@@ -147,20 +151,20 @@ class UserApi {
     }
   }
 
-  static Future<CheckOutResponse?> CheckOutApi(empId,sessioId,location,latlngs,File_a) async {
+  static Future<CheckOutResponse?> CheckOutApi(empId,sessioId,location,latlngs,image) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (sessioId).toString(),
         'location': (location).toString(),
         'posit': (latlngs).toString(),
-        'check_out_pic':File_a.toString()
+        'check_out_pic':image
       };
       var res;
 
-      if (File_a != null) {
+      if (image != null) {
 
-          res = await postImage(data, checkOutapi, {}, File_a);
+          res = await postImage3(data, checkOutapi, image);
           res = jsonDecode(res);
 
         return CheckOutResponse.fromJson(res);

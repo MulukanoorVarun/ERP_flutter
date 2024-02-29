@@ -6,6 +6,7 @@ import 'package:GenERP/screens/Dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -56,12 +57,20 @@ class _CheckInScreenState extends State<CheckInScreen> {
   Timer? _timer;
   File? _image;
   var image_picked = 0;
+  bool isLoading = true;
 
   @override
   void initState() {
     _getLocationPermission();
   //  locationService = LocationService();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _locationController.dispose();
+    //  locationService = LocationService();
+    super.dispose();
   }
 
   Future<void> _getLocationPermission() async {
@@ -83,9 +92,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
         return;
       }
     }
-
+    isLoading = false;
     permissionGranted = (await location.hasPermission());
     if (permissionGranted == PermissionStatus) {
+
       permissionGranted = (await location.requestPermission());
       if (permissionGranted != PermissionStatus) {
         return;
@@ -139,13 +149,20 @@ class _CheckInScreenState extends State<CheckInScreen> {
     try {
       final XFile? galleryImage = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: imageQuality,
+        imageQuality: imageQuality
       );
       print("added");
       setState(() {
         _image = File(galleryImage!.path);
         image_picked = 1;
-        CheckIn();
+        if (_image != null) {
+          var file = FlutterImageCompress.compressWithFile(galleryImage!.path);{
+            if (file != null) {
+              CheckIn();
+            }
+            }
+          }
+
       });
     } catch (e) {
       debugPrint("mmmm: ${e.toString()}");
@@ -157,23 +174,24 @@ class _CheckInScreenState extends State<CheckInScreen> {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
     try {
-      print(empId);
-      print(sessionId);
-      print(_locationController.text);
-      print(latlongs);
-      print(_image);
+
         await UserApi.CheckInApi(empId,sessionId,_locationController.text,latlongs,_image).then((data) => {
           if (data != null)
             {
               setState(() {
                 if (data.error == 0) {
-                  BackgroundLocation.startLocationService();
+                  print(empId);
+                  print(sessionId);
+                  print(_locationController.text);
+                  print(latlongs);
+                  print(_image);
+                  isLoading = false;
+                  // BackgroundLocation.startLocationService();
                 } else {
                   print(data.error.toString());
                 }
               })
-            }
-          else
+            } else
             {
               print("Something went wrong, Please try again.")}
         });
@@ -188,7 +206,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     Size size = MediaQuery.of(context).size;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: SafeArea(
+      body: (isLoading)?Loaders():SafeArea(
         child: Container(
           color: ColorConstant.erp_appColor,
           child: Column(
@@ -200,18 +218,22 @@ class _CheckInScreenState extends State<CheckInScreen> {
                 child: Row(
                   children: [
                     Padding(padding: EdgeInsets.only(left: 20)),
-                    SvgPicture.asset(
+                    InkWell(
+                      onTap: (){
+                        Navigator.pop(context,true);
+                      },
+                      child:SvgPicture.asset(
                       "assets/back_icon.svg",
-                      height: 20,
-                      width: 20,
-                    ),
-                    SizedBox(width: 25),
+                      height: 24,
+                      width: 24,
+                    ),),
+                    SizedBox(width: 20),
                     Center(
                       child: Text(
                         "Check In",
                         style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
+                          fontSize: FontConstant.Size18,
+                          fontWeight: FontWeight.w500,
                           color: Colors.white,
                         ),
                       ),
@@ -241,6 +263,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                     onMapCreated: (controller) {
                       setState(() {
                         mapController = controller;
+
                       });
                     },
                     onCameraMove: _onCameraMove,

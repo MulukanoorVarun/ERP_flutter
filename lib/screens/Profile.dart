@@ -1,6 +1,7 @@
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
 import 'package:GenERP/models/LogoutDialogue.dart';
+import 'package:GenERP/screens/Login.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ class _ProfileState extends State<Profile> {
   var mobile_num = "";
   var latestversion = "";
   var releaseNotes = "";
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -62,10 +64,11 @@ class _ProfileState extends State<Profile> {
                         branch = data.branchName ?? "";
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
+                        isLoading = false;
                       } else if (data.sessionExists == 0) {
                         PreferenceService().clearPreferences();
                         Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Splash()));
+                            MaterialPageRoute(builder: (context) => Login()));
                         print(data.toString());
                       }
                     })
@@ -86,8 +89,9 @@ class _ProfileState extends State<Profile> {
           {
             setState(() {
               if (data.error == 0) {
+                isLoading = false;
                 PreferenceService().clearPreferences();
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Splash()));
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
               } else {
                 print(data.toString());
               }
@@ -143,7 +147,11 @@ class _ProfileState extends State<Profile> {
             onPressed: () =>
             {
               print("littu"),
-              LogoutApiFunction()
+              setState(() {
+                isLoading = true;
+              }),
+              LogoutApiFunction(),
+              Navigator.of(context).pop(false)
             },
 
             child: Text(
@@ -255,7 +263,7 @@ class _ProfileState extends State<Profile> {
           ),
         ),
       ),
-      body: SafeArea(
+      body:(isLoading)?Loaders(): SafeArea(
         child: Container(
           // color: ColorConstant.erp_appColor,
           child: Stack(

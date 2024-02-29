@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 import '../Utils/FontConstant.dart';
@@ -20,19 +23,47 @@ class _SplashState extends State<Splash>{
   void initState(){
     super.initState();
     validate_and_run();
+    navigateAfterDelay();
+    requestPermissions();
   }
 
+  void requestPermissions() async {
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.camera,
+      Permission.storage,
+      Permission.location,
+      Permission.locationWhenInUse,
+      Permission.locationAlways,
+      Permission.accessMediaLocation,
+      Permission.notification,
+      Permission.accessNotificationPolicy
+      // Add more permissions as needed
+    ].request();
+
+    statuses.forEach((permission, status) {
+      if (!status.isGranted) {
+        // Handle denied permissions
+      }
+
+    }
+
+    );
+  }
+  void navigateAfterDelay() {
+    // Delay navigation by 5 seconds
+    Timer(Duration(seconds: 5), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Login()), // Replace Dashboard with your desired destination
+      );
+    });
+  }
   validate_and_run() async {
     var SessionAvailable= await PreferenceService().getString("Session_id");
     if (SessionAvailable != null) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) =>  Dashboard()));
-    } else {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) =>  Login()));
     }
-  //   Navigator.push(
-  //             context, MaterialPageRoute(builder: (context) =>  Login()));
   }
 
   @override

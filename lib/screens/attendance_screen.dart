@@ -1,5 +1,7 @@
 import 'package:GenERP/screens/CheckInScreen.dart';
 import 'package:GenERP/screens/CheckOutScreen.dart';
+import 'package:GenERP/screens/Login.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
+import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import '../models/AttendanceListResponse.dart';
 
@@ -21,6 +24,7 @@ class Attendance extends StatefulWidget {
 class _AttendanceState extends State<Attendance> {
   List<AttHistory> attHistory=[];
   int attStatus=0;
+  bool isLoading = true;
   @override
   void initState() {
     getAttendanceList();
@@ -39,8 +43,16 @@ class _AttendanceState extends State<Attendance> {
         if (data != null)
           {
             setState(() {
-              attHistory=data.attHistory!;
-              attStatus=data.attStatus!;
+              if(data.sessionExists==1){
+                attHistory=data.attHistory!;
+                attStatus=data.attStatus!;
+                isLoading = false;
+              }else{
+                isLoading = true;
+                PreferenceService().clearPreferences();
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
+              }
+
             })
           }
         else
@@ -62,7 +74,7 @@ class _AttendanceState extends State<Attendance> {
     return Scaffold(
       //backgroundColor: ColorConstant.edit_bg_color,
       // Set your desired height here
-        body:SafeArea(
+        body:(isLoading)?Loaders():SafeArea(
             child: Container(
               color:ColorConstant.erp_appColor,
               child: Column(
@@ -74,24 +86,29 @@ class _AttendanceState extends State<Attendance> {
                     child: Row(
                       children: [
                         Padding(padding: EdgeInsets.only(left: 20)),
-                        SvgPicture.asset(
-                          "assets/back_icon.svg",
-                          height: 30,
-                          width: 30,
+                        InkWell(
+                          onTap: (){
+                            Navigator.pop(context,true);
+                          },
+                          child: SvgPicture.asset(
+                            "assets/back_icon.svg",
+                            height: 24.0,
+                            width: 24.0,
+                          ),
                         ),
                         SizedBox(width: 16,),
                         Center(
-                        child:Text(
-                          "Check In/Out",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size22,
-                              fontWeight: FontWeight.bold,
-                              overflow: TextOverflow.ellipsis,
+                          child:Text(
+                            "Check In/Out",
+                            style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  fontSize: FontConstant.Size18,
+                                  fontWeight: FontWeight.w500,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                color: Colors.white
                             ),
-                            color: Colors.white
                           ),
-                        ),
                         ),
 
                       ],
@@ -112,8 +129,14 @@ class _AttendanceState extends State<Attendance> {
                         children: [
                           if(attStatus==0)...[
                           InkWell(
-                            onTap: (){
-                              Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
+                            onTap: () async {
+                              var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
+                              if(res==true){
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                getAttendanceList();
+                              }
                             },
                             child:Container(
                               alignment: Alignment.center,
@@ -139,8 +162,14 @@ class _AttendanceState extends State<Attendance> {
                           ),
                           ]else...[
                             InkWell(
-                              onTap: (){
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
+                              onTap: () async{
+                                var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
+                                if(res==true){
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  getAttendanceList();
+                                }
                               },
                               child:Container(
                                 alignment: Alignment.center,

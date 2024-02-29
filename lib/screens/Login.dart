@@ -46,6 +46,7 @@ class _LoginState extends State<Login> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    validate_and_run();
     if (Platform.isAndroid) {
       _initAndroidId();
     } else {
@@ -53,6 +54,13 @@ class _LoginState extends State<Login> {
     }
   }
 
+  validate_and_run() async {
+    var SessionAvailable= await PreferenceService().getString("Session_id");
+    if (SessionAvailable != null) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) =>  Dashboard()));
+    }
+  }
 
 
   Future<String?> _getId() async {
@@ -153,11 +161,14 @@ class _LoginState extends State<Login> {
                           print(data.sessionId);
                           var roles = data.permissions!.toString();
                           PreferenceService().saveString("roles", roles);
+                          validate_and_run();
 
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => Splash()));
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => Dashboard()));
+
+
                         } else {
                           print(data.error.toString());
                         }
@@ -171,6 +182,7 @@ class _LoginState extends State<Login> {
       print("$e");
     }
   }
+
 
   Future<bool> _onBackPressed() async {
     return await showDialog<bool>(
@@ -189,7 +201,7 @@ class _LoginState extends State<Login> {
                   "NO",
                   style: GoogleFonts.ubuntu(
                     textStyle: TextStyle(
-                      color: ColorConstant.accent_color,
+                      color: ColorConstant.erp_appColor,
                       fontWeight: FontWeight.w500,
                       fontSize: FontConstant.Size15,
                     ),
@@ -208,7 +220,7 @@ class _LoginState extends State<Login> {
                   "YES",
                   style: GoogleFonts.ubuntu(
                     textStyle: TextStyle(
-                      color: ColorConstant.accent_color,
+                      color: ColorConstant.erp_appColor,
                       fontWeight: FontWeight.w500,
                       fontSize: FontConstant.Size15,
                     ),

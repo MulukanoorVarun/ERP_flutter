@@ -1,3 +1,4 @@
+import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -44,7 +45,7 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
             setState(() {
               if (data.error == 0) {
                 PreferenceService().clearPreferences();
-                Navigator.push(context,MaterialPageRoute(builder: (context)=>Splash()));
+                Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
               } else {
                 print(data.toString());
               }
