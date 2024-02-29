@@ -1,3 +1,4 @@
+import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/CheckInScreen.dart';
 import 'package:GenERP/screens/CheckOutScreen.dart';
 import 'package:GenERP/screens/Login.dart';
@@ -210,7 +211,11 @@ class _AttendanceState extends State<Attendance> {
                                 ),
                               ),
                               Spacer(),
-                              Text(
+                              InkWell(
+                                onTap: (){
+                                  Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+                                },
+                              child:Text(
                                 "View History",
                                 style: GoogleFonts.ubuntu(
                                   textStyle: TextStyle(
@@ -220,6 +225,7 @@ class _AttendanceState extends State<Attendance> {
                                   ),
                                   color: ColorConstant.black,
                                 ),
+                              ),
                               ),
                               Spacer(),
                               SvgPicture.asset(
