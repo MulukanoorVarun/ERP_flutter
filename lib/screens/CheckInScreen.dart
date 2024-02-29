@@ -318,8 +318,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                               child:InkWell(
                                 onTap: () async {
-                                  BackgroundLocation.stopLocationService();
-                                 // _imgFromCamera();
+                                 // BackgroundLocation.stopLocationService();
+                                  _imgFromCamera();
                                 },
                                 child:Container(
                                   alignment: Alignment.center,
