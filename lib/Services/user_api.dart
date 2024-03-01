@@ -17,6 +17,7 @@ import '../models/AttendanceHistoryresponse.dart';
 import '../models/AttendanceListResponse.dart';
 import '../models/CheckInResponse.dart';
 import '../models/CheckOutResponse.dart';
+import '../models/DayWiseAttendance.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
@@ -206,7 +207,7 @@ class UserApi {
     }
   }
 
-  static Future<AttendanceHistory?>LoadAttendanceDetails(empId,session,month,year) async {
+  static LoadAttendanceDetails(empId,session,month,year) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -217,7 +218,29 @@ class UserApi {
       final res = await post(data,loadAttendanceDetailsapi, {});
       if (res != null) {
         print(res.body);
-        return AttendanceHistory.fromJson(jsonDecode(res.body));
+        // return AttendanceHistory.fromJson(jsonDecode(res.body));
+        return res.body;
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<AttendanceDaywiseResponse?>DateWiseAttendanceApi(empId,session,date) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'date': (date).toString(),
+      };
+      final res = await post(data,DayAttendanceDetailsapi, {});
+      if (res != null) {
+        print(res.body);
+        return AttendanceDaywiseResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -359,6 +382,8 @@ class UserApi {
       return null;
     }
   }
+
+
 
 
 

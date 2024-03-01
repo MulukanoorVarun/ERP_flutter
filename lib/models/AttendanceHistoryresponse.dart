@@ -1,10 +1,14 @@
+import 'dart:ui';
+
+import 'package:flutter/material.dart';
+
 class AttendanceHistory {
   int? presentDays;
   int? absentDays;
   int? holidays;
   int? latePenalties;
-  List<DateArray>? dateArray;
-  List<LatePenaltyArray>? latePenaltyArray;
+  DateArray? dateArray;
+  LatePenaltyArray? latePenaltyArray;
   int? error;
   int? sessionExists;
 
@@ -23,16 +27,12 @@ class AttendanceHistory {
     absentDays = json['absent_days'];
     holidays = json['holidays'];
     latePenalties = json['late_penalties'];
-
-    if (json['date_array'] != null) {
-      dateArray = <DateArray>[];
-      json['date_array'].forEach((v) { dateArray!.add(DateArray.fromJson(v)); });
-    }
-
-    if (json['late_penalty_array'] != null) {
-      latePenaltyArray = <LatePenaltyArray>[];
-      json['late_penalty_array'].forEach((v) { latePenaltyArray!.add(LatePenaltyArray.fromJson(v)); });
-    }
+    dateArray = json['date_array'] != null
+        ? new DateArray.fromJson(json['date_array'])
+        : null;
+    latePenaltyArray = json['late_penalty_array'] != null
+        ? new LatePenaltyArray.fromJson(json['late_penalty_array'])
+        : null;
     error = json['error'];
     sessionExists = json['session_exists'];
   }
@@ -43,14 +43,12 @@ class AttendanceHistory {
     data['absent_days'] = this.absentDays;
     data['holidays'] = this.holidays;
     data['late_penalties'] = this.latePenalties;
-
-    if (dateArray != null) {
-      data['date_array'] = dateArray!.map((v) => v.toJson()).toList();
+    if (this.dateArray != null) {
+      data['date_array'] = this.dateArray!.toJson();
     }
-    if (latePenaltyArray != null) {
-      data['late_penalty_array'] = latePenaltyArray!.map((v) => v.toJson()).toList();
+    if (this.latePenaltyArray != null) {
+      data['late_penalty_array'] = this.latePenaltyArray!.toJson();
     }
-
     data['error'] = this.error;
     data['session_exists'] = this.sessionExists;
     return data;
@@ -329,4 +327,5 @@ class LatePenaltyArray {
     data['2024-02-25'] = this.i20240225;
     return data;
   }
+
 }

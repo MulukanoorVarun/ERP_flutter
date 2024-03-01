@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,6 +10,7 @@ import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import '../models/AttendanceHistoryresponse.dart';
+import '../models/DayWiseAttendance.dart';
 import 'CalenderWidget.dart';
 
 class AttendanceHistory extends StatefulWidget{
@@ -20,25 +23,37 @@ class AttendanceHistory extends StatefulWidget{
 class _AttendanceHistoryState extends State<AttendanceHistory>{
   late DateTime month;
   late int monthNo;
-  DateTime selectedMonth = DateTime.utc(2024, 2);
 
   int presentDays=0;
   int absentDays=0;
   int holidays=0;
   int latePenalties=0;
-  List<DateArray> dateArray=[];
-  List<LatePenaltyArray> latePenaltyArray=[];
+  String?dateColor;
+  List<Map<String, dynamic>> dateArrayList = [];
+  List<Map<String, dynamic>> penalityArrayList = [];
+
+  String date="";
+  String intime="";
+  String outtime="";
+  String inlocation="";
+  String outlocation="";
+  String penalties="";
+  String SelectedDate="";
 
   @override
   void initState() {
     month = DateTime.now();
     getMonth(DateFormat('MMMM').format(month));
+    String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    dateWiseAttendance(formattedDate);
     super.initState();
   }
 
   void setPreviousMonth() {
     setState(() {
     month = DateTime(month.year, month.month - 1);
+    dateArrayList = [];
+    getMonth(DateFormat('MMMM').format(month));
     });
   }
 
@@ -46,16 +61,9 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
   void setNextMonth() {
     setState(() {
     month = DateTime(month.year, month.month + 1);
+    dateArrayList = [];
+    getMonth(DateFormat('MMMM').format(month));
     });
-  }
-
-  List<String> generateDates(int month, int year) {
-    List<String> dates = [];
-    int daysInMonth = DateTime(year, month + 1, 0).day;
-    for (int day = 1; day <= daysInMonth; day++) {
-      dates.add(day.toString());
-    }
-    return dates;
   }
 
 
@@ -112,24 +120,29 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
 
     loadAttendanceDetails();
   }
+  String? firstKey;
+  dynamic? firstValue;
+  String? formattedDayOfWeek;
+  int startingIndex=0;
 
-  Future<void> loadAttendanceDetails() async {
+
+  Future<void> dateWiseAttendance(Selecteddate) async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
     try {
-      await UserApi.LoadAttendanceDetails(empId,sessionId,monthNo,year).then((data) => {
+
+      await UserApi.DateWiseAttendanceApi(empId,sessionId,Selecteddate).then((data) => {
         if (data != null)
           {
             setState(() {
-              if (data.error == 0) {
-                presentDays=data.presentDays!;
-                absentDays=data.absentDays!;
-                holidays=data.holidays!;
-                latePenalties=data.latePenalties!;
-                dateArray=data.dateArray!;
-                latePenaltyArray=data.latePenaltyArray!;
-              }
+            date=data.date!;
+            intime=data.intime!;
+            outtime=data.outtime!;
+            inlocation=data.inlocation!;
+            outlocation=data.outlocation!;
+            penalties=data.latePenalties!;
             })
-          }
-        else
+          } else
           {
             print("Something went wrong, Please try again.")}
       });
@@ -138,9 +151,242 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
       print("$e");
     }
   }
+
+  Future<void> loadAttendanceDetails() async {
+    print("monthNo:${monthNo}");
+    try {
+      final data = await UserApi.LoadAttendanceDetails(empId, sessionId, monthNo, year);
+      if (data != null) {
+        final decodedResponse = jsonDecode(data);
+        setState(() {
+        presentDays = decodedResponse['present_days'] ?? 0;
+        absentDays = decodedResponse['absent_days'] ?? 0;
+        holidays = decodedResponse['holidays'] ?? 0;
+        latePenalties = decodedResponse['late_penalties'] ?? 0;
+        Map<String, dynamic>? dateArray = decodedResponse['date_array'];
+        Map<String, dynamic>? latePenaltyArray = decodedResponse['late_penalty_array'];
+
+        // Assuming dateArray is a Map<String, dynamic>
+
+          if (dateArray != null && dateArray.isNotEmpty) {
+            firstKey = dateArray.keys.elementAt(0);
+            firstValue = dateArray[firstKey];
+          }
+
+        print('First Key: $firstKey, First Value: $firstValue');
+
+
+        if (dateArray != null) {
+          dateArray.forEach((key, value) {
+            // Split the key string to extract the date part
+            List<String> parts = key.split("-");
+            String date = parts[2];
+            // Remove leading zeros
+            date = int.parse(date).toString();
+            dateArrayList.add({date: value});
+          //  print('Date: $date, Value: $value');
+          });
+        }
+
+        if (latePenaltyArray != null) {
+          latePenaltyArray.forEach((key, value) {
+            penalityArrayList.add({key: value});
+           // print('Date: $key, Value: $value');
+          });
+        }
+        });
+      } else {
+        print("Null Response");
+      }
+
+    } catch (e) {
+      print("Exception: $e");
+    }
+  }
+
+  Future InfoDialogue() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+        ),
+        title: Align(
+          alignment: Alignment.topLeft,
+          child: Text(
+            'Information',
+            style: GoogleFonts.ubuntu(
+              textStyle: TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size25,
+                  fontWeight: FontWeight.w500,
+                  decoration: TextDecoration.underline
+              ),
+            ),
+          ),
+        ),
+        content: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 180), // Set the maximum height here
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.blue,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        'Holiday',
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+                SizedBox(height: 10,),
+                Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.green,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        'Present',
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+                SizedBox(height: 10,),
+                Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.brown,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        'Half Day',
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+                SizedBox(height: 10,),
+                Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.red,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        'Absent',
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+                SizedBox(height: 10,),
+                Row(
+                    children: [
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.yellow,
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(
+                        'Not Checked Out',
+                        style: GoogleFonts.ubuntu(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+
+                          ),
+                        ),
+                      ),
+                    ]
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: true,
+    ) ??
+        false;
+  }
+
+
   @override
   Widget build(BuildContext context){
- //   List<String> dates = generateDates(month.month, month.year); // Example: February 2024
+    DateTime? parsedDate;
+
+    if (firstKey != null) {
+      parsedDate = DateTime.parse(firstKey!);
+    }
+
+    if (parsedDate != null) {
+       formattedDayOfWeek = DateFormat('EEEE').format(parsedDate);
+      print(formattedDayOfWeek); // prints the day of the week (e.g., Tuesday)
+    } else {
+      print('Error: Unable to parse the date');
+    }
+
+    // Weekdays in the same order as DateTime constants
+    List<String> weekdays = [ 'Sunday','Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // Calculate the starting index based on the day of the week
+     startingIndex = weekdays.indexOf(formattedDayOfWeek!);
+
     return Scaffold(
       backgroundColor: ColorConstant.edit_bg_color,
       appBar: AppBar(
@@ -171,7 +417,9 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                 ),
                 Container(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      InfoDialogue();
+                    },
                     icon: const Icon(
                       Icons.info_outline,
                       size: 30,
@@ -474,54 +722,228 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                 child: Container(
                   height: 280,
                   color: Colors.white,
-                   child:GridView.builder(
-                     itemCount: dateArray.length,
-                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                       crossAxisCount: 7,
-                       crossAxisSpacing: 2,
-                       mainAxisSpacing: 25,
-                       childAspectRatio: (255 / 140),
-                     ),
-                     padding: const EdgeInsets.fromLTRB(10, 10, 10, 0), // Adjusted padding for Sunday
-                     shrinkWrap: true,
-                     itemBuilder: (context, index) {
-                       final date = dateArray[index];
-                       if (dateArray.length!=0) {
-                         return InkWell(
-                           onTap: () {
-                            // dateListener(DateTime.utc(2024, 2, int.parse(date)));
-                           },
-                           child: Card(
-                             elevation: 0,
-                             shadowColor: Colors.black,
-                             child: Center(
-                               child: Text(
-                                 "${dateArray[index]}",
-                                 style: TextStyle(
-                                   fontSize: 15,
-                                   fontWeight: FontWeight.w400,
-                                   color: Colors.black,
-                                 ),
-                               ),
-                             ),
-                           ),
-                         );
-                       } else {
-                         return Card(
-                           elevation: 0,
-                           shadowColor: Colors.transparent,
-                         );
-                       }
-                     },
-                   )
-                  // CalendarAdapter(
-                  //   selectedMonth:month, // Pass selected month to CalendarAdapter
-                  //   dateListener: (selectedDate) {
-                  //     // Handle selected date
-                  //     print('Selected date: $selectedDate');
-                  //     print('Selected month: $month');
-                  //   },
-                  // ),
+                  child: GridView.builder(
+                    itemCount: dateArrayList.length + startingIndex,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 7,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 1,
+                      childAspectRatio: (255 / 250),
+                    ),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      if (index < startingIndex) {
+                        // Add empty spaces before the start of the month
+                        return SizedBox.shrink();
+                      } else {
+                        final adjustedIndex = index - startingIndex;
+                        final dateKeys = dateArrayList[adjustedIndex].keys.toList();
+                        final dateColors = dateArrayList[adjustedIndex].values.toList();
+                        final datePenalities = penalityArrayList[adjustedIndex].values.toList();
+                        final Penalitykeys = penalityArrayList[adjustedIndex].keys.toList();
+
+                        String? date;
+                        String? dateColor;
+                        String? penalitykeys;
+                        int? datePenality;
+
+                        if (dateKeys.isNotEmpty) {
+                          date = dateKeys[0];
+                        }
+                        if (dateColors.isNotEmpty) {
+                          dateColor = dateColors[0];
+                        }
+                        if (Penalitykeys.isNotEmpty) {
+                          penalitykeys = Penalitykeys[0];
+                        }
+                        if (datePenalities.isNotEmpty) {
+                          datePenality = datePenalities[0];
+                        }
+
+                        // Get the current date
+                        DateTime currentDate = DateTime.now();
+
+                        return InkWell(
+                          onTap: () {
+                            if (penalitykeys != null) {
+                              dateWiseAttendance(penalitykeys);
+                              print("Selected date: $penalitykeys");
+                            }
+                            setState(() {
+                              SelectedDate=dateKeys[0]!;
+                              print("SelectedDate: $SelectedDate");
+                              print("ParsedDate: ${int.parse(date!)}");
+                            });
+                          },
+                          child: Card(
+                            elevation: 0,
+                            shadowColor: Colors.black,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children:[
+                                    Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: dateColor == 'g' ? Colors.green :
+                                        dateColor == 'r' ? Colors.red :
+                                        dateColor == 'b' ? Colors.blue :
+                                        dateColor == 'br' ? Colors.brown :
+                                        dateColor == 'y' ? Colors.yellow :
+                                        Colors.transparent,
+                                      ),
+                                    ),
+                                    SizedBox(width: 3),
+                                    Text(
+                                      (datePenality != 0) ? "(${datePenality.toString()})" : "",
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                          fontSize: FontConstant.Size10,
+                                          fontWeight: FontWeight.w400,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                      // Conditional rendering to highlight selected and current dates
+                      Center(
+                      child: SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: Container(
+                      decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: SelectedDate != null && SelectedDate == int.parse(date!) ? Colors.blue :
+                      currentDate.day == int.parse(date!) ? Colors.black : Colors.transparent,
+                      ),
+                      child: Center(
+                      child: Text(
+                      date ?? "",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                      color: SelectedDate != null && SelectedDate == int.parse(date!) ? Colors.white :
+                      currentDate.day == int.parse(date!) ? Colors.white : Colors.black,
+                      ),
+                      ),
+                      ))))
+
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                  ),
+
+
+                  // child:GridView.builder(
+                    //   itemCount: dateArrayList.length + startingIndex,
+                    //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    //     crossAxisCount: 7,
+                    //     crossAxisSpacing: 2,
+                    //     mainAxisSpacing: 1,
+                    //     childAspectRatio: (255 / 250),
+                    //   ),
+                    //   padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    //   shrinkWrap: true,
+                    //   itemBuilder: (context, index) {
+                    //     if (index < startingIndex) {
+                    //       // Add empty spaces before the start of the month
+                    //       return SizedBox.shrink();
+                    //     } else {
+                    //       final adjustedIndex = index - startingIndex;
+                    //       final dateKeys = dateArrayList[adjustedIndex].keys.toList();
+                    //       final dateColors = dateArrayList[adjustedIndex].values.toList();
+                    //
+                    //       final datePenalities = penalityArrayList[adjustedIndex].values.toList();
+                    //       final Penalitykeys = penalityArrayList[adjustedIndex].keys.toList();
+                    //
+                    //       String? date;
+                    //       String? dateColor;
+                    //       String? penalitykeys;
+                    //       int? datePenality;
+                    //
+                    //       if (dateKeys.isNotEmpty) {
+                    //         date = dateKeys[0];
+                    //       }
+                    //       if (dateColors.isNotEmpty) {
+                    //         dateColor = dateColors[0];
+                    //       }
+                    //       if (Penalitykeys.isNotEmpty) {
+                    //         penalitykeys = Penalitykeys[0];
+                    //       }
+                    //
+                    //       if (datePenalities.isNotEmpty) {
+                    //         datePenality = datePenalities[0];
+                    //       }
+                    //       DateTime currentDate = DateTime.now();
+                    //       return InkWell(
+                    //         onTap: () {
+                    //           if (penalitykeys != null) {
+                    //             dateWiseAttendance(penalitykeys);
+                    //             print("Selected date: $penalitykeys");
+                    //           }
+                    //         },
+                    //         child: Card(
+                    //           elevation: 0,
+                    //           shadowColor: Colors.black,
+                    //           child: Column(
+                    //             children: [
+                    //               Row(
+                    //                 mainAxisAlignment: MainAxisAlignment.center,
+                    //                 children:[
+                    //                   Text(
+                    //                     (datePenality != 0) ? "(${datePenality.toString()})" : "",
+                    //                     style: GoogleFonts.ubuntu(
+                    //                       textStyle: TextStyle(
+                    //                         fontSize: FontConstant.Size10,
+                    //                         fontWeight: FontWeight.w400,
+                    //                         overflow: TextOverflow.ellipsis,
+                    //                       ),
+                    //                       color: Colors.black,
+                    //                     ),
+                    //                   ),
+                    //               SizedBox(width: 3,),
+                    //               Container(
+                    //                 width:8,
+                    //                 height:8,
+                    //                 decoration: BoxDecoration(
+                    //                   shape: BoxShape.circle,
+                    //                   color: dateColor == 'g' ? Colors.green :
+                    //                   dateColor == 'r' ? Colors.red :
+                    //                   dateColor == 'b' ? Colors.blue :
+                    //                   dateColor == 'br' ? Colors.brown :
+                    //                   dateColor == 'y' ? Colors.yellow :
+                    //                   Colors.transparent, // Default color
+                    //                 ),
+                    //               ),
+                    //              ],
+                    //               ),
+                    //               Center(
+                    //                 child: Text(
+                    //                   date ?? "",
+                    //                   style: TextStyle(
+                    //                     fontSize: 15,
+                    //                     fontWeight: FontWeight.w400,
+                    //                     color: Colors.black,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       );
+                    //     }
+                    //   },
+                    // ),
+
                 ),
               ),
 
@@ -567,7 +989,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                 ),
 
                                 Text(
-                                  "-",
+                                  "${intime}",
                                   style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
                                         fontSize: FontConstant.Size15,
@@ -592,7 +1014,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                 ),
 
                                 Text(
-                                  "Head office (Biometric)",
+                                  "${inlocation}",
                                   style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
                                         fontSize: FontConstant.Size15,
@@ -616,7 +1038,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                 ),
 
                                 Text(
-                                  "0",
+                                  "${penalties}",
                                   style: GoogleFonts.ubuntu(
                                       textStyle: TextStyle(
                                         fontSize: FontConstant.Size15,
@@ -653,7 +1075,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                   ),
 
                                   Text(
-                                    "-",
+                                    "${outtime}",
                                     style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           fontSize: FontConstant.Size15,
@@ -677,7 +1099,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                   ),
 
                                   Text(
-                                    "Head office (Biometric)",
+                                    "${outlocation}",
                                     style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           fontSize: FontConstant.Size15,
@@ -701,7 +1123,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory>{
                                   ),
 
                                   Text(
-                                    "29 Feb 24",
+                                    "${date}",
                                     style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           fontSize: FontConstant.Size15,
