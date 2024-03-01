@@ -97,6 +97,7 @@ dependencies:
   flutter_image_compress: ^2.1.0
   flutter_downloader: ^1.11.6
   flutter_download_manager: ^0.5.5
+  qr_code_scanner: ^1.0.1
 
 
 dev_dependencies:

@@ -2,8 +2,14 @@ import 'dart:convert';
 import 'package:GenERP/models/DashboardResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
+import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
+import 'package:GenERP/models/TagGeneratorResponse.dart';
+import 'package:GenERP/models/TagLocationResponse.dart';
+import 'package:GenERP/models/UpdatePasswordResponse.dart';
 import 'package:GenERP/models/VersionsResponse.dart';
+import 'package:GenERP/models/generatorComplaintResponse.dart';
+import 'package:GenERP/models/loadGeneratorDetailsResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
@@ -212,6 +218,138 @@ class UserApi {
       if (res != null) {
         print(res.body);
         return AttendanceHistory.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<SessionResponse?>SessionExistsApi(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data,getSessionExistsApi, {});
+      if (res != null) {
+        print(res.body);
+        return SessionResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<UpdatePasswordResponse?>UpdatePasswordApi(empId,session,password,conf_password) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'password':(password).toString(),
+        'confirm_password':(conf_password).toString()
+      };
+      final res = await post(data,updatePassword, {});
+      if (res != null) {
+        print(res.body);
+        return UpdatePasswordResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+  static Future<loadGeneratorDetailsResponse?> LoadGeneratorDetailsAPI(empId,session,gen_hash_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_hash_id':(gen_hash_id).toString(),
+
+      };
+      final res = await post(data,loadGeneratorDetails, {});
+      if (res != null) {
+        print(res.body);
+        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<generatorComplaintResponse?> LoadGeneratorComplaintListAPI(empId,session,gen_id,open_status) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_id':(gen_id).toString(),
+        'open_status':(open_status).toString()
+
+      };
+      final res = await post(data,getComplaintHistoryList, {});
+      if (res != null) {
+        print(res.body);
+        return generatorComplaintResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<TagLocationResponse?> TagLocationAPI(empId,session,gen_hash_id,location) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_hash_id':(gen_hash_id).toString(),
+        'location':(location).toString()
+
+      };
+      final res = await post(data,tagLocation, {});
+      if (res != null) {
+        print(res.body);
+        return TagLocationResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<TagGeneratorResponse?> TagGeneratorAPI(empId,session,gen_hash_id,engine_no) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_hash_id':(gen_hash_id).toString(),
+        'engine_no':(engine_no).toString()
+
+      };
+      final res = await post(data,tagGenerator, {});
+      if (res != null) {
+        print(res.body);
+        return TagGeneratorResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;

@@ -1,5 +1,10 @@
+import 'package:GenERP/Services/other_services.dart';
+import 'package:GenERP/Services/user_api.dart';
+import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/AddAccount.dart';
 import 'package:GenERP/screens/AttendanceHistory.dart';
+import 'package:GenERP/screens/Dashboard.dart';
+import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -19,10 +24,70 @@ class _UpdatePasswordState extends State<UpdatePassword> {
   TextEditingController password = TextEditingController();
   TextEditingController conf_password = TextEditingController();
   bool _passwordVisible = false;
+  var _validate_pwd = "";
+  var _validate_confpwd = "";
+  var empId = "";
+  var session =  "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+  }
+  Future<void> UpdatePasswordApiFunctin() async{
+    empId= await PreferenceService().getString("UserId")??"";
+    session= await PreferenceService().getString("Session_id")??"";
+    if(password.text.toString().trim().isEmpty){
+      _validate_pwd = "Enter Password";
+    }
+    if(conf_password.text.toString().trim().isEmpty){
+      _validate_confpwd = "Enter Confirm Password";
+    }
+    if(password.text.toString().trim().isEmpty&&conf_password.text.toString().trim().isEmpty){
+      _validate_pwd = "Enter Password";
+      _validate_confpwd = "Enter Confirm Password";
+    }
+    if(password.text.toString().trim().isEmpty&&conf_password.text.toString().trim().isNotEmpty){
+      _validate_pwd = "Enter Password";
+      _validate_confpwd = "";
+    }
+    if(password.text.toString().trim().isNotEmpty&&conf_password.text.toString().trim().isEmpty){
+      _validate_pwd = "";
+      _validate_confpwd = "Enter Confirm Password";
+    }
+    else if(password.text.toString().trim().length < 8){
+      toast(context,"password should be of minimum of 8 characters");
+    }else if(conf_password.text.toString().trim().length < 8){
+      toast(context,"confirmPassword should be of minimum of 8 characters");
+    }else if (password.text.toString().trim() !=
+        conf_password.text.toString().trim()){
+      toast(context,"Both Passwords should be same");
+    }else {
+      try {
+        UserApi.UpdatePasswordApi(
+            empId, session, password.text, conf_password.text).then((data) =>
+        {
+          if(data != null){
+            setState(() {
+              if (data.sessionExists == 1) {
+                if (data.error == 0) {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Dashboard()));
+                  toast(context, data.message);
+                } else {
+                  toast(context, data.message);
+                }
+              } else {
+                PreferenceService().clearPreferences();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Login()));
+              }
+            })
+          }
+        });
+      } on Error catch (e) {
+        print(e.toString());
+      }
+    }
   }
 
   @override
@@ -59,7 +124,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
             child: Column(// Set max height constraints
               children: [
                Container(
-               height: 240,
+               height: 280,
                  decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(20.0),
@@ -104,7 +169,23 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 10.0,),
+                        if(_validate_pwd!=null)...[
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5,left:25),
+                            child: Text(
+                              _validate_pwd,
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: FontConstant.Size10,
+                                ),
+                              ),
+                            ),
+                          )
+                        ]else...[
+                        SizedBox(height: 10.0,)],
                         Container(
                           alignment: Alignment.center,
                           height: 55,
@@ -141,11 +222,27 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             ),
                           ),
                         ),
+                        if(_validate_confpwd!=null)...[
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.only(top: 2.5, bottom: 2.5,left:25),
+                            child: Text(
+                              _validate_confpwd,
+                              textAlign: TextAlign.start,
+                              style: GoogleFonts.ubuntu(
+                                textStyle: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: FontConstant.Size10,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                         SizedBox(height: 50.0,),
                         Container(
                             child: InkWell(
                               onTap: (){
-                                Navigator.push(context,MaterialPageRoute(builder: (Context)=>AddAccount()));
+                               UpdatePasswordApiFunctin();
                               },
                               child: Container(
                                 alignment: Alignment.center,

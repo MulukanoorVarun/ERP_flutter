@@ -20,8 +20,13 @@ const checkInapi = "${baseUrl}home/attendance_check_in";
 const checkOutapi = "${baseUrl}home/attendance_check_out";
 const attendanceListapi = "${baseUrl}home/attendance_dashboard";
 const loadAttendanceDetailsapi = "${baseUrl}home/attendance_monthwise_det";
-
-
+const getSessionExistsApi ="${baseUrl}home/get_session_det";
+const updatePassword= "${baseUrl}home/update_password";
+const qrLoginRequest = "${baseUrl}home/login_qr_code_submit";
+const loadGeneratorDetails = "${baseUrl}home/gen_tracker_generator_details";
+const getComplaintHistoryList = "${baseUrl}home/gen_tracker_generator_complaints_list";
+const tagLocation = "${baseUrl}home/gen_tracker_tag_location";
+const tagGenerator = "${baseUrl}home/gen_tracker_tag_generator";
 // const profile_details = "${baseUrl}profile_details";
 // const refresh_token_api = "${baseUrl}refresh_customer_token";
 

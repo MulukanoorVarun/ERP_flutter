@@ -1,8 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:android="http://schemas.android.com/apk/res/android"
-    width="1125dp"
-    height="1726.1dp"
-    viewportWidth="1125"
-    viewportHeight="1726.1">
+<svg xmlns="http://www.w3.org/2000/svg" width="1125" height="1726.1">
   <path
       d="M1125,50.2V1726.1H0V1.9C38.7,39.4 110.9,98.8 216.7,129.2c24.1,6.9 80,21 159.3,18.9 216.1,-5.9 285.1,-123.9 469,-145C906.7,-4 1001.7,-2.6 1125,50.2Z"
       fill="#e4eff9"/>

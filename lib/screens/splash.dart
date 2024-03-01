@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:GenERP/Services/user_api.dart';
+import 'package:GenERP/screens/UpdatePassword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,8 +24,9 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash>{
   void initState(){
     super.initState();
-    validate_and_run();
-    navigateAfterDelay();
+    getSessiondetailsApiFunction();
+    // validate_and_run();
+    // navigateAfterDelay();
     requestPermissions();
   }
 
@@ -49,20 +52,46 @@ class _SplashState extends State<Splash>{
 
     );
   }
-  void navigateAfterDelay() {
-    // Delay navigation by 5 seconds
-    Timer(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Login()), // Replace Dashboard with your desired destination
-      );
-    });
-  }
-  validate_and_run() async {
-    var SessionAvailable= await PreferenceService().getString("Session_id");
-    if (SessionAvailable != null) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) =>  Dashboard()));
+  // void navigateAfterDelay() {
+  //   Delay navigation by 5 seconds
+  //   Timer(Duration(seconds: 5), () {
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => Login()), // Replace Dashboard with your desired destination
+  //     );
+  //   });
+  // }
+  // validate_and_run() async {
+  //   var SessionAvailable= await PreferenceService().getString("Session_id");
+  //   if (SessionAvailable != null) {
+  //     Navigator.push(context,
+  //         MaterialPageRoute(builder: (context) =>  Dashboard()));
+  //   }
+  // }
+
+  Future<void> getSessiondetailsApiFunction() async{
+    var session= await PreferenceService().getString("Session_id");
+    var empId= await PreferenceService().getString("UserId");
+    try{
+      await UserApi.SessionExistsApi(empId, session).then((data)=>{
+        if(data!=null){
+          setState((){
+            if(data.sessionExists==1&&data.updatePasswordRequired==0){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>  Dashboard()));
+            }else if(data.sessionExists==1&&data.updatePasswordRequired==1){
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>  UpdatePassword()));
+            }else{
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) =>  Login()));
+            }
+          })
+        }
+      });
+
+    } on Error catch(e){
+      print(e.toString());
     }
   }
 

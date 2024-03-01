@@ -1,9 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:android ="http://schemas..com/apk/res/"
-    width="50dp"
-    height="50dp"
-    viewportWidth="117.87"
-    viewportHeight="141.06">
-  <path
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 119.62 140">
+
+<path
       d="M115.8,95v38.32H90V97.59Z"
       fill="#8d9fad"/>
   <path

@@ -34,6 +34,13 @@ class _WebERPState extends State<WebERP> {
     loadData();
   }
 
+  @override
+  void onDispose() {
+    // TODO: implement initState
+
+    super.dispose();
+  }
+
 
   Future<void> loadData() async {
     empId = await PreferenceService().getString("UserId") ?? "";

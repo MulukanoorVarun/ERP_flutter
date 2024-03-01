@@ -55,7 +55,9 @@ class _AddAccountState extends State<AddAccount>{
             ),
           ),
           backgroundColor: ColorConstant.erp_appColor),
-      body: Container(
+      body: SingleChildScrollView(
+        physics: FixedExtentScrollPhysics(),
+          child:Container(
         color: ColorConstant.erp_appColor,
         child: Expanded(
           child: Container(
@@ -334,7 +336,7 @@ class _AddAccountState extends State<AddAccount>{
 
           ),
         ),
-      ),
+      )),
     );
   }
 }

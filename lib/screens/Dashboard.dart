@@ -1,9 +1,11 @@
+import 'package:GenERP/screens/GenTracker/GenTrackerDashboard.dart';
 import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/WebERP.dart';
 import 'package:GenERP/screens/attendance_screen.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +19,7 @@ import '../Utils/MyWidgets.dart';
 import '../Utils/api_names.dart';
 import '../Utils/storage.dart';
 import 'Login.dart';
+import 'Scanner.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -37,6 +40,7 @@ class _DashboardState extends State<Dashboard> {
   var session="";
   var online_status = 0;
   var webPageUrl = "";
+  var roleStatus = "";
   bool isLoading = true;
 
   @override
@@ -53,6 +57,7 @@ class _DashboardState extends State<Dashboard> {
       username = await PreferenceService().getString("UserName")??"";
       email = await PreferenceService().getString("UserEmail")??"";
       session = await PreferenceService().getString("Session_id")??"";
+      roleStatus = await PreferenceService().getString("roles")??"";
       if (await PreferenceService().getString("redirectUrl") == null) {
         webPageUrl =
         "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
@@ -61,8 +66,9 @@ class _DashboardState extends State<Dashboard> {
         "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
       }
 
-      print("session"+session);
-
+      print("s:"+session);
+      print("r:"+roleStatus);
+      print(roleStatus.length);
     await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
       if (data != null)
         {
@@ -70,6 +76,7 @@ class _DashboardState extends State<Dashboard> {
             if (data.sessionExists == 1) {
               isLoading = false;
               online_status = data.attStatus??0;
+
             } else if (data.sessionExists == 0) {
               PreferenceService().clearPreferences();
               Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
@@ -94,10 +101,62 @@ class _DashboardState extends State<Dashboard> {
       DashboardApiFunction();
     });
   }
+  Future<bool> _onBackPressed() async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text('Do you want to exit the App'),
+        actions: [
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white),
+            ),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              "NO",
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: ColorConstant.erp_appColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontConstant.Size15,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white70),
+            ),
+            onPressed: () =>
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+            child: Text(
+              "YES",
+              style: GoogleFonts.ubuntu(
+                textStyle: TextStyle(
+                  color: ColorConstant.erp_appColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontConstant.Size15,
+                ),
+              ),
+            ),
+          ),
+        ],
+        elevation: 30.0,
+      ),
+      barrierDismissible: false,
+    ) ??
+        false;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+        onWillPop: _onBackPressed,
+        child:Scaffold(
           body:(isLoading)?Loaders():
            SafeArea(
               child: Container(
@@ -198,8 +257,14 @@ class _DashboardState extends State<Dashboard> {
                               Row(children: [
                                 Container(
                                   child: InkWell(
-                                    onTap: (){
-                                      // Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                                    onTap: () async {
+                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner()));
+                                      if(res==true){
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        DashboardApiFunction();
+                                      }
                                     },
                                     child:SvgPicture.asset(
                                       "assets/images/qr_scanner.svg",
@@ -247,17 +312,115 @@ class _DashboardState extends State<Dashboard> {
                         padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
                         child: Column(// Set max height constraints
                           children: [
+                            if(roleStatus.contains("430"))...[
+                              Container(child: InkWell(
+                                onTap: () async {
+                                  var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
+
+                                  if(res == true){
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    DashboardApiFunction();
+                                  }
+                                },
+                                child:Container(
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10,),
+                                      SvgPicture.asset(
+                                        "assets/checkin_out_icon.svg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      SizedBox(width: 15,),
+                                      Text(
+                                        "Check In/Out",
+                                        style: GoogleFonts.ubuntu(
+                                          textStyle: TextStyle(
+                                            fontSize: FontConstant.Size20,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          color: ColorConstant.erp_appColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ),
+                              ),),
+                            ],
+                            SizedBox(height: 15,),
+                            if(roleStatus.contains("431"))...[
+                              Container(child: InkWell(
+                                onTap: () async {
+                                  var res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                  );
+                                  if(res == true){
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    DashboardApiFunction();
+                                  }
+                                },
+
+                                child:Container(
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10,),
+                                      SvgPicture.asset(
+                                        "assets/ic_web_erp.svg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      SizedBox(width: 15,),
+                                      Text(
+                                        "ERP",
+                                        style: GoogleFonts.ubuntu(
+                                          textStyle: TextStyle(
+                                            fontSize: FontConstant.Size20,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          color: ColorConstant.erp_appColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ),
+
+                              ),),
+                            ],
+                            SizedBox(height: 15,),
+                            if(roleStatus.contains("432"))...[
                             Container(child: InkWell(
                               onTap: () async {
-                                var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
-
-                                if(res == true){
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-                                  DashboardApiFunction();
-                                }
+                                // var res = await Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                // );
+                                // if(res == true){
+                                //   setState(() {
+                                //     isLoading = true;
+                                //   });
+                                //   DashboardApiFunction();
+                                // }
                               },
+
                               child:Container(
                                 height: 80,
                                 decoration: BoxDecoration(
@@ -268,13 +431,13 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     SizedBox(width: 10,),
                                     SvgPicture.asset(
-                                      "assets/checkin_out_icon.svg",
+                                      "assets/ic_inventory.svg",
                                       height: 50,
                                       width: 50,
                                     ),
                                     SizedBox(width: 15,),
                                     Text(
-                                      "Check In/Out",
+                                      "Inventory",
                                       style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           fontSize: FontConstant.Size20,
@@ -288,13 +451,63 @@ class _DashboardState extends State<Dashboard> {
                                 ),
 
                               ),
-                            ),),
+
+                            ),),],
                             SizedBox(height: 15,),
+                            if(roleStatus.contains("433"))...[
+                            Container(child: InkWell(
+                              onTap: () async {
+                                // var res = await Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                // );
+                                // if(res == true){
+                                //   setState(() {
+                                //     isLoading = true;
+                                //   });
+                                //   DashboardApiFunction();
+                                // }
+                              },
+
+                              child:Container(
+                                height: 80,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10,),
+                                    SvgPicture.asset(
+                                      "assets/ic_technician.svg",
+                                      height: 50,
+                                      width: 50,
+                                    ),
+                                    SizedBox(width: 15,),
+                                    Text(
+                                      "Technician",
+                                      style: GoogleFonts.ubuntu(
+                                        textStyle: TextStyle(
+                                          fontSize: FontConstant.Size20,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                              ),
+
+                            ),)],
+                            SizedBox(height: 15,),
+                            if(roleStatus.contains("434"))...[
                             Container(child: InkWell(
                               onTap: () async {
                                 var res = await Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                  MaterialPageRoute(builder: (context) => GenTrackerDashboard()),
                                 );
                                 if(res == true){
                                   setState(() {
@@ -314,13 +527,13 @@ class _DashboardState extends State<Dashboard> {
                                   children: [
                                     SizedBox(width: 10,),
                                     SvgPicture.asset(
-                                      "assets/checkin_out_icon.svg",
+                                      "assets/ic_gen_tracker.svg",
                                       height: 50,
                                       width: 50,
                                     ),
                                     SizedBox(width: 15,),
                                     Text(
-                                      "ERP",
+                                      "Gen Tracker",
                                       style: GoogleFonts.ubuntu(
                                         textStyle: TextStyle(
                                           fontSize: FontConstant.Size20,
@@ -335,7 +548,7 @@ class _DashboardState extends State<Dashboard> {
 
                               ),
 
-                            ),),
+                            ),)],
                             SizedBox(height: 15,),
                           ],
                         ),
@@ -345,7 +558,7 @@ class _DashboardState extends State<Dashboard> {
                   ],
                 ),
               )
-          )
+          ))
 
       );
   }
