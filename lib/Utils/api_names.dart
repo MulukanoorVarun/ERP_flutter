@@ -28,6 +28,8 @@ const loadGeneratorDetails = "${baseUrl}home/gen_tracker_generator_details";
 const getComplaintHistoryList = "${baseUrl}home/gen_tracker_generator_complaints_list";
 const tagLocation = "${baseUrl}home/gen_tracker_tag_location";
 const tagGenerator = "${baseUrl}home/gen_tracker_tag_generator";
+const submitComplaint = "${baseUrl}home/gen_tracker_register_complaint";
+const ComplaintsSelection = "${baseUrl}home/compliants_select_data";
 // const profile_details = "${baseUrl}profile_details";
 // const refresh_token_api = "${baseUrl}refresh_customer_token";
 

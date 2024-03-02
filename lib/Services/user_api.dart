@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'package:GenERP/models/ComplaintsSelectionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
+import 'package:GenERP/models/LoginQRResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
 import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
+import 'package:GenERP/models/SubmitComplaintResponse.dart';
 import 'package:GenERP/models/TagGeneratorResponse.dart';
 import 'package:GenERP/models/TagLocationResponse.dart';
 import 'package:GenERP/models/UpdatePasswordResponse.dart';
@@ -132,7 +135,7 @@ class UserApi {
         'session_id': (sessioId).toString(),
         'posit': (latlngs).toString(),
         'location': (location).toString(),
-        'check_in_pic':check_in_pic
+
       };
       print("${empId}, ${sessioId},${location},${latlngs},${check_in_pic}");
       var res;
@@ -166,7 +169,7 @@ class UserApi {
         'session_id': (sessioId).toString(),
         'location': (location).toString(),
         'posit': (latlngs).toString(),
-        'check_out_pic':image
+
       };
       var res;
 
@@ -383,7 +386,76 @@ class UserApi {
     }
   }
 
+  static Future<SubmitComplaintResponse?> SubmitGeneratorComplaintAPI(empId,session,complaint_type_id,complaint_category_id,complaint_desc_id,running_hrs,gen_id,complaint_note) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'complaint_type_id':(complaint_type_id).toString(),
+        'complaint_category_id':(complaint_category_id).toString(),
+        'complaint_desc_id':(complaint_desc_id).toString(),
+        'running_hrs':(running_hrs).toString(),
+        'gen_id':(gen_id).toString(),
+        'complaint_note':(complaint_note).toString()
+      };
+      final res = await post(data,submitComplaint, {});
+      if (res != null) {
+        print(res.body);
+        return SubmitComplaintResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
 
+  static Future<ComplaintsSelectionResponse?> ComplaintSelectionAPI(empId,session,gen_hash_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_hash_id':(gen_hash_id).toString(),
+
+      };
+      final res = await post(data,ComplaintsSelection, {});
+      if (res != null) {
+        print(res.body);
+        return ComplaintsSelectionResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<LoginQRResponse?> QRLoginRequestAPI(empId,session,type,token) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'type':(type).toString(),
+        'token':(token).toString(),
+
+      };
+      final res = await post(data,qrLoginRequest, {});
+      if (res != null) {
+        print(res.body);
+        return LoginQRResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
 
 
 

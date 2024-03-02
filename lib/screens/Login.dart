@@ -53,6 +53,11 @@ class _LoginState extends State<Login> {
       _getId();
     }
   }
+  void onDispose() {
+    // TODO: implement initState
+    super.dispose();
+    FocusScope.of(context).unfocus();
+  }
 
   validate_and_run() async {
     var SessionAvailable = await PreferenceService().getString("Session_id");
@@ -74,7 +79,7 @@ class _LoginState extends State<Login> {
     String androidId;
     var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
     var androidDeviceInfo = await deviceInfo.androidInfo;
-    _deviceDetails = "Version Name: " + androidDeviceInfo.version.toString().trim()+ ", " + "Version Code: " + androidDeviceInfo.version.codename.toString().trim() + ", " + "OS Version: " + androidDeviceInfo.version.codename.toString().trim() + ", SDK Version: " + androidDeviceInfo.version.sdkInt.toString().trim() + ", Device: " + androidDeviceInfo.device.toString().trim() + ", Model: " + androidDeviceInfo.model.toString().trim() + ", Product: " + androidDeviceInfo.product.toString().trim() + ", Manufacturer: " + androidDeviceInfo.manufacturer.toString().trim() + ", Brand: " + androidDeviceInfo.brand.toString().trim() + ", User: " + androidDeviceInfo.data['user'].toString().trim() + ", Display: " + androidDeviceInfo.display.toString().trim() + ", Hardware: " + androidDeviceInfo.hardware.toString().trim() + ", Board: " + androidDeviceInfo.board.toString().trim()+ ", Host: " + androidDeviceInfo.host.toString().trim() + ", Serial: " + androidDeviceInfo.serialNumber.toString().trim() + ", ID: " + androidDeviceInfo.id.toString().trim() + ", Bootloader: " + androidDeviceInfo.bootloader.toString().trim() + ", CPU ABI1: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", CPU ABI2: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", FingerPrint: " + androidDeviceInfo.fingerprint.toString().trim();
+    _deviceDetails = await  "Version Name: " + androidDeviceInfo.version.toString().trim()+ ", " + "Version Code: " + androidDeviceInfo.version.codename.toString().trim() + ", " + "OS Version: " + androidDeviceInfo.version.codename.toString().trim() + ", SDK Version: " + androidDeviceInfo.version.sdkInt.toString().trim() + ", Device: " + androidDeviceInfo.device.toString().trim() + ", Model: " + androidDeviceInfo.model.toString().trim() + ", Product: " + androidDeviceInfo.product.toString().trim() + ", Manufacturer: " + androidDeviceInfo.manufacturer.toString().trim() + ", Brand: " + androidDeviceInfo.brand.toString().trim() + ", User: " + androidDeviceInfo.data['user'].toString().trim() + ", Display: " + androidDeviceInfo.display.toString().trim() + ", Hardware: " + androidDeviceInfo.hardware.toString().trim() + ", Board: " + androidDeviceInfo.board.toString().trim()+ ", Host: " + androidDeviceInfo.host.toString().trim() + ", Serial: " + androidDeviceInfo.serialNumber.toString().trim() + ", ID: " + androidDeviceInfo.id.toString().trim() + ", Bootloader: " + androidDeviceInfo.bootloader.toString().trim() + ", CPU ABI1: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", CPU ABI2: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", FingerPrint: " + androidDeviceInfo.fingerprint.toString().trim();
     // _deviceDetails = androidDeviceInfo.model.toString();
     try {
       androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
@@ -400,6 +405,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           minLines: 1,
+                          autofocus: true,
                         ),
                       ),
                       if (_validateEmail != null) ...[
@@ -472,6 +478,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           minLines: 1,
+                          autofocus: true,
                         ),
                       ),
                       if (_validatepassword != null) ...[

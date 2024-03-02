@@ -64,7 +64,7 @@ Future<String?> postImage2(Map<String, String> body,Map<String, String> headers,
   try {
     var req = http.MultipartRequest('POST', Uri.parse(urlLink));
     req.headers.addAll(headers);
-    req.files.add(await http.MultipartFile.fromPath('check_in_image', image.path));
+    req.files.add(await http.MultipartFile.fromPath('check_in_pic', image.path));
     req.fields.addAll(body);
 
     var res = await req.send();
@@ -87,7 +87,7 @@ Future<String?> postImage3(Map<String, String> body, String urlLink,
      File itemImage) async {
   try {
     var req = http.MultipartRequest('POST', Uri.parse(urlLink));
-    req.files.add(await http.MultipartFile.fromPath('check_out_image', itemImage.path));
+    req.files.add(await http.MultipartFile.fromPath('check_out_pic', itemImage.path));
     req.fields.addAll(body);
 
     var res = await req.send();

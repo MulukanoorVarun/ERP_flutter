@@ -5,6 +5,7 @@ import 'package:GenERP/screens/AddAccount.dart';
 import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker/GeneratoraDetails.dart';
+import 'package:GenERP/screens/GenTracker/RegisterComplaint.dart';
 import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -47,10 +48,10 @@ class _QRScannerState extends State<QRScanner> {
           setState((){
             if(data.error==0){
               if(widget.title=="Generator Details"){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneratorDetails(generator_id: Generator_id.text,)));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneratorDetails(generator_id: Generator_id.text)));
               }
               if(widget.title=="Register Complaint"){
-                // Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneratorDetails()));
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterComplaint(generator_id: Generator_id.text)));
               }
             }
           })
@@ -104,6 +105,7 @@ class _QRScannerState extends State<QRScanner> {
       ),
       body: SingleChildScrollView(
       child:Container(
+        height: screenHeight,
         color: ColorConstant.erp_appColor,
         child: Expanded(
           child: Container(

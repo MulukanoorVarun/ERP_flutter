@@ -44,17 +44,22 @@ class _TagGeneratorState extends State<TagGenerator> {
       await UserApi.TagGeneratorAPI(empId, session,Generator_id.text,Engine_no.text).then((data)=>{
         if(data!=null){
           setState((){
-            if(data.error==0){
-              toast(context,data.message);
+            if(data.sessionExists==1){
+              if(data.error==0){
+                toast(context,data.message);
 
-            }else if(data.error==1){
-              toast(context, data.message);
-            }else if(data.error==2){
-              toast(context, data.message);
+              }else if(data.error==1){
+                toast(context, data.message);
+              }else if(data.error==2){
+                toast(context, data.message);
+              }
+              else{
+                toast(context, "Something Went wrong, Please Try Again!");
+              }
+            }else{
+              toast(context, "Your session has expired, please login again!");
             }
-            else{
-              toast(context, "Something Went wrong, Please Try Again!");
-            }
+
           })
         }else{
 

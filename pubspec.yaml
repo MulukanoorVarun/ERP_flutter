@@ -98,7 +98,7 @@ dependencies:
   flutter_downloader: ^1.11.6
   flutter_download_manager: ^0.5.5
   qr_code_scanner: ^1.0.1
-
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:

@@ -86,7 +86,7 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                       children: [
                         Container(child: InkWell(
                         onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title: "Generator Details",)));
+                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title:"Generator Details",)));
                            },
                            child: Container(
                         height: 80,
@@ -124,7 +124,7 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
 
                      Container(child: InkWell(
                         onTap: () async {
-                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title: "Register Complaint",)));
+                          await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title:"Register Complaint")));
                         },
 
                        child: Container(
