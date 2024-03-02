@@ -33,6 +33,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
   String? selectedType;
   String? selectedCategory;
   String? selectedDescription;
+  ComplaintTypeList? selectedComplaintType;
 
   var session = "";
   var empId = "";
@@ -63,7 +64,6 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
               Complaint_type_dropdown = data.complaintTypeList!;
               Complaint_category_dropdown = data.complaintCategoryList!;
               Complaint_description_dropdown = data.complaintDescriptionList!;
-              print("littu");
             }
           })
         }
@@ -368,8 +368,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           DropdownButtonHideUnderline(
                             child: Container(
                               width: 360,
-                              child: DropdownButton2<String>(
-
+                              child: DropdownButton2<ComplaintTypeList>(
                                 isExpanded: true,
                                 hint: const Row(
                                   children: [
@@ -386,14 +385,13 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     ),
                                   ],
                                 ),
-                                items: Complaint_type_dropdown.map((dynamic item1) =>
-                                    DropdownMenuItem<String>(
-                                      value: item1,
+                                items:Complaint_type_dropdown.map((complaintType) =>
+                                    DropdownMenuItem<ComplaintTypeList>(
+                                      value: complaintType,
                                       child: Text(
-                                        item1,
+                                        complaintType.name ?? '',
                                         style: const
                                         TextStyle(
-
                                           fontSize: 14,
                                           fontWeight: FontWeight.bold,
                                           color: Color(0xFF011842),
@@ -403,12 +401,16 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
 
                                     ))
                                     .toList(),
-                                value: selectedType,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    selectedType = value;
-                                  });
+                                value: selectedComplaintType,
+                                onChanged: (ComplaintTypeList? value) {
+                                  if (value != null) {
+                                    setState(() {
+                                      selectedComplaintType = value;
+                                      print("Selected Complaint Type: ${value.name}, ID: ${value.id}");
+                                    });
+                                  }
                                 },
+
                                 buttonStyleData: ButtonStyleData(
                                   height: 50,
                                   width: 160,

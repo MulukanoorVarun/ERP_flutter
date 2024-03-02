@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'package:GenERP/models/ComplaintsSelectionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
-import 'package:GenERP/models/LoginQRResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
 import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
-import 'package:GenERP/models/SubmitComplaintResponse.dart';
 import 'package:GenERP/models/TagGeneratorResponse.dart';
 import 'package:GenERP/models/TagLocationResponse.dart';
 import 'package:GenERP/models/UpdatePasswordResponse.dart';
@@ -20,7 +17,10 @@ import '../models/AttendanceHistoryresponse.dart';
 import '../models/AttendanceListResponse.dart';
 import '../models/CheckInResponse.dart';
 import '../models/CheckOutResponse.dart';
+import '../models/ComplaintsSelectionResponse.dart';
 import '../models/DayWiseAttendance.dart';
+import '../models/LoginQRResponse.dart';
+import '../models/SubmitComplaintResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
@@ -137,19 +137,15 @@ class UserApi {
         'location': (location).toString(),
 
       };
-      print("${empId}, ${sessioId},${location},${latlngs},${check_in_pic}");
       var res;
       if (check_in_pic != null) {
-        res = await postImage2(data,{}, checkInapi, check_in_pic);
+        res = await postImage(data, checkInapi, {},check_in_pic);
         res = jsonDecode(res);
-        print(res.body);
       } else {
         res = await post(data, checkInapi, {});
-        res = jsonDecode(res.body);
-        print(res.body);
+        res = jsonDecode(res);
       }
       if (res != null) {
-        print(res);
         print(res.body);
         return CheckInResponse.fromJson(res);
       } else {
@@ -172,12 +168,15 @@ class UserApi {
 
       };
       var res;
-
       if (image != null) {
-
-          res = await postImage3(data, checkOutapi, image);
-          res = jsonDecode(res);
-
+        res = await postImage2(data,{},checkOutapi,image);
+        res = jsonDecode(res);
+      } else {
+        res = await post(data, checkOutapi, {});
+        res = jsonDecode(res);
+      }
+      if (res != null) {
+        print(res);
         return CheckOutResponse.fromJson(res);
       } else {
         print("Null Response");

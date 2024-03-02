@@ -173,21 +173,23 @@ class _CheckInScreenState extends State<CheckInScreen> {
   Future<void> CheckIn() async {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
+    print(empId);
+    print(sessionId);
+    print(_locationController.text);
+    print(latlongs);
+    print(_image);
     try {
-
         await UserApi.CheckInApi(empId,sessionId,_locationController.text,latlongs,_image).then((data) => {
           if (data != null)
             {
               setState(() {
                 if (data.error == 0) {
-                  print(empId);
-                  print(sessionId);
-                  print(_locationController.text);
-                  print(latlongs);
-                  print(_image);
+                  toast(context, "CheckedIn Successfully");
+                  Navigator.pop(context,true);
                   isLoading = false;
                   // BackgroundLocation.startLocationService();
                 } else {
+                  toast(context, "CheckedIn UnSuccessfull");
                   print(data.error.toString());
                 }
               })

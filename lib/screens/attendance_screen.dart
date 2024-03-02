@@ -14,6 +14,7 @@ import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import '../models/AttendanceListResponse.dart';
+import 'background_service.dart';
 
 class Attendance extends StatefulWidget {
   const Attendance({Key? key}) : super(key: key);
@@ -163,7 +164,9 @@ class _AttendanceState extends State<Attendance> {
                                   ),
                             ),
                           ),
-                          ]else...[
+                          ]
+                         //  else...[
+                          else if(attStatus==1)...[
                             InkWell(
                               onTap: () async{
                                 var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));

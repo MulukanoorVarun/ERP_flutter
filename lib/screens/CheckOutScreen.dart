@@ -163,9 +163,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           {
             setState(() {
               if (data.error == 0) {
+                toast(context,"Checked out Successfully!");
+                Navigator.pop(context,true);
                 isLoading = false;
-                BackgroundLocation.stopLocationService();
+                //BackgroundLocation.stopLocationService();
               } else {
+                toast(context,"Checked out UnSuccessfull");
                 print(data.error.toString());
               }
             })

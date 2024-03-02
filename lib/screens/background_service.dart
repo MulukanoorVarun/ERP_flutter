@@ -1,12 +1,41 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io' show Platform;
 
 import 'package:GenERP/Services/other_services.dart';
+import 'package:GenERP/Utils/api_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:web_socket_channel/io.dart';
 
+import '../Services/WebSocketManager.dart';
 import '../Services/user_api.dart';
 import '../Utils/storage.dart';
+
+
+
+
+class BackgroundService extends StatefulWidget {
+  const BackgroundService({Key? key}) : super(key: key);
+
+  @override
+  State<BackgroundService> createState() => _BackgroundServiceState();
+}
+
+class _BackgroundServiceState extends State<BackgroundService> {
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    throw UnimplementedError();
+  }
+}
 
 /// BackgroundLocation plugin to get background
 /// lcoation updates in iOS and Android
@@ -17,7 +46,29 @@ class BackgroundLocation {
   MethodChannel('com.almoullim.background_location/methods');
   static Timer? _locationTimer;
 
-  static get context => null; // Timer for location updates
+  static get context => null;
+
+  WebSocketManager webSocketManager = WebSocketManager(
+    onConnectSuccess: () {
+      // Handle WebSocket connection success
+    },
+    onMessage: (message) {
+      // Handle incoming WebSocket message
+    },
+    onClose: () {
+      // Handle WebSocket connection closure
+    },
+    onConnectFailed: () {
+      // Handle WebSocket connection failure
+    },
+  );
+
+    void initWebSocket() {
+    Future.delayed(Duration.zero, () {
+      webSocketManager.connect();
+    });
+  }
+
 
 
   /// Stop receiving location updates
@@ -38,9 +89,12 @@ class BackgroundLocation {
   static startLocationService() async {
     print("Background location Service started");
     // Stop previous timer if running
+    BackgroundLocation backgroundLocation = BackgroundLocation();
+    // Initialize WebSocket
+    backgroundLocation.initWebSocket();
     stopLocationService();
     // Start a new timer for location updates
-    _locationTimer = Timer.periodic(Duration(seconds: 2), (timer) async {
+    _locationTimer = Timer.periodic(Duration(seconds: 20), (timer) async {
       await _channel.invokeMethod('start_location_service');
       var location = await BackgroundLocation().getCurrentLocation();
     });
@@ -66,8 +120,12 @@ class BackgroundLocation {
     }
   }
 
+  String? empId;
+  String? sessionId;
   /// Get the current location once.
   Future<Location> getCurrentLocation() async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
     print('Received Location Update: of GEN ERP');
     var completer = Completer<Location>();
 
@@ -87,10 +145,9 @@ class BackgroundLocation {
   }
 
 
-
   /// Register a function to recive location updates as long as the location
   /// service has started
-  static getLocationUpdates(Function(Location) location) {
+    getLocationUpdates(Function(Location) location) {
     // add a handler on the channel to recive updates from the native classes
     _channel.setMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'location') {
@@ -109,37 +166,74 @@ class BackgroundLocation {
               time: locationData['time'],
               isMock: locationData['is_mock']),
         );
+
+        //Send location updates using WebSocketManager
+        webSocketManager.sendMessage(jsonEncode({
+          "command": "server_request",
+          "route": "attendenece_live_location_update",
+          "session_id":sessionId,
+          "ref_data": {
+            "session_id":sessionId,
+            "location": "${locationData['latitude']},${locationData['longitude']}",
+            "speed": locationData['speed'],
+            "altitude": locationData['altitude'],
+            "direction": locationData['bearing'],
+            "direction_accuracy": locationData['bearingAccuracyDegrees'],
+            "altitude_accuracy": locationData['verticalAccuracyMeters'],
+            "speed_accuracy": locationData['speedAccuracyMetersPerSecond'],
+            "location_accuracy": locationData['accuracy'],
+            "location_provider": "",
+          }
+        }));
+
+          saveLocations(
+              empId,
+              sessionId,
+          "${locationData['latitude']},""${locationData['longitude']}",
+          locationData['speed'],
+          locationData['altitude'],
+          locationData['bearing'],
+          locationData['bearingAccuracyDegrees'],
+          locationData['verticalAccuracyMeters'],
+          locationData['speedAccuracyMetersPerSecond'],
+          locationData['accuracy'],
+          ""
+      );
+
       }
     });
   }
 }
 
-//String? empId;
-// String? sessionId;
-// Future<void> CheckIn() async {
-//   empId = await PreferenceService().getString("UserId");
-//   sessionId = await PreferenceService().getString("Session_id");
-//   try {
-//     print(empId);
-//     print(sessionId);
-//     await UserApi.CheckInApi(empId,sessionId).then((data) => {
-//       if (data != null)
-//         {
-//             if (data.error == 0) {
-//               BackgroundLocation.startLocationService();
-//             } else {
-//               print(data.error.toString());
-//             }
-//         }
-//       else
-//         {
-//           print("Something went wrong, Please try again.")}
-//     });
-//
-//   } on Exception catch (e) {
-//     print("$e");
-//   }
-// }
+Future<void> saveLocations(
+    empId,
+    sessionId,
+    latLng,
+    speed,
+    altitude,
+    bearing,
+    bearingAccuracyDegrees,
+    verticalAccuracyMeters,
+    speedAccuracyMetersPerSecond,
+    accuracy,
+    provider) async {
+  print(empId);
+  print(sessionId);
+  print(latLng);
+  print(speed);
+  print(altitude);
+  print(bearing);
+  print(bearingAccuracyDegrees);
+  print(verticalAccuracyMeters);
+  print(speedAccuracyMetersPerSecond);
+  print(accuracy);
+  print(provider);
+
+
+  print("Saving Location Updates Started!");
+
+
+}
 
 /// about the user current location
 class Location {

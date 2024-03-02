@@ -9,9 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../Services/WebSocketManager.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -31,7 +33,7 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
 
-  final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
+  // final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
   var username="";
   var email="";
   var loginStatus=0;
@@ -42,13 +44,32 @@ class _DashboardState extends State<Dashboard> {
   var webPageUrl = "";
   var roleStatus = "";
   bool isLoading = true;
+  var Sessionid;
+
+
+  WebSocketManager webSocketManager = WebSocketManager(
+    onConnectSuccess: () {
+      // Handle on connect success callback
+    },
+    onMessage: (message) {
+      // Handle on message callback
+    },
+    onClose: () {
+      // Handle on close callback
+    },
+    onConnectFailed: () {
+      // Handle on connect failed callback
+    },
+  );
 
   @override
   void initState()  {
-    // TODO: implement initState
+    print(WEB_SOCKET_URL);
+    webSocketManager.init();
     super.initState();
     DashboardApiFunction();
   }
+
 
   Future<void> DashboardApiFunction() async {
     try{
