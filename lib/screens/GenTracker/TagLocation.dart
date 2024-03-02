@@ -16,6 +16,7 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../Scanner.dart';
 
 class TagLocation extends StatefulWidget {
   const TagLocation({Key? key}) : super(key: key);
@@ -194,15 +195,20 @@ class _TagLocationState extends State<TagLocation> {
               child: Column(// Set max height constraints
                 children: [
                   SizedBox(height: 15.0,),
-                  Container(
-                    child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                        fontSize: FontConstant.Size25,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      color: ColorConstant.erp_appColor,
-                    ),),),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagLocation")));
+                    },
+                    child: Container(
+                      child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          fontSize: FontConstant.Size25,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        color: ColorConstant.erp_appColor,
+                      ),),),
+                  ),
                   SizedBox(height: 5.0,),
                   Container(
                     height: screenHeight*0.75,

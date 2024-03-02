@@ -12,6 +12,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../Scanner.dart';
 
 class TagGenerator extends StatefulWidget {
   const TagGenerator({Key? key}) : super(key: key);
@@ -255,15 +256,20 @@ class _TagGeneratorState extends State<TagGenerator> {
               child: Column(// Set max height constraints
                 children: [
                   SizedBox(height: 15.0,),
-                  Container(
-                    child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
-                        fontSize: FontConstant.Size25,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      color: ColorConstant.erp_appColor,
-                    ),),),
+                  InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagGenerator")));
+                    },
+                    child: Container(
+                      child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          fontSize: FontConstant.Size25,
+                          fontWeight: FontWeight.bold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        color: ColorConstant.erp_appColor,
+                      ),),),
+                  ),
                   SizedBox(height: 5.0,),
                   Container(
                     height: screenHeight*0.75,

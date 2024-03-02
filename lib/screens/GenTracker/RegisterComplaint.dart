@@ -33,7 +33,14 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
   String? selectedType;
   String? selectedCategory;
   String? selectedDescription;
+
   ComplaintTypeList? selectedComplaintType;
+  ComplaintCategoryList? selectedCategoryType;
+  ComplaintDescriptionList? selectedDescriptionType;
+
+  String? selectedTypeId;
+  String? selectedCategoryId;
+  String? selectedDescriptionId;
 
   var session = "";
   var empId = "";
@@ -109,12 +116,17 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
     try{
-      await UserApi.SubmitGeneratorComplaintAPI(empId, session,selectedType,selectedCategory,selectedDescription,running_hrs,widget.generator_id,Complaint_Note).then((data)=>{
+      print("selectedTypeId:${selectedTypeId}");
+      print("selectedDescriptionId:${selectedDescriptionId}");
+      print("selectedDescriptionId:${selectedDescriptionId}");
+      await UserApi.SubmitGeneratorComplaintAPI(empId, session,selectedTypeId,selectedDescriptionId,selectedDescriptionId
+          ,running_hrs,widget.generator_id,Complaint_Note).then((data)=>{
         if(data!=null){
           setState((){
             if(data.sessionExists==1){
               if(data.error==0){
                 toast(context,"Complaint Submitted Successfully");
+                Navigator.pop(context,true);
 
               }else if(data.error==1){
                 toast(context, "Something Went wrong, Please Try Again!");
@@ -407,6 +419,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     setState(() {
                                       selectedComplaintType = value;
                                       print("Selected Complaint Type: ${value.name}, ID: ${value.id}");
+                                      selectedType = value?.name;
+                                      selectedTypeId = value?.id;
+                                      print("hfjkshfg"+selectedTypeId.toString());
                                     });
                                   }
                                 },
@@ -458,7 +473,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                             DropdownButtonHideUnderline(
                               child: Container(
                                 width: 360,
-                                child: DropdownButton2<String>(
+                                child: DropdownButton2<ComplaintCategoryList>(
 
                                   isExpanded: true,
                                   hint: const Row(
@@ -477,11 +492,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     ],
                                   ),
                                   items: Complaint_category_dropdown
-                                      .map((dynamic item) =>
-                                      DropdownMenuItem<String>(
-                                        value: item,
+                                      .map((Category) =>
+                                      DropdownMenuItem<ComplaintCategoryList>(
+                                        value: Category,
                                         child: Text(
-                                          item,
+                                          Category.name ?? "",
                                           style: const
                                           TextStyle(
 
@@ -494,10 +509,12 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
 
                                       ))
                                       .toList(),
-                                  value: selectedCategory,
-                                  onChanged: (String? value) {
+                                  value: selectedCategoryType,
+                                  onChanged: (ComplaintCategoryList? value) {
                                     setState(() {
-                                      selectedCategory = value;
+                                      selectedCategoryType = value;
+                                      selectedCategory=value?.name;
+                                      selectedCategoryId = value?.id;
                                     });
                                   },
                                   buttonStyleData: ButtonStyleData(
@@ -549,7 +566,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                             DropdownButtonHideUnderline(
                               child: Container(
                                 width: 360,
-                                child: DropdownButton2<String>(
+                                child: DropdownButton2<ComplaintDescriptionList>(
 
                                   isExpanded: true,
                                   hint: const Row(
@@ -568,11 +585,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     ],
                                   ),
                                   items: Complaint_description_dropdown
-                                      .map((dynamic item) =>
-                                      DropdownMenuItem<String>(
-                                        value: item,
+                                      .map((Description) =>
+                                      DropdownMenuItem<ComplaintDescriptionList>(
+                                        value: Description,
                                         child: Text(
-                                          item,
+                                          Description.name??"",
                                           style: const
                                           TextStyle(
 
@@ -585,11 +602,13 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
 
                                       ))
                                       .toList(),
-                                  value: selectedDescription,
-                                  onChanged: (String? value) {
+                                  value: selectedDescriptionType,
+                                  onChanged: (ComplaintDescriptionList? value) {
                                     setState(() {
-                                      selectedDescription = value;
-                                      print("selected"+value.toString());
+                                      selectedDescriptionType = value;
+                                      selectedDescription = value?.name;
+                                      selectedDescriptionId = value?.id;
+
                                     });
                                   },
                                   buttonStyleData: ButtonStyleData(

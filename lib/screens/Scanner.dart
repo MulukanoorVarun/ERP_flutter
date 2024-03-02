@@ -13,7 +13,8 @@ import 'dart:convert';
 
 
 class Scanner extends StatefulWidget {
-  const Scanner({Key? key}) : super(key: key);
+  final from;
+  const Scanner({Key? key,required this.from}) : super(key: key);
 
   @override
   State<Scanner> createState() => _ScannerState();
@@ -47,7 +48,6 @@ class _ScannerState extends State<Scanner> {
         // result = scanData;
 
         print(a.toString());
-        extractTokenFromQRCode(scanData.toString());
         print("littu");
       });
     });
@@ -61,42 +61,28 @@ class _ScannerState extends State<Scanner> {
         print(scanData.format);
         print("b");
         print(scanData.rawBytes);
-        // scanData.code.fromJson(jsonDecode(scanData.code));
-        String? jsonData = scanData.code;
+        if(widget.from == "dashboard"){
+          var decodedata = jsonDecode(scanData.code!);
+          var token = decodedata['data']['token'];
+          print(token);
+          var type = decodedata['type'];
+          LoadQRAPIFunction(token,type);
+        }
+        if(widget.from =="generatorDetails"){
 
-        // Parse JSON data
-        Map<String, dynamic> parsedData = jsonDecode(jsonData!);
+        }
+        if(widget.from =="registerComplaint"){
 
-        // Access individual fields
-        String name = parsedData['name'];
-        int age = parsedData['age'];
-        String city = parsedData['city'];
+        }
+        if(widget.from =="tagGenerator"){
 
-        // Print the parsed data
-        print('Name: $name');
-        print('Age: $age');
-        print('City: $city');
-        // extractTokenFromQRCode("${scanData.code}");
+        }
+        if(widget.from =="tagLocation"){
+
+        }
+
       });
     });
-  }
-
-  String extractTokenFromQRCode(String qrCodeData) {
-    try {
-      // Parse the JSON data from the QR code
-      Map<String, dynamic> jsonData = jsonDecode(qrCodeData);
-
-      // Extract the token from the parsed data
-      String token = jsonData['token'];
-      print(jsonData['token'].toString());
-      print("srinivas");
-
-      return token;
-    } catch (e) {
-      // Handle parsing errors or missing token
-      print('Error extracting token from QR code: $e');
-      return ''; // Return empty string if token extraction fails
-    }
   }
 
 

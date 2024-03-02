@@ -279,7 +279,7 @@ class _DashboardState extends State<Dashboard> {
                                 Container(
                                   child: InkWell(
                                     onTap: () async {
-                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner()));
+                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner(from: "dashboard",)));
                                       if(res==true){
                                         setState(() {
                                           isLoading = true;

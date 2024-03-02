@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../Scanner.dart';
 
 class QRScanner extends StatefulWidget {
   final title;
@@ -141,12 +142,23 @@ class _QRScannerState extends State<QRScanner> {
                   Column(
                     children: [
                       SizedBox(height: 25.0,),
-                      Container(
+                      InkWell(
+                        onTap: (){
+                          if(widget.title=="Generator Details"){
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"generatorDetails")));
+                          }
+                          if(widget.title=="Register Complaint"){
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
+                          }
 
-                        child: SvgPicture.asset(
-                          "assets/ic_qrcode.svg",
-                          height: 350,
-                          width: 350,
+                        },
+                        child: Container(
+
+                          child: SvgPicture.asset(
+                            "assets/ic_qrcode.svg",
+                            height: 350,
+                            width: 350,
+                          ),
                         ),
                       ),
                       Container(
