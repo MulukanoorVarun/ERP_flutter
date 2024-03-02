@@ -19,6 +19,9 @@ class loadGeneratorDetailsResponse {
   String? dispDate;
   String? cmsngDate;
   String? status;
+  List<ComplaintCategoryList>? complaintCategoryList;
+  List<ComplaintTypeList>? complaintTypeList;
+  List<ComplaintDescriptionList>? complaintDescriptionList;
   String? nextService;
   int? sessionExists;
 
@@ -43,6 +46,9 @@ class loadGeneratorDetailsResponse {
         this.dispDate,
         this.cmsngDate,
         this.status,
+        this.complaintCategoryList,
+        this.complaintTypeList,
+        this.complaintDescriptionList,
         this.nextService,
         this.sessionExists});
 
@@ -67,6 +73,24 @@ class loadGeneratorDetailsResponse {
     dispDate = json['disp_date'];
     cmsngDate = json['cmsng_date'];
     status = json['status'];
+    if (json['complaint_category_list'] != null) {
+      complaintCategoryList = <ComplaintCategoryList>[];
+      json['complaint_category_list'].forEach((v) {
+        complaintCategoryList!.add(new ComplaintCategoryList.fromJson(v));
+      });
+    }
+    if (json['complaint_type_list'] != null) {
+      complaintTypeList = <ComplaintTypeList>[];
+      json['complaint_type_list'].forEach((v) {
+        complaintTypeList!.add(new ComplaintTypeList.fromJson(v));
+      });
+    }
+    if (json['complaint_description_list'] != null) {
+      complaintDescriptionList = <ComplaintDescriptionList>[];
+      json['complaint_description_list'].forEach((v) {
+        complaintDescriptionList!.add(new ComplaintDescriptionList.fromJson(v));
+      });
+    }
     nextService = json['next_service'];
     sessionExists = json['session_exists'];
   }
@@ -93,8 +117,75 @@ class loadGeneratorDetailsResponse {
     data['disp_date'] = this.dispDate;
     data['cmsng_date'] = this.cmsngDate;
     data['status'] = this.status;
+    if (this.complaintCategoryList != null) {
+      data['complaint_category_list'] =
+          this.complaintCategoryList!.map((v) => v.toJson()).toList();
+    }
+    if (this.complaintTypeList != null) {
+      data['complaint_type_list'] =
+          this.complaintTypeList!.map((v) => v.toJson()).toList();
+    }
+    if (this.complaintDescriptionList != null) {
+      data['complaint_description_list'] =
+          this.complaintDescriptionList!.map((v) => v.toJson()).toList();
+    }
     data['next_service'] = this.nextService;
     data['session_exists'] = this.sessionExists;
+    return data;
+  }
+}
+
+class ComplaintCategoryList {
+  String? id;
+  String? name;
+
+  ComplaintCategoryList({this.id, this.name});
+
+  ComplaintCategoryList.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    return data;
+  }
+}
+class ComplaintTypeList {
+  String? id;
+  String? name;
+
+  ComplaintTypeList({this.id, this.name});
+
+  ComplaintTypeList.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
+    return data;
+  }
+}
+class ComplaintDescriptionList {
+  String? id;
+  String? name;
+
+  ComplaintDescriptionList({this.id, this.name});
+
+  ComplaintDescriptionList.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['name'] = this.name;
     return data;
   }
 }

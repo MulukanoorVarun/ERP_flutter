@@ -27,9 +27,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
   // TextEditingController Complaint_description_dropdown = TextEditingController();
   TextEditingController Complaint_Note = TextEditingController();
 
-   List<ServiceComptType> Complaint_type_dropdown = [];
-   List<ServiceComptCat> Complaint_category_dropdown = [];
-   List<ServiceComptDesc> Complaint_description_dropdown = [];
+   List<ComplaintTypeList> Complaint_type_dropdown = [];
+   List<ComplaintCategoryList> Complaint_category_dropdown = [];
+   List<ComplaintDescriptionList> Complaint_description_dropdown = [];
   String? selectedType;
   String? selectedCategory;
   String? selectedDescription;
@@ -44,7 +44,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
   void initState(){
     super.initState();
     LoadgeneratorDetailsApifunction();
-    LoadComplaintsApifunction();
+    // LoadComplaintsApifunction();
   }
 
 
@@ -60,10 +60,10 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
               gen_id = data.genId!;
               product_name = data.spname!;
               eng_no = data.engineNo!;
-              // Complaint_type_dropdown = data.complaintTypeList!;
-              // Complaint_category_dropdown = data.complaintCategoryList!;
-              // Complaint_description_dropdown = data.complaintDescriptionList!;
-
+              Complaint_type_dropdown = data.complaintTypeList!;
+              Complaint_category_dropdown = data.complaintCategoryList!;
+              Complaint_description_dropdown = data.complaintDescriptionList!;
+              print("littu");
             }
           })
         }
@@ -74,32 +74,37 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
     }
   }
 
-  Future<void> LoadComplaintsApifunction() async{
-    try{
-      await UserApi.ComplaintSelectionAPI(empId, session,widget.generator_id).then((data)=>{
-        if(data!=null){
-          setState((){
-            if(data.sessionExists==1){
-              if(data.error==0){
+  // Future<void> LoadComplaintsApifunction() async{
+  //   try{
+  //     await UserApi.ComplaintSelectionAPI(empId, session,widget.generator_id).then((data)=>{
+  //       if(data!=null){
+  //         setState((){
+  //           if(data.sessionExists==1){
+  //             if(data.error==0){
+  //
+  //               Complaint_type_dropdown = data.serviceComptType!;
+  //               Complaint_category_dropdown = data.serviceComptCat!;
+  //               Complaint_description_dropdown = data.serviceComptDesc!;
+  //               print("littu");
+  //               print(Complaint_description_dropdown);
+  //               print(Complaint_description_dropdown);
+  //               print(Complaint_description_dropdown);
+  //
+  //             }
+  //           }else{
+  //             // PreferenceService().clearPreferences();
+  //             // Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
+  //           }
+  //
+  //         })
+  //       }
+  //     });
+  //
+  //   } on Error catch(e){
+  //     print(e.toString());
+  //   }
+  // }
 
-                Complaint_type_dropdown = data.serviceComptType!;
-                Complaint_category_dropdown = data.serviceComptCat!;
-                Complaint_description_dropdown = data.serviceComptDesc!;
-
-              }
-            }else{
-              // PreferenceService().clearPreferences();
-              // Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
-            }
-
-          })
-        }
-      });
-
-    } on Error catch(e){
-      print(e.toString());
-    }
-  }
   Future<void> SubmitComplaintFunction() async{
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
