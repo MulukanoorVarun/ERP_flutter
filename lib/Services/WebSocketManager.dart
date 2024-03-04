@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:GenERP/Utils/api_names.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:http/http.dart' as http;
 import 'package:web_socket_channel/io.dart';
 
@@ -140,6 +141,15 @@ class WebSocketManager {
       channel?.sink.close();
       channel = null;
       isConnect = false;
+    }
+  }
+
+  Future<bool> isNetworkAvailable() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      return false;
+    } else {
+      return true;
     }
   }
 }

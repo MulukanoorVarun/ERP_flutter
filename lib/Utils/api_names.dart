@@ -30,6 +30,8 @@ const tagLocation = "${baseUrl}home/gen_tracker_tag_location";
 const tagGenerator = "${baseUrl}home/gen_tracker_tag_generator";
 const submitComplaint = "${baseUrl}home/gen_tracker_register_complaint";
 const ComplaintsSelection = "${baseUrl}home/compliants_select_data";
+const inventory_part_detailsAPI = "${baseUrl}home/inventory_part_details";
+const inventory_stock_updateAPI = "${baseUrl}home/inventory_update_stock";
 // const profile_details = "${baseUrl}profile_details";
 // const refresh_token_api = "${baseUrl}refresh_customer_token";
 

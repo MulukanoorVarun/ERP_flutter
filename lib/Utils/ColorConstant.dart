@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class ColorConstant {
   static Color erp_appColor = fromHex("#011842");
   static Color edit_bg_color = fromHex("#E4EFF9");
+  static Color absent_color = fromHex("#FF0000");
   static Color appbardash = fromHex("#1A0D00");
   static Color scafcolor = fromHex("#F3F4FB");
   static Color buttonback = fromHex("#FFEBCC");

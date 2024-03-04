@@ -169,23 +169,28 @@ class BackgroundLocation {
         );
 
         //Send location updates using WebSocketManager
-        webSocketManager.sendMessage(jsonEncode({
-          "command": "server_request",
-          "route": "attendenece_live_location_update",
-          "session_id":sessionId,
-          "ref_data": {
-            "session_id":sessionId,
-            "location": "${locationData['latitude']},${locationData['longitude']}",
-            "speed": locationData['speed'],
-            "altitude": locationData['altitude'],
-            "direction": locationData['bearing'],
-            "direction_accuracy": locationData['bearingAccuracyDegrees'],
-            "altitude_accuracy": locationData['verticalAccuracyMeters'],
-            "speed_accuracy": locationData['speedAccuracyMetersPerSecond'],
-            "location_accuracy": locationData['accuracy'],
-            "location_provider": "",
-          }
-        }));
+        if(await webSocketManager.isNetworkAvailable()) {
+          webSocketManager.sendMessage(jsonEncode({
+            "command": "server_request",
+            "route": "attendenece_live_location_update",
+            "session_id": sessionId,
+            "ref_data": {
+              "session_id": sessionId,
+              "location": "${locationData['latitude']},${locationData['longitude']}",
+              "speed": locationData['speed'],
+              "altitude": locationData['altitude'],
+              "direction": locationData['bearing'],
+              "direction_accuracy": locationData['bearingAccuracyDegrees'],
+              "altitude_accuracy": locationData['verticalAccuracyMeters'],
+              "speed_accuracy": locationData['speedAccuracyMetersPerSecond'],
+              "location_accuracy": locationData['accuracy'],
+              "location_provider": "",
+            }
+          }));
+          setAndroidNotification(title: "You're Online !", message: "", icon: "");
+        }else{
+          setAndroidNotification(title: "You're Offline !, Check your network connection.", message: "", icon: "");
+        }
 
           saveLocations(
               empId,

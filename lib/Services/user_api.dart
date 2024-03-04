@@ -19,6 +19,7 @@ import '../models/CheckInResponse.dart';
 import '../models/CheckOutResponse.dart';
 import '../models/ComplaintsSelectionResponse.dart';
 import '../models/DayWiseAttendance.dart';
+import '../models/Inventory_Part_details_response.dart';
 import '../models/LoginQRResponse.dart';
 import '../models/SubmitComplaintResponse.dart';
 import 'api_calls.dart';
@@ -146,7 +147,7 @@ class UserApi {
         res = jsonDecode(res);
       }
       if (res != null) {
-        print(res.body);
+        print(res);
         return CheckInResponse.fromJson(res);
       } else {
         print("Null Response");
@@ -446,6 +447,57 @@ class UserApi {
       if (res != null) {
         print(res.body);
         return LoginQRResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  ///Inventory Module API's
+
+
+  static Future<Inventory_Part_details_response?> LoadPartDetailsAPI(empId,session,part_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'part_id':(part_id).toString(),
+
+      };
+      final res = await post(data,inventory_part_detailsAPI, {});
+      if (res != null) {
+        print(res.body);
+        return Inventory_Part_details_response.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+
+  static Future<loadGeneratorDetailsResponse?>InventoryUpdateStockAPI(empId,session,qty,descr,part_id,tran_type) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'qty': (qty).toString(),
+        'descr': (descr).toString(),
+        'product_id':(part_id).toString(),
+        'tran_type':(tran_type).toString(),
+
+      };
+      final res = await post(data,inventory_stock_updateAPI, {});
+      if (res != null) {
+        print(res.body);
+        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
