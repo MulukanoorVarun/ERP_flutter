@@ -99,6 +99,7 @@ dependencies:
   flutter_download_manager: ^0.5.5
   qr_code_scanner: ^1.0.1
   dropdown_button2: ^2.3.9
+  dio: ^5.4.1
 
 dev_dependencies:
   flutter_test:

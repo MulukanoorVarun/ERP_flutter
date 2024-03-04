@@ -1,10 +1,12 @@
 import 'package:GenERP/Utils/storage.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
  
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_download_manager/flutter_download_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
+import '../Services/other_services.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
@@ -161,13 +163,22 @@ class _WebERPState extends State<WebERP> {
                   var dl = DownloadManager();
                   dl.addDownload(downloadStartRequest.url.path, "/storage/emulated/0/Download");
 
-                  DownloadTask? task = dl.getDownload(downloadStartRequest.url.toString());
+                  DownloadTask? task = dl.getDownload(downloadStartRequest.url.data.toString());
 
                   task?.status.addListener(() {
                     print(task.status.value);
                     print("littu");
                   });
-
+                  var dio = Dio();
+                  var response = await dio.download("${downloadStartRequest.url!.data}","/storage/emulated/0/Download");
+                  if (response.statusCode == 200) {
+                    toast(context, "Download successful. Check your downloads.");
+                  }else{
+                    toast(context, "Download failed. Status code: ${response.statusCode}");
+                  }
+                  task?.request.forceDownload;
+                  task?.request.path;
+                  task?.request.url;
                   task?.progress.addListener(() {
                     print(task.progress.value);
                   });
@@ -178,27 +189,33 @@ class _WebERPState extends State<WebERP> {
                   DownloadStartRequest(url: downloadStartRequest.url,contentLength: 10);
                 },
               onDownloadStart: (controller, url) async {
-                // DownloadTask task = await DownloadStartRequest.enqueue(
-                //   url: url.toString(),
-                //   headers: {"User-Agent": controller.settings.userAgent},
-                //   savedDir: "/storage/emulated/0/Download",
-                //   showNotification: true,
-                //   openFileFromNotification: true,
+
                 // );
+                var dio = Dio();
 
                 var dl = DownloadManager();
+
                 dl.addDownload(url.path, "/storage/emulated/0/Download");
+
 
                 DownloadTask? task = dl.getDownload(url.toString());
 
                 task?.status.addListener(() {
                   print(task.status.value);
+                  print(task.progress.value);
                   print("littu");
                 });
 
-                task?.progress.addListener(() {
-                  print(task.progress.value);
-                });
+                print("littu");
+                print(url.data);
+                print(url.host);
+                print(url.path);
+                var response = await dio.download("${url!.data}","/sdcard/download/");
+                if (response.statusCode == 200) {
+                  toast(context, "Download successful. Check your downloads.");
+                }else{
+                  toast(context, "Download failed. Status code: ${response.statusCode}");
+                }
 
                 await dl.whenDownloadComplete(url.toString());
 
