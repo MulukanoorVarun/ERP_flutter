@@ -3,7 +3,7 @@ import 'package:GenERP/screens/splash.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
@@ -167,7 +167,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text("Register Complaint",
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
@@ -230,12 +230,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   child: Text(
                                     "Customer Name",
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.grey_153,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -245,12 +244,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   child: Text(
                                     "GEN ID",
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.grey_153,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -269,12 +267,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     "$cust_name",
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.black,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -285,12 +282,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     "$gen_id",
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.black,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -308,12 +304,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   child: Text(
                                     "Product Name",
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.grey_153,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -323,12 +318,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   child: Text(
                                     "Engine ID",
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style: TextStyle(
                                           color: ColorConstant.grey_153,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -347,12 +341,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     "$product_name",
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style: TextStyle(
                                           color: ColorConstant.black,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
+
                                   ),
                                 ),
                                 Spacer(),
@@ -363,12 +356,10 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     "$eng_no",
                                     textAlign: TextAlign.start,
                                     maxLines: 2,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                           color: ColorConstant.black,
                                           fontSize: FontConstant.Size15,
                                           fontWeight: FontWeight.w300),
-                                    ),
                                   ),
                                 ),
                                 Spacer(),
@@ -666,12 +657,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               decoration: InputDecoration(
                                 prefixIcon:const Icon(Icons.access_time_rounded,size: 28,color: Color(0xFF011842)),
                                 hintText: "Running Hours",
-                                hintStyle: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                hintStyle:  TextStyle(
                                       fontSize: FontConstant.Size18,
                                       color: ColorConstant.Textfield,
                                       fontWeight: FontWeight.w400),
-                                ),
+
                                 filled: true,
                                 fillColor: ColorConstant.edit_bg_color,
                                 enabledBorder: OutlineInputBorder(
@@ -705,12 +695,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 hintText: "Messaage",
-                                hintStyle: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                hintStyle:  TextStyle(
                                       fontSize: FontConstant.Size18,
                                       color: ColorConstant.Textfield,
                                       fontWeight: FontWeight.w400),
-                                ),
+
                                 filled: true,
                                 fillColor: ColorConstant.edit_bg_color,
                                 enabledBorder: OutlineInputBorder(
@@ -747,11 +736,10 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   child: Text(
                                     "Submit Complaint",
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                         color: ColorConstant.white,
                                         fontSize: FontConstant.Size15,
-                                      ),),
+                                      ),
                                   ),
                                 ),
                               )

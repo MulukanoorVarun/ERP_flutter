@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:share_plus/share_plus.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
@@ -217,13 +217,11 @@ class _LoginState extends State<Login> {
                 onPressed: () => Navigator.of(context).pop(false),
                 child: Text(
                   "NO",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
+                  style:  TextStyle(
                       color: ColorConstant.erp_appColor,
                       fontWeight: FontWeight.w500,
                       fontSize: FontConstant.Size15,
                     ),
-                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -236,13 +234,13 @@ class _LoginState extends State<Login> {
                     SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
                 child: Text(
                   "YES",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: TextStyle(
+                  style:
+                    TextStyle(
                       color: ColorConstant.erp_appColor,
                       fontWeight: FontWeight.w500,
                       fontSize: FontConstant.Size15,
                     ),
-                  ),
+
                 ),
               ),
             ],
@@ -263,13 +261,12 @@ class _LoginState extends State<Login> {
             ),
             title: Align(
                 alignment: Alignment.center,
-                child: Text('Device ID', style: GoogleFonts.ubuntu(
-                  textStyle: TextStyle(
+                child: Text('Device ID', style:  TextStyle(
                       color: Colors.black,
                       fontSize: FontConstant.Size25,
                       fontWeight: FontWeight.w500,
                       decoration: TextDecoration.underline
-                  ),
+
                 ),)
             ),
 
@@ -284,12 +281,11 @@ class _LoginState extends State<Login> {
                     decoration: BoxDecoration(
                         color: ColorConstant.edit_bg_color,
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: Text('$deviceId', style: GoogleFonts.ubuntu(
-                      textStyle: TextStyle(
+                    child: Text('$deviceId', style:  TextStyle(
                         color: Colors.black,
                         fontSize: FontConstant.Size18,
 
-                      ),
+
                     ),)
                 ),
                 Spacer(),
@@ -360,12 +356,11 @@ class _LoginState extends State<Login> {
                         padding: EdgeInsets.all(5.0),
                         child: Text(
                           "Sign In",
-                          style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                          style:  TextStyle(
                                   color: ColorConstant.erp_appColor,
                                   fontSize: FontConstant.Size25,
                                   decoration: TextDecoration.underline)),
-                        ),
+
                       ),
                       SizedBox(
                         height: 10.0,
@@ -380,12 +375,11 @@ class _LoginState extends State<Login> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: "Enter Email",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -416,12 +410,12 @@ class _LoginState extends State<Login> {
                           child: Text(
                             _validateEmail,
                             textAlign: TextAlign.start,
-                            style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            style:
+                             TextStyle(
                                 color: Colors.red,
                                 fontSize: FontConstant.Size10,
                               ),
-                            ),
+
                           ),
                         )
                       ] else
@@ -453,12 +447,11 @@ class _LoginState extends State<Login> {
                                 });
                               },
                             ),
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle: TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -489,11 +482,10 @@ class _LoginState extends State<Login> {
                           child: Text(
                             _validatepassword,
                             textAlign: TextAlign.start,
-                            style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            style:  TextStyle(
                                 color: Colors.red,
                                 fontSize: FontConstant.Size10,
-                              ),
+
                             ),
                           ),
                         )
@@ -521,11 +513,10 @@ class _LoginState extends State<Login> {
                               child: Text(
                                 "Login",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:  TextStyle(
                                     color: ColorConstant.white,
                                     fontSize: FontConstant.Size20,
-                                  ),
+
                                 ),
                               ),
                             ),

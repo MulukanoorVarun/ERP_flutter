@@ -1,7 +1,7 @@
 import 'package:GenERP/Utils/storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_download_manager/flutter_download_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -74,9 +74,9 @@ class _WebERPState extends State<WebERP> {
               Container(
                 child: InkWell(
                   onTap: () => Navigator.pop(context, true),
-                  child: Text("Web ERP",
+                  child: Text("ERP",
                       textAlign: TextAlign.left,
-                      style: GoogleFonts.ubuntu(
+                      style: TextStyle(
                         color: ColorConstant.white,
                         fontSize: FontConstant.Size18,
                         fontWeight: FontWeight.w500,
@@ -109,28 +109,54 @@ class _WebERPState extends State<WebERP> {
                   });
                 }
               },
+              initialOptions: InAppWebViewGroupOptions(
+                crossPlatform: InAppWebViewOptions(
+                    javaScriptEnabled: true,
+                    useOnDownloadStart: true,
+                    allowFileAccessFromFileURLs: true,
+                    allowUniversalAccessFromFileURLs: true
+                ),
+              ),
+
               initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+              initialSettings: InAppWebViewSettings(
+                allowUniversalAccessFromFileURLs: true,
+                allowFileAccessFromFileURLs: true,
+                allowFileAccess: true,
+                iframeAllow: "camera;microphone;location",
+                domStorageEnabled: true,
+                allowContentAccess: true,
+                javaScriptEnabled: true,
+                cacheMode:CacheMode.LOAD_DEFAULT,
+                supportZoom:true,
+                builtInZoomControls:true,
+                displayZoomControls: false,
+                textZoom: 125,
+                blockNetworkImage: false,
+                loadsImagesAutomatically: true,
+                safeBrowsingEnabled: true,
+                useWideViewPort: true,
+                loadWithOverviewMode: true,
+                javaScriptCanOpenWindowsAutomatically: true,
+                mediaPlaybackRequiresUserGesture: false,
+                geolocationEnabled: true,
+                  useOnDownloadStart:true,
+
+              ),
               // initialUrlRequest: URLRequest(
               //   url: WebUri.uri(Uri.parse(webPageUrl))
               // ),
               onLoadStart: (controller, url) {
                 setState(() {
-                  isLoading = true;
-                });
-              },
-              onLoadStop: (controller, url) {
-                setState(() {
                   isLoading = false;
                 });
               },
-              initialOptions: InAppWebViewGroupOptions(
-                crossPlatform: InAppWebViewOptions(
-                  javaScriptEnabled: true,
-                  useOnDownloadStart: true,
-                  allowFileAccessFromFileURLs: true,
-                  allowUniversalAccessFromFileURLs: true,
-                ),
-              ),
+              // onLoadStop: (controller, url) {
+              //   setState(() {
+              //     isLoading = false;
+              //   });
+              // },
+              //
                 onDownloadStartRequest:(controller, downloadStartRequest) async {
                   var dl = DownloadManager();
                   dl.addDownload(downloadStartRequest.url.path, "/storage/emulated/0/Download");
@@ -177,24 +203,27 @@ class _WebERPState extends State<WebERP> {
                 await dl.whenDownloadComplete(url.toString());
 
               },
+              // onDownloadStart: (controller, downloadStartRequest) async {
+              //   var dl = DownloadManager();
+              //   dl.addDownload(downloadStartRequest.url.path, "/storage/emulated/0/Download");
+              //
+              //   DownloadTask? task = dl.getDownload(downloadStartRequest.url.toString());
+              //
+              //   task?.status.addListener(() {
+              //     print(task.status.value);
+              //     print("Download status changed");
+              //   });
+              //
+              //   task?.progress.addListener(() {
+              //     print(task.progress.value);
+              //     print("Download progress changed");
+              //   });
+              //
+              //   await dl.whenDownloadComplete(downloadStartRequest.url.toString());
+              // },
 
-              androidOnPermissionRequest: (controller, origin, resources) async {
-                Map<Permission, PermissionStatus> statuses = await [
-                Permission.location,
-                Permission.locationWhenInUse,
-                Permission.locationAlways,
-                Permission.notification,
-                Permission.accessNotificationPolicy
-                // Add more permissions as needed
-                ].request();
-                statuses.forEach((permission, status) {
-                  if (!status.isGranted) {
-                    // Handle denied permissions
-                  }
 
-                });
 
-              },
 
               // pullToRefreshController: PullToRefreshController(
               //   onRefresh: () {

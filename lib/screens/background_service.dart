@@ -6,6 +6,7 @@ import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Utils/api_names.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:web_socket_channel/io.dart';
 
 import '../Services/WebSocketManager.dart';
@@ -235,6 +236,13 @@ Future<void> saveLocations(
 
 }
 
+saveLastLocationTime(){
+  var currentTime =  DateTime.now();
+  var formatter =  DateFormat('HH:mm:ss').format(currentTime);
+  PreferenceService().saveString("lastLocationTime", formatter);
+}
+
+
 /// about the user current location
 class Location {
   double? latitude;
@@ -269,6 +277,7 @@ class Location {
     };
     return obj;
   }
+
 }
 
 

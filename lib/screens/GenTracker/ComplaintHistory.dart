@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -74,7 +72,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text("Complaint Details",
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
@@ -139,12 +137,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                               alignment: Alignment.topLeft,
                               margin: EdgeInsets.fromLTRB(7.5, 7.5, 0, 0),
                               child: Text(
-                                "Complaint Details", style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
+                                "Complaint Details", style: TextStyle(
+                                
                                   fontSize: FontConstant.Size18,
                                   fontWeight: FontWeight.w500,
                                   overflow: TextOverflow.ellipsis,
-                                ),
+                                
                                 color: ColorConstant.erp_appColor,
                               ),),),
                             Container(
@@ -179,15 +177,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               "Technician Name",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
+                                               
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+                                             
                                             ),
                                           ),
                                           Container(
@@ -195,14 +193,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               comp_List[index].techName??"",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
+                                                
                                                     color: ColorConstant.black,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+                                              
                                             ),
                                           ),
                                           Container(
@@ -211,8 +209,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               "Complaint Type",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
+                                                
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
@@ -220,21 +218,21 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                                     fontWeight: FontWeight
                                                         .w300),
                                               ),
-                                            ),
+                                            
                                           ),
                                           Container(
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               comp_List[index].compType??"",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
+                                                
                                                     color: ColorConstant.black,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+                                              
                                             ),
                                           ),
                                           Container(
@@ -242,15 +240,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               "Complaint Status",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
+                                                
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+                                              
                                             ),
                                           ),
                                           Container(
@@ -258,14 +256,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               comp_List[index].compStatus??"",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
-                                                    color: ColorConstant.black,
-                                                    fontSize: FontConstant
-                                                        .Size15,
-                                                    fontWeight: FontWeight
-                                                        .w300),
-                                              ),
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant
+                                                      .Size15,
+                                                  fontWeight: FontWeight
+                                                      .w300),
                                             ),
                                           ),
                                         ],
@@ -282,15 +278,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               "ID",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style:  TextStyle(
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                           Container(
@@ -298,14 +293,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               comp_List[index].compId??"",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style:  TextStyle(
                                                     color: ColorConstant.black,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                           Container(
@@ -314,15 +308,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               "Date",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style: TextStyle(
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                           Container(
@@ -330,14 +323,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                             child: Text(
                                               comp_List[index].compRegdate??"",
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style:  TextStyle(
                                                     color: ColorConstant.black,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                           Container(
@@ -348,15 +340,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                               maxLines: 3,
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style:  TextStyle(
                                                     color: ColorConstant
                                                         .grey_153,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                           Container(
@@ -366,14 +357,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                               maxLines: 3,
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
-                                              style: GoogleFonts.ubuntu(
-                                                textStyle: TextStyle(
+                                              style:  TextStyle(
                                                     color: ColorConstant.black,
                                                     fontSize: FontConstant
                                                         .Size15,
                                                     fontWeight: FontWeight
                                                         .w300),
-                                              ),
+
                                             ),
                                           ),
                                         ],
@@ -391,12 +381,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       return Align(
                         alignment: Alignment.center,
                           child:Text(
-                            "No Data Available", style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size18,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            "No Data Available", style:
+                          TextStyle(
+                            fontSize: FontConstant.Size18,
+                            fontWeight: FontWeight.w500,
+                            overflow: TextOverflow.ellipsis,
                             color: ColorConstant.erp_appColor,
                           ),)
                       );
@@ -421,14 +410,15 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
         child: Align(
             alignment: Alignment.center,
             child:Text(
-              "No Data Available", style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+              "No Data Available", style:
+              TextStyle(
                 fontSize: FontConstant.Size18,
                 fontWeight: FontWeight.w500,
                 overflow: TextOverflow.ellipsis,
+                color: ColorConstant.erp_appColor,
               ),
-              color: ColorConstant.erp_appColor,
-            ),)
+
+            )
         ),
       ),
     );

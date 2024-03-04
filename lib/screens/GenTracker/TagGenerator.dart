@@ -8,7 +8,7 @@ import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -24,6 +24,8 @@ class TagGenerator extends StatefulWidget {
 class _TagGeneratorState extends State<TagGenerator> {
   var session = "";
   var empId = "";
+  var _error_genID = "";
+  var _error_engNo = "";
   TextEditingController Generator_id = TextEditingController();
   TextEditingController Engine_no = TextEditingController();
 
@@ -38,37 +40,49 @@ class _TagGeneratorState extends State<TagGenerator> {
     Engine_no.dispose();
     super.dispose();
   }
-  Future<void> TagGeneratorAPIFunction() async{
-    session= await PreferenceService().getString("Session_id")??"";
-    empId= await PreferenceService().getString("UserId")??"";
-    try{
-      await UserApi.TagGeneratorAPI(empId, session,Generator_id.text,Engine_no.text).then((data)=>{
-        if(data!=null){
-          setState((){
-            if(data.sessionExists==1){
-              if(data.error==0){
-                toast(context,data.message);
-
-              }else if(data.error==1){
-                toast(context, data.message);
-              }else if(data.error==2){
-                toast(context, data.message);
-              }
-              else{
-                toast(context, "Something Went wrong, Please Try Again!");
-              }
-            }else{
-              toast(context, "Your session has expired, please login again!");
-            }
-
-          })
-        }else{
-
-        }
+  Future<void> TagGeneratorAPIFunction() async {
+    session = await PreferenceService().getString("Session_id") ?? "";
+    empId = await PreferenceService().getString("UserId") ?? "";
+    if (Engine_no.text.isEmpty) {
+      setState(() {
+        _error_engNo = "Enter Engine Number";
+      });
+    } else {
+      setState(() {
+        _error_engNo = "";
+        _error_engNo.isEmpty;
       });
 
-    } on Error catch(e){
-      print(e.toString());
+      try {
+        await UserApi.TagGeneratorAPI(
+            empId, session, Generator_id.text, Engine_no.text).then((data) =>
+        {
+          if(data != null){
+            setState(() {
+              if (data.sessionExists == 1) {
+                if (data.error == 0) {
+                  toast(context, data.message);
+                  Navigator.pop(context, true);
+                } else if (data.error == 1) {
+                  toast(context, data.message);
+                } else if (data.error == 2) {
+                  toast(context, data.message);
+                }
+                else {
+                  toast(context, "Something Went wrong, Please Try Again!");
+                }
+              } else {
+                toast(context, "Your session has expired, please login again!");
+              }
+            })
+          } else
+            {
+              toast(context, "No response from server, Please try again later!")
+            }
+        });
+      } on Error catch (e) {
+        print(e.toString());
+      }
     }
   }
 
@@ -83,13 +97,12 @@ class _TagGeneratorState extends State<TagGenerator> {
         shadowColor: Colors.black,
         title: Align(
             alignment: Alignment.topLeft,
-            child:Text("#"+Generator_id.text,style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            child:Text("#"+Generator_id.text,style:  TextStyle(
                   color: Colors.black,
                   fontSize: FontConstant.Size22,
                   fontWeight: FontWeight.w500,
                 decoration: TextDecoration.underline
-              ),
+
             ),)
         ),
         content:
@@ -101,19 +114,18 @@ class _TagGeneratorState extends State<TagGenerator> {
              alignment: Alignment.center,
              width:450,
              height: 50,
-             margin:EdgeInsets.only(left:15.0,right:15.0),
+             margin:EdgeInsets.only(left:5.0,right:5.0),
              child: TextFormField(
                controller: Engine_no,
                cursorColor: ColorConstant.black,
                keyboardType: TextInputType.text,
                decoration: InputDecoration(
                  hintText: "Enter Engine Number",
-                 hintStyle: GoogleFonts.ubuntu(
-                   textStyle: TextStyle(
+                 hintStyle: TextStyle(
                        fontSize: FontConstant.Size15,
                        color: ColorConstant.Textfield,
                        fontWeight: FontWeight.w400),
-                 ),
+
                  filled: true,
                  fillColor: ColorConstant.edit_bg_color,
                  enabledBorder: OutlineInputBorder(
@@ -129,13 +141,30 @@ class _TagGeneratorState extends State<TagGenerator> {
                ),
              ),
            ),
+           if(_error_engNo!=null)...[
+             Container(
+               alignment: Alignment.topLeft,
+               margin: EdgeInsets.only(
+                   top: 2.5, bottom: 2.5, left: 25),
+               child: Text(
+                 "$_error_engNo",
+                 textAlign: TextAlign.start,
+                 style:  TextStyle(
+                     color: Colors.red,
+                     fontSize: FontConstant.Size10,
+
+                 ),
+               ),
+             )
+           ]else...[
            SizedBox(height: 15,),
+           ],
            Row(
              children: [
                Container(
                  width:110,
-                 height: 50,
-                 margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                 height: 45,
+                 margin: EdgeInsets.only(left: 10.0,right: 10.0),
                  decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
                  child: TextButton(
                    style: ButtonStyle(
@@ -147,12 +176,11 @@ class _TagGeneratorState extends State<TagGenerator> {
 
                    child: Text(
                      "Cancel",
-                     style: GoogleFonts.ubuntu(
-                       textStyle: TextStyle(
+                     style: TextStyle(
                          color: ColorConstant.white,
                          fontWeight: FontWeight.w300,
                          fontSize: FontConstant.Size15,
-                       ),
+
                      ),
                    ),
                  ),
@@ -161,8 +189,8 @@ class _TagGeneratorState extends State<TagGenerator> {
 
                Container(
                  width:110,
-                 height: 50,
-                 margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                 height: 45,
+                 margin: EdgeInsets.only(left: 10.0,right: 10.0),
                  decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
                  child:  TextButton(
                    style: ButtonStyle(
@@ -177,12 +205,11 @@ class _TagGeneratorState extends State<TagGenerator> {
                    },
                    child: Text(
                      "Submit",
-                     style: GoogleFonts.ubuntu(
-                       textStyle: TextStyle(
+                     style:  TextStyle(
                          color: ColorConstant.white,
                          fontWeight: FontWeight.w300,
                          fontSize: FontConstant.Size15,
-                       ),
+
                      ),
                    ),
                  ),
@@ -217,7 +244,7 @@ class _TagGeneratorState extends State<TagGenerator> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text("Tag Generator",
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
@@ -241,35 +268,31 @@ class _TagGeneratorState extends State<TagGenerator> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: ColorConstant.erp_appColor,
+          height: screenHeight,
+          decoration: BoxDecoration(
+            color: ColorConstant.edit_bg_color,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+          ),
           child: Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
-              decoration: BoxDecoration(
-                color: ColorConstant.edit_bg_color,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
+
               padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: Column(// Set max height constraints
                 children: [
                   SizedBox(height: 15.0,),
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagGenerator")));
-                    },
-                    child: Container(
-                      child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
-                        textStyle: TextStyle(
+                  Container(
+                      child: Text("Scan QR Code or Enter ID", style: TextStyle(
                           fontSize: FontConstant.Size25,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
-                        ),
+
                         color: ColorConstant.erp_appColor,
                       ),),),
-                  ),
+
                   SizedBox(height: 5.0,),
                   Container(
                     height: screenHeight*0.75,
@@ -285,11 +308,15 @@ class _TagGeneratorState extends State<TagGenerator> {
                         ),
                         Container(
 
-                          child: SvgPicture.asset(
+                          child:  InkWell(
+                            onTap: () async {
+                              await Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagGenerator")));
+                            },
+                            child:SvgPicture.asset(
                             "assets/ic_qrcode.svg",
                             height: 350,
                             width: 350,
-                          ),
+                          )),
                         ),
                         Container(
                             child:Row(
@@ -303,12 +330,11 @@ class _TagGeneratorState extends State<TagGenerator> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  child: Text("OR", style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
+                                  child: Text("OR", style:  TextStyle(
                                       fontSize: FontConstant.Size20,
                                       fontWeight: FontWeight.w300,
                                       overflow: TextOverflow.ellipsis,
-                                    ),
+
                                     color: Colors.grey,
                                   ),),),
                                 Spacer(),
@@ -331,12 +357,11 @@ class _TagGeneratorState extends State<TagGenerator> {
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               hintText: "Enter Generator ID",
-                              hintStyle: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
+                              hintStyle:  TextStyle(
                                     fontSize: FontConstant.Size15,
                                     color: ColorConstant.Textfield,
                                     fontWeight: FontWeight.w400),
-                              ),
+
                               filled: true,
                               fillColor: ColorConstant.edit_bg_color,
                               enabledBorder: OutlineInputBorder(
@@ -357,13 +382,40 @@ class _TagGeneratorState extends State<TagGenerator> {
                             ),
                           ),
                         ),
+                      if(_error_genID!=null)...[
+                        Container(
+              alignment: Alignment.topLeft,
+              margin: EdgeInsets.only(
+                  top: 2.5, bottom: 2.5, left: 25),
+              child: Text(
+                "$_error_genID",
+                textAlign: TextAlign.start,
+                style:  TextStyle(
+                    color: Colors.red,
+                    fontSize: FontConstant.Size10,
+
+                ),
+              ),
+            )
+                      ]else...[
                         SizedBox(height: 20.0,),
+                        ],
                         Container(
                             child: InkWell(
                               onTap: (){
+                                if(Generator_id.text.isEmpty){
+                                 setState(() {
+                                   _error_genID = "Enter Generator Id";
+                                 });
+                                }
                                 if(Generator_id.text.isNotEmpty){
+                                 setState(() {
+                                   _error_genID = "";
+                                   _error_genID.isEmpty;
+                                 });
                                   TagGeneratorDialogue();
                                 }
+
 
                               },
                               child: Container(
@@ -374,11 +426,10 @@ class _TagGeneratorState extends State<TagGenerator> {
                                 child: Text(
                                   "Submit",
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
+                                  style:  TextStyle(
                                       color: ColorConstant.white,
                                       fontSize: FontConstant.Size15,
-                                    ),),
+                                    ),
                                 ),
                               ),
                             )

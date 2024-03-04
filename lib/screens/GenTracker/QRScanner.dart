@@ -7,10 +7,11 @@ import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker/GeneratoraDetails.dart';
 import 'package:GenERP/screens/GenTracker/RegisterComplaint.dart';
 import 'package:GenERP/screens/Login.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -24,46 +25,107 @@ class QRScanner extends StatefulWidget {
   State<QRScanner> createState() => _QRScannerState();
 }
 
-class _QRScannerState extends State<QRScanner> {
+class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
   TextEditingController Generator_id = TextEditingController();
   var session = "";
   var empId = "";
+  var _Error = "";
+  var result = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    check_session();
+    WidgetsBinding.instance!.addObserver(this);
   }
 
   @override
-  void onDispose(){
-    Generator_id.dispose();
+  void dispose() {
+    WidgetsBinding.instance!.removeObserver(this);
     super.dispose();
   }
-  Future<void> LoadgeneratorDetailsApifunction() async{
-    session= await PreferenceService().getString("Session_id")??"";
-    empId= await PreferenceService().getString("UserId")??"";
-    try{
-      await UserApi.LoadGeneratorDetailsAPI(empId, session,Generator_id.text).then((data)=>{
-        if(data!=null){
-          setState((){
-            if(data.error==0){
-              if(widget.title=="Generator Details"){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>GeneratorDetails(generator_id: Generator_id.text)));
-              }
-              if(widget.title=="Register Complaint"){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterComplaint(generator_id: Generator_id.text)));
-              }
-            }
-          })
-        }
-      });
 
-    } on Error catch(e){
-      print(e.toString());
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+    if (state == AppLifecycleState.resumed) {
+      // This block of code will be executed when the app resumes from the background
+      // You can put any logic you want to execute on app resume here
+      LoadgeneratorDetailsApifunction(empId,session,result);
+
     }
   }
 
+  check_session() async {
+    session= await PreferenceService().getString("Session_id")??"";
+    empId= await PreferenceService().getString("UserId")??"";
+    result = await PreferenceService().getString("result")??"";
+    print("e:$empId");
+    print("s:$session");
+  }
+
+  Future<void> LoadgeneratorDetailsApifunction(empId,session,gen_hash_id) async{
+
+      try {
+        if(Generator_id.text.isEmpty){
+          setState(() {
+            _Error = "Enter Generator Id";
+          });
+          // toast(context,"Enter Generator Id");
+          print(_Error);
+
+        }else {
+          _Error = "";
+          _Error.isEmpty;
+          await UserApi.LoadGeneratorDetailsAPI(empId,session,gen_hash_id)
+              .then((data) =>
+          {
+            if(data != null){
+              setState(() {
+                if (data.sessionExists == 1) {
+                  if (data.error == 0) {
+                    if (widget.title == "Generator Details") {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              GeneratorDetails(generator_id: Generator_id.text)));
+                    }
+                    if (widget.title == "Register Complaint") {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) =>
+                              RegisterComplaint(
+                                  generator_id: Generator_id.text)));
+                    }
+                  }
+                  else if (data.error == 1) {
+                    toast(context, "Enter Valid Generator Id");
+                  }
+                  else {
+                    toast(
+                        context, "Something went wrong, Please try again later!");
+                  }
+                } else {
+                  PreferenceService().clearPreferences();
+                  toast(context, "Your session has expired, please login again");
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) => Splash()));
+                }
+              })
+            } else
+              {
+                toast(context, "No response from server, Please try again later!")
+              }
+          });
+        }
+
+      } on Error catch (e) {
+        print(e.toString());
+      }
+    }
+
+
+   validations(){
+     _Error = "Enter Generator Id";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +144,7 @@ class _QRScannerState extends State<QRScanner> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text(widget.title,
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
@@ -123,12 +185,11 @@ class _QRScannerState extends State<QRScanner> {
               children: [
                 SizedBox(height: 15.0,),
                 Container(
-                  child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
-                  textStyle: TextStyle(
+                  child: Text("Scan QR Code or Enter ID", style:  TextStyle(
                     fontSize: FontConstant.Size25,
                     fontWeight: FontWeight.bold,
                     overflow: TextOverflow.ellipsis,
-                  ),
+
                   color: ColorConstant.erp_appColor,
                 ),),),
                 SizedBox(height: 5.0,),
@@ -173,12 +234,11 @@ class _QRScannerState extends State<QRScanner> {
                               ),
                               Spacer(),
                               Container(
-                                child: Text("OR", style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                child: Text("OR", style:  TextStyle(
                                     fontSize: FontConstant.Size20,
                                     fontWeight: FontWeight.w300,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
+
                                   color: Colors.grey,
                                 ),),),
                               Spacer(),
@@ -201,12 +261,11 @@ class _QRScannerState extends State<QRScanner> {
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Enter Generator ID",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -219,19 +278,31 @@ class _QRScannerState extends State<QRScanner> {
                               borderSide: BorderSide(
                                   width: 0, color: ColorConstant.edit_bg_color),
                             ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
                           ),
                         ),
                       ),
+                      if(_Error.isNotEmpty)...[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(
+                              top: 2.5, bottom: 2.5, left: 25),
+                          child: Text(
+                            "$_Error",
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: FontConstant.Size10,
+
+                            ),
+                          ),
+                        )
+                      ]else...[
                       SizedBox(height: 20.0,),
+                      ],
                       Container(
                           child: InkWell(
                             onTap: (){
-                              LoadgeneratorDetailsApifunction();
+                              LoadgeneratorDetailsApifunction(empId,session,Generator_id.text);
 
                             },
                             child: Container(
@@ -242,11 +313,11 @@ class _QRScannerState extends State<QRScanner> {
                               child: Text(
                                 "Submit",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:
+                                  TextStyle(
                                     color: ColorConstant.white,
                                     fontSize: FontConstant.Size15,
-                                  ),),
+                                  ),
                               ),
                             ),
                           )
@@ -264,4 +335,5 @@ class _QRScannerState extends State<QRScanner> {
       )),
     );
   }
+
 }

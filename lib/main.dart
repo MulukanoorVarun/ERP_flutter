@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       title: 'Gen ERP',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        fontFamily: 'Nexa',
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,

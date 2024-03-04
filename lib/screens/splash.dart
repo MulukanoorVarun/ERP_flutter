@@ -5,10 +5,11 @@ import 'package:GenERP/screens/UpdatePassword.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:permission_handler/permission_handler.dart';
 
 
+import '../Services/other_services.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import 'Dashboard.dart';
@@ -76,17 +77,27 @@ class _SplashState extends State<Splash>{
       await UserApi.SessionExistsApi(empId, session).then((data)=>{
         if(data!=null){
           setState((){
-            if(data.sessionExists==1&&data.updatePasswordRequired==0){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>  Dashboard()));
-            }else if(data.sessionExists==1&&data.updatePasswordRequired==1){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>  UpdatePassword()));
+            if(data.sessionExists==1){
+              if(data.updatePasswordRequired==0){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>  Dashboard()));
+              }
+              else if(data.updatePasswordRequired==1){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>  UpdatePassword()));
+              }
+              // else{
+              //   Navigator.push(context,
+              //       MaterialPageRoute(builder: (context) =>  Login()));
+              // }
             }else{
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>  Login()));
+              toast(context,"Your Session has been expired, Please Login Again");
             }
           })
+        }else{
+          toast(context,"Something went wrong, Please try again later!")
         }
       });
 

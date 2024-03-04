@@ -3,7 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
 import 'ColorConstant.dart';
 import 'Constants.dart';
 import 'FontConstant.dart';
@@ -89,7 +89,7 @@ AppBar appBar(BuildContext context, String title) {
             onTap: () => Navigator.pop(context, true),
             child: Text(title,
                 textAlign: TextAlign.left,
-                style: GoogleFonts.ubuntu(
+                style: TextStyle(
                   color: ColorConstant.white,
                   fontSize: FontConstant.Size18,
                   fontWeight: FontWeight.w500,
@@ -345,7 +345,7 @@ AppBar StoreLocaterBar(BuildContext context, String title) {
                 child: Center(
                   child: Text(
                     title,
-                    style: GoogleFonts.ubuntu(
+                    style: TextStyle(
                       color: ColorConstant.black,
                       fontSize: FontConstant.Size18,
                       fontWeight: FontWeight.w500,
@@ -431,11 +431,10 @@ Loaders() {
           child: Text(
             "Please wait.......",
             textAlign: TextAlign.center,
-            style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(
+            style:  TextStyle(
                     decorationThickness: 0,
                     fontSize: FontConstant.Size15,
-                    fontWeight: FontWeight.normal),
+                    fontWeight: FontWeight.normal,
                 color: ColorConstant.erp_appColor),
           ),
         ),
@@ -624,7 +623,7 @@ ProductCard(context) {
                               const SizedBox(width: 3),
                               Text(
                                 "50% Off",
-                                style: GoogleFonts.ubuntu(
+                                style: TextStyle(
                                     color: Colors.white,
                                     fontSize: FontConstant.Size15),
                               )
@@ -664,7 +663,7 @@ ProductCard(context) {
               width: 120,
               child: Text(
                 "Berries And Nuts",
-                style: GoogleFonts.ubuntu(
+                style: TextStyle(
                     fontSize: FontConstant.Size12, fontWeight: FontWeight.w400),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -681,7 +680,7 @@ ProductCard(context) {
             ),
             Text(
               "1 Kg",
-              style: GoogleFonts.ubuntu(
+              style: TextStyle(
                   fontSize: FontConstant.Size10,
                   color: Colors.orange,
                   fontWeight: FontWeight.normal),
@@ -700,14 +699,14 @@ ProductCard(context) {
               children: [
                 Text(
                   "970",
-                  style: GoogleFonts.ubuntu(
+                  style: TextStyle(
                       fontSize: FontConstant.Size15,
                       decoration: TextDecoration.lineThrough,
                       color: Colors.grey),
                 ),
                 Text(
                   " 970",
-                  style: GoogleFonts.ubuntu(
+                  style: TextStyle(
                     fontSize: FontConstant.Size18,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -732,7 +731,7 @@ ProductCard(context) {
                         ),
                         Text(
                           "Add",
-                          style: GoogleFonts.ubuntu(
+                          style: TextStyle(
                               fontSize: FontConstant.Size10,
                               color: Colors.orangeAccent,
                               fontWeight: FontWeight.bold),
@@ -1167,10 +1166,10 @@ loading_image(image,type){
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SpinKitSpinningLines(color: Colors.orangeAccent,size: 25),
-        Text("Loading",style: GoogleFonts.ubuntu(
-            textStyle: TextStyle(
+        Text("Loading",style:
+            TextStyle(
                 fontSize: 10.0,
-                fontWeight: FontWeight.normal),
+                fontWeight: FontWeight.normal,
             color: Colors.black),)
       ],
     ),),

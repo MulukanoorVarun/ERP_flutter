@@ -134,8 +134,9 @@ class WebSocketManager {
   }
 
 
-  void close() {
+  Future<void> close() async {
     if (isConnected()) {
+      print('WebSocket Closed');
       channel?.sink.close();
       channel = null;
       isConnect = false;

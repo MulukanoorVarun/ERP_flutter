@@ -9,7 +9,7 @@ import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -42,6 +42,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
 
   var gen_id = "";
   var eng_no = "";
+  var actname = "";
 
   @override
   void initState() {
@@ -52,7 +53,6 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
 
   @override
   void onDispose(){
-
     super.dispose();
   }
 
@@ -122,13 +122,36 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text("Generator Details",
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
                         )),
                   ),
                 ),
+                const Spacer(),
+                Container(
+                  child: const SizedBox(
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+                if(actname=="NearByGenerators")...[
+                  Container(
+                    child: IconButton(
+                      onPressed: () {
+
+                      },
+                      icon: const Icon(
+                        Icons.assistant_direction_sharp,
+                        size: 30,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ]
+
+
               ],
             )),
         titleSpacing: 0,
@@ -174,12 +197,11 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.fromLTRB(7.5,7.5,0,0),
-                        child: Text("Customer Details", style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
+                        child: Text("Customer Details", style: TextStyle(
                             fontSize: FontConstant.Size18,
                             fontWeight: FontWeight.w500,
                             overflow: TextOverflow.ellipsis,
-                          ),
+
                           color: ColorConstant.erp_appColor,
                         ),),),
                       Container(
@@ -197,195 +219,225 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                           )
                       ),
                       SizedBox(height: 5.0,),
-                      Container(
-                       child: Row(
+                     Container(
+                       alignment: Alignment.topLeft,
+                       child: Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
                          children: [
-                           Spacer(),
-                            Container(
-                              width: screenWidth*0.4,
-                            child:Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
 
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Company",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$comp_name",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
+                           Row(
+                             mainAxisAlignment: MainAxisAlignment.start,
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Company",
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
 
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Mobile Number",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$mob_num",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Mail ID",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$mail_id",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ),
-                            Spacer(),
-                            Container(
-                              width: screenWidth*0.4,
-                              child:Column(
-                              children: [
-                                Container(
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Customer Name",
+                                   textAlign: TextAlign.start,
+                                   style: TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
 
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Customer Name",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$Cust_name",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
+                                 ),
+                               ),
+                               Spacer()
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                           Row(
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$comp_name",
+                                   maxLines: 2,
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
 
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Alternate Number",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$alt_mob_num",
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$Cust_name",
+                                   textAlign: TextAlign.start,
+                                   style: TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
 
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "Address",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.grey_153,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "$address",
-                                    maxLines: 3,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.start,
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                          color: ColorConstant.black,
-                                          fontSize: FontConstant.Size15,
-                                          fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ),
-                           Spacer(),
-                          ],
-                        )
-                      )
+                                 ),
+                               ),
+                               Spacer(),
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                           Row(
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Mobile Number",
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Alternate Number",
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                           Row(
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$mob_num",
+                                   textAlign: TextAlign.start,
+                                   style: TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$alt_mob_num",
+                                   textAlign: TextAlign.start,
+                                   style: TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                           Row(
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Mail ID",
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "Address",
+                                   maxLines: 3,
+                                   overflow: TextOverflow.ellipsis,
+                                   textAlign: TextAlign.start,
+                                   style: TextStyle(
+                                         color: ColorConstant.grey_153,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                           Row(
+                             children: [
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$mail_id",
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                               Container(
+                                 width: 180,
+                                 alignment: Alignment.topLeft,
+                                 child: Text(
+                                   "$address",
+                                   maxLines: 3,
+                                   overflow: TextOverflow.ellipsis,
+                                   textAlign: TextAlign.start,
+                                   style:  TextStyle(
+                                         color: ColorConstant.black,
+                                         fontSize: FontConstant.Size15,
+                                         fontWeight: FontWeight.w300),
+
+                                 ),
+                               ),
+                               Spacer(),
+                             ],
+                           ),
+                           SizedBox(height: 5.0,),
+                         ],
+                       ),
+                     )
                     ],
                   ),
 
@@ -400,18 +452,15 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child:
-                  Column(
+                  child: Column(
                     children: [
                       Container(
                         alignment: Alignment.topLeft,
                         margin: EdgeInsets.fromLTRB(7.5,7.5,0,0),
-                        child: Text("Generator Details", style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
+                        child: Text("Generator Details", style:  TextStyle(
                             fontSize: FontConstant.Size18,
                             fontWeight: FontWeight.w500,
                             overflow: TextOverflow.ellipsis,
-                          ),
                           color: ColorConstant.erp_appColor,
                         ),),),
                       Container(
@@ -430,240 +479,359 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                       ),
                       SizedBox(height: 5.0,),
                       Container(
-                          child: Row(
+                          child: Column(
                             children: [
-                              Spacer(),
-                              Container(
-                                width: screenWidth*0.4,
-                                child:Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Product Name",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$p_name",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Product Name",
+                                    textAlign: TextAlign.start,
+                                    style:
+                                       TextStyle(
+                                          color: ColorConstant.grey_153,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
 
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Engine Model",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$eng_model",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "DG set Number",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$dg_set_num",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Battery Number",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$batt_num",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Status",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$status",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                              Spacer(),
-                              Container(
-                                width: screenWidth*0.4,
-                                child:Column(
-                                  children: [
-                                    Container(
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Date of Engine Sale",
+                                    textAlign: TextAlign.start,
+                                    style:  TextStyle(
+                                          color: ColorConstant.grey_153,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
 
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Date of Engine Sale",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$date_of_eng_sale",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Dispatch Date",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$disp_date",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "Date of Supply",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.grey_153,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      child: Text(
-                                        "$disp_date",
-                                        textAlign: TextAlign.start,
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                              color: ColorConstant.black,
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w300),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
+                                Spacer(),
+                              ],
+                            ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "$p_name",
+                                    textAlign: TextAlign.start,
+                                    style:  TextStyle(
+                                          color: ColorConstant.black,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "$date_of_eng_sale",
+                                    textAlign: TextAlign.start,
+                                    style:  TextStyle(
+                                          color: ColorConstant.black,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Engine Model",
+                                    textAlign: TextAlign.start,
+                                    style:  TextStyle(
+                                          color: ColorConstant.grey_153,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Dispatch Date",
+                                    textAlign: TextAlign.start,
+                                    style:  TextStyle(
+                                          color: ColorConstant.grey_153,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "$eng_model",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                          color: ColorConstant.black,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: 180,
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "$disp_date",
+                                    textAlign: TextAlign.start,
+                                    style:
+                                    TextStyle(
+                                          color: ColorConstant.black,
+                                          fontSize: FontConstant.Size15,
+                                          fontWeight: FontWeight.w300),
+
+                                  ),
+                                ),
+                                Spacer(),
+                              ],
+                            ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "DG set Number",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Date of Supply",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
                               ),
-                              Spacer(),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$dg_set_num",
+                                      textAlign: TextAlign.start,
+                                      style:TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$disp_date",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Battery Number",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$batt_num",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "Status",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "",
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "$status",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  Container(
+                                    width: 180,
+                                    alignment: Alignment.topLeft,
+                                    child: Text(
+                                      "",
+                                      textAlign: TextAlign.start,
+                                      style:  TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300),
+
+                                    ),
+                                  ),
+                                  Spacer(),
+                                ],
+                              ),
+                              SizedBox(height: 5.0,),
                             ],
                           )
                       )
@@ -688,11 +856,11 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                           child: Text(
                             "View Complaint History",
                             textAlign: TextAlign.center,
-                            style: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            style:  TextStyle(
+                              fontFamily: 'Nexa',
                                 color: ColorConstant.white,
                                 fontSize: FontConstant.Size15,
-                              ),),
+                              ),
                           ),
                         ),
                       )

@@ -1,4 +1,5 @@
 import 'package:GenERP/screens/GenTracker/GenTrackerDashboard.dart';
+import 'package:GenERP/screens/LocationService.dart';
 import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/WebERP.dart';
 import 'package:GenERP/screens/attendance_screen.dart';
@@ -7,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web_socket_channel/io.dart';
@@ -22,6 +23,7 @@ import '../Utils/api_names.dart';
 import '../Utils/storage.dart';
 import 'Login.dart';
 import 'Scanner.dart';
+import 'background_service.dart';
 
 
 class Dashboard extends StatefulWidget {
@@ -45,6 +47,7 @@ class _DashboardState extends State<Dashboard> {
   var roleStatus = "";
   bool isLoading = true;
   var Sessionid;
+  var setstatus;
 
 
   WebSocketManager webSocketManager = WebSocketManager(
@@ -79,6 +82,7 @@ class _DashboardState extends State<Dashboard> {
       email = await PreferenceService().getString("UserEmail")??"";
       session = await PreferenceService().getString("Session_id")??"";
       roleStatus = await PreferenceService().getString("roles")??"";
+      var lastLocationTime = await PreferenceService().getString("lastLocationTime");
       if (await PreferenceService().getString("redirectUrl") == null) {
         webPageUrl =
         "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
@@ -93,10 +97,67 @@ class _DashboardState extends State<Dashboard> {
     await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
       if (data != null)
         {
-          setState(() {
+          setState(()  {
             if (data.sessionExists == 1) {
               isLoading = false;
               online_status = data.attStatus??0;
+              if(online_status==0){
+                print("online_status:$online_status");
+                webSocketManager.close();
+                BackgroundLocation.stopLocationService();
+                setState(() {
+                  setstatus ="Offline";
+                });
+                print("setstatus:$setstatus");
+              }
+              if(online_status==1){
+                print("online_status:$online_status");
+                DateTime Date1;
+                DateTime Date2;
+                String getCurrentTime() {
+                  DateTime now = DateTime.now(); // Get current time
+                  DateFormat formatter = DateFormat('HH:mm:ss'); // Define the format
+                  return formatter.format(now); // Format and return the time string
+                }
+
+                String currentTime = getCurrentTime();
+
+                // var currentTime =  DateTime.now();
+                // var df =  DateFormat('HH:mm:ss').format(currentTime);
+
+                if(lastLocationTime!=null){
+                  Date1 = DateFormat('HH:mm:ss').parse(currentTime);
+                  Date2 = DateFormat('HH:mm:ss').parse(lastLocationTime);
+
+                  var diff = double.parse((Date1.timeZoneOffset - Date2.timeZoneOffset).toString())/1000;
+                  print(diff);
+                  if(diff>=20){
+                    setState(() {
+                      setstatus ="Offline";
+                    });
+                  }else{
+                    setState(() {
+                      setstatus ="Online";
+                    });
+
+                  }
+                }else{
+                  setState(() {
+                    setstatus ="Offline";
+                  });
+                }
+                BackgroundLocation.startLocationService();
+                print("setstatus:$setstatus");
+              }
+              if(online_status==2){
+                print("online_status:$online_status");
+                webSocketManager.close();
+                BackgroundLocation.stopLocationService();
+                setState(() {
+                  setstatus ="Offline";
+                });
+                print("setstatus:$setstatus");
+              }
 
             } else if (data.sessionExists == 0) {
               PreferenceService().clearPreferences();
@@ -137,12 +198,10 @@ class _DashboardState extends State<Dashboard> {
             onPressed: () => Navigator.of(context).pop(false),
             child: Text(
               "NO",
-              style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(
+              style:  TextStyle(
                   color: ColorConstant.erp_appColor,
                   fontWeight: FontWeight.w500,
                   fontSize: FontConstant.Size15,
-                ),
               ),
             ),
           ),
@@ -156,13 +215,12 @@ class _DashboardState extends State<Dashboard> {
                 SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
             child: Text(
               "YES",
-              style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(
+              style:  TextStyle(
                   color: ColorConstant.erp_appColor,
                   fontWeight: FontWeight.w500,
                   fontSize: FontConstant.Size15,
                 ),
-              ),
+
             ),
           ),
         ],
@@ -197,12 +255,11 @@ class _DashboardState extends State<Dashboard> {
                               SizedBox(height: 25),
                               Text(
                                 DateFormat.yMMMMd().format(DateTime.now()),
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style: TextStyle(
                                     fontSize: FontConstant.Size13,
                                     fontWeight: FontWeight.w500,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
+
                                   color: Colors.grey,
                                 ),
                               ),
@@ -210,64 +267,39 @@ class _DashboardState extends State<Dashboard> {
                               Text(
                                 "$username",
                                 maxLines: 2,
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:  TextStyle(
                                     fontSize: FontConstant.Size20,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
+
                                   color: Colors.white,
                                 ),
                               ),
                               SizedBox(height: 10),
-                              (online_status==0)?
-                              Row(
-                                children: [
+                              Row(children: [
                                   Container(
                                     width: 20,
                                     height: 20,
-                                    decoration: BoxDecoration(
+                                    decoration: (setstatus=="Offline")?BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.orangeAccent,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    "Offline",
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w400,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ):Row(
-                                children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: BoxDecoration(
+                                      color: Colors.yellowAccent,
+                                    ):BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: Colors.green,
                                     ),
                                   ),
                                   SizedBox(width: 10),
                                   Text(
-                                    "Online",
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    "$setstatus",
+                                    style:  TextStyle(
                                         fontSize: FontConstant.Size15,
                                         fontWeight: FontWeight.w400,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
+
                                       color: Colors.white,
                                     ),
                                   ),
-                                ],
-                              ),
+                                ],),
                               SizedBox(height: 20), // Added SizedBox for spacing
                             ],
                           ),
@@ -279,7 +311,7 @@ class _DashboardState extends State<Dashboard> {
                                 Container(
                                   child: InkWell(
                                     onTap: () async {
-                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner(from: "dashboard",)));
+                                      var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner(from: "dashboard")));
                                       if(res==true){
                                         setState(() {
                                           isLoading = true;
@@ -362,12 +394,11 @@ class _DashboardState extends State<Dashboard> {
                                       SizedBox(width: 15,),
                                       Text(
                                         "Check In/Out",
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
+                                        style: TextStyle(
                                             fontSize: FontConstant.Size20,
                                             fontWeight: FontWeight.bold,
                                             overflow: TextOverflow.ellipsis,
-                                          ),
+
                                           color: ColorConstant.erp_appColor,
                                         ),
                                       ),
@@ -410,12 +441,11 @@ class _DashboardState extends State<Dashboard> {
                                       SizedBox(width: 15,),
                                       Text(
                                         "ERP",
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
+                                        style:  TextStyle(
                                             fontSize: FontConstant.Size20,
                                             fontWeight: FontWeight.bold,
                                             overflow: TextOverflow.ellipsis,
-                                          ),
+
                                           color: ColorConstant.erp_appColor,
                                         ),
                                       ),
@@ -459,12 +489,11 @@ class _DashboardState extends State<Dashboard> {
                                     SizedBox(width: 15,),
                                     Text(
                                       "Inventory",
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style: TextStyle(
                                           fontSize: FontConstant.Size20,
                                           fontWeight: FontWeight.bold,
                                           overflow: TextOverflow.ellipsis,
-                                        ),
+
                                         color: ColorConstant.erp_appColor,
                                       ),
                                     ),
@@ -506,13 +535,12 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                     SizedBox(width: 15,),
                                     Text(
-                                      "Technician",
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      "Sevice Engineers",
+                                      style:  TextStyle(
                                           fontSize: FontConstant.Size20,
                                           fontWeight: FontWeight.bold,
                                           overflow: TextOverflow.ellipsis,
-                                        ),
+
                                         color: ColorConstant.erp_appColor,
                                       ),
                                     ),
@@ -555,12 +583,11 @@ class _DashboardState extends State<Dashboard> {
                                     SizedBox(width: 15,),
                                     Text(
                                       "Gen Tracker",
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                           fontSize: FontConstant.Size20,
                                           fontWeight: FontWeight.bold,
                                           overflow: TextOverflow.ellipsis,
-                                        ),
+
                                         color: ColorConstant.erp_appColor,
                                       ),
                                     ),

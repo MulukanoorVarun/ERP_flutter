@@ -6,7 +6,7 @@ import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -104,12 +104,11 @@ class _AttendanceState extends State<Attendance> {
                         Center(
                           child:Text(
                             "Check In/Out",
-                            style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
+                            style: TextStyle(
                                   fontSize: FontConstant.Size18,
                                   fontWeight: FontWeight.w500,
                                   overflow: TextOverflow.ellipsis,
-                                ),
+
                                 color: Colors.white
                             ),
                           ),
@@ -153,12 +152,11 @@ class _AttendanceState extends State<Attendance> {
                               ),
                                   child:Text(
                                     "Check In",
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style: TextStyle(
                                         fontSize: FontConstant.Size20,
                                         fontWeight: FontWeight.bold,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
+
                                       color: ColorConstant.white,
                                     ),
                                   ),
@@ -188,12 +186,11 @@ class _AttendanceState extends State<Attendance> {
                                 ),
                                 child:Text(
                                   "Check Out",
-                                  style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
+                                  style: TextStyle(
                                       fontSize: FontConstant.Size20,
                                       fontWeight: FontWeight.bold,
                                       overflow: TextOverflow.ellipsis,
-                                    ),
+
                                     color: ColorConstant.white,
                                   ),
                                 ),
@@ -206,14 +203,12 @@ class _AttendanceState extends State<Attendance> {
                             children: [
                               Text(
                                 "Attendance History",
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:
+    TextStyle(
                                     fontSize: FontConstant.Size18,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
-                                  color: ColorConstant.black,
-                                ),
+                                  color: ColorConstant.black,),
                               ),
                               Spacer(),
                               InkWell(
@@ -222,12 +217,11 @@ class _AttendanceState extends State<Attendance> {
                                 },
                               child:Text(
                                 "View History",
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:
+    TextStyle(
                                     fontSize: FontConstant.Size15,
                                     fontWeight: FontWeight.w400,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
                                   color: ColorConstant.black,
                                 ),
                               ),
@@ -278,24 +272,20 @@ class _AttendanceState extends State<Attendance> {
                                                   SizedBox(width: 10,),
                                                   Text(
                                                     "Date :",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style:  TextStyle(
                                                         fontSize: FontConstant.Size18,
                                                         fontWeight: FontWeight.w400,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
                                                   SizedBox(width: 5,),
                                                   Text(
                                                     "${attHistory[index].date}",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style:  TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.bold,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
@@ -307,24 +297,20 @@ class _AttendanceState extends State<Attendance> {
                                                   SizedBox(width: 10,),
                                                   Text(
                                                     "Check In Time :",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style: TextStyle(
                                                         fontSize: FontConstant.Size18,
                                                         fontWeight: FontWeight.w400,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
                                                   SizedBox(width: 5,),
                                                   Text(
                                                     "${attHistory[index].checkInTime}",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style:  TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.bold,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
@@ -337,24 +323,20 @@ class _AttendanceState extends State<Attendance> {
                                                   SizedBox(width: 10,),
                                                   Text(
                                                     "Check Out Time :",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style: TextStyle(
                                                         fontSize: FontConstant.Size18,
                                                         fontWeight: FontWeight.w400,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),
                                                   SizedBox(width: 5,),
                                                   Text(
                                                     "${attHistory[index].checkOutTime}",
-                                                    style: GoogleFonts.ubuntu(
-                                                      textStyle: TextStyle(
+                                                    style:  TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.bold,
                                                         overflow: TextOverflow.ellipsis,
-                                                      ),
                                                       color: ColorConstant.black,
                                                     ),
                                                   ),

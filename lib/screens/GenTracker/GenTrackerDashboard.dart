@@ -5,7 +5,7 @@ import 'package:GenERP/screens/GenTracker/TagLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -43,7 +43,7 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                       onTap: () => Navigator.pop(context, true),
                       child: Text("Gen Tracker",
                           textAlign: TextAlign.left,
-                          style: GoogleFonts.ubuntu(
+                          style: TextStyle(
                             color: ColorConstant.white,
                             fontSize: FontConstant.Size18,
                             fontWeight: FontWeight.w500,
@@ -105,12 +105,11 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                           SizedBox(width: 15,),
                           Text(
                           "Generator Details",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
+                          style:  TextStyle(
                               fontSize: FontConstant.Size20,
                               fontWeight: FontWeight.bold,
                               overflow: TextOverflow.ellipsis,
-                            ),
+
                             color: ColorConstant.erp_appColor,
                           ),
                         ),
@@ -144,12 +143,11 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                       SizedBox(width: 15,),
                       Text(
                         "Register Complaint",
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
+                        style:  TextStyle(
                             fontSize: FontConstant.Size20,
                             fontWeight: FontWeight.bold,
                             overflow: TextOverflow.ellipsis,
-                          ),
+
                           color: ColorConstant.erp_appColor,
                         ),
                       ),
@@ -187,12 +185,11 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                               SizedBox(width: 15,),
                               Text(
                                 "Tag Location",
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:  TextStyle(
                                     fontSize: FontConstant.Size20,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
+
                                   color: ColorConstant.erp_appColor,
                                 ),
                               ),
@@ -225,12 +222,10 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                               SizedBox(width: 15,),
                               Text(
                                 "Tag Generator",
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:  TextStyle(
                                     fontSize: FontConstant.Size20,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
-                                  ),
                                   color: ColorConstant.erp_appColor,
                                 ),
                               ),

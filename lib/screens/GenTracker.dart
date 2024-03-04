@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -39,12 +39,11 @@ class _GenTrackerState extends State<GenTracker>{
           title: Text(
             "Gen Tracker",
             textAlign: TextAlign.center,
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            style:  TextStyle(
                   color: ColorConstant.white,
                   fontSize: FontConstant.Size20,
                   fontWeight: FontWeight.w500),
-            ),
+
           ),
           backgroundColor: ColorConstant.erp_appColor),
       body: Container(
@@ -73,12 +72,12 @@ class _GenTrackerState extends State<GenTracker>{
                     children: [
                       Icon(Icons.search),
                       Text("Generator Details",textAlign: TextAlign.center,
-                        style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
+                        style:
+                         TextStyle(
                                 color: ColorConstant.black,
                                 fontSize: FontConstant.Size20,
                                 fontWeight: FontWeight.w500)),
-                      )],
+                      ],
                   ),
 
                 ),

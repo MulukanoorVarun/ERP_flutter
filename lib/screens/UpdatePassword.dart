@@ -8,7 +8,6 @@ import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -99,12 +98,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           title: Text(
             "UpdatePassword",
             textAlign: TextAlign.center,
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
-                  color: ColorConstant.white,
-                  fontSize: FontConstant.Size20,
-                  fontWeight: FontWeight.w500),
-            ),
+            style:
+            TextStyle(
+                color: ColorConstant.white,
+                fontSize: FontConstant.Size20,
+                fontWeight: FontWeight.w500),
           ),
           leadingWidth: 0.0,
           backgroundColor: ColorConstant.erp_appColor),
@@ -143,12 +141,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               hintText: "New Password*",
-                              hintStyle: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    fontSize: FontConstant.Size15,
-                                    color: ColorConstant.Textfield,
-                                    fontWeight: FontWeight.w400),
-                              ),
+                              hintStyle: TextStyle(
+                                fontSize: FontConstant.Size15,
+                                color: ColorConstant.Textfield,
+                                fontWeight: FontWeight.w400),
                               filled: true,
                               fillColor: ColorConstant.edit_bg_color,
                               enabledBorder: OutlineInputBorder(
@@ -176,11 +172,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             child: Text(
                               _validate_pwd,
                               textAlign: TextAlign.start,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: FontConstant.Size10,
-                                ),
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontSize: FontConstant.Size10,
                               ),
                             ),
                           )
@@ -196,12 +190,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               hintText: "Confirm New Password*",
-                              hintStyle: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                    fontSize: FontConstant.Size15,
-                                    color: ColorConstant.Textfield,
-                                    fontWeight: FontWeight.w400),
-                              ),
+                              hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size15,
+                                  color: ColorConstant.Textfield,
+                                  fontWeight: FontWeight.w400),
                               filled: true,
                               fillColor: ColorConstant.edit_bg_color,
                               enabledBorder: OutlineInputBorder(
@@ -229,11 +221,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                             child: Text(
                               _validate_confpwd,
                               textAlign: TextAlign.start,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  color: Colors.red,
-                                  fontSize: FontConstant.Size10,
-                                ),
+                              style:TextStyle(
+                                color: Colors.red,
+                                fontSize: FontConstant.Size10,
                               ),
                             ),
                           )
@@ -252,11 +242,10 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 child: Text(
                                   "Update",
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
-                                      color: ColorConstant.white,
-                                      fontSize: FontConstant.Size15,
-                                    ),),
+                                  style:TextStyle(
+                                    color: ColorConstant.white,
+                                    fontSize: FontConstant.Size15,
+                                  ),
                                 ),
                               ),
                             )

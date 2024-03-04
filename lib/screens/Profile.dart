@@ -7,7 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../Services/user_api.dart';
 import '../Utils/Constants.dart';
@@ -37,6 +37,7 @@ class _ProfileState extends State<Profile> {
   var latestversion = "";
   var releaseNotes = "";
   bool isLoading = true;
+  var totpText = "";
 
   @override
   void initState() {
@@ -115,26 +116,24 @@ class _ProfileState extends State<Profile> {
         shadowColor: Colors.black,
         title: Align(
             alignment: Alignment.topLeft,
-            child:Text('Confirm Log Out',style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            child:Text('Confirm Log Out',style:  TextStyle(
                   color: Colors.black,
                   fontSize: FontConstant.Size22,
                 fontWeight: FontWeight.w200
-              ),
+
             ),)
         ),
         content: Container(
                 width:400,
                 height: 75,
                 alignment: Alignment.center,
-                child:Text('$username you are signing out from  $appName app on this device ',
-                  maxLines:4,style: GoogleFonts.ubuntu(
-                  textStyle: TextStyle(
+                child:Text('$username, you are signing out from  $appName app on this device ',
+                  maxLines:4,style:  TextStyle(
                     color: Colors.black,
                     fontSize: FontConstant.Size18,
                     fontWeight: FontWeight.w100
 
-                  ),
+
                 ),)
 
         ),
@@ -156,12 +155,11 @@ class _ProfileState extends State<Profile> {
 
             child: Text(
               "LOG OUT",
-              style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(
+              style:  TextStyle(
                   color: ColorConstant.black,
                   fontWeight: FontWeight.w100,
                   fontSize: FontConstant.Size15,
-                ),
+
               ),
             ),
           ),
@@ -173,12 +171,11 @@ class _ProfileState extends State<Profile> {
             onPressed: () => Navigator.of(context).pop(false),
             child: Text(
               "CANCEL",
-              style: GoogleFonts.ubuntu(
-                textStyle: TextStyle(
+              style:  TextStyle(
                   color: ColorConstant.black,
                   fontWeight: FontWeight.w100,
                   fontSize: FontConstant.Size15,
-                ),
+
               ),
             ),
           ),
@@ -206,6 +203,69 @@ class _ProfileState extends State<Profile> {
       print("$e");
     }
   }
+  Future TOTPDialogue() async {
+    return await showDialog(
+      useSafeArea: true,
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0)
+        ),
+        title: Align(
+          alignment: Alignment.center,
+          child: Text(
+            'TOTP',
+            style: TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size25,
+                  fontWeight: FontWeight.w500,
+                  decoration: TextDecoration.underline
+
+            ),
+          ),
+        ),
+        shadowColor: Colors.black,
+        content: SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: 50), // Set the maximum height here
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        '',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: FontConstant.Size18,
+                            fontWeight: FontWeight.w500,
+
+
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: ColorConstant.erp_appColor,
+                        ),
+                      ),
+
+                    ]
+                ),
+                SizedBox(height: 10,),
+              ],
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: true,
+    ) ??
+        false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +284,7 @@ class _ProfileState extends State<Profile> {
                 onTap: () => Navigator.pop(context, true),
                 child: Text("Profile",
                     textAlign: TextAlign.left,
-                    style: GoogleFonts.ubuntu(
+                    style: TextStyle(
                       color: ColorConstant.white,
                       fontSize: FontConstant.Size18,
                       fontWeight: FontWeight.w500,
@@ -240,7 +300,9 @@ class _ProfileState extends State<Profile> {
             ),
             Container(
               child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  TOTPDialogue();
+                },
                 icon: const Icon(
                   Icons.security,
                   size: 30,
@@ -290,7 +352,7 @@ class _ProfileState extends State<Profile> {
               ),
               Container(
                 alignment: Alignment.topCenter,
-                child: SvgPicture.asset("assets/images/top_bar_profile.svg",
+                child: SvgPicture.asset("assets/images/top_bar_profile.svg",height: screenHeight,
                     width: screenWidth, fit: BoxFit.fill),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -310,7 +372,7 @@ class _ProfileState extends State<Profile> {
                         )),
               Container(
                 margin: EdgeInsets.only(
-                    top: screenHeight * 0.15, left: screenWidth * 0.3),
+                    top: screenHeight * 0.15, left: screenWidth * 0.325),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -320,12 +382,11 @@ class _ProfileState extends State<Profile> {
                         "$username",
                         maxLines: 2,
                         textAlign: TextAlign.start,
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
+                        style: TextStyle(
                               color: ColorConstant.white,
                               fontSize: FontConstant.Size20,
                               fontWeight: FontWeight.w500),
-                        ),
+
                       ),
                     ),
                     Container(
@@ -333,12 +394,11 @@ class _ProfileState extends State<Profile> {
                       child: Text(
                         "$email",
                         textAlign: TextAlign.start,
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
+                        style:  TextStyle(
                               color: ColorConstant.white,
                               fontSize: FontConstant.Size15,
                               fontWeight: FontWeight.w500),
-                        ),
+
                       ),
                     ),
                   ],
@@ -371,12 +431,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "Company",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w300),
-                                      ),
+
                                     ),
                                   ),
                                   Container(
@@ -384,12 +443,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "$company",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.black,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
-                                      ),
+
                                     ),
                                   ),
                                 ],
@@ -403,12 +461,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "Branch",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w300),
-                                      ),
+
                                     ),
                                   ),
                                   Container(
@@ -416,12 +473,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "$branch",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.black,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
-                                      ),
+
                                     ),
                                   ),
                                 ],
@@ -433,14 +489,13 @@ class _ProfileState extends State<Profile> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "Designation*",
+                                      "Designation",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w300),
-                                      ),
+
                                     ),
                                   ),
                                   Container(
@@ -449,12 +504,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "$designation",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.black,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
-                                      ),
+
                                       maxLines: 2,
                                     ),
                                   ),
@@ -469,26 +523,24 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "Employee Id",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style: TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w300),
-                                      ),
+
                                     ),
                                   ),
                                   Container(
                                     alignment: Alignment.topLeft,
                                     width: 150,
                                     child: Text(
-                                      "$empId",
+                                      "E-$empId",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.black,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
-                                      ),
+
                                     ),
                                   ),
                                 ],
@@ -502,12 +554,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "Mobile Number",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style:  TextStyle(
                                             color: ColorConstant.grey_153,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w300),
-                                      ),
+
                                     ),
                                   ),
                                   Container(
@@ -515,12 +566,11 @@ class _ProfileState extends State<Profile> {
                                     child: Text(
                                       "$mobile_num",
                                       textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
+                                      style: TextStyle(
                                             color: ColorConstant.black,
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
-                                      ),
+
                                     ),
                                   ),
                                 ],
@@ -544,13 +594,12 @@ class _ProfileState extends State<Profile> {
                                 borderRadius: BorderRadius.circular(30.0),
                               ),
                               child: Text(
-                                "Logout",
+                                "Log Out",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style:  TextStyle(
                                     color: ColorConstant.white,
                                     fontSize: FontConstant.Size20,
-                                  ),
+
                                 ),
                               ),
                             ),
@@ -566,11 +615,10 @@ class _ProfileState extends State<Profile> {
                             child: Text(
                               "Version $releaseNotes",
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
+                              style:  TextStyle(
                                   color: ColorConstant.grey_153,
                                   fontSize: FontConstant.Size15,
-                                ),
+
                               ),
                             ),
                           )),

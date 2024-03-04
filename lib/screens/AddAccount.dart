@@ -2,7 +2,7 @@ import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -47,12 +47,11 @@ class _AddAccountState extends State<AddAccount>{
           title: Text(
             "Add Account",
             textAlign: TextAlign.center,
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            style:  TextStyle(
                   color: ColorConstant.white,
                   fontSize: FontConstant.Size20,
                   fontWeight: FontWeight.w500),
-            ),
+
           ),
           backgroundColor: ColorConstant.erp_appColor),
       body: SingleChildScrollView(
@@ -92,12 +91,11 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Enter Name*",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -129,12 +127,12 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Designation*",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:
+                             TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -166,12 +164,11 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Mobile Number*",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -203,12 +200,11 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Alternate Mobile Number",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -240,12 +236,11 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Telephone NUmber",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
+
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -277,12 +272,10 @@ class _AddAccountState extends State<AddAccount>{
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
                             hintText: "Mail ID",
-                            hintStyle: GoogleFonts.ubuntu(
-                              textStyle: TextStyle(
+                            hintStyle: TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                            ),
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -317,11 +310,10 @@ class _AddAccountState extends State<AddAccount>{
                               child: Text(
                                 "SAVE",
                                 textAlign: TextAlign.center,
-                                style: GoogleFonts.ubuntu(
-                                  textStyle: TextStyle(
+                                style: TextStyle(
                                     color: ColorConstant.white,
                                     fontSize: FontConstant.Size15,
-                                  ),),
+                                  ),
                               ),
                             ),
                           )

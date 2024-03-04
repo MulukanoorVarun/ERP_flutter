@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as Location;
 import 'package:geocoding/geocoding.dart' as geocoding;
@@ -17,6 +17,7 @@ import 'package:location/location.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../Scanner.dart';
+import '../splash.dart';
 
 class TagLocation extends StatefulWidget {
   const TagLocation({Key? key}) : super(key: key);
@@ -42,6 +43,7 @@ class _TagLocationState extends State<TagLocation> {
   String locationdd = "Search Location";
   bool isLoading = true;
   TextEditingController Generator_id = TextEditingController();
+  var _error_genID = "";
 
   @override
   void initState() {
@@ -113,26 +115,46 @@ class _TagLocationState extends State<TagLocation> {
       });
     }
   }
+
   Future<void> TagLocationAPIFunction() async{
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
     try{
-      await UserApi.TagLocationAPI(empId, session,Generator_id.text,latlongs).then((data)=>{
-        if(data!=null){
-          setState((){
-            if(data.error==0){
-              toast(context,"Location Tagged Successfully!!");
-
-            }else if(data.error==1){
-              toast(context, "Enter Valid Generator Id");
-            }else{
-              toast(context, "Something Went wrong, Please Try Again!");
-            }
-          })
-        }else{
-
-        }
-      });
+      if(Generator_id.text.isEmpty){
+        setState(() {
+          _error_genID = "Enter Generator Id";
+        });
+      }
+      else{
+        setState(() {
+          _error_genID = "";
+          _error_genID.isEmpty;
+        });
+        await UserApi.TagLocationAPI(empId, session,Generator_id.text,latlongs).then((data)=>{
+          if(data!=null){
+            setState((){
+              if(data.sessionExists==1){
+                if(data.error==0){
+                  toast(context,"Location Tagged Successfully!!");
+                  Navigator.pop(context,true);
+                }
+                else if(data.error==1){
+                  toast(context, "Enter Valid Generator Id");
+                }
+                else{
+                  toast(context, "Something Went wrong, Please Try Again!");
+                }
+              }else{
+                PreferenceService().clearPreferences();
+                toast(context,"Your session has expired, please login again");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
+              }
+            })
+          }else{
+            toast(context, "No Response from server, Please try again later!")
+          }
+        });
+      }
 
     } on Error catch(e){
       print(e.toString());
@@ -156,7 +178,7 @@ class _TagLocationState extends State<TagLocation> {
                     onTap: () => Navigator.pop(context, true),
                     child: Text("Tag Location",
                         textAlign: TextAlign.left,
-                        style: GoogleFonts.ubuntu(
+                        style: TextStyle(
                           color: ColorConstant.white,
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
@@ -180,35 +202,31 @@ class _TagLocationState extends State<TagLocation> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          color: ColorConstant.erp_appColor,
+          height: screenHeight,
+          decoration: BoxDecoration(
+            color: ColorConstant.edit_bg_color,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+          ),
           child: Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
-              decoration: BoxDecoration(
-                color: ColorConstant.edit_bg_color,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                ),
-              ),
+
               padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: Column(// Set max height constraints
                 children: [
                   SizedBox(height: 15.0,),
-                  InkWell(
-                    onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagLocation")));
-                    },
-                    child: Container(
-                      child: Text("Scan QR Code or Enter ID", style: GoogleFonts.ubuntu(
-                        textStyle: TextStyle(
+                 Container(
+                      child: Text("Scan QR Code or Enter ID", style: TextStyle(
                           fontSize: FontConstant.Size25,
                           fontWeight: FontWeight.bold,
                           overflow: TextOverflow.ellipsis,
-                        ),
+
                         color: ColorConstant.erp_appColor,
                       ),),),
-                  ),
+
                   SizedBox(height: 5.0,),
                   Container(
                     height: screenHeight*0.75,
@@ -222,6 +240,11 @@ class _TagLocationState extends State<TagLocation> {
                         SizedBox(
                           height: 25,
                         ),
+                    InkWell(
+                        onTap: ()async {
+                          await Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"tagLocation")));
+                        },
+                        child:
                         Container(
 
                           child: SvgPicture.asset(
@@ -229,7 +252,7 @@ class _TagLocationState extends State<TagLocation> {
                             height: 350,
                             width: 350,
                           ),
-                        ),
+                        )),
                         Container(
                             child:Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -242,12 +265,11 @@ class _TagLocationState extends State<TagLocation> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  child: Text("OR", style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
+                                  child: Text("OR", style:  TextStyle(
                                       fontSize: FontConstant.Size20,
                                       fontWeight: FontWeight.w300,
                                       overflow: TextOverflow.ellipsis,
-                                    ),
+
                                     color: Colors.grey,
                                   ),),),
                                 Spacer(),
@@ -270,13 +292,10 @@ class _TagLocationState extends State<TagLocation> {
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                               hintText: "Enter Generator ID",
-                              hintStyle: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
+                              hintStyle:  TextStyle(
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400,),
-
-                              ),
                               filled: true,
                               fillColor: ColorConstant.edit_bg_color,
                               enabledBorder: OutlineInputBorder(
@@ -297,7 +316,23 @@ class _TagLocationState extends State<TagLocation> {
                             ),
                           ),
                         ),
+                        if(_error_genID!=null)...[
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.only(
+                                top: 2.5, bottom: 2.5, left: 25),
+                            child: Text(
+                              "$_error_genID",
+                              textAlign: TextAlign.start,
+                              style:  TextStyle(
+                                  color: Colors.red,
+                                  fontSize: FontConstant.Size10,
+                              ),
+                            ),
+                          )
+                        ]else...[
                         SizedBox(height: 20.0,),
+                        ],
                         Container(
                             child: InkWell(
                               onTap: (){
@@ -312,11 +347,10 @@ class _TagLocationState extends State<TagLocation> {
                                 child: Text(
                                   "Submit",
                                   textAlign: TextAlign.center,
-                                  style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
+                                  style:  TextStyle(
                                       color: ColorConstant.white,
                                       fontSize: FontConstant.Size15,
-                                    ),),
+                                    ),
                                 ),
                               ),
                             )

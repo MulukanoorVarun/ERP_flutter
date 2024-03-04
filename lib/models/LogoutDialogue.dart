@@ -1,6 +1,6 @@
 import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -72,12 +72,11 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
       backgroundColor:   ColorConstant.Fillcolor,
       title: Align(
           alignment: Alignment.topLeft,
-          child:Text('Confirm Log Out',style: GoogleFonts.ubuntu(
-            textStyle: TextStyle(
+          child:Text('Confirm Log Out',style:  TextStyle(
                 color: Colors.black,
                 fontSize: FontConstant.Size22,
                 fontWeight: FontWeight.w200
-            ),
+
           ),)
       ),
       content: Container(
@@ -85,13 +84,12 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
           height: 75,
           alignment: Alignment.center,
           child:Text('$username you are signing out from  $appName app on this device ',
-            maxLines:4,style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            maxLines:4,style:  TextStyle(
                   color: Colors.black,
                   fontSize: FontConstant.Size18,
                   fontWeight: FontWeight.w100
 
-              ),
+
             ),)
 
       ),
@@ -107,12 +105,11 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
           },
           child: Text(
             "LOG OUT",
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            style: TextStyle(
                 color: ColorConstant.black,
                 fontWeight: FontWeight.w100,
                 fontSize: FontConstant.Size15,
-              ),
+
             ),
           ),
         ),
@@ -124,12 +121,10 @@ class _LogoutDialogueDialogueState extends State<LogoutDialogue> {
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
             "CANCEL",
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
+            style:  TextStyle(
                 color: ColorConstant.black,
                 fontWeight: FontWeight.w100,
                 fontSize: FontConstant.Size15,
-              ),
             ),
           ),
         ),

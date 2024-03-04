@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 
 
 class Helpers {
@@ -19,7 +19,7 @@ class Helpers {
       elevation: 0,
       title:  Container(
         child: Text(title,
-            style:  GoogleFonts.ubuntu(
+            style:TextStyle(
               color: Colors.orangeAccent,
               fontSize: 20.0,
               fontWeight: FontWeight.w500,

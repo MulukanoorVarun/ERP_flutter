@@ -3,13 +3,24 @@ import 'dart:io';
 
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
+import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
+import 'package:GenERP/screens/GenTracker/TagLocation.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:geolocator/geolocator.dart';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart' as Location;
+import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:location/location.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/storage.dart';
 import 'dart:convert';
+
+import 'GenTracker/GeneratoraDetails.dart';
+import 'GenTracker/RegisterComplaint.dart';
 
 
 class Scanner extends StatefulWidget {
@@ -24,11 +35,27 @@ class _ScannerState extends State<Scanner> {
   final GlobalKey scannerKey = GlobalKey(debugLabel: 'QR');
   var empId="";
   var session="";
+  Location.Location currentLocation1 = Location.Location();
+  Location.LocationData? currentLocation;
+  var latlongs = "";
+  Set<Marker> markers = {};
+  List<String> addresses = [];
+  bool isLocationEnabled = false;
+  bool hasLocationPermission = false;
+  String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
+  GoogleMapController? mapController;
+  CameraPosition? cameraPosition;
+  LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
+  String locationdd = "Search Location";
+  bool isLoading = true;
+  TextEditingController Generator_id = TextEditingController();
+  var _error_genID = "";
   QRViewController? controller;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _getLocationPermission();
     }
   @override
   void reassemble() {
@@ -38,51 +65,192 @@ class _ScannerState extends State<Scanner> {
     }
     controller!.resumeCamera();
   }
-  void _onQRViewCreated(QRViewController controller) {
+
+  Future<void> _getLocationPermission() async {
+    // Check if location services are enabled
+    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+// Check if the app has been granted location permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    hasLocationPermission = permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+
+    final Location.Location location = Location.Location();
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+    isLoading = false;
+    permissionGranted = (await location.hasPermission());
+    if (permissionGranted == PermissionStatus) {
+
+      permissionGranted = (await location.requestPermission());
+      if (permissionGranted != PermissionStatus) {
+        return;
+      }
+    }
+    final Location.LocationData locData = await location.getLocation();
+
     setState(() {
-
+      currentLocation = locData;
     });
-    controller.scannedDataStream.listen((scanData)  {
-      var a  =  scanData;
+
+    if (currentLocation != null) {
+      mapController?.animateCamera(
+        CameraUpdate.newLatLng(LatLng(
+          currentLocation!.latitude!,
+          currentLocation!.longitude!,
+        )),
+      );
+
+      markers.add(Marker(
+        markerId: MarkerId('current_location'),
+        position:
+        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        infoWindow: InfoWindow(title: 'Current Location'),
+        icon: BitmapDescriptor.defaultMarker,
+      ));
+
       setState(() {
-        // result = scanData;
-
-        print(a.toString());
-        print("littu");
+        final lat = currentLocation!.latitude;
+        final lang = currentLocation!.longitude!;
+        latlongs = '$lat,$lang';
+        //Storelocatorfunction(latlongs);
       });
-    });
+    }
   }
   void onQRViewCreated(QRViewController controller) {
+
+    print("QRVIEW");
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       setState(() {
-        print(scanData.code);
-        print("a");
-        print(scanData.format);
-        print("b");
-        print(scanData.rawBytes);
         if(widget.from == "dashboard"){
-          var decodedata = jsonDecode(scanData.code!);
-          var token = decodedata['data']['token'];
-          print(token);
-          var type = decodedata['type'];
-          LoadQRAPIFunction(token,type);
-        }
-        if(widget.from =="generatorDetails"){
+          Map<String, dynamic> obj = jsonDecode(scanData.code!);
+          if (obj["type"] == "login") {
+            print("type:"+obj["type"]);
+            print("token:"+(obj["data"]["token"]));
+            LoadQRAPIFunction(obj["type"],(obj["data"]["token"]));
+            Navigator.pop(context,true);
+          }
 
         }
-        if(widget.from =="registerComplaint"){
+        else if(widget.from =="generatorDetails"){
+          PreferenceService().saveString("result", scanData.code!);
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  GeneratorDetails(generator_id:scanData.code)));
+
+          // LoadgeneratorDetailsApifunction(scanData.code!);
+        }
+        else if(widget.from =="registerComplaint"){
+          PreferenceService().saveString("result", scanData.code!);
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  RegisterComplaint(generator_id:scanData.code)));
+          // LoadgeneratorDetailsApifunction(scanData.code!);
+        }
+        else if(widget.from =="tagGenerator"){
+          PreferenceService().saveString("result", scanData.code!);
+          Navigator.pop(context,true);
+
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  TagGenerator()));
+
 
         }
-        if(widget.from =="tagGenerator"){
-
-        }
-        if(widget.from =="tagLocation"){
+        else if(widget.from =="tagLocation"){
+          PreferenceService().saveString("result", scanData.code!);
+          TagLocationAPIFunction(scanData.code!,latlongs);
+          Navigator.pop(context);
+          // Navigator.push(context, MaterialPageRoute(
+          //     builder: (context) =>
+          //         TagLocation()));
 
         }
 
       });
     });
+  }
+
+
+  Future<void> TagGeneratorAPIFunction(Generator_id,Engine_no) async {
+    session = await PreferenceService().getString("Session_id") ?? "";
+    empId = await PreferenceService().getString("UserId") ?? "";
+
+      try {
+        await UserApi.TagGeneratorAPI(
+            empId, session, Generator_id, Engine_no).then((data) =>
+        {
+          if(data != null){
+            setState(() {
+              if (data.sessionExists == 1) {
+                if (data.error == 0) {
+                  toast(context, data.message);
+                  Navigator.pop(context, true);
+                } else if (data.error == 1) {
+                  toast(context, data.message);
+                } else if (data.error == 2) {
+                  toast(context, data.message);
+                }
+                else {
+                  toast(context, "Something Went wrong, Please Try Again!");
+                }
+              } else {
+                toast(context, "Your session has expired, please login again!");
+              }
+            })
+          } else
+            {
+              toast(context, "No response from server, Please try again later!")
+            }
+        });
+      } on Error catch (e) {
+        print(e.toString());
+      }
+  }
+
+
+  Future<void> TagLocationAPIFunction(Generator_id,latlongs) async{
+    session= await PreferenceService().getString("Session_id")??"";
+    empId= await PreferenceService().getString("UserId")??"";
+    try{
+        await UserApi.TagLocationAPI(empId, session,Generator_id,latlongs).then((data)=>{
+          if(data!=null){
+            setState((){
+              if(data.sessionExists==1){
+                if(data.error==0){
+                  toast(context,"Location Tagged Successfully!!");
+                  Navigator.pop(context,true);
+                }
+                else if(data.error==1){
+                  toast(context, "Enter Valid Generator Id");
+                }
+                else{
+                  toast(context, "Something Went wrong, Please Try Again!");
+                }
+              }else{
+                PreferenceService().clearPreferences();
+                toast(context,"Your session has expired, please login again");
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
+              }
+            })
+          }else{
+            toast(context, "No Response from server, Please try again later!")
+          }
+        });
+
+    } on Error catch(e){
+      print(e.toString());
+    }
   }
 
 
@@ -98,6 +266,7 @@ class _ScannerState extends State<Scanner> {
   Future<void> LoadQRAPIFunction(type,token) async{
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
+    print("empId:$empId");
     try{
       await UserApi.QRLoginRequestAPI(empId, session,type,token).then((data)=>{
         if(data!=null){
@@ -151,6 +320,9 @@ class _ScannerState extends State<Scanner> {
           child: QRView(
               onQRViewCreated: onQRViewCreated,
             key: scannerKey,
+            formatsAllowed: [
+              BarcodeFormat.qrcode,
+            ],
 
             cameraFacing: CameraFacing.back,
 
@@ -160,7 +332,7 @@ class _ScannerState extends State<Scanner> {
                 borderLength: 30,
                 borderWidth: 10,
                 cutOutSize: scanArea),
-            onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
+
           ),
             ),
 

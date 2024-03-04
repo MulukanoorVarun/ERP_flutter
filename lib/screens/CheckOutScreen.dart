@@ -9,7 +9,7 @@ import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:google_fonts/google_fonts.dart';
+ 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
@@ -265,12 +265,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                   child:Text(
                                     "Location",
-                                    style: GoogleFonts.ubuntu(
-                                      textStyle: TextStyle(
+                                    style:  TextStyle(
                                         fontSize: FontConstant.Size15,
                                         fontWeight: FontWeight.w400,
                                         overflow: TextOverflow.ellipsis,
-                                      ),
+
                                       color: Colors.grey,
                                     ),
                                   ),),
@@ -286,12 +285,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                       keyboardType: TextInputType.text,
                                       decoration: InputDecoration(
                                         hintText: "Enter Check Out Location",
-                                        hintStyle: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
+                                        hintStyle:TextStyle(
                                               fontSize: FontConstant.Size15,
                                               color: ColorConstant.grey_153,
                                               fontWeight: FontWeight.w400),
-                                        ),
+
                                         filled: true,
                                         fillColor: ColorConstant.edit_bg_color,
                                         enabledBorder: OutlineInputBorder(
@@ -330,12 +328,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                       ),
                                       child:Text(
                                         "Punch Out (Upload Selfie)",
-                                        style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
+                                        style:  TextStyle(
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500,
                                             overflow: TextOverflow.ellipsis,
-                                          ),
+
                                           color: ColorConstant.white,
                                         ),
                                       ),
