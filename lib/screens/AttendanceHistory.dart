@@ -861,8 +861,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                 // Conditional rendering to highlight selected and current dates
                                 Center(
                                     child: SizedBox(
-                                        width: 22,
-                                        height: 22,
+                                        width: 21,
+                                        height: 21,
                                         child: Container(
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,

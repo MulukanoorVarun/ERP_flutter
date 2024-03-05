@@ -209,7 +209,7 @@ class _AttendanceState extends State<Attendance> {
                               Text(
                                 "Attendance History",
                                 style: TextStyle(
-                                    fontSize: FontConstant.Size18,
+                                    fontSize: FontConstant.Size16,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
                                   color: ColorConstant.black,),
@@ -223,14 +223,14 @@ class _AttendanceState extends State<Attendance> {
                                 "View History",
                                 style:
                                  TextStyle(
-                                    fontSize: FontConstant.Size18,
+                                    fontSize: FontConstant.Size15,
                                     fontWeight: FontWeight.w400,
                                     overflow: TextOverflow.ellipsis,
                                   color: ColorConstant.black,
                                 ),
                               ),
                               ),
-                              SizedBox(width: 15,),
+                              SizedBox(width: 10,),
     InkWell(
     onTap: (){
     Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
@@ -241,7 +241,7 @@ class _AttendanceState extends State<Attendance> {
                                 height: 25,
                                 width: 25,
                               ),),
-                              SizedBox(width: 15,),
+                              SizedBox(width: 10,),
                             ],
                           ),
 
