@@ -1,4 +1,5 @@
 import 'package:GenERP/screens/GenInventory/InventoryScreen.dart';
+import 'package:GenERP/screens/GenTechnicianModule/TechnicianDashboard.dart';
 import 'package:GenERP/screens/GenTracker/GenTrackerDashboard.dart';
 import 'package:GenERP/screens/LocationService.dart';
 import 'package:GenERP/screens/Profile.dart';
@@ -510,16 +511,10 @@ class _DashboardState extends State<Dashboard> {
                             if(roleStatus.contains("433"))...[
                             Container(child: InkWell(
                               onTap: () async {
-                                // var res = await Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
-                                // );
-                                // if(res == true){
-                                //   setState(() {
-                                //     isLoading = true;
-                                //   });
-                                //   DashboardApiFunction();
-                                // }
+                                var res = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => GenTechnicianDashboard()),
+                                );
                               },
 
                               child:Container(

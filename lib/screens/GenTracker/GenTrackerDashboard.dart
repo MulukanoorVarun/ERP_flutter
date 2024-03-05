@@ -121,7 +121,8 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
 
                     SizedBox(height: 15,),
 
-                     Container(child: InkWell(
+                     Container(child:
+                     InkWell(
                         onTap: () async {
                           await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title:"Register Complaint")));
                         },
