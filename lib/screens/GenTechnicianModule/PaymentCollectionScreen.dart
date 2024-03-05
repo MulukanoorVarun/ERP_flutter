@@ -4,6 +4,7 @@ import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
+import 'package:GenERP/screens/WebERP.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -159,7 +160,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               children: [
                                                 SizedBox(width: 10),
                                                 Text(
-                                                  "Payment Ref No:",
+                                                  pc_list![index].accountName??"-",
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -171,6 +172,27 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                             ),
                                           ),
                                           Spacer(),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  pc_list![index].amount??"-",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10,),
+                                      Row(
+                                        children: [
                                           Expanded(
                                             child: Row(
                                               children: [
@@ -189,27 +211,6 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 10,),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
 
                                       SizedBox(height: 10,),
 
@@ -220,7 +221,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               children: [
                                                 SizedBox(width: 10),
                                                 Text(
-                                                  "Date",
+                                                  pc_list![index].paymentMode??"-",
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -241,15 +242,20 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                             child: Row(
                                               children: [
                                                 SizedBox(width: 10),
-                                                Text(
-                                                  "View proof",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
+                                               InkWell(
+                                                 onTap: (){
+                                                   Navigator.push(context,MaterialPageRoute(builder: (context)=>WebERP(url: pc_list![index].paymentProofFilePath??"")));
+                                                 },
+                                                 child:  Text(
+                                                   "View proof",
+                                                   style: TextStyle(
+                                                     fontSize: FontConstant.Size15,
+                                                     fontWeight: FontWeight.w400,
+                                                     overflow: TextOverflow.ellipsis,
+                                                     color: ColorConstant.black,
+                                                   ),
+                                                 ),
+                                               )
                                               ],
                                             ),
                                           ),
@@ -257,16 +263,22 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                           Expanded(
                                             child: Row(
                                               children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
+                                                Container(
+                                                  width:80,
+                                                  padding:EdgeInsets.all(5.0),
+                                                  decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.circular(3.0)),
+                                                  child: Text(
+                                                    pc_list![index].approvalStatus??"-",
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w400,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      color: ColorConstant.black,
+                                                    ),
                                                   ),
-                                                ),
+                                                )
                                               ],
                                             ),
                                           ),
