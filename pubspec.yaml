@@ -100,6 +100,8 @@ dependencies:
   qr_code_scanner: ^1.0.1
   dropdown_button2: ^2.3.9
   dio: ^5.4.1
+  auto_start_flutter: ^0.1.1
+  android_autostart: ^0.0.3
 
 dev_dependencies:
   flutter_test:

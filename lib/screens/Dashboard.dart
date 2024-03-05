@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:GenERP/screens/GenInventory/InventoryScreen.dart';
+import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:GenERP/screens/GenTechnicianModule/TechnicianDashboard.dart';
 import 'package:GenERP/screens/GenTracker/GenTrackerDashboard.dart';
 import 'package:GenERP/screens/LocationService.dart';
@@ -6,6 +9,9 @@ import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/WebERP.dart';
 import 'package:GenERP/screens/attendance_screen.dart';
 import 'package:GenERP/screens/splash.dart';
+import 'package:android_autostart/android_autostart.dart';
+import 'package:auto_start_flutter/auto_start_flutter.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -72,9 +78,71 @@ class _DashboardState extends State<Dashboard> {
     print(WEB_SOCKET_URL);
     webSocketManager.init();
     super.initState();
+    addAutoStartup();
     DashboardApiFunction();
   }
 
+
+void autostart(){
+  var austostart = AndroidAutostart.navigateAutoStartSetting;
+
+  AndroidAutostart.customSetComponent(
+    manufacturer: "xiaomi",
+    pkg: "com.miui.securitycenter",
+    cls:
+    "com.miui.permcenter.autostart.AutoStartManagementActivity",
+  );
+}
+
+  void addAutoStartup() async {
+    String androidId;
+    var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
+    var androidDeviceInfo = await deviceInfo.androidInfo;
+    String manufacturer = androidDeviceInfo.manufacturer.toString(); // Replace this with actual device manufacturer
+
+    switch (manufacturer.toLowerCase()) {
+      case "xiaomi":
+        AndroidAutostart.customSetComponent(
+          manufacturer: "xiaomi",
+          pkg: "com.miui.securitycenter",
+          cls: "com.miui.permcenter.autostart.AutoStartManagementActivity",
+        );
+        break;
+      case "oppo":
+        AndroidAutostart.customSetComponent(
+          manufacturer: "oppo",
+          pkg: "com.coloros.safecenter",
+          cls: "com.coloros.safecenter.permission.startup.StartupAppListActivity",
+        );
+        break;
+      case "vivo":
+        AndroidAutostart.customSetComponent(
+          manufacturer: "vivo",
+          pkg: "com.vivo.permissionmanager",
+          cls: "com.vivo.permissionmanager.activity.BgStartUpManagerActivity",
+        );
+        break;
+      case "letv":
+        AndroidAutostart.customSetComponent(
+          manufacturer: "letv",
+          pkg: "com.letv.android.letvsafe",
+          cls: "com.letv.android.letvsafe.AutobootManageActivity",
+        );
+        break;
+      case "huawei":
+      case "honor":
+      AndroidAutostart.customSetComponent(
+          manufacturer: "huawei",
+          pkg: "com.huawei.systemmanager",
+          cls: "com.huawei.systemmanager.optimize.process.ProtectActivity",
+        );
+        break;
+      default:
+        return;
+    }
+
+    AndroidAutostart.navigateAutoStartSetting;
+  }
 
   Future<void> DashboardApiFunction() async {
     try{
@@ -515,6 +583,12 @@ class _DashboardState extends State<Dashboard> {
                                   context,
                                   MaterialPageRoute(builder: (context) => GenTechnicianDashboard()),
                                 );
+                                if(res == true){
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  DashboardApiFunction();
+                                }
                               },
 
                               child:Container(
@@ -533,7 +607,7 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                     SizedBox(width: 15,),
                                     Text(
-                                      "Sevice Engineers",
+                                      "Service Engineers",
                                       style:  TextStyle(
                                           fontSize: FontConstant.Size20,
                                           fontWeight: FontWeight.bold,

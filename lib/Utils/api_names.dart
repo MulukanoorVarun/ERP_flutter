@@ -32,6 +32,8 @@ const submitComplaint = "${baseUrl}home/gen_tracker_register_complaint";
 const ComplaintsSelection = "${baseUrl}home/compliants_select_data";
 const inventory_part_detailsAPI = "${baseUrl}home/inventory_part_details";
 const inventory_stock_updateAPI = "${baseUrl}home/inventory_update_stock";
+const getAccountSuggestions = "${baseUrl}home/technician_search_account_list";
+const getPendingComplaintsList = "${baseUrl}home/technician_pending_complaints";
 // const profile_details = "${baseUrl}profile_details";
 // const refresh_token_api = "${baseUrl}refresh_customer_token";
 

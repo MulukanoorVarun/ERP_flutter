@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/splash.dart';
@@ -13,7 +14,6 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_svg/svg.dart';
  
 import 'package:share_plus/share_plus.dart';
-import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -79,7 +79,7 @@ class _LoginState extends State<Login> {
     String androidId;
     var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
     var androidDeviceInfo = await deviceInfo.androidInfo;
-    _deviceDetails = await  "Version Name: " + androidDeviceInfo.version.toString().trim()+ ", " + "Version Code: " + androidDeviceInfo.version.codename.toString().trim() + ", " + "OS Version: " + androidDeviceInfo.version.codename.toString().trim() + ", SDK Version: " + androidDeviceInfo.version.sdkInt.toString().trim() + ", Device: " + androidDeviceInfo.device.toString().trim() + ", Model: " + androidDeviceInfo.model.toString().trim() + ", Product: " + androidDeviceInfo.product.toString().trim() + ", Manufacturer: " + androidDeviceInfo.manufacturer.toString().trim() + ", Brand: " + androidDeviceInfo.brand.toString().trim() + ", User: " + androidDeviceInfo.data['user'].toString().trim() + ", Display: " + androidDeviceInfo.display.toString().trim() + ", Hardware: " + androidDeviceInfo.hardware.toString().trim() + ", Board: " + androidDeviceInfo.board.toString().trim()+ ", Host: " + androidDeviceInfo.host.toString().trim() + ", Serial: " + androidDeviceInfo.serialNumber.toString().trim() + ", ID: " + androidDeviceInfo.id.toString().trim() + ", Bootloader: " + androidDeviceInfo.bootloader.toString().trim() + ", CPU ABI1: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", CPU ABI2: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", FingerPrint: " + androidDeviceInfo.fingerprint.toString().trim();
+    _deviceDetails = await  "Version Name: " + androidDeviceInfo.version.baseOS.toString().trim()+ ", " + "Version Code: " + androidDeviceInfo.version.codename.toString().trim() + ", " + "OS Version: " + androidDeviceInfo.version.codename.toString().trim() + ", SDK Version: " + androidDeviceInfo.version.sdkInt.toString().trim() + ", Device: " + androidDeviceInfo.device.toString().trim() + ", Model: " + androidDeviceInfo.model.toString().trim() + ", Product: " + androidDeviceInfo.product.toString().trim() + ", Manufacturer: " + androidDeviceInfo.manufacturer.toString().trim() + ", Brand: " + androidDeviceInfo.brand.toString().trim() + ", User: " + androidDeviceInfo.data['user'].toString().trim() + ", Display: " + androidDeviceInfo.display.toString().trim() + ", Hardware: " + androidDeviceInfo.hardware.toString().trim() + ", Board: " + androidDeviceInfo.board.toString().trim()+ ", Host: " + androidDeviceInfo.host.toString().trim() + ", Serial: " + androidDeviceInfo.serialNumber.toString().trim() + ", ID: " + androidDeviceInfo.id.toString().trim() + ", Bootloader: " + androidDeviceInfo.bootloader.toString().trim() + ", CPU ABI1: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", CPU ABI2: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", FingerPrint: " + androidDeviceInfo.fingerprint.toString().trim();
     // _deviceDetails = androidDeviceInfo.model.toString();
     try {
       androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
@@ -129,10 +129,7 @@ class _LoginState extends State<Login> {
         });
       } else if ((email.text.isNotEmpty) && password.text.isEmpty) {
         setState(() {
-          // _validateEmail.isEmpty;
-          // _validateEmail = "";
-          // _validateName = "*Please Enter Your Name";
-          // print(_validateName + "kjfjk");
+
         });
       } else {
         _validatepassword = "";
@@ -140,13 +137,9 @@ class _LoginState extends State<Login> {
 
         String? fcmToken = " ";
         if (Platform.isAndroid) {
-          // toast(context,"Android");
-          // platformname = "Android";
-          // fcmToken = await FirebaseMessaging.instance.getToken();
+
         } else if (Platform.isIOS) {
-          // toast(context,"ios");
-          // platformname = "iOS";
-          // fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+
         }
         await UserApi.LoginFunctionApi(
             email.text,
@@ -192,7 +185,9 @@ class _LoginState extends State<Login> {
               })
             }
           else
-            {print("Something went wrong, Please try again.")}
+            {
+            toast(context, "Something went wrong, Please try again."),
+              print("Something went wrong, Please try again.")}
         });
       }
     } on Exception catch (e) {

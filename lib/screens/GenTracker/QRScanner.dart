@@ -1,7 +1,7 @@
 import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Services/user_api.dart';
 import 'package:GenERP/Utils/storage.dart';
-import 'package:GenERP/screens/AddAccount.dart';
+import 'package:GenERP/screens/GenTechnicianModule/AddAccount.dart';
 import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker/GeneratoraDetails.dart';

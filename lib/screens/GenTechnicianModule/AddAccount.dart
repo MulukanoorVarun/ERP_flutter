@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
  
 
-import '../Utils/ColorConstant.dart';
-import '../Utils/FontConstant.dart';
+import '../../Utils/ColorConstant.dart';
+import '../../Utils/FontConstant.dart';
 
 class AddAccount extends StatefulWidget{
   const AddAccount({Key?key}): super(key:key);

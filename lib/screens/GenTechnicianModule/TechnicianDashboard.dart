@@ -73,7 +73,8 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
             child: Column(
               children: [
                 Expanded(
-                  child: Container(
+                  child:
+                  Container(
                     width: double.infinity, // Set width to fill parent width
                     decoration: BoxDecoration(
                       color: ColorConstant.edit_bg_color,
@@ -83,360 +84,408 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                       ),
                     ),
                     padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                    child: Row( // Use Row to split into two columns
+                    child:
+                    Column( // Use Row to split into two columns
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Expanded(
-                          child: Column( // First column
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_rating.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                     Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                          Center(
-                                          child:Text(
-                                            "6.0",
-                                            style: TextStyle(
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.bold,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: ColorConstant.erp_appColor,
-                                            ),
-                                          ),
-                                          ),
-                                          Center(
-                                            child:Text(
-                                            "rating",
-                                            style: TextStyle(
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.bold,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: ColorConstant.erp_appColor,
-                                            ),
-                                          ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 20,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15,),
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_today_visits.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                          Center(
-                                            child:Text(
-                                              "0",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Center(
-                                            child:Text(
-                                              "Today Visits",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 15,),
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_rating.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                          Center(
-                                            child:Text(
-                                              "00.0",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Center(
-                                            child:Text(
-                                              "Month",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Center(
-                                            child:Text(
-                                              "Collection",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 10), // Add spacing between columns
-                        Expanded(
-                          child: Column( // Second column
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => PendingComplaints()));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_pending.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                        Text(
-                                              "0",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
+                       Row(
+                         children: [
+                           Expanded(
+                             child: Column( // First column
+                               children: [
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_rating.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Center(
+                                               child:Text(
+                                                 "6.0",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size15,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "rating",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size15,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 20,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 15,),
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_today_visits.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Center(
+                                               child:Text(
+                                                 "0",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "Today Visits",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 10,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 15,),
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_payments.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Center(
+                                               child:Text(
+                                                 "00.0",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "Month",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "Collection",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 10,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                           SizedBox(width: 10), // Add spacing between columns
+                           Expanded(
+                             child: Column( // Second column
+                               children: [
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => PendingComplaints()));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_pending.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Text(
+                                               "0",
+                                               style: TextStyle(
+                                                 fontSize: FontConstant.Size13,
+                                                 fontWeight: FontWeight.bold,
+                                                 overflow: TextOverflow.ellipsis,
+                                                 color: ColorConstant.erp_appColor,
+                                               ),
+                                             ),
 
-                                            Text(
-                                              "Pending",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          Text(
-                                            "Complaints",
-                                            style: TextStyle(
-                                              fontSize: FontConstant.Size13,
-                                              fontWeight: FontWeight.bold,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: ColorConstant.erp_appColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10,)
-                                    ],
-                                  ),
-                                ),
+                                             Text(
+                                               "Pending",
+                                               style: TextStyle(
+                                                 fontSize: FontConstant.Size13,
+                                                 fontWeight: FontWeight.bold,
+                                                 overflow: TextOverflow.ellipsis,
+                                                 color: ColorConstant.erp_appColor,
+                                               ),
+                                             ),
+                                             Text(
+                                               "Complaints",
+                                               style: TextStyle(
+                                                 fontSize: FontConstant.Size13,
+                                                 fontWeight: FontWeight.bold,
+                                                 overflow: TextOverflow.ellipsis,
+                                                 color: ColorConstant.erp_appColor,
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 10,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 15,),
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_month_visits.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Center(
+                                               child:Text(
+                                                 "0",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "Month Visits",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 10,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 15,),
+                                 InkWell(
+                                   onTap: () async {
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                   },
+                                   child: Container(
+                                     height: 80,
+                                     decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(20.0),
+                                     ),
+                                     child: Row(
+                                       children: [
+                                         SizedBox(width: 10),
+                                         SvgPicture.asset(
+                                           "assets/ic_payments.svg",
+                                           height: 50,
+                                           width: 50,
+                                         ),
+                                         Spacer(),
+                                         Column(
+                                           crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
+                                           mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
+                                           children: [
+                                             Center(
+                                               child:Text(
+                                                 "31000.56",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                             Center(
+                                               child:Text(
+                                                 "P.C Wallet",
+                                                 style: TextStyle(
+                                                   fontSize: FontConstant.Size13,
+                                                   fontWeight: FontWeight.bold,
+                                                   overflow: TextOverflow.ellipsis,
+                                                   color: ColorConstant.erp_appColor,
+                                                 ),
+                                               ),
+                                             ),
+                                           ],
+                                         ),
+                                         SizedBox(width: 10,)
+                                       ],
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                           ),
+                         ],
+                       ),
+                        SizedBox(height: 25,),
+                        Container(
+                          height: 80,
+                          child: InkWell(
+                            onTap: () async {
+
+                            },
+                            child:
+                            Container(
+                              height: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
-                              SizedBox(height: 15,),
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 10),
+                                  SvgPicture.asset(
+                                    "assets/ic_nearby.svg",
+                                    height: 50,
+                                    width: 50,
                                   ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_month_visits.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                          Center(
-                                            child:Text(
-                                              "0",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
+                                  SizedBox(width: 20,),
+                                  Spacer(),
+                                  Container(
+                                    child:Text(
+                                          "Nearby Generators",
+                                          style: TextStyle(
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.bold,
+                                            overflow: TextOverflow.ellipsis,
+                                            color: ColorConstant.erp_appColor,
                                           ),
-                                          Center(
-                                            child:Text(
-                                              "Month Visits",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10,)
-                                    ],
+                                        ),
                                   ),
-                                ),
+                                  Spacer(),
+                                  SizedBox(width: 20,)
+                                ],
                               ),
-                              SizedBox(height: 15,),
-                              InkWell(
-                                onTap: () async {
-                                  await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
-                                },
-                                child: Container(
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(20.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(width: 10),
-                                      SvgPicture.asset(
-                                        "assets/ic_rating.svg",
-                                        height: 50,
-                                        width: 50,
-                                      ),
-                                      Spacer(),
-                                      Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center, // Align text to the left
-                                        mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
-                                        children: [
-                                          Center(
-                                            child:Text(
-                                              "31000.56",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                          Center(
-                                            child:Text(
-                                              "P.C Wallet",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size13,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: ColorConstant.erp_appColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(width: 10,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
-                        ),
+                        )
                       ],
                     ),
 
                   ),
                 ),
+                
 
               ],
             ),

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:GenERP/models/AccountSuggestionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
@@ -6,10 +7,12 @@ import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
 import 'package:GenERP/models/TagGeneratorResponse.dart';
 import 'package:GenERP/models/TagLocationResponse.dart';
+import 'package:GenERP/models/TechniciansPendingComplaintsResponse.dart';
 import 'package:GenERP/models/UpdatePasswordResponse.dart';
 import 'package:GenERP/models/VersionsResponse.dart';
 import 'package:GenERP/models/generatorComplaintResponse.dart';
 import 'package:GenERP/models/loadGeneratorDetailsResponse.dart';
+import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import '../Utils/api_names.dart';
@@ -498,6 +501,46 @@ class UserApi {
       if (res != null) {
         print(res.body);
         return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+  static Future<AccountSuggestionResonse?> AccountSuggestionAPI(empId,session,search_string) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'search_string': (search_string).toString(),
+
+
+      };
+      final res = await post(data,getAccountSuggestions, {});
+      if (res != null) {
+        print(res.body);
+        return AccountSuggestionResonse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }static Future<TechnicianPendingComplaintsResponse?> LoadTechnicianComplaintsAPI(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data,getPendingComplaintsList, {});
+      if (res != null) {
+        print(res.body);
+        return TechnicianPendingComplaintsResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
