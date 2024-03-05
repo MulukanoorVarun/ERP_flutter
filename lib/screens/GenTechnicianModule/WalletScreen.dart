@@ -13,6 +13,7 @@ import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../../models/PaymentCollectionWalletResponse.dart';
 import '../../models/TodayVisitResponse.dart';
 import '../Profile.dart';
 import '../Scanner.dart';
@@ -30,24 +31,27 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   void initState() {
+    LoadTransactionsListAPI();
     super.initState();
   }
 
   String? empId;
   String? sessionId;
-  List<Visitlist> todayvisitlist=[];
+  List<HistoryList> historyList=[];
+  //TotalDet totalDet;
   Future<void> LoadTransactionsListAPI() async {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
     try {
       print(empId);
       print(sessionId);
-      await UserApi.getTodayVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
+      await UserApi.loadTransactionsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
         if (data != null)
           {
             setState(() {
               if(data.error==0){
-                todayvisitlist=data.list!;
+                historyList=data.historyList!;
+                //totalDet=data.totalDet!;
                 isLoading = false;
               }else{
 

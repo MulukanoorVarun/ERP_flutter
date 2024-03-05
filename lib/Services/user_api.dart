@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:GenERP/models/AccountSuggestionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
+import 'package:GenERP/models/PaymentCollectionWalletResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
 import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
@@ -655,6 +656,7 @@ class UserApi {
       return null;
     }
   }
+
 static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,session,type,gen_id,account_id) async {
     try {
       Map<String, String> data = {
@@ -745,6 +747,27 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
       if (res != null) {
         print(res.body);
         return PaymentCollectionResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+
+  static Future<PaymentCollectionWalletResponse?>loadTransactionsListAPI(empId,session) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data,loadTransactionsListApi, {});
+      if (res != null) {
+        print(res.body);
+        return PaymentCollectionWalletResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
