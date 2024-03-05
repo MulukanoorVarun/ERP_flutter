@@ -1,6 +1,5 @@
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
-import 'package:GenERP/models/LogoutDialogue.dart';
 import 'package:GenERP/screens/Login.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';

@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'dart:io';
 import 'dart:ui' as ui;
 import 'package:GenERP/screens/Dashboard.dart';
+import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
@@ -183,19 +184,26 @@ class _CheckInScreenState extends State<CheckInScreen> {
           if (data != null)
             {
               setState(() {
-                if (data.error == 0) {
-                  toast(context, "CheckedIn Successfully");
-                  Navigator.pop(context,true);
-                  isLoading = false;
-                  // BackgroundLocation.startLocationService();
-                } else {
-                  toast(context, "CheckedIn UnSuccessfull");
-                  print(data.error.toString());
+                if(data.sessionExists==1){
+                  if (data.error == 0) {
+                    toast(context, "CheckedIn Successfully");
+                    Navigator.pop(context,true);
+                    isLoading = false;
+                    // BackgroundLocation.startLocationService();
+                  } else {
+                    toast(context, "CheckedIn UnSuccessfull");
+                    print(data.error.toString());
+                  }
+                }else{
+                  PreferenceService().clearPreferences();
+                  toast(context,"Your session has been expired, please try again!");
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
                 }
+
               })
             } else
             {
-              print("Something went wrong, Please try again.")}
+              toast(context,"Something went wrong, Please try again.")}
         });
 
     } on Exception catch (e) {

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
  
 
+import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -51,6 +52,7 @@ class _AttendanceState extends State<Attendance> {
                 isLoading = false;
               }else{
                 isLoading = true;
+                toast(context, "Your session has expired, please login again!");
                 PreferenceService().clearPreferences();
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
               }
@@ -59,6 +61,7 @@ class _AttendanceState extends State<Attendance> {
           }
         else
           {
+          toast(context, "Something went wrong, Please try again!"),
             print("Something went wrong, Please try again.")}
       });
 
@@ -100,15 +103,14 @@ class _AttendanceState extends State<Attendance> {
                             width: 24.0,
                           ),
                         ),
-                        SizedBox(width: 16,),
+                        SizedBox(width: 10,),
                         Center(
                           child:Text(
                             "Check In/Out",
                             style: TextStyle(
-                                  fontSize: FontConstant.Size18,
+                                  fontSize: FontConstant.Size20,
                                   fontWeight: FontWeight.w500,
                                   overflow: TextOverflow.ellipsis,
-
                                 color: Colors.white
                             ),
                           ),
@@ -202,10 +204,13 @@ class _AttendanceState extends State<Attendance> {
 
                           Row(
                             children: [
+                              SizedBox(
+                                width: 15
+                              ),
                               Text(
                                 "Attendance History",
                                 style:
-    TextStyle(
+                                   TextStyle(
                                     fontSize: FontConstant.Size18,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
@@ -219,20 +224,26 @@ class _AttendanceState extends State<Attendance> {
                               child:Text(
                                 "View History",
                                 style:
-    TextStyle(
-                                    fontSize: FontConstant.Size15,
+                                 TextStyle(
+                                    fontSize: FontConstant.Size18,
                                     fontWeight: FontWeight.w400,
                                     overflow: TextOverflow.ellipsis,
                                   color: ColorConstant.black,
                                 ),
                               ),
                               ),
-                              Spacer(),
+                              SizedBox(width: 15,),
+    InkWell(
+    onTap: (){
+    Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+    },
+    child:
                               SvgPicture.asset(
                                 "assets/forward_slash.svg",
-                                height: 35,
-                                width: 35,
-                              ),
+                                height: 25,
+                                width: 25,
+                              ),),
+                              SizedBox(width: 15,),
                             ],
                           ),
 

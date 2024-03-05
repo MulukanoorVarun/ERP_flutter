@@ -141,7 +141,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
             }
           })
         }else{
-
+          toast(context, "No response from server, please try again!")
         }
       });
 

@@ -128,21 +128,29 @@ class _DashboardState extends State<Dashboard> {
                 if(lastLocationTime!=null){
                   Date1 = DateFormat('HH:mm:ss').parse(currentTime);
                   Date2 = DateFormat('HH:mm:ss').parse(lastLocationTime);
+                  print("Date1:${Date1.timeZoneOffset}");
+                  print("Date2:${Date2.timeZoneOffset}");
 
-                  var diff = double.parse((Date1.timeZoneOffset - Date2.timeZoneOffset).toString())/1000;
+                  Duration difference = Date1.difference(Date2);
+                  print("difference:${difference.inMilliseconds }");
+                  // var diff = double.parse((Date1.timeZoneOffset - Date2.timeZoneOffset).toString())/1000;
+                  var diff = difference.inSeconds/1000;
                   print(diff);
                   if(diff>=20){
                     setState(() {
+                      print("diff");
                       setstatus ="Offline";
                     });
                   }else{
                     setState(() {
+                      print("nodiff");
                       setstatus ="Online";
                     });
 
                   }
                 }else{
                   setState(() {
+                    print("offine");
                     setstatus ="Offline";
                   });
                 }

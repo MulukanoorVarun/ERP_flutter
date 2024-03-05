@@ -174,7 +174,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             })
           }
         else
-          {print("Something went wrong, Please try again.")}
+          {toast(context,"Something went wrong, Please try again.")}
       });
 
     } on Exception catch (e) {

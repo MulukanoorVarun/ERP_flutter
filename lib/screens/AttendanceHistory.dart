@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
@@ -160,7 +161,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                     })
                   }
                 else
-                  {print("Something went wrong, Please try again.")}
+                  {toast(context,"Something went wrong, Please try again.")}
               });
     } on Exception catch (e) {
       print("$e");

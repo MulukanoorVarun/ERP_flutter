@@ -16,6 +16,7 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
+import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import 'dart:convert';
 
@@ -310,10 +311,44 @@ class _ScannerState extends State<Scanner> {
   Widget build(BuildContext context) {
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
         MediaQuery.of(context).size.height < 400)
-        ? 150.0
-        : 300.0;
+        ? 300.0
+        : 450.0;
     // TODO: implement build
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorConstant.erp_appColor,
+        elevation: 0,
+        title: Container(
+            child: Row(
+              children: [
+                // Spacer(),
+                Container(
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context, true),
+                    child: Text("Scanner",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: ColorConstant.white,
+                          fontSize: FontConstant.Size18,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
+                ),
+              ],
+            )),
+        titleSpacing: 0,
+        leading: Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context, true),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24.0,
+            ),
+          ),
+        ),
+      ),
       body: Center(
         child: Container(
 

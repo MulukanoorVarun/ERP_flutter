@@ -13,6 +13,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../splash.dart';
 
 class GeneratorDetails extends StatefulWidget {
   final generator_id;
@@ -63,38 +64,46 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
       await UserApi.LoadGeneratorDetailsAPI(empId, session,widget.generator_id).then((data)=>{
         if(data!=null){
           setState((){
-            if(data.error==0){
-              comp_name = data.aname!;
-              eng_model = data.emodel!;
-              p_name = data.spname!;
-              mob_num = data.mob1!;
-              alt_mob_num = data.mob2!;
-              mail_id = data.mail!;
-              Cust_name = data.cname!;
-              date_of_eng_sale=data.dateOfEngineSale!;
-              batt_num = data.btryNo!;
-              dg_set_num = data.dgSetNo!;
-              address = data.address!;
-              date_of_sup = data.dispDate!;
-              disp_date = data.dispDate!;
-              status = data.status!;
-              gen_id = data.genId!;
-              eng_no = data.engineNo!;
-              PreferenceService().saveString("EngineNumber",data.engineNo!);
-              print("EngineNumber"+data.engineNo!);
-              // data.nextService!;
-              // data.cmsngDate!;
-              // data.state!;
-              // data.district!;
-              // data.altNo!;
-              //
+            if(data.sessionExists==1){
+              if(data.error==0){
+                comp_name = data.aname!;
+                eng_model = data.emodel!;
+                p_name = data.spname!;
+                mob_num = data.mob1!;
+                alt_mob_num = data.mob2!;
+                mail_id = data.mail!;
+                Cust_name = data.cname!;
+                date_of_eng_sale=data.dateOfEngineSale!;
+                batt_num = data.btryNo!;
+                dg_set_num = data.dgSetNo!;
+                address = data.address!;
+                date_of_sup = data.dispDate!;
+                disp_date = data.dispDate!;
+                status = data.status!;
+                gen_id = data.genId!;
+                eng_no = data.engineNo!;
+                PreferenceService().saveString("EngineNumber",data.engineNo!);
+                print("EngineNumber"+data.engineNo!);
+                // data.nextService!;
+                // data.cmsngDate!;
+                // data.state!;
+                // data.district!;
+                // data.altNo!;
+                //
 
-              print("littu");
+                print("littu");
+              }else{
+                toast(context,"Something Went Wrong, Please try again!");
+                print("error");
+              }
             }else{
-              print("error");
+              PreferenceService().clearPreferences();
+              toast(context,"Your Session expired, Please Login Again!");
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
             }
           })
         }else{
+          toast(context,"No response From the server, Please try Again!"),
           print("error2")
         }
       });

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:GenERP/Utils/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +23,8 @@ class WebERP extends StatefulWidget {
 }
 
 class _WebERPState extends State<WebERP> {
-
+  final Completer<InAppWebViewController> _controller =
+  Completer<InAppWebViewController>();
   var empId = "";
   var sessionId = "";
   var webPageUrl = "";
@@ -45,6 +48,7 @@ class _WebERPState extends State<WebERP> {
 
 
   Future<void> loadData() async {
+
     empId = await PreferenceService().getString("UserId") ?? "";
     sessionId = await PreferenceService().getString("Session_id") ?? "";
     print(1724);
@@ -104,13 +108,39 @@ class _WebERPState extends State<WebERP> {
           child: Container(
             child: InAppWebView(
               key: webViewKey,
+              initialUrlRequest: URLRequest(url: WebUri(widget.url),),
+              onWebViewCreated: (controller) {
+                _controller.complete(controller);
+              },
+
+              onLoadStart: (controller, url) {
+                print("start");
+                // This is called when the page starts loading
+                setState(() {
+                  print("start");
+
+                  isLoading = true; // Set isLoading to true when the page starts loading
+                });
+              },
+              onLoadStop: (controller, url) {
+                setState(() {
+                  print("stop");
+                  isLoading = false;
+                });
+              },
+              onLoadError: (controller, url, code, message) {
+                // Handle loading errors
+                print("Error loading $url: $code, $message");
+              },
               onProgressChanged: (controller, progress) {
-                if(progress < MAX_PROGRESS){
+
                   setState(() {
                     isLoading = false;
                   });
-                }
+
               },
+
+
               initialOptions: InAppWebViewGroupOptions(
                 crossPlatform: InAppWebViewOptions(
                     javaScriptEnabled: true,
@@ -120,7 +150,7 @@ class _WebERPState extends State<WebERP> {
                 ),
               ),
 
-              initialUrlRequest: URLRequest(url: WebUri(widget.url)),
+
               initialSettings: InAppWebViewSettings(
                 allowUniversalAccessFromFileURLs: true,
                 allowFileAccessFromFileURLs: true,
@@ -148,11 +178,6 @@ class _WebERPState extends State<WebERP> {
               // initialUrlRequest: URLRequest(
               //   url: WebUri.uri(Uri.parse(webPageUrl))
               // ),
-              onLoadStart: (controller, url) {
-                setState(() {
-                  isLoading = false;
-                });
-              },
               // onLoadStop: (controller, url) {
               //   setState(() {
               //     isLoading = false;

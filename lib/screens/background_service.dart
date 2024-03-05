@@ -237,7 +237,7 @@ Future<void> saveLocations(
 
 
   print("Saving Location Updates Started!");
-
+  saveLastLocationTime();
 
 }
 
@@ -245,6 +245,7 @@ saveLastLocationTime(){
   var currentTime =  DateTime.now();
   var formatter =  DateFormat('HH:mm:ss').format(currentTime);
   PreferenceService().saveString("lastLocationTime", formatter);
+  print("formatter:{$formatter}");
 }
 
 
