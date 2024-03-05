@@ -83,6 +83,29 @@ Future<String?> postImage2(Map<String, String> body,Map<String, String> headers,
   }
 }
 
+Future<String?> postImage3(Map<String, String> body,Map<String, String> headers, String urlLink,
+    File image) async {
+  try {
+    var req = http.MultipartRequest('POST', Uri.parse(urlLink));
+    req.headers.addAll(headers);
+    req.files.add(await http.MultipartFile.fromPath('payment_proof', image.path));
+    req.fields.addAll(body);
+
+    var res = await req.send();
+    final resBody = await res.stream.bytesToString();
+
+    if (res.statusCode >= 200 && res.statusCode < 300) {
+      print("**** $resBody .... $res");
+      return resBody;
+    } else {
+      print("error: ${res.reasonPhrase}");
+      return null;
+    }
+  } catch (e) {
+    debugPrint(e.toString());
+    return null;
+  }
+}
 
 Future<String?> PostMultipleImages(Map<String, String> body, String urlLink,
     Map<String, String> headers, List<http.MultipartFile> newList) async {

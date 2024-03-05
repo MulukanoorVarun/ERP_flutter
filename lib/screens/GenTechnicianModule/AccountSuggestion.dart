@@ -1,3 +1,4 @@
+import 'package:GenERP/screens/GenTechnicianModule/PaymentDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -178,7 +179,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                             return InkWell(
                                 onTap: () {
                                   // if(actname == "pendingComplaints"&&status=="Open"){
-                                  //   Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id: ,)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetails(account_name: "Account",refId: accountList![index].accountId,)));
                                   // }
                                 },
                                 child:Container(

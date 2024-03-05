@@ -17,6 +17,7 @@ import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import 'PaymentDetails.dart';
 
 class GenTechnicianDashboard extends StatefulWidget {
   const GenTechnicianDashboard({Key? key}) : super(key: key);
@@ -145,7 +146,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                children: [
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+
                                    },
                                    child: Container(
                                      height: 80,

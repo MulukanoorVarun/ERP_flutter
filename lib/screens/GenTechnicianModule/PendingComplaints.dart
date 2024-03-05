@@ -15,6 +15,7 @@ import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 import '../../models/TechniciansPendingComplaintsResponse.dart';
+import 'PaymentDetails.dart';
 
 class PendingComplaints extends StatefulWidget {
   const PendingComplaints({Key? key}) : super(key: key);
@@ -25,7 +26,7 @@ class PendingComplaints extends StatefulWidget {
 
 class _PendingComplaintsState extends State<PendingComplaints> {
 
-  bool isLoading = false;
+  bool isLoading = true;
   var empId = "";
   var session =  "";
   List<TP_List>? tpech_comp_list = [];
@@ -48,7 +49,7 @@ class _PendingComplaintsState extends State<PendingComplaints> {
             if (data.sessionExists == 1) {
               if (data.error == 0) {
                 tpech_comp_list = data.list!;
-
+                isLoading = false;
               } else {
 
               }
@@ -350,6 +351,8 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             InkWell(
                                               onTap: (){
                                                 //paymentDetails_navigation
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetails(account_name: "generator",refId: tpech_comp_list![index].complaintId!,)));
+                                                PreferenceService().saveString("genId", tpech_comp_list![index].genId!);
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_pending.svg",

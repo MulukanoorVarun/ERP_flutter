@@ -1,19 +1,15 @@
 import 'package:GenERP/Utils/storage.dart';
-import 'package:GenERP/screens/GenTechnicianModule/ViewVisitDetails.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 
-import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
-import '../../models/TodayVisitResponse.dart';
 
 class TodayVisitsScreen extends StatefulWidget {
   const TodayVisitsScreen({Key? key}) : super(key: key);

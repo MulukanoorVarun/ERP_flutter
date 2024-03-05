@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 
-class AddAccount extends StatefulWidget{
-  const AddAccount({Key?key}): super(key:key);
+class AddContact extends StatefulWidget{
+  const AddContact({Key?key}): super(key:key);
 
   @override
-  State<AddAccount> createState() => _AddAccountState();
+  State<AddContact> createState() => _AddContactState();
 }
 
-class _AddAccountState extends State<AddAccount>{
+class _AddContactState extends State<AddContact>{
   TextEditingController name = TextEditingController();
   TextEditingController designation = TextEditingController();
   TextEditingController mobile = TextEditingController();
@@ -45,7 +45,7 @@ class _AddAccountState extends State<AddAccount>{
             ),
           ),
           title: Text(
-            "Add Account",
+            "Add Contact",
             textAlign: TextAlign.center,
             style:  TextStyle(
                   color: ColorConstant.white,

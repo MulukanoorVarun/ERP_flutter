@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
@@ -7,9 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 
+import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../../models/PaymentCollectionResponse.dart';
+import '../../models/PaymentCollectionWalletResponse.dart';
+import '../splash.dart';
 
 class PaymentCollectionScreen extends StatefulWidget {
   const PaymentCollectionScreen({Key? key}) : super(key: key);
@@ -21,10 +27,43 @@ class PaymentCollectionScreen extends StatefulWidget {
 class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
 
   bool isLoading = false;
-
+  var empId = "";
+  var session =  "";
+  List<PC_List>? pc_list = [];
+  late TotalDet total_details;
   @override
   void initState() {
     super.initState();
+    PaymentCollectionAPI();
+  }
+
+  Future<void> PaymentCollectionAPI() async{
+    empId= await PreferenceService().getString("UserId")??"";
+    session= await PreferenceService().getString("Session_id")??"";
+    try {
+      UserApi.paymentCollectionListAPI(
+          empId, session).then((data) =>
+      {
+        if(data != null){
+          setState(() {
+            if (data.sessionExists == 1) {
+              if (data.error == 0) {
+                pc_list = data.list!;
+
+              } else {
+
+              }
+            } else {
+              PreferenceService().clearPreferences();
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Splash()));
+            }
+          })
+        }
+      });
+    } on Error catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -82,7 +121,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                     ),
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: GridView.builder(
-                        itemCount: 3,
+                        itemCount: pc_list!.length,
                         gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: (MediaQuery.of(context).size.width < 600)
@@ -96,21 +135,22 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return Container(
-                              child: Card(
-                                elevation: 0,
-                                shadowColor: Colors.white,
-                                margin: const EdgeInsets.fromLTRB(
-                                    3.0, 0.0, 0.0, 5.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      20),
-                                ),
-                                child: Column(
-                                    crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(padding:const EdgeInsets.all(8.0),),
+                          if(pc_list!.length>0){
+                            return Container(
+                                child: Card(
+                                  elevation: 0,
+                                  shadowColor: Colors.white,
+                                  margin: const EdgeInsets.fromLTRB(
+                                      3.0, 0.0, 0.0, 5.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        20),
+                                  ),
+                                  child: Column(
+                                      crossAxisAlignment:CrossAxisAlignment.start,
+                                      children: [
+                                        Padding(padding:const EdgeInsets.all(8.0),),
 
                                       Row(
                                         children: [
@@ -119,7 +159,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               children: [
                                                 SizedBox(width: 10),
                                                 Text(
-                                                  "Date",
+                                                  "Payment Ref No:",
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -136,7 +176,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               children: [
                                                 SizedBox(width: 10),
                                                 Text(
-                                                  "Date",
+                                                  pc_list![index].paymentRefNo??"-",
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -235,8 +275,22 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                     ]),
 
 
-                                // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
-                              ));
+                                  // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
+                                ));
+                          }else{
+                            return Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No Data Available",
+                                  style: TextStyle(
+                                    fontSize: FontConstant.Size18,
+                                    fontWeight: FontWeight.w500,
+                                    overflow: TextOverflow.ellipsis,
+                                    color: ColorConstant.erp_appColor,
+                                  ),
+                                ));
+                          }
+
                           return null;
                         }),
                   ),
