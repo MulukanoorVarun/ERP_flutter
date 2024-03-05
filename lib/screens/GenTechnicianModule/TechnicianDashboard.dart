@@ -1,5 +1,10 @@
 import 'package:GenERP/Utils/storage.dart';
+import 'package:GenERP/screens/GenTechnicianModule/MonthlyVisits.dart';
+import 'package:GenERP/screens/GenTechnicianModule/NearbyGenerators.dart';
+import 'package:GenERP/screens/GenTechnicianModule/PaymentCollectionScreen.dart';
 import 'package:GenERP/screens/GenTechnicianModule/PendingComplaints.dart';
+import 'package:GenERP/screens/GenTechnicianModule/TodayVisits.dart';
+import 'package:GenERP/screens/GenTechnicianModule/WalletScreen.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
@@ -8,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 
+import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
@@ -21,12 +27,56 @@ class GenTechnicianDashboard extends StatefulWidget {
 
 class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
-    // TODO: implement initState
+    loadTechnicianDashboard();
     super.initState();
+  }
+
+  String? empId;
+  String? sessionId;
+  int? avgRating;
+  int? pendingComplaints;
+  int? todayVisits;
+  int? thisMonthsVisits;
+  String? paymentCollectionWalletBalanceAmount;
+  String? monthlyPaymentCollectionAmount;
+
+  Future<void> loadTechnicianDashboard() async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
+    try {
+      print(empId);
+      print(sessionId);
+      await UserApi.loadTechnicianDashboardApi(empId,sessionId).then((data) => {
+        if (data != null)
+          {
+            setState(() {
+              if(data.error==0){
+                avgRating=data.avgRating!;
+                pendingComplaints=data.pendingComplaints!;
+                pendingComplaints=data.pendingComplaints!;
+                todayVisits=data.todayVisits!;
+                thisMonthsVisits=data.thisMonthsVisits!;
+                paymentCollectionWalletBalanceAmount=data.paymentCollectionWalletBalanceAmount!;
+                monthlyPaymentCollectionAmount=data.monthlyPaymentCollectionAmount!;
+                isLoading = false;
+              }else{
+
+              }
+
+            })
+          }
+        else
+          {
+            print("Something went wrong, Please try again.")}
+      });
+
+    } on Exception catch (e) {
+      print("$e");
+    }
   }
 
   @override
@@ -118,7 +168,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            children: [
                                              Center(
                                                child:Text(
-                                                 "6.0",
+                                                 avgRating.toString() ?? "",
                                                  style: TextStyle(
                                                    fontSize: FontConstant.Size15,
                                                    fontWeight: FontWeight.bold,
@@ -148,7 +198,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => TodayVisitsScreen()));
                                    },
                                    child: Container(
                                      height: 80,
@@ -171,7 +221,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            children: [
                                              Center(
                                                child:Text(
-                                                 "0",
+                                                 todayVisits.toString() ?? "",
                                                  style: TextStyle(
                                                    fontSize: FontConstant.Size13,
                                                    fontWeight: FontWeight.bold,
@@ -201,7 +251,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentCollectionScreen()));
                                    },
                                    child: Container(
                                      height: 80,
@@ -224,7 +274,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            children: [
                                              Center(
                                                child:Text(
-                                                 "00.0",
+                                                 "₹${monthlyPaymentCollectionAmount}" ?? "",
                                                  style: TextStyle(
                                                    fontSize: FontConstant.Size13,
                                                    fontWeight: FontWeight.bold,
@@ -293,7 +343,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            mainAxisAlignment: MainAxisAlignment.center, // Center column vertically
                                            children: [
                                              Text(
-                                               "0",
+                                               pendingComplaints.toString() ?? "",
                                                style: TextStyle(
                                                  fontSize: FontConstant.Size13,
                                                  fontWeight: FontWeight.bold,
@@ -330,7 +380,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => MonthlyVisitsScreen()));
                                    },
                                    child: Container(
                                      height: 80,
@@ -353,7 +403,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            children: [
                                              Center(
                                                child:Text(
-                                                 "0",
+                                                 thisMonthsVisits.toString() ?? "",
                                                  style: TextStyle(
                                                    fontSize: FontConstant.Size13,
                                                    fontWeight: FontWeight.bold,
@@ -383,7 +433,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => QRScanner(title: "Generator Details")));
+                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => WalletScreen()));
                                    },
                                    child: Container(
                                      height: 80,
@@ -406,7 +456,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                            children: [
                                              Center(
                                                child:Text(
-                                                 "31000.56",
+                                                 "₹${paymentCollectionWalletBalanceAmount}" ?? "",
                                                  style: TextStyle(
                                                    fontSize: FontConstant.Size13,
                                                    fontWeight: FontWeight.bold,
@@ -443,7 +493,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                           height: 80,
                           child: InkWell(
                             onTap: () async {
-
+                              await Navigator.push(context, MaterialPageRoute(builder: (context) => NearbyGenerators()));
                             },
                             child:
                             Container(
