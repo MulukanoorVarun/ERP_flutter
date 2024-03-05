@@ -12,6 +12,7 @@ import 'package:web_socket_channel/io.dart';
 import '../Services/WebSocketManager.dart';
 import '../Services/user_api.dart';
 import '../Utils/storage.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 
@@ -64,6 +65,42 @@ class BackgroundLocation {
     },
   );
 
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // Other existing code...
+
+  static void init() {
+    final InitializationSettings initializationSettings =
+    InitializationSettings(android: AndroidInitializationSettings('app_icon'));
+
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+
+  static void showNotification(String title, String? message) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+    );
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      message,
+      platformChannelSpecifics,
+    );
+  }
+
+
+  static void hideNotification() async {
+    await flutterLocalNotificationsPlugin.cancel(0);
+  }
+
     void initWebSocket() {
     Future.delayed(Duration.zero, () {
       webSocketManager.connect();
@@ -101,15 +138,15 @@ class BackgroundLocation {
     });
   }
 
-  static setAndroidNotification(
-      {String? title, String? message, String? icon}) async {
-    if (Platform.isAndroid) {
-      return await _channel.invokeMethod('set_android_notification',
-          <String, dynamic>{'title': title, 'message': message, 'icon': icon});
-    } else {
-      //return Promise.resolve();
-    }
-  }
+  // static setAndroidNotification(
+  //     {String? title, String? message, String? icon}) async {
+  //   if (Platform.isAndroid) {
+  //     return await _channel.invokeMethod('set_android_notification',
+  //         <String, dynamic>{'title': title, 'message': message, 'icon': icon});
+  //   } else {
+  //     //return Promise.resolve();
+  //   }
+  // }
 
   static setAndroidConfiguration(int interval) async {
     if (Platform.isAndroid) {
@@ -187,9 +224,9 @@ class BackgroundLocation {
               "location_provider": "",
             }
           }));
-          setAndroidNotification(title: "You're Online !", message: "", icon: "");
+          showNotification("You're Online!","");
         }else{
-          setAndroidNotification(title: "You're Offline !, Check your network connection.", message: "", icon: "");
+          //showNotification();
         }
 
           saveLocations(
@@ -237,15 +274,15 @@ Future<void> saveLocations(
 
 
   print("Saving Location Updates Started!");
-  saveLastLocationTime();
 
+  saveLastLocationTime();
 }
 
 saveLastLocationTime(){
   var currentTime =  DateTime.now();
   var formatter =  DateFormat('HH:mm:ss').format(currentTime);
   PreferenceService().saveString("lastLocationTime", formatter);
-  print("formatter:{$formatter}");
+  print("formatter:${formatter}");
 }
 
 

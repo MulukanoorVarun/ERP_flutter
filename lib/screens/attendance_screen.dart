@@ -52,7 +52,6 @@ class _AttendanceState extends State<Attendance> {
                 isLoading = false;
               }else{
                 isLoading = true;
-                toast(context, "Your session has expired, please login again!");
                 PreferenceService().clearPreferences();
                 Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
               }
@@ -61,7 +60,6 @@ class _AttendanceState extends State<Attendance> {
           }
         else
           {
-          toast(context, "Something went wrong, Please try again!"),
             print("Something went wrong, Please try again.")}
       });
 
@@ -165,8 +163,8 @@ class _AttendanceState extends State<Attendance> {
                             ),
                           ),
                           ]
-                         //  else...[
-                          else if(attStatus==1)...[
+                           else...[
+                         // else if(attStatus==1)...[
                             InkWell(
                               onTap: () async{
                                 // var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
@@ -177,6 +175,7 @@ class _AttendanceState extends State<Attendance> {
                                 //   getAttendanceList();
                                 // }
                                 BackgroundLocation.stopLocationService();
+                               // BackgroundLocation.startLocationService();
                               },
                               child:Container(
                                 alignment: Alignment.center,
@@ -209,8 +208,7 @@ class _AttendanceState extends State<Attendance> {
                               ),
                               Text(
                                 "Attendance History",
-                                style:
-                                   TextStyle(
+                                style: TextStyle(
                                     fontSize: FontConstant.Size18,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
