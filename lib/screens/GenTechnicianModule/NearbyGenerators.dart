@@ -140,10 +140,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     });
   }
 
-  Future<bool> _onBackPressed() async {
-    Navigator.pop(context, true);
-    return true;
-  }
 
   String? empId;
   String? sessionId;

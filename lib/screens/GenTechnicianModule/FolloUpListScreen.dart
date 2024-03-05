@@ -11,14 +11,14 @@ import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 
-class PaymentCollectionScreen extends StatefulWidget {
-  const PaymentCollectionScreen({Key? key}) : super(key: key);
+class FollowUpList extends StatefulWidget {
+  const FollowUpList({Key? key}) : super(key: key);
 
   @override
-  State<PaymentCollectionScreen> createState() => _PaymentCollectionScreenState();
+  State<FollowUpList> createState() => _FollowUpListState();
 }
 
-class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
+class _FollowUpListState extends State<FollowUpList> {
 
   bool isLoading = false;
 
@@ -40,7 +40,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                   Container(
                     child: InkWell(
                       onTap: () => Navigator.pop(context, true),
-                      child: Text("Payment Details",
+                      child: Text("Follow Up Details",
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             color: ColorConstant.white,
@@ -91,7 +91,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 2,
                             childAspectRatio:
-                            (255 / 120)),
+                            (255 / 140)),
                         padding: const EdgeInsets.all(5),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
@@ -111,6 +111,98 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                     crossAxisAlignment:CrossAxisAlignment.start,
                                     children: [
                                       Padding(padding:const EdgeInsets.all(8.0),),
+                                      Row(
+                                        children: [
+                                          SizedBox(width: 10,),
+                                          Text(
+                                            "Date ",
+                                            style:  TextStyle(
+                                              fontSize: FontConstant.Size15,
+                                              fontWeight: FontWeight.w400,
+                                              overflow: TextOverflow.ellipsis,
+                                              color: ColorConstant.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(height: 10,),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  "Date",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  "Date",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+
+                                      SizedBox(height: 10,),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  "Date",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 10),
+                                                Text(
+                                                  "Date",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      SizedBox(height: 10,),
 
                                       Row(
                                         children: [
@@ -130,7 +222,6 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               ],
                                             ),
                                           ),
-                                          Spacer(),
                                           Expanded(
                                             child: Row(
                                               children: [
@@ -168,52 +259,6 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                                               ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-
-                                      SizedBox(height: 10,),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 15,),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "View proof",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
                                           Expanded(
                                             child: Row(
                                               children: [

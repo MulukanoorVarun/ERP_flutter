@@ -25,6 +25,7 @@ import '../models/DayWiseAttendance.dart';
 import '../models/Inventory_Part_details_response.dart';
 import '../models/LoginQRResponse.dart';
 import '../models/SubmitComplaintResponse.dart';
+import '../models/TodayVisitResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
@@ -548,7 +549,7 @@ class UserApi {
     }
   }
 
-  static Future<TechnicianResponse?> getTodayVisitsListAPI(empId,
+  static Future<TodayVisitResponse?> getTodayVisitsListAPI(empId,
       session) async {
     try {
       Map<String, String> data = {
@@ -558,7 +559,7 @@ class UserApi {
       final res = await post(data, technician_todays_visitsAPI, {});
       if (res != null) {
         print(res.body);
-        return TechnicianResponse.fromJson(jsonDecode(res.body));
+        return TodayVisitResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -570,7 +571,7 @@ class UserApi {
   }
 
 
-  static Future<TechnicianResponse?> getMonthVisitsListAPI(empId,
+  static Future<TodayVisitResponse?> getMonthVisitsListAPI(empId,
       session) async {
     try {
       Map<String, String> data = {
@@ -580,7 +581,7 @@ class UserApi {
       final res = await post(data, technician_monthly_visitsAPI, {});
       if (res != null) {
         print(res.body);
-        return TechnicianResponse.fromJson(jsonDecode(res.body));
+        return TodayVisitResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
