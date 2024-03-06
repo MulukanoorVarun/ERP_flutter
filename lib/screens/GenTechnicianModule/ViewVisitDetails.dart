@@ -14,12 +14,13 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
+import '../../models/ViewVisitDetailsResponse.dart';
 import '../splash.dart';
 
 class ViewVisitDetails extends StatefulWidget {
-
   final complaintId;
-  const ViewVisitDetails({Key? key, required this.complaintId,}) : super(key: key);
+  const ViewVisitDetails({Key? key, required this.complaintId}) : super(key: key);
   @override
   State<ViewVisitDetails> createState() => _ViewVisitDetailsState();
 }
@@ -27,24 +28,8 @@ class ViewVisitDetails extends StatefulWidget {
 class _ViewVisitDetailsState extends State<ViewVisitDetails> {
   var session = "";
   var empId = "";
-  var comp_name = "";
-  var Cust_name = "";
-  var mob_num = "";
-  var alt_mob_num = "";
-  var mail_id = "";
-  var address = "";
-  var p_name = "";
-  var eng_model = "";
-  var dg_set_num = "";
-  var batt_num = "";
-  var status = "";
-  var date_of_eng_sale = "";
-  var disp_date = "";
-  var date_of_sup = "";
-
-  var gen_id = "";
-  var eng_no = "";
-  var actname = "";
+  bool isLoading = true;
+  Complaintdetails? complaintdetails;
 
   @override
   void initState() {
@@ -61,47 +46,18 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
     try{
-      await UserApi.loadVisitDetailsAPI(empId, session,"").then((data)=>{
+      print("complaintId:${widget.complaintId}");
+      await UserApi.loadVisitDetailsAPI(empId, session,widget.complaintId).then((data)=>{
         if(data!=null){
           setState((){
-            if(data.sessionExists==1){
               if(data.error==0){
-                comp_name = data.aname!;
-                eng_model = data.emodel!;
-                p_name = data.spname!;
-                mob_num = data.mob1!;
-                alt_mob_num = data.mob2!;
-                mail_id = data.mail!;
-                Cust_name = data.cname!;
-                date_of_eng_sale=data.dateOfEngineSale!;
-                batt_num = data.btryNo!;
-                dg_set_num = data.dgSetNo!;
-                address = data.address!;
-                date_of_sup = data.dispDate!;
-                disp_date = data.dispDate!;
-                status = data.status!;
-                gen_id = data.genId!;
-                eng_no = data.engineNo!;
-                PreferenceService().saveString("EngineNumber",data.engineNo!);
-                print("EngineNumber"+data.engineNo!);
-                // data.nextService!;
-                // data.cmsngDate!;
-                // data.state!;
-                // data.district!;
-                // data.altNo!;
-                //
-
-                print("littu");
+                complaintdetails=data.complaintDetails!;
+                isLoading = false;
               }else{
                 toast(context,"Something Went Wrong, Please try again!");
                 print("error");
               }
-            }else{
-              PreferenceService().clearPreferences();
-              toast(context,"Your Session expired, Please Login Again!");
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>Splash()));
-            }
-          })
+            })
         }else{
           toast(context,"No response From the server, Please try Again!"),
           print("error2")
@@ -118,7 +74,7 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return (isLoading)?Loaders():Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -145,22 +101,6 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                     height: 40,
                   ),
                 ),
-                if(actname=="NearByGenerators")...[
-                  Container(
-                    child: IconButton(
-                      onPressed: () {
-
-                      },
-                      icon: const Icon(
-                        Icons.assistant_direction_sharp,
-                        size: 30,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ]
-
-
               ],
             )),
         titleSpacing: 0,
@@ -210,7 +150,6 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                           fontSize: FontConstant.Size18,
                           fontWeight: FontWeight.w500,
                           overflow: TextOverflow.ellipsis,
-
                           color: ColorConstant.erp_appColor,
                         ),),),
                       Container(
@@ -276,7 +215,7 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$comp_name",
+                                    complaintdetails?.cname ?? "",
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style:  TextStyle(
@@ -291,7 +230,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$Cust_name",
+                                    complaintdetails?.mob1 ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -345,7 +285,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$mob_num",
+                                    complaintdetails?.mob2 ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -359,7 +300,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$alt_mob_num",
+                                    complaintdetails?.mail ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -385,7 +327,7 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
 
 
                 Container(
-                  height: screenHeight*0.32,
+                  height: screenHeight*0.35,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
@@ -464,7 +406,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$p_name",
+                                      complaintdetails?.genHashId ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style:  TextStyle(
                                           color: ColorConstant.black,
@@ -478,7 +421,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$date_of_eng_sale",
+                                      complaintdetails?.spname ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style:  TextStyle(
                                           color: ColorConstant.black,
@@ -534,7 +478,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$eng_model",
+                                      complaintdetails?.engineNo ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: ColorConstant.black,
@@ -548,7 +493,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$disp_date",
+                                      complaintdetails?.engineModel ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style:
                                       TextStyle(
@@ -605,7 +551,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$dg_set_num",
+                                      complaintdetails?.address ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style:TextStyle(
                                           color: ColorConstant.black,
@@ -619,7 +566,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                     width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "$disp_date",
+                                      complaintdetails?.dateOfSupply ?? "",
+                                      maxLines: 2,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                           color: ColorConstant.black,
@@ -724,7 +672,7 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$comp_name",
+                                    complaintdetails?.complaintId ?? "",
                                     maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style:  TextStyle(
@@ -739,7 +687,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$Cust_name",
+                                    complaintdetails?.openedDate ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -793,7 +742,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$mob_num",
+                                    complaintdetails?.complaintDesc ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -807,7 +757,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                                   width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
-                                    "$alt_mob_num",
+                                    complaintdetails?.complaintType ?? "",
+                                    maxLines: 2,
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                         color: ColorConstant.black,
@@ -835,7 +786,7 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                   child: Container(
                       child: InkWell(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>FollowUpList()));
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>FollowUpList(complaintId:complaintdetails!.complaintId)));
                         },
                         child: Container(
                           alignment: Alignment.center,

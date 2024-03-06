@@ -12,10 +12,12 @@ import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../../models/FollowUpResponse.dart';
 import '../../models/NearbyGeneratorsResponse.dart';
 
 class FollowUpList extends StatefulWidget {
-  const FollowUpList({Key? key}) : super(key: key);
+  final complaintId;
+  const FollowUpList({Key? key,required this.complaintId}) : super(key: key);
 
   @override
   State<FollowUpList> createState() => _FollowUpListState();
@@ -23,30 +25,33 @@ class FollowUpList extends StatefulWidget {
 
 class _FollowUpListState extends State<FollowUpList> {
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
+    LoadFollowupListAPI();
     super.initState();
   }
 
   String? empId;
   String? sessionId;
-  String? complaintId;
+  List<Followuplist> followuplist =[];
   Future<void> LoadFollowupListAPI() async {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
     print(empId);
     print(sessionId);
+    print("complaintId:${widget.complaintId}");
     try {
-      await UserApi.loadFollowupListAPI(empId,sessionId,complaintId).then((data) => {
+      await UserApi.loadFollowupListAPI(empId,sessionId,widget.complaintId).then((data) => {
         if (data != null)
           {
             setState(() {
               if (data.error == 0) {
+                followuplist=data.list!;
                 isLoading = false;
               } else {
-
+                isLoading = false;
               }
             })
           } else {
@@ -114,7 +119,7 @@ class _FollowUpListState extends State<FollowUpList> {
                     ),
                     padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
                     child: GridView.builder(
-                        itemCount: 3,
+                        itemCount: followuplist.length,
                         gridDelegate:
                         SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: (MediaQuery.of(context).size.width < 600)
@@ -123,49 +128,90 @@ class _FollowUpListState extends State<FollowUpList> {
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 2,
                             childAspectRatio:
-                            (255 / 140)),
+                            (255 / 145)),
                         padding: const EdgeInsets.all(5),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return Container(
-                              child: Card(
-                                elevation: 0,
-                                shadowColor: Colors.white,
-                                margin: const EdgeInsets.fromLTRB(
-                                    3.0, 0.0, 0.0, 5.0),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      20),
-                                ),
-                                child: Column(
-                                    crossAxisAlignment:CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(padding:const EdgeInsets.all(8.0),),
-                                      Row(
-                                        children: [
-                                          SizedBox(width: 10,),
-                                          Text(
-                                            "Date ",
-                                            style:  TextStyle(
-                                              fontSize: FontConstant.Size15,
-                                              fontWeight: FontWeight.w400,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: ColorConstant.black,
+                          if(followuplist.length>0) {
+                            return Container(
+                                child: Card(
+                                  elevation: 0,
+                                  shadowColor: Colors.white,
+                                  margin: const EdgeInsets.fromLTRB(
+                                      3.0, 0.0, 0.0, 5.0),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(
+                                        20),
+                                  ),
+                                  child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),),
+                                        Container(
+                                        child:Row(
+                                          children: [
+                                            SizedBox(width: 10,),
+                                            Text(
+                                              followuplist[index].ename ?? "",
+                                              style: TextStyle(
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w400,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: ColorConstant.black,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
+                                          ],
+                                        ),
+                                        ),
+                                        SizedBox(height: 10,),
+
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0,0, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Feedback",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.medium_grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(0, 0,10,0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Type",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.medium_grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10,),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0,0, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  followuplist[index].feedback ?? "",
+                                                  maxLines: 1,
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -173,15 +219,16 @@ class _FollowUpListState extends State<FollowUpList> {
                                                     color: ColorConstant.black,
                                                   ),
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(0, 0,10, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  followuplist[index].type ?? "",
+                                                  maxLines: 1,
                                                   style: TextStyle(
                                                     fontSize: FontConstant.Size15,
                                                     fontWeight: FontWeight.w400,
@@ -189,132 +236,96 @@ class _FollowUpListState extends State<FollowUpList> {
                                                     color: ColorConstant.black,
                                                   ),
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
+                                          ],
+                                        ),
+
+                                        SizedBox(height: 10,),
+
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0,0, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Date",
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.medium_grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(0, 0,10, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text("Time",
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.medium_grey,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 10,),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(10, 0,0, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  followuplist[index].date ?? "",
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Expanded(
+                                              child: Container(
+                                                padding: EdgeInsets.fromLTRB(0, 0,10, 0),
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                 // "argfyyyyyyyyweriufgywey",
+                                                  followuplist[index].time ?? "",
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow: TextOverflow.ellipsis,
+                                                    color: ColorConstant.black,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        SizedBox(height: 10,),
+
+                                      ]),
 
 
-                                      SizedBox(height: 10,),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      SizedBox(height: 10,),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  "Date",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ]),
-
-
-                                // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
-                              ));
-                          return null;
+                                  // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
+                                ));
+                            return null;
+                          }
                         }),
                   ),
                 ),

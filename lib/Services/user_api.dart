@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:GenERP/models/AccountSuggestionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
+import 'package:GenERP/models/FollowUpResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
 import 'package:GenERP/models/PaymentCollectionWalletResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
@@ -33,6 +34,7 @@ import '../models/SubmitComplaintResponse.dart';
 import '../models/TechnicianAddPaymentCollectionResponse.dart';
 import '../models/TechnicianLoadNumbersResponse.dart';
 import '../models/TodayVisitResponse.dart';
+import '../models/ViewVisitDetailsResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
 class UserApi {
@@ -815,7 +817,7 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
     }
   }
 
-  static Future<loadGeneratorDetailsResponse?> loadVisitDetailsAPI(empId, session, comp_id) async {
+  static Future<ViewVisitDetailsResponse?> loadVisitDetailsAPI(empId, session, comp_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -825,7 +827,7 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
       final res = await post(data, technician_complaint_detailsAPI, {});
       if (res != null) {
         print(res.body);
-        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+        return ViewVisitDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -836,7 +838,7 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
     }
   }
 
-  static Future<loadGeneratorDetailsResponse?>loadFollowupListAPI(empId, session, comp_id) async {
+  static Future<FollowupListResponse?>loadFollowupListAPI(empId, session, comp_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -846,7 +848,7 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
       final res = await post(data, technician_complaint_followup_listAPI, {});
       if (res != null) {
         print(res.body);
-        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+        return FollowupListResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;

@@ -73,12 +73,17 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       type = "generator";
       refType ="Complaint";
       refId = widget.refId;
+
+      print("${type}");
+      print("${refType}");
+      print("${refId}");
     }else{
       type = "account";
       refType ="Account";
       refId = widget.refId;
     }
     try {
+     // print("${type}");
       UserApi.LoadContactsTechnicianAPI(
           empId, session,type,gen_id,refId).then((data) =>
       {

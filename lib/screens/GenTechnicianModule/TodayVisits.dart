@@ -42,7 +42,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
     try {
       print(empId);
       print(sessionId);
-      await UserApi.getTodayVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
+      await UserApi.getTodayVisitsListAPI(empId,sessionId).then((data) => {
         if (data != null)
           {
             setState(() {
@@ -50,7 +50,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                 todayvisitlist=data.list!;
                 isLoading = false;
               }else{
-
+                isLoading = false;
               }
 
             })
@@ -134,7 +134,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(todayvisitlist!.length>0){
+                          if(todayvisitlist.length>0){
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -347,7 +347,8 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
 
                                 ));
                           }else{
-                            return Align(
+                            return Container(
+                              child:Align(
                                 alignment: Alignment.center,
                                 child: Text(
                                   "No Data Available",
@@ -357,7 +358,9 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                     overflow: TextOverflow.ellipsis,
                                     color: ColorConstant.erp_appColor,
                                   ),
-                                ));
+                                )
+                              ),
+                              );
                           }
                           return null;
                         }),
