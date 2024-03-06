@@ -553,7 +553,7 @@ else{
                               Spacer(),
                               DropdownButtonHideUnderline(
                                 child: Container(
-                                  width: 300,
+                                  width: 250,
                                   child: DropdownButton2<Contacts>(
                                     isExpanded: true,
                                     hint: const Row(

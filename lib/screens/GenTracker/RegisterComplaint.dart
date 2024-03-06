@@ -390,7 +390,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           SizedBox(height: 10.0,),
                           DropdownButtonHideUnderline(
                             child: Container(
-                              width: 360,
+                              width: 340,
                               child: DropdownButton2<ComplaintTypeList>(
                                 isExpanded: true,
                                 hint: const Row(
@@ -483,7 +483,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                             SizedBox(height: 10.0,),
                             DropdownButtonHideUnderline(
                               child: Container(
-                                width: 360,
+                                width: 340,
                                 child: DropdownButton2<ComplaintCategoryList>(
 
                                   isExpanded: true,
@@ -576,7 +576,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                             SizedBox(height: 10.0,),
                             DropdownButtonHideUnderline(
                               child: Container(
-                                width: 360,
+                                width: 340,
                                 child: DropdownButton2<ComplaintDescriptionList>(
 
                                   isExpanded: true,

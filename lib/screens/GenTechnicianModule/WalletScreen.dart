@@ -87,10 +87,15 @@ class _WalletScreenState extends State<WalletScreen> {
                         child: Row(
                           children: [
                             Padding(padding: EdgeInsets.fromLTRB(0,40,20,10)),
-                            SvgPicture.asset(
-                              "assets/back_icon.svg",
-                              height: 24,
-                              width: 24,
+                            InkWell(
+                              onTap: (){
+                                Navigator.pop(context,true);
+                              },
+                              child: SvgPicture.asset(
+                                "assets/back_icon.svg",
+                                height: 24,
+                                width: 24,
+                              ),
                             ),
                           SizedBox(width: 30,),
                             Text(

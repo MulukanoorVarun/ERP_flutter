@@ -484,7 +484,7 @@ void initState() {
                         SizedBox(height: 10.0,),
                         DropdownButtonHideUnderline(
                           child: Container(
-                            width: 360,
+                            width: 340,
                             child: DropdownButton2< String>(
                               isExpanded: true,
                               hint: const Row(

@@ -61,6 +61,8 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     super.dispose();
   }
 
+
+
   Future<void> LoadgeneratorDetailsApifunction() async{
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";

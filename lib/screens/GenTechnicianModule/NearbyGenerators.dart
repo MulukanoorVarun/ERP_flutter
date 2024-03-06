@@ -223,7 +223,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
             context,
             MaterialPageRoute(
               builder: (context) => GeneratorDetails(
-                actName: generator.accName,
+                actName: "NearByGenerators",
                 location: generator.loc,
                 generatorId: generator.generatorId,
               ),

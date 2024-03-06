@@ -187,6 +187,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                               controller: part_id,
                               cursorColor: ColorConstant.black,
                               keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.characters,
                               decoration: InputDecoration(
                                 hintText: "Enter Part ID",
                                 hintStyle: GoogleFonts.ubuntu(
