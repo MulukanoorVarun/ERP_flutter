@@ -169,7 +169,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                             1, // 4 items in a row for tablet
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 2,
-                            childAspectRatio: (100 / 10)),
+                            childAspectRatio: (100 / 25)),
                         padding: const EdgeInsets.all(5),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
@@ -189,30 +189,23 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                                     ));
                                   // }
                                 },
-                                child:Container(
-                                  width: screenWidth*0.6,
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          child: Text(
-                                            "${accountList![index].accountName}",
-                                            textAlign:
-                                            TextAlign.start,
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(
-                                                color: ColorConstant
-                                                    .black,
-                                                fontSize: FontConstant
-                                                    .Size15,
-                                                fontWeight:
-                                                FontWeight.w300),
-                                          ),
-                                        ),
-
-
-                                      ],
-                                    ))
+                              child: SizedBox(
+                                child: Container(
+                                  width: screenWidth * 0.9,
+                                  padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                  child: Text(
+                                    "${accountList![index].accountName}",
+                                    textAlign: TextAlign.start,
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: ColorConstant.black,
+                                      fontSize: FontConstant.Size15,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             );
                           }else{
                             return Align(

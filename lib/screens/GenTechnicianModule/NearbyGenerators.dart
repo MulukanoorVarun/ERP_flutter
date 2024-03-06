@@ -49,7 +49,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   String locationdd = "Search Location";
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
-  var radius = "1";
   List<Marker> markers = [];
   List<String> addresses = [];
   var address_loading = true;
@@ -75,6 +74,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     //  locationService = LocationService();
     super.dispose();
   }
+  double currentValue = 1.0;
 
   Future<void> _getLocationPermission() async {
     // Check if location services are enabled
@@ -155,7 +155,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     print(latlongs);
     print(_image);
     try {
-      await UserApi.loadNearbyGeneratorsAPI(empId,sessionId,latlongs,radius).then((data) => {
+      await UserApi.loadNearbyGeneratorsAPI(empId,sessionId,latlongs,currentValue).then((data) => {
         if (data != null)
           {
             setState(() {
@@ -185,7 +185,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
       addresses.add(address);
     });
     for (int i = 0; i < addresses.length; i++) {
-      print('List of Addresses:' "${addresses[i]}");
+      //print('List of Addresses:' "${addresses[i]}");
       // print('List of Addresses:' "${addresses[1]}" );
     }
   }
@@ -233,7 +233,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
       },
       ));
     });
-
     return markers;
   }
 
@@ -249,7 +248,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     }
     return const LatLng(0.0, 0.0);
   }
-
 
   Future<String> _getAddressFromLatLng(String? location) async {
     if (location != null) {
@@ -279,64 +277,107 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     }
     return "Address not found";
   }
-  
-  InfoDialogue(BuildContext context) {
-    double _currentValue = 0.0;
+  Future<void> infoDialogue(BuildContext context) async {
     return showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        title: Align(
-          alignment: Alignment.topLeft,
-          child: Text(
-            'Radius (Kms)',
-            style: GoogleFonts.ubuntu(
-              textStyle: TextStyle(
-                color: Colors.black,
-                fontSize: FontConstant.Size25,
-                fontWeight: FontWeight.w500,
-                decoration: TextDecoration.underline,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Radius (Kms)',
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: FontConstant.Size25,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.cancel,
+                    size: 35,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      currentValue = 0.0;
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+            content: Container(
+              height: 120,
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    // Text(
+                    //   'Value: ${currentValue.toStringAsFixed(2)}', // Display current value
+                    //   style: TextStyle(fontSize: 24.0),
+                    // ),
+                    Slider(
+                      value: currentValue,
+                      max: 100,
+                      divisions: 100,
+                      label: currentValue.toStringAsFixed(2),
+                      activeColor: ColorConstant.erp_appColor,
+                      inactiveColor: Colors.grey,
+                      thumbColor: ColorConstant.erp_appColor,
+                      onChanged: (value) {
+                        // Update currentValue when Slider value changes
+                        setState(() {
+                          currentValue = value;
+                        });
+                      },
+                    ),
+                    SizedBox(height: 25.0),
+                    Container(
+                        child: InkWell(
+                          onTap: (){
+                            markers = [];
+                            LoadNearbyGeneratorsAPI();
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 45,
+                            margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                            decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
+                            child: Text("Serach",
+                              textAlign: TextAlign.center,
+                              style:  TextStyle(
+                                fontFamily: 'Nexa',
+                                color: ColorConstant.white,
+                                fontSize: FontConstant.Size15,
+                              ),
+                            ),
+                          ),
+                        )
+                    ),
+
+
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-        content:Container(
-          height: 200,
-        child:Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Value: $_currentValue',
-                style: TextStyle(fontSize: 24.0),
-              ),
-              SizedBox(height: 20.0),
-              Slider(
-                value: _currentValue,
-                max: 100,
-                divisions: 5, // Optional: Creates discrete steps in the SeekBar
-                label: _currentValue.round().toString(), // Optional: Displays a label above the current value
-                activeColor: Colors.blue, // Color for the active part of the SeekBar
-                inactiveColor: Colors.grey, // Color for the inactive part of the SeekBar
-                thumbColor: Colors.red, // Color for the thumb (indicator) of the SeekBar
-                onChanged: (value) {
-                  // Update _currentValue when SeekBar value changes
-                  setState(() {
-                    _currentValue = value;
-                  });
-                },
-              ),
-
-            ],
-          ),
-        ),
-      ),
+          );
+        },
       ),
       barrierDismissible: true,
     );
   }
+
 
 
   @override
@@ -379,7 +420,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                     Spacer(),
                     InkWell(
                       onTap: (){
-                        InfoDialogue(context);
+                        infoDialogue(context);
                       },
                       child:SvgPicture.asset(
                         "assets/ic_location1.svg",

@@ -167,15 +167,15 @@ class _AttendanceState extends State<Attendance> {
                          // else if(attStatus==1)...[
                             InkWell(
                               onTap: () async{
-                                // var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
-                                // if(res==true){
-                                //   setState(() {
-                                //     isLoading = true;
-                                //   });
-                                //   getAttendanceList();
-                                // }
-                                BackgroundLocation.stopLocationService();
-                               // BackgroundLocation.startLocationService();
+                                var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
+                                if(res==true){
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  getAttendanceList();
+                                }
+                               //  BackgroundLocation.stopLocationService();
+                               // // BackgroundLocation.startLocationService();
                               },
                               child:Container(
                                 alignment: Alignment.center,

@@ -102,6 +102,7 @@ dependencies:
   dio: ^5.4.1
   auto_start_flutter: ^0.1.1
   android_autostart: ^0.0.3
+  camera: ^0.10.5+9
 
 dev_dependencies:
   flutter_test:

@@ -51,7 +51,7 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                 tpech_comp_list = data.list!;
                 isLoading = false;
               } else {
-
+                isLoading = false;
               }
             } else {
               PreferenceService().clearPreferences();
@@ -89,6 +89,20 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                           )),
                     ),
                   ),
+                  Spacer(),
+                  Container(
+                  child: InkWell(
+                  onTap: () async{
+                    await Navigator.push(context, MaterialPageRoute(builder: (context)=>QRScanner(title:"pendingComplaints",)));
+                    },
+                  child:SvgPicture.asset(
+                    "assets/images/qr_scanner.svg",
+                    height: 35,
+                    width: 35,
+                  ),
+                  ),
+                  ),
+                  SizedBox(width: 15,)
                 ],
               )),
           titleSpacing: 0,

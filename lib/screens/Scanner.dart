@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:GenERP/Utils/ColorConstant.dart';
+import 'package:GenERP/screens/GenInventory/PartDetails.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
@@ -162,8 +163,7 @@ class _ScannerState extends State<Scanner> {
               builder: (context) =>
                   RegisterComplaint(generator_id:scanData.code)));
           // LoadgeneratorDetailsApifunction(scanData.code!);
-        }
-        else if(widget.from =="tagGenerator"){
+        } else if(widget.from =="tagGenerator"){
           PreferenceService().saveString("result", scanData.code!);
           Navigator.pop(context,true);
           //
@@ -172,8 +172,7 @@ class _ScannerState extends State<Scanner> {
           //         TagGenerator()));
 
 
-        }
-        else if(widget.from =="tagLocation"){
+        } else if(widget.from =="tagLocation"){
           PreferenceService().saveString("result", scanData.code!);
           print("result:${scanData.code!}");
           print("latlongs:${latlongs}");
@@ -183,6 +182,12 @@ class _ScannerState extends State<Scanner> {
           //     builder: (context) =>
           //         TagLocation()));
 
+        }else if(widget.from =="inventory"){
+          PreferenceService().saveString("result", scanData.code!);
+          Navigator.pop(context);
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  PartDetailsScreen(part_id:scanData.code)));
         }
 
       });

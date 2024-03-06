@@ -131,11 +131,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   _imgFromCamera() async {
-    // Capture a photo
     try {
       final XFile? galleryImage = await _picker.pickImage(
         source: ImageSource.camera,
         imageQuality: imageQuality,
+        preferredCameraDevice: CameraDevice.front,
       );
       print("added");
       setState(() {

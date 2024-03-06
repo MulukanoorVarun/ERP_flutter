@@ -139,11 +139,10 @@ class _InventoryScreenState extends State<InventoryScreen> {
                         children: [
                           SizedBox(height: 25.0,),
                           InkWell(
-                            onTap: (){
-                                Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
+                            onTap: () {
+                                Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"Inventory")));
                             },
                             child: Container(
-
                               child: SvgPicture.asset(
                                 "assets/ic_qrcode.svg",
                                 height: 280,
@@ -155,7 +154,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
                               child:Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-
                                   Spacer(),
                                   Container(
                                     width:130,

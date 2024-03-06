@@ -149,7 +149,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
     try {
       final XFile? galleryImage = await _picker.pickImage(
         source: ImageSource.camera,
-        imageQuality: imageQuality
+        imageQuality: imageQuality,
+        preferredCameraDevice: CameraDevice.front,
       );
       print("added");
       setState(() {

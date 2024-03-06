@@ -228,18 +228,32 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
           builder: (context) => AlertDialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0)),
-            title: Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                'Information',
-                style: GoogleFonts.ubuntu(
-                  textStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: FontConstant.Size25,
-                      fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.underline),
+            title: Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: Text(
+                      'Information',
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: FontConstant.Size25,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                IconButton(
+                  icon: Icon(Icons.cancel,
+                    size: 35,
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
             ),
             content: SingleChildScrollView(
               child: ConstrainedBox(
