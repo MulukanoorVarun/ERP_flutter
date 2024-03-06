@@ -152,6 +152,7 @@ class _LoginState extends State<Login> {
           if (data != null)
             {
               setState(() {
+                print("${data.error} login error here");
                 if (data.error == 0) {
                   PreferenceService().saveInt("loginStatus", 1);
                   PreferenceService().saveString("UserId", data.userId!);

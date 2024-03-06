@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:GenERP/models/AccountSuggestionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
@@ -68,6 +69,41 @@ class UserApi {
         print(res.body);
 
         return StatusResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future download_files(empId, session,url,cntxt) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+      };
+      final res = await post(data, url, {});
+      if (res != null) {
+        final bytes = res.bodyBytes;
+        final directory = "/storage/emulated/0/Download";
+
+
+
+        final contentDisposition = res.headers['content-disposition'];
+        print("contentDisposition ${contentDisposition?.split('filename=')[1]}");
+
+        // final filename = contentDisposition != null
+        //     ? contentDisposition.split('filename=')[1]
+        //     : 'file';
+        var filename=(contentDisposition?.split('filename=')[1])?.replaceAll('"', "");
+        final file = File('${directory}/${filename}');
+        await file.writeAsBytes(bytes);
+        toast(cntxt, "File saved to your downloads as ${filename}, Successfully");
+        print('File saved successfully');
+        return  jsonDecode(res.body);
       } else {
         print("Null Response");
         return null;
