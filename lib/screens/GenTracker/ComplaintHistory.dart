@@ -5,6 +5,7 @@ import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
 import '../../Utils/storage.dart';
 import '../../models/generatorComplaintResponse.dart';
 
@@ -32,6 +33,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   List<C_List> comp_List = [];
   var actname = "";
   var status = "";
+  bool isloading = true;
 
   @override
   void initState() {
@@ -53,11 +55,14 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                       if (data.sessionExists == 1) {
                         if (data.error == 0) {
                           comp_List = data.list!;
+                          isloading = false;
                           print("littu");
                         } else {
+                          isloading = true;
                           print("error");
                         }
                       } else {
+                        isloading = true;
                         PreferenceService().clearPreferences();
                         toast(context,
                             "Your Session expired, Please Login Again!");
@@ -68,6 +73,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                   }
                 else
                   {
+                    isloading = true,
                     toast(context, "Something Went Wrong, Please try again!"),
                     print("error2")
                   }
@@ -116,359 +122,334 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           ),
         ),
       ),
-      body: (comp_List.length > 0)
-          ? Container(
-              color: ColorConstant.erp_appColor,
-              child: Expanded(
-                child: Container(
-                  width: double.infinity, // Set width to fill parent width
-                  decoration: BoxDecoration(
-                    color: ColorConstant.edit_bg_color,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(30.0),
-                      topRight: Radius.circular(30.0),
-                    ),
-                  ),
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                  child: Column(
-                    // Set max height constraints
-                    children: [
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      Container(
-                        child: GridView.builder(
-                            itemCount: comp_List.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount:
-                                        1, // 4 items in a row for tablet
-                                    crossAxisSpacing: 4,
-                                    mainAxisSpacing: 2,
-                                    childAspectRatio: (175 / 100)),
-                            padding: const EdgeInsets.all(5),
-                            physics: const BouncingScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              if (comp_List.length > 0) {
-                                return InkWell(
-                                  onTap: () {
-                                    // if(actname == "pendingComplaints"&&status=="Open"){
-                                    //   Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id: ,)));
-                                    // }
-                                  },
-                                  child: Container(
-                                    height: screenHeight * 0.3,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.topLeft,
-                                          margin: EdgeInsets.fromLTRB(
-                                              7.5, 7.5, 0, 0),
-                                          child: Text(
-                                            "Complaint Details",
-                                            style: TextStyle(
-                                              fontSize: FontConstant.Size18,
-                                              fontWeight: FontWeight.w500,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: ColorConstant.erp_appColor,
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                            child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            Spacer(),
-                                            Container(
-                                              width: screenWidth * 0.9,
-                                              child: Divider(
-                                                  thickness: 0.5,
-                                                  color: Colors.grey),
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        )),
-                                        SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        Container(
-                                            child: Row(
-                                          children: [
-                                            Spacer(),
-                                            Container(
-                                              width: screenWidth * 0.4,
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.start,
-                                                children: [
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "Technician Name",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      comp_List[index]
-                                                              .techName ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "Complaint Type",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      comp_List[index]
-                                                              .compType ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "Complaint Status",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      comp_List[index]
-                                                              .compStatus ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            Container(
-                                              width: screenWidth * 0.4,
-                                              child: Column(
-                                                children: [
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "ID",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      comp_List[index].compId ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "Date",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      comp_List[index]
-                                                              .compRegdate ??
-                                                          "",
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "",
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .grey_153,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: Text(
-                                                      "",
-                                                      maxLines: 3,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      textAlign:
-                                                          TextAlign.start,
-                                                      style: TextStyle(
-                                                          color: ColorConstant
-                                                              .black,
-                                                          fontSize: FontConstant
-                                                              .Size15,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Spacer(),
-                                          ],
-                                        ))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              } else {
-                                return Align(
-                                    alignment: Alignment.center,
+      body: (isloading)
+          ? Loaders()
+          : Container(
+        color: ColorConstant.erp_appColor,
+        child: Expanded(
+          child: Container(
+            width: double.infinity, // Set width to fill parent width
+            decoration: BoxDecoration(
+              color: ColorConstant.edit_bg_color,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+              ),
+            ),
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+            child: Column(
+              // Set max height constraints
+              children: [
+                SizedBox(
+                  height: 5.0,
+                ),
+                Container(
+                  child: GridView.builder(
+                      itemCount: comp_List.length,
+                      gridDelegate:
+                      SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                          1, // 4 items in a row for tablet
+                          crossAxisSpacing: 4,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: (175 / 115)),
+                      padding: const EdgeInsets.all(5),
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        if (comp_List.length > 0) {
+                          return InkWell(
+                            onTap: () {
+                              // if(actname == "pendingComplaints"&&status=="Open"){
+                              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id: ,)));
+                              // }
+                            },
+                            child: Container(
+                              height: screenHeight * 0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.fromLTRB(
+                                        7.5, 7.5, 0, 0),
                                     child: Text(
-                                      "No Data Available",
+                                      "Complaint Details",
                                       style: TextStyle(
                                         fontSize: FontConstant.Size18,
                                         fontWeight: FontWeight.w500,
                                         overflow: TextOverflow.ellipsis,
                                         color: ColorConstant.erp_appColor,
                                       ),
-                                    ));
-                              }
-                            }),
-                      ),
-                      SizedBox(
-                        height: 15.0,
-                      ),
-                    ],
-                  ),
+                                    ),
+                                  ),
+                                  Container(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: screenWidth * 0.9,
+                                            child: Divider(
+                                                thickness: 0.5,
+                                                color: Colors.grey),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+
+                                  Container(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Technician Name",
+                                                  textAlign: TextAlign.start,
+                                                  style:
+                                                  TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "ID",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  comp_List[index]!.techName??"-",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  comp_List[index]!.compId??"-",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Complaint Type",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Date",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  comp_List[index]!.compType??"-",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  comp_List[index]!.compRegdate??"-",
+                                                  textAlign: TextAlign.start,
+                                                  style:
+                                                  TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Complaint Status",
+                                                  textAlign: TextAlign.start,
+                                                  style:  TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(height: 5.0,),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  comp_List[index]!.compStatus??"-",
+                                                  textAlign: TextAlign.start,
+                                                  style:TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+
+                                        ],
+                                      )
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "No Data Available",
+                                style: TextStyle(
+                                  fontSize: FontConstant.Size18,
+                                  fontWeight: FontWeight.w500,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: ColorConstant.erp_appColor,
+                                ),
+                              ));
+                        }
+                      }),
                 ),
-              ),
-            )
-          : Container(
-              color: ColorConstant.edit_bg_color,
-              child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "No Data Available",
-                    style: TextStyle(
-                      fontSize: FontConstant.Size18,
-                      fontWeight: FontWeight.w500,
-                      overflow: TextOverflow.ellipsis,
-                      color: ColorConstant.erp_appColor,
-                    ),
-                  )),
+                SizedBox(
+                  height: 15.0,
+                ),
+              ],
             ),
+          ),
+        ),
+      ),
     );
   }
 }

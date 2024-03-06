@@ -16,6 +16,7 @@ import 'package:geocoding/geocoding.dart' as geocoding;
 import 'package:location/location.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
 import '../Scanner.dart';
 import '../splash.dart';
 
@@ -44,6 +45,7 @@ class _TagLocationState extends State<TagLocation> {
   bool isLoading = true;
   TextEditingController Generator_id = TextEditingController();
   var _error_genID = "";
+
 
   @override
   void initState() {
@@ -136,6 +138,8 @@ class _TagLocationState extends State<TagLocation> {
               if(data.sessionExists==1){
                 if(data.error==0){
                   toast(context,"Location Tagged Successfully!!");
+                  isLoading = false;
+
                   Navigator.pop(context,true);
                 }
                 else if(data.error==1){
@@ -335,7 +339,8 @@ class _TagLocationState extends State<TagLocation> {
                         ],
                         Container(
                             child: InkWell(
-                              onTap: (){
+                              onTap: () async{
+
                                 TagLocationAPIFunction();
                                 // Generator_id.dispose();
                               },

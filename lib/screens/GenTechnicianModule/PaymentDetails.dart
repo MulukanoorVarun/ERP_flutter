@@ -48,7 +48,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   var type = "";
   var refType = "";
   var refId = "";
-  var gen_id = "4461";
+  var gen_id = "";
   var account_id = "";
   var CollectionId = 0;
   final ImagePicker _picker = ImagePicker();
@@ -123,7 +123,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     print(_image);
 
     try {
-      UserApi.TechnicianUpdatepaymentAPI(
+      await UserApi.TechnicianUpdatepaymentAPI(
           empId, session,refType,refId,paymentModeID,Reference.text,Amount.text,contact,contactID,_image).then((data) =>
       {
         if(data != null){
@@ -400,7 +400,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         if (_image != null) {
           var file = FlutterImageCompress.compressWithFile(galleryImage!.path);{
             if (file != null) {
-              PaymentUpdateAPI();
+              CheckValidations();
             }
           }
         }
@@ -428,7 +428,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
         if (_image != null) {
           var file = FlutterImageCompress.compressWithFile(galleryImage!.path);{
             if (file != null) {
-              PaymentUpdateAPI();
+              CheckValidations();
             }
           }
         }
@@ -436,6 +436,25 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     } catch (e) {
       debugPrint("mmmm: ${e.toString()}");
     }
+  }
+
+  CheckValidations(){
+    if(contactID==null||contactID==""){
+      toast(context,"Select Phone Number");
+    }
+    else if(paymentModeID==null||paymentModeID==""){
+      toast(context,"Select Payment Mode");
+    }
+    else if(Amount.text.isEmpty){
+      toast(context,"Enter Amount");
+    }
+    else if(_image == "" || _image==null||image_picked==0){
+      toast(context,"Select Attachment");
+    }
+else{
+      PaymentUpdateAPI();
+    }
+
   }
 
   @override
@@ -629,7 +648,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                 decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius: BorderRadius.circular(7.0)),
                                 child: InkWell(
                                   onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact()));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact(actName: widget.account_name=="generator",id: widget.refId,)));
                                   },
                                   child: SvgPicture.asset(
                                     "assets/ic_add.svg",
@@ -841,7 +860,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                           Container(
                               child: InkWell(
                                 onTap: (){
-                                  PaymentUpdateAPI();
+                                  CheckValidations();
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

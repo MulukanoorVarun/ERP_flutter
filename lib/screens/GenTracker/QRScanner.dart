@@ -15,6 +15,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
 import '../Scanner.dart';
 
 class QRScanner extends StatefulWidget {
@@ -31,6 +32,7 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
   var empId = "";
   var _Error = "";
   var result = "";
+  bool isLoading = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -62,6 +64,10 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
     result = await PreferenceService().getString("result")??"";
     print("e:$empId");
     print("s:$session");
+    if(empId!=null && session!=null){
+      isLoading = false;
+    }
+
   }
 
   Future<void> LoadgeneratorDetailsApifunction(empId,session,gen_hash_id) async{
@@ -171,7 +177,7 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body:(isLoading)?Loaders(): SingleChildScrollView(
       child:Container(
         height: screenHeight,
         color: ColorConstant.erp_appColor,

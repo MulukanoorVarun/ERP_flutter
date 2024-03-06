@@ -53,6 +53,8 @@ class _ScannerState extends State<Scanner> {
   TextEditingController Generator_id = TextEditingController();
   var _error_genID = "";
   QRViewController? controller;
+  var _error_engNo = "";
+  TextEditingController Engine_no = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -165,11 +167,11 @@ class _ScannerState extends State<Scanner> {
           // LoadgeneratorDetailsApifunction(scanData.code!);
         } else if(widget.from =="tagGenerator"){
           PreferenceService().saveString("result", scanData.code!);
+          PreferenceService().saveString("from", "scanner");
           Navigator.pop(context,true);
-          //
-          // Navigator.push(context, MaterialPageRoute(
-          //     builder: (context) =>
-          //         TagGenerator()));
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context) =>
+                  TagGenerator()));
 
 
         } else if(widget.from =="tagLocation"){
@@ -194,146 +196,146 @@ class _ScannerState extends State<Scanner> {
     });
   }
 
-  // Future TagGeneratorDialogue(id) async {
-  //   return await showDialog(
-  //     context: context,
-  //     builder: (context) => AlertDialog(
-  //       shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(5.0)
-  //       ),
-  //       elevation: 20,
-  //       shadowColor: Colors.black,
-  //       title: Align(
-  //           alignment: Alignment.topLeft,
-  //           child:Text("#"+id,style:  TextStyle(
-  //               color: Colors.black,
-  //               fontSize: FontConstant.Size22,
-  //               fontWeight: FontWeight.w500,
-  //               decoration: TextDecoration.underline
-  //
-  //           ),)
-  //       ),
-  //       content:
-  //       Container(
-  //         height: 125,
-  //         child:  Column
-  //           (children:[
-  //           Container(
-  //             alignment: Alignment.center,
-  //             width:450,
-  //             height: 50,
-  //             margin:EdgeInsets.only(left:5.0,right:5.0),
-  //             child: TextFormField(
-  //               controller: Engine_no,
-  //               cursorColor: ColorConstant.black,
-  //               keyboardType: TextInputType.text,
-  //               decoration: InputDecoration(
-  //                 hintText: "Enter Engine Number",
-  //                 hintStyle: TextStyle(
-  //                     fontSize: FontConstant.Size15,
-  //                     color: ColorConstant.Textfield,
-  //                     fontWeight: FontWeight.w400),
-  //
-  //                 filled: true,
-  //                 fillColor: ColorConstant.edit_bg_color,
-  //                 enabledBorder: OutlineInputBorder(
-  //                   borderRadius: BorderRadius.circular(10.0),
-  //                   borderSide: BorderSide(
-  //                       width: 0, color: ColorConstant.edit_bg_color),
-  //                 ),
-  //                 focusedBorder: OutlineInputBorder(
-  //                   borderRadius: BorderRadius.circular(10.0),
-  //                   borderSide: BorderSide(
-  //                       width: 0, color: ColorConstant.edit_bg_color),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           if(_error_engNo!=null)...[
-  //             Container(
-  //               alignment: Alignment.topLeft,
-  //               margin: EdgeInsets.only(
-  //                   top: 2.5, bottom: 2.5, left: 25),
-  //               child: Text(
-  //                 "$_error_engNo",
-  //                 textAlign: TextAlign.start,
-  //                 style:  TextStyle(
-  //                   color: Colors.red,
-  //                   fontSize: FontConstant.Size10,
-  //
-  //                 ),
-  //               ),
-  //             )
-  //           ]else...[
-  //             SizedBox(height: 15,),
-  //           ],
-  //           Row(
-  //             children: [
-  //               Container(
-  //                 width:110,
-  //                 height: 45,
-  //                 margin: EdgeInsets.only(left: 10.0,right: 10.0),
-  //                 decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
-  //                 child: TextButton(
-  //                   style: ButtonStyle(
-  //                     backgroundColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
-  //                     overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
-  //                   ),
-  //                   onPressed: () =>Navigator.of(context).pop(false),
-  //
-  //
-  //                   child: Text(
-  //                     "Cancel",
-  //                     style: TextStyle(
-  //                       color: ColorConstant.white,
-  //                       fontWeight: FontWeight.w300,
-  //                       fontSize: FontConstant.Size15,
-  //
-  //                     ),
-  //                   ),
-  //                 ),
-  //
-  //               ),
-  //
-  //               Container(
-  //                 width:110,
-  //                 height: 45,
-  //                 margin: EdgeInsets.only(left: 10.0,right: 10.0),
-  //                 decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
-  //                 child:  TextButton(
-  //                   style: ButtonStyle(
-  //                     backgroundColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
-  //                     overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
-  //                   ),
-  //                   onPressed: () =>{
-  //
-  //                     setState(() {
-  //                       TagGeneratorAPIFunction();
-  //                     }),
-  //                   },
-  //                   child: Text(
-  //                     "Submit",
-  //                     style:  TextStyle(
-  //                       color: ColorConstant.white,
-  //                       fontWeight: FontWeight.w300,
-  //                       fontSize: FontConstant.Size15,
-  //
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //
-  //             ],
-  //           )
-  //         ]),
-  //       ),
-  //
-  //
-  //     ),
-  //     barrierDismissible: false,
-  //   ) ??
-  //       false;
-  // }
+  Future TagGeneratorDialogue(id) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+        ),
+        elevation: 20,
+        shadowColor: Colors.black,
+        title: Align(
+            alignment: Alignment.topLeft,
+            child:Text("#"+id,style:  TextStyle(
+                color: Colors.black,
+                fontSize: FontConstant.Size22,
+                fontWeight: FontWeight.w500,
+                decoration: TextDecoration.underline
+
+            ),)
+        ),
+        content:
+        Container(
+          height: 125,
+          child:  Column
+            (children:[
+            Container(
+              alignment: Alignment.center,
+              width:450,
+              height: 50,
+              margin:EdgeInsets.only(left:5.0,right:5.0),
+              child: TextFormField(
+                controller: Engine_no,
+                cursorColor: ColorConstant.black,
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+                  hintText: "Enter Engine Number",
+                  hintStyle: TextStyle(
+                      fontSize: FontConstant.Size15,
+                      color: ColorConstant.Textfield,
+                      fontWeight: FontWeight.w400),
+
+                  filled: true,
+                  fillColor: ColorConstant.edit_bg_color,
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                        width: 0, color: ColorConstant.edit_bg_color),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(
+                        width: 0, color: ColorConstant.edit_bg_color),
+                  ),
+                ),
+              ),
+            ),
+            if(_error_engNo!=null)...[
+              Container(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.only(
+                    top: 2.5, bottom: 2.5, left: 25),
+                child: Text(
+                  "$_error_engNo",
+                  textAlign: TextAlign.start,
+                  style:  TextStyle(
+                    color: Colors.red,
+                    fontSize: FontConstant.Size10,
+
+                  ),
+                ),
+              )
+            ]else...[
+              SizedBox(height: 15,),
+            ],
+            Row(
+              children: [
+                Container(
+                  width:110,
+                  height: 45,
+                  margin: EdgeInsets.only(left: 10.0,right: 10.0),
+                  decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
+                  child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
+                      overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
+                    ),
+                    onPressed: () =>Navigator.of(context).pop(false),
+
+
+                    child: Text(
+                      "Cancel",
+                      style: TextStyle(
+                        color: ColorConstant.white,
+                        fontWeight: FontWeight.w300,
+                        fontSize: FontConstant.Size15,
+
+                      ),
+                    ),
+                  ),
+
+                ),
+
+                Container(
+                  width:110,
+                  height: 45,
+                  margin: EdgeInsets.only(left: 10.0,right: 10.0),
+                  decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
+                  child:  TextButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
+                      overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
+                    ),
+                    onPressed: () =>{
+
+                      setState(() {
+                        TagGeneratorAPIFunction(id,Engine_no.text);
+                      }),
+                    },
+                    child: Text(
+                      "Submit",
+                      style:  TextStyle(
+                        color: ColorConstant.white,
+                        fontWeight: FontWeight.w300,
+                        fontSize: FontConstant.Size15,
+
+                      ),
+                    ),
+                  ),
+                ),
+
+              ],
+            )
+          ]),
+        ),
+
+
+      ),
+      barrierDismissible: false,
+    ) ??
+        false;
+  }
 
   Future<void> TagGeneratorAPIFunction(Generator_id,Engine_no) async {
     session = await PreferenceService().getString("Session_id") ?? "";

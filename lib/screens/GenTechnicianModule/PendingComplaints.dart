@@ -2,6 +2,7 @@ import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
+import 'package:GenERP/screens/GenTracker/UpdateComplaint.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -353,6 +354,8 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             InkWell(
                                               onTap: (){
                                                 //complaintStatus_navigation
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id:  tpech_comp_list![index].complaintId!)));
+                                                
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_document.svg",

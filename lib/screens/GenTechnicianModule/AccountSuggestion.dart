@@ -6,6 +6,7 @@ import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
 import '../../Utils/storage.dart';
 import '../../models/AccountSuggestionResponse.dart';
 import '../Login.dart';
@@ -21,6 +22,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
   var empId = "";
   var session =  "";
   var searched_string = "";
+  bool isLoading =false;
   final TextEditingController _searchController = TextEditingController();
   List<AccountList>? accountList = [];
 
@@ -41,7 +43,13 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
           setState(() {
             if (data.sessionExists == 1) {
               if (data.error == 0) {
+                isLoading = false;
                 accountList = data.accountList!;
+                if(accountList!.length.toDouble() <= double.parse(accountList!.last.toString())){
+                  isLoading = false;
+                }else{
+                  isLoading == true;
+                }
 
               } else {
                 accountList = [];
@@ -100,7 +108,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
           ),
         ),
       ),
-      body: SafeArea(
+      body: (isLoading)?Loaders():SafeArea(
         child:
         Column(
           children: [
@@ -121,6 +129,8 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                   });
                   if (value.length >= 3) {
                     AccountSuggestionAPI();
+
+
                   }
                 },
                 decoration: InputDecoration(

@@ -1,5 +1,6 @@
 import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Services/user_api.dart';
+import 'package:GenERP/Utils/MyWidgets.dart';
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AddAccount.dart';
 import 'package:GenERP/screens/AttendanceHistory.dart';
@@ -19,6 +20,7 @@ class GeneratorDetails extends StatefulWidget {
   final generatorId;
   final actName;
   final location;
+
   const GeneratorDetails({Key? key, required this.actName, required this.location, required this.generatorId}) : super(key: key);
 
   @override
@@ -46,6 +48,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
   var gen_id = "";
   var eng_no = "";
   var actname = "";
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -63,7 +66,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     empId= await PreferenceService().getString("UserId")??"";
     try{
       print("generatorid:${widget.generatorId}");
-      await UserApi.LoadGeneratorDetailsAPI(empId, session,widget.generatorId).then((data)=>{
+      await UserApi.LoadGeneratorDetailsAPI(empId,session,widget.generatorId).then((data)=>{
         if(data!=null){
           setState((){
             if(data.sessionExists==1){
@@ -86,6 +89,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                 eng_no = data.engineNo!;
                 PreferenceService().saveString("EngineNumber",data.engineNo!);
                 print("EngineNumber"+data.engineNo!);
+                isLoading = false;
                 // data.nextService!;
                 // data.cmsngDate!;
                 // data.state!;
@@ -95,7 +99,8 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
 
                 print("littu");
               }else{
-                toast(context,"Something Went Wrong, Please try again!");
+                isLoading = true;
+                toast(context,"");
                 print("error");
               }
             }else{
@@ -105,6 +110,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
             }
           })
         }else{
+          isLoading = true,
           toast(context,"No response From the server, Please try Again!"),
           print("error2")
         }
@@ -178,7 +184,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
           ),
         ),
       ),
-      body: Container(
+      body:(isLoading)?Loaders(): Container(
         color: ColorConstant.erp_appColor,
         child: Expanded(
           child: Container(
@@ -241,7 +247,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Company",
@@ -255,7 +261,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Customer Name",
@@ -275,7 +281,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$comp_name",
@@ -290,7 +296,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$Cust_name",
@@ -310,7 +316,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Mobile Number",
@@ -324,7 +330,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Alternate Number",
@@ -344,7 +350,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$mob_num",
@@ -358,7 +364,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$alt_mob_num",
@@ -378,7 +384,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Mail ID",
@@ -392,7 +398,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "Address",
@@ -414,7 +420,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                              children: [
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$mail_id",
@@ -428,7 +434,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                ),
                                Spacer(),
                                Container(
-                                 width: 180,
+                                 width: 150,
                                  alignment: Alignment.topLeft,
                                  child: Text(
                                    "$address",
@@ -497,7 +503,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Product Name",
@@ -512,7 +518,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Date of Engine Sale",
@@ -533,7 +539,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$p_name",
@@ -547,7 +553,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$date_of_eng_sale",
@@ -568,7 +574,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Engine Model",
@@ -582,7 +588,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Dispatch Date",
@@ -603,7 +609,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$eng_model",
@@ -617,7 +623,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$disp_date",
@@ -639,7 +645,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 children: [
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "DG set Number",
@@ -653,7 +659,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "Date of Supply",
@@ -674,7 +680,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 children: [
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "$dg_set_num",
@@ -688,7 +694,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "$disp_date",
@@ -709,7 +715,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 children: [
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "Battery Number",
@@ -723,10 +729,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
-                                      "",
+                                      "Status",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                             color: ColorConstant.grey_153,
@@ -744,7 +750,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                 children: [
                                   Spacer(),
                                   Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "$batt_num",
@@ -758,79 +764,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Spacer(),
                                   Container(
-                                    width: 180,
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "",
-                                      textAlign: TextAlign.start,
-                                      style:  TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-
-                                    ),
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
-                              SizedBox(height: 5.0,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Spacer(),
-                                  Container(
-                                    width: 180,
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "Status",
-                                      textAlign: TextAlign.start,
-                                      style:  TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    width: 180,
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-
-                                    ),
-                                  ),
-                                  Spacer(),
-                                ],
-                              ),
-                              SizedBox(height: 5.0,),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Spacer(),
-                                  Container(
-                                    width: 180,
+                                    width: 150,
                                     alignment: Alignment.topLeft,
                                     child: Text(
                                       "$status",
-                                      textAlign: TextAlign.start,
-                                      style:  TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-
-                                    ),
-                                  ),
-                                  Spacer(),
-                                  Container(
-                                    width: 180,
-                                    alignment: Alignment.topLeft,
-                                    child: Text(
-                                      "",
                                       textAlign: TextAlign.start,
                                       style:  TextStyle(
                                             color: ColorConstant.black,
@@ -856,8 +793,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                       child: InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: gen_id)));
+                        onTap: () async {
+                          var res  = await Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: gen_id)));
+                          if(res==true){
+                            isLoading= true;
+                            LoadgeneratorDetailsApifunction();
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,

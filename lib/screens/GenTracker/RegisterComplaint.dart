@@ -1,3 +1,4 @@
+import 'package:GenERP/Utils/MyWidgets.dart';
 import 'package:GenERP/models/loadGeneratorDetailsResponse.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -48,6 +49,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
   var gen_id = "";
   var product_name = "";
   var eng_no = "";
+  bool isLoading = true;
   @override
   void initState(){
     super.initState();
@@ -71,6 +73,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
               Complaint_type_dropdown = data.complaintTypeList!;
               Complaint_category_dropdown = data.complaintCategoryList!;
               Complaint_description_dropdown = data.complaintDescriptionList!;
+              isLoading = false;
             }
           })
         }
@@ -126,6 +129,8 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
             if(data.sessionExists==1){
               if(data.error==0){
                 toast(context,"Complaint Submitted Successfully");
+                isLoading = false;
+                dispose();
                 Navigator.pop(context,true);
 
               }else if(data.error==1){
@@ -150,6 +155,21 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
     }
   }
 
+  CheckValidations(){
+    if(selectedTypeId==null){
+      toast(context, "Select Complaint Type");
+    }if(selectedCategoryId==null){
+      toast(context, "Select Category Type");
+    }if(selectedDescriptionId==null){
+      toast(context, "Select Description Type");
+    }
+    else if(running_hrs.text.isEmpty){
+      toast(context, "Enter Running Hours");
+    }else{
+      SubmitComplaintFunction();
+    }
+
+  }
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -189,7 +209,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
+      body:(isLoading)?Loaders(): SingleChildScrollView(
           child:Container(
             height: screenHeight,
             color: ColorConstant.erp_appColor,
@@ -725,8 +745,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           SizedBox(height: 20.0,),
                           Container(
                               child: InkWell(
-                                onTap: (){
-                                  SubmitComplaintFunction();
+                                onTap: () {
+                                  Loaders();
+                                  CheckValidations();
                                 },
                                 child: Container(
                                   alignment: Alignment.center,

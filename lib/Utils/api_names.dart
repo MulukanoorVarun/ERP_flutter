@@ -47,5 +47,6 @@ const paymentCollectionListApi = "${baseUrl}home/technician_payment_collection_l
 const loadTransactionsListApi = "${baseUrl}home/technician_payment_collection_wallet";
 const technician_complaint_detailsAPI = "${baseUrl}home/technician_complaint_details";
 const technician_complaint_followup_listAPI = "${baseUrl}home/technician_complaint_followup_list";
-
+const saveContactApi = "${baseUrl}home/technician_add_contact";
+const updateComplaintStatus = "${baseUrl}home/technician_update_visit";
 

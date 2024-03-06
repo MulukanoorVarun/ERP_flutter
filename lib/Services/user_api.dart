@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:GenERP/models/AccountSuggestionResponse.dart';
 import 'package:GenERP/models/DashboardResponse.dart';
-import 'package:GenERP/models/FollowUpResponse.dart';
 import 'package:GenERP/models/LogoutResponse.dart';
-import 'package:GenERP/models/PaymentCollectionWalletResponse.dart';
 import 'package:GenERP/models/ProfileResponse.dart';
 import 'package:GenERP/models/SessionResponse.dart';
 import 'package:GenERP/models/StatusResponse.dart';
@@ -19,21 +17,25 @@ import 'package:GenERP/models/loadGeneratorDetailsResponse.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:flutter/cupertino.dart';
 import '../Utils/api_names.dart';
+import '../models/AddContactResponse.dart';
 import '../models/AttendanceHistoryresponse.dart';
 import '../models/AttendanceListResponse.dart';
 import '../models/CheckInResponse.dart';
 import '../models/CheckOutResponse.dart';
 import '../models/ComplaintsSelectionResponse.dart';
 import '../models/DayWiseAttendance.dart';
+import '../models/FollowUpResponse.dart';
 import '../models/Inventory_Part_details_response.dart';
 import '../models/LoginQRResponse.dart';
 import '../models/NearbyGeneratorsResponse.dart';
 import '../models/PaymentCollectionResponse.dart';
 import '../models/PaymentCollectionValidateOTPResponse.dart';
+import '../models/PaymentCollectionWalletResponse.dart';
 import '../models/SubmitComplaintResponse.dart';
 import '../models/TechnicianAddPaymentCollectionResponse.dart';
 import '../models/TechnicianLoadNumbersResponse.dart';
 import '../models/TodayVisitResponse.dart';
+import '../models/UpdateComplaintResponse.dart';
 import '../models/ViewVisitDetailsResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
@@ -640,7 +642,7 @@ class UserApi {
         'tech_loc': (tech_loc).toString(),
         'radius': (radius).toString(),
       };
-      final res = await post(data,technician_nearby_generatorsAPI, {});
+      final res = await post(data, technician_nearby_generatorsAPI, {});
       if (res != null) {
         print(res.body);
         return NearbyGeneratorsResponse.fromJson(jsonDecode(res.body));
@@ -653,7 +655,9 @@ class UserApi {
       return null;
     }
   }
-  static Future<AccountSuggestionResonse?> AccountSuggestionAPI(empId,session,search_string) async {
+
+  static Future<AccountSuggestionResonse?> AccountSuggestionAPI(empId, session,
+      search_string) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -662,7 +666,7 @@ class UserApi {
 
 
       };
-      final res = await post(data,getAccountSuggestions, {});
+      final res = await post(data, getAccountSuggestions, {});
       if (res != null) {
         print(res.body);
         return AccountSuggestionResonse.fromJson(jsonDecode(res.body));
@@ -676,16 +680,19 @@ class UserApi {
     }
   }
 
-  static Future<TechnicianPendingComplaintsResponse?> LoadTechnicianComplaintsAPI(empId,session) async {
+  static Future<
+      TechnicianPendingComplaintsResponse?> LoadTechnicianComplaintsAPI(empId,
+      session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
       };
-      final res = await post(data,getPendingComplaintsList, {});
+      final res = await post(data, getPendingComplaintsList, {});
       if (res != null) {
         print(res.body);
-        return TechnicianPendingComplaintsResponse.fromJson(jsonDecode(res.body));
+        return TechnicianPendingComplaintsResponse.fromJson(
+            jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -696,7 +703,8 @@ class UserApi {
     }
   }
 
-static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,session,type,gen_id,account_id) async {
+  static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,
+      session, type, gen_id, account_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -705,7 +713,7 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
         'gen_id': (gen_id).toString(),
         'account_id': (account_id).toString(),
       };
-      final res = await post(data,loadNumbersApi, {});
+      final res = await post(data, loadNumbersApi, {});
       if (res != null) {
         print(res.body);
         return TechnicianLoadNumbersResponse.fromJson(jsonDecode(res.body));
@@ -719,7 +727,10 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
     }
   }
 
-  static Future<TechnicianAddPaymentCollectionResponse?> TechnicianUpdatepaymentAPI(empId,session,ref_type,ref_id,payment_mode_id,payment_ref_no,amount,otp_validated_name,otp_validated_mobile_number,payment_proof) async {
+  static Future<
+      TechnicianAddPaymentCollectionResponse?> TechnicianUpdatepaymentAPI(empId,
+      session, ref_type, ref_id, payment_mode_id, payment_ref_no, amount,
+      otp_validated_name, otp_validated_mobile_number, payment_proof) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -753,7 +764,10 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
       return null;
     }
   }
-  static Future<PaymentCollectionValidateOTPResponse?> TechnicianPaymentOTPValidateAPI(empId,session,payment_collection_id,otp) async {
+
+  static Future<
+      PaymentCollectionValidateOTPResponse?> TechnicianPaymentOTPValidateAPI(
+      empId, session, payment_collection_id, otp) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -762,10 +776,11 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
         'otp': (otp).toString(),
 
       };
-      final res = await post(data,validateOTPApi, {});
+      final res = await post(data, validateOTPApi, {});
       if (res != null) {
         print(res.body);
-        return PaymentCollectionValidateOTPResponse.fromJson(jsonDecode(res.body));
+        return PaymentCollectionValidateOTPResponse.fromJson(
+            jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -776,13 +791,14 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
     }
   }
 
-  static Future<PaymentCollectionResponse?> paymentCollectionListAPI(empId,session,) async {
+  static Future<PaymentCollectionResponse?> paymentCollectionListAPI(empId,
+      session,) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
       };
-      final res = await post(data,paymentCollectionListApi, {});
+      final res = await post(data, paymentCollectionListApi, {});
       if (res != null) {
         print(res.body);
         return PaymentCollectionResponse.fromJson(jsonDecode(res.body));
@@ -859,16 +875,68 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
     }
   }
 
+  static Future<AddContactResponse?> AddContactAPI(empId, session, gen_id, name,
+      designation, mob1, mob2, tel, mail, type, account_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_id': (gen_id).toString(),
+        'name': (name).toString(),
+        'designation': (designation).toString(),
+        'mob1': (mob1).toString(),
+        'mob2': (mob2).toString(),
+        'tel': (tel).toString(),
+        'mail': (mail).toString(),
+        'type': (type).toString(),
+        'account_id': (account_id).toString(),
+      };
+      final res = await post(data, saveContactApi, {});
+      if (res != null) {
+        print(res.body);
+        return AddContactResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
 
-
-
-
-
-
-
-
-
-
-
-
+  static Future<UpdateComplaintResponse?> UpdateComplaintPI(empId, session,
+      complaint_id, in_time, feedback, fsr_no, running_hrs, complaint_status,
+      fsr_file) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'complaint_id': (complaint_id).toString(),
+        'in_time': (in_time).toString(),
+        'feedback': (feedback).toString(),
+        'fsr_no': (fsr_no).toString(),
+        'running_hrs': (running_hrs).toString(),
+        'complaint_status': (complaint_status).toString(),
+      };
+      var res;
+      if (fsr_file != null) {
+        res = await postImage4(data, {}, updateComplaintStatus, fsr_file);
+        res = jsonDecode(res);
+      } else {
+        res = await post(data, checkInapi, {});
+        res = jsonDecode(res);
+      }
+      if (res != null) {
+        print(res);
+        return UpdateComplaintResponse.fromJson(res);
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
 }

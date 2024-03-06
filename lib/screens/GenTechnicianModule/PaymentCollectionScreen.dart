@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
+import 'package:GenERP/screens/GenTechnicianModule/PaymentDetails.dart';
+import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
@@ -90,20 +92,25 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                           )),
                     ),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Container(
-                    child: InkWell(
-                      onTap: () async {
-                        await Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountSuggestion()));
+                    child: const SizedBox(
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                  Container(
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AccountSuggestion()));
                       },
-                      child:SvgPicture.asset(
-                        "assets/ic_add.svg",
-                        height: 60,
-                        width: 60,
+                      icon: const Icon(
+                        Icons.add_circle_outline_rounded,
+                        size: 30,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  SizedBox(width: 15,)
                 ],
               )),
           titleSpacing: 0,

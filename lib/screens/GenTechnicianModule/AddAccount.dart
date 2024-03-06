@@ -4,11 +4,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
  
 
+import '../../Services/other_services.dart';
+import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/storage.dart';
+import '../splash.dart';
 
 class AddContact extends StatefulWidget{
-  const AddContact({Key?key}): super(key:key);
+  final actName,id;
+  const AddContact({Key?key,required this.actName,this.id}): super(key:key);
 
   @override
   State<AddContact> createState() => _AddContactState();
@@ -21,12 +26,126 @@ class _AddContactState extends State<AddContact>{
   TextEditingController alt_mobile = TextEditingController();
   TextEditingController Tel_num = TextEditingController();
   TextEditingController email = TextEditingController();
+  var empId = "";
+  var session="";
+  var genId = "";
+  var accountId = "";
+  var saveAgainst = "";
+  var _validate_name = "";
+  var _validate_designation = "";
+  var _validate_mobile_number = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
   }
+
+
+
+  Future<void> AddContactAPIFunction() async{
+    empId= await PreferenceService().getString("UserId")??"";
+    session= await PreferenceService().getString("Session_id")??"";
+    if(widget.actName=="generator"){
+      saveAgainst = "Generator";
+      genId = widget.id;
+    }else{
+      saveAgainst = "account";
+      accountId = widget.id;
+    }
+    try {
+      if(name.text.isEmpty){
+        setState(() {
+          _validate_name = "Enter Name";
+        });
+
+      }else if(designation.text.isEmpty){
+        setState(() {
+          _validate_designation = "Enter Designation";
+        });
+
+      }else if(mobile.text.isEmpty){
+        setState(() {
+          _validate_mobile_number = "Enter valid Mobile Number";
+        });
+
+      }else if(name.text.isNotEmpty&&designation.text.isEmpty){
+        setState(() {
+          _validate_name = "";
+          _validate_name.isEmpty;
+          _validate_designation = "Enter Designation";
+        });
+      }else if(designation.text.isNotEmpty&&mobile.text.isEmpty){
+        setState(() {
+          _validate_designation = "";
+          _validate_designation.isEmpty;
+          _validate_mobile_number = "Enter valid Mobile Number";
+        });
+      }
+      else if(mobile.text.isNotEmpty&&name.text.isEmpty){
+        setState(() {
+          _validate_mobile_number = "";
+          _validate_mobile_number.isEmpty;
+          _validate_name = "Enter Name";
+        });
+
+      }else if(name.text.isNotEmpty&&designation.text.isEmpty&&mobile.text.isEmpty){
+        setState(() {
+          _validate_name = "";
+          _validate_name.isEmpty;
+          _validate_designation = "Enter Designation";
+          _validate_mobile_number = "Enter valid Mobile Number";
+        });
+      }else if(designation.text.isNotEmpty&&name.text.isEmpty&&mobile.text.isEmpty){
+        setState(() {
+          _validate_designation = "";
+          _validate_designation.isEmpty;
+          _validate_name = "Enter Name";
+          _validate_mobile_number = "Enter valid Mobile Number";
+
+        });
+      }else if(mobile.text.isNotEmpty&&name.text.isEmpty&&designation.text.isEmpty){
+        setState(() {
+          _validate_mobile_number = "";
+          _validate_mobile_number.isEmpty;
+          _validate_name = "Enter Name";
+          _validate_designation = "Enter Designation";
+        });
+      }
+      else{
+        await UserApi.AddContactAPI(
+            empId, session,genId,name.text,designation.text,mobile.text,alt_mobile.text,Tel_num.text,email.text,saveAgainst,accountId ).then((data) =>
+        {
+          if(data != null){
+            setState(() {
+              _validate_mobile_number = "";
+              _validate_designation = "";
+              _validate_name = "";
+              _validate_name.isEmpty;
+              _validate_designation.isEmpty;
+              _validate_mobile_number.isEmpty;
+              if (data.sessionExists == 1) {
+                if (data.error == 0) {
+                  toast(context,data.message);
+                  Navigator.pop(context,true);
+
+                } else if(data.error==1){
+                  toast(context,data.message);
+                }
+              } else {
+                PreferenceService().clearPreferences();
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Splash()));
+              }
+            })
+          }
+        });
+      }
+    } on Error catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -57,7 +176,8 @@ class _AddContactState extends State<AddContact>{
       body: SingleChildScrollView(
         physics: FixedExtentScrollPhysics(),
           child:Container(
-        color: ColorConstant.erp_appColor,
+            height: screenHeight,
+        color: ColorConstant.edit_bg_color,
         child: Expanded(
           child: Container(
             width: double.infinity, // Set width to fill parent width
@@ -72,7 +192,7 @@ class _AddContactState extends State<AddContact>{
             child: Column(// Set max height constraints
               children: [
                 Container(
-                  height: 500,
+                  height: 550,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
@@ -116,7 +236,25 @@ class _AddContactState extends State<AddContact>{
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0,),
+                      if(_validate_name!=null)...[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(
+                              top: 2.5, bottom: 2.5, left: 25),
+                          child: Text(
+                            _validate_name,
+                            textAlign: TextAlign.start,
+                            style:
+                            TextStyle(
+                              color: Colors.red,
+                              fontSize: FontConstant.Size10,
+                            ),
+
+                          ),
+                        )
+                      ]else...[
+                        SizedBox(height: 10.0,),
+                      ],
                       Container(
                         alignment: Alignment.center,
                         height: 55,
@@ -153,7 +291,25 @@ class _AddContactState extends State<AddContact>{
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0,),
+                      if(_validate_designation!=null)...[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(
+                              top: 2.5, bottom: 2.5, left: 25),
+                          child: Text(
+                            _validate_designation,
+                            textAlign: TextAlign.start,
+                            style:
+                            TextStyle(
+                              color: Colors.red,
+                              fontSize: FontConstant.Size10,
+                            ),
+
+                          ),
+                        )
+                      ]else...[
+                        SizedBox(height: 10.0,),
+                      ],
                       Container(
                         alignment: Alignment.center,
                         height: 55,
@@ -189,7 +345,25 @@ class _AddContactState extends State<AddContact>{
                           ),
                         ),
                       ),
-                      SizedBox(height: 10.0,),
+                      if(_validate_mobile_number!=null)...[
+                        Container(
+                          alignment: Alignment.topLeft,
+                          margin: EdgeInsets.only(
+                              top: 2.5, bottom: 2.5, left: 25),
+                          child: Text(
+                            _validate_mobile_number,
+                            textAlign: TextAlign.start,
+                            style:
+                            TextStyle(
+                              color: Colors.red,
+                              fontSize: FontConstant.Size10,
+                            ),
+
+                          ),
+                        )
+                      ]else...[
+                        SizedBox(height: 10.0,),
+                      ],
                       Container(
                         alignment: Alignment.center,
                         height: 55,
@@ -300,7 +474,8 @@ class _AddContactState extends State<AddContact>{
                       Container(
                           child: InkWell(
                             onTap: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
+                              AddContactAPIFunction();
+                              // Navigator.push(context, MaterialPageRoute(builder: (context)=>Dashboard()));
                             },
                             child: Container(
                               alignment: Alignment.center,
