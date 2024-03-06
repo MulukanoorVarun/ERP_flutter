@@ -191,7 +191,7 @@ class BackgroundLocation {
       if (methodCall.method == 'location') {
         var locationData = Map.from(methodCall.arguments);
         print('Received Location Update: $locationData');
-      //  toast(context,'Received Location Update: $locationData');
+        //  toast(context,'Received Location Update: $locationData');
         // Call the user passed function
         location(
           Location(
@@ -206,7 +206,7 @@ class BackgroundLocation {
         );
 
         //Send location updates using WebSocketManager
-        if(await webSocketManager.isNetworkAvailable()) {
+        if (await webSocketManager.isNetworkAvailable()) {
           webSocketManager.sendMessage(jsonEncode({
             "command": "server_request",
             "route": "attendenece_live_location_update",
@@ -224,25 +224,24 @@ class BackgroundLocation {
               "location_provider": "",
             }
           }));
-          showNotification("You're Online!","");
-        }else{
-          //showNotification();
-        }
+          showNotification("You're Online!", "");
+        } else {
+          showNotification("You're Offline!", "");
 
           saveLocations(
               empId,
               sessionId,
-          "${locationData['latitude']},""${locationData['longitude']}",
-          locationData['speed'],
-          locationData['altitude'],
-          locationData['bearing'],
-          locationData['bearingAccuracyDegrees'],
-          locationData['verticalAccuracyMeters'],
-          locationData['speedAccuracyMetersPerSecond'],
-          locationData['accuracy'],
-          ""
-      );
-
+              "${locationData['latitude']},""${locationData['longitude']}",
+              locationData['speed'],
+              locationData['altitude'],
+              locationData['bearing'],
+              locationData['bearingAccuracyDegrees'],
+              locationData['verticalAccuracyMeters'],
+              locationData['speedAccuracyMetersPerSecond'],
+              locationData['accuracy'],
+              ""
+          );
+        }
       }
     });
   }

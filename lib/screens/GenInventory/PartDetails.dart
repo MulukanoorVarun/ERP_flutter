@@ -14,6 +14,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
+import '../../Utils/MyWidgets.dart';
 import '../../models/Inventory_Part_details_response.dart';
 import '../Scanner.dart';
 
@@ -33,6 +34,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
   var session = "";
   var empId = "";
   PartData? partdata;
+  bool isLoading = true;
   @override
   void initState() {
     LoadPartDetailsApifunction();
@@ -57,6 +59,9 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
           setState((){
             if(data.error==0){
               partdata=data.partData!;
+              isLoading = false;
+            }else{
+              isLoading = false;
             }
           })
         }
@@ -84,6 +89,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
             if(data.error==0){
               toast(context, "Updated Successfully!");
               Navigator.pop(context);
+              isLoading = true;
               LoadPartDetailsApifunction();
               issue_quantity.clear();
               issue_description.clear();
@@ -110,6 +116,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
             if(data.error==0){
               toast(context, "Updated Successfully!");
               Navigator.pop(context);
+              isLoading = true;
               LoadPartDetailsApifunction();
               receive_quantity.clear();
               receive_description.clear();
@@ -553,7 +560,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return  (isLoading)?Loaders(): Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -754,7 +761,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
 
                 Container(
                   padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  height: screenHeight * 0.45,
+                  height: screenHeight * 0.47,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),

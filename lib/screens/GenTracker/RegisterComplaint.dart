@@ -228,7 +228,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                   children: [
                     SizedBox(height: 5.0,),
                     Container(
-
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20.0),
@@ -240,12 +240,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                             height: 25,
                           ),
                           Container(
-
                             child: Row(
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Customer Name",
@@ -259,7 +258,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "GEN ID",
@@ -281,7 +280,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$cust_name",
@@ -296,7 +295,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$gen_id",
@@ -319,7 +318,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Product Name",
@@ -333,7 +332,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Engine ID",
@@ -355,7 +354,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               children: [
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$product_name",
@@ -370,7 +369,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                 ),
                                 Spacer(),
                                 Container(
-                                  width: 180,
+                                  width: 150,
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "$eng_no",
@@ -390,7 +389,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           SizedBox(height: 10.0,),
                           DropdownButtonHideUnderline(
                             child: Container(
-                              width: 340,
+                              width: 310,
                               child: DropdownButton2<ComplaintTypeList>(
                                 isExpanded: true,
                                 hint: const Row(

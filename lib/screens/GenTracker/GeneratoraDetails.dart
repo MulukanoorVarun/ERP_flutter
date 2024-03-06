@@ -101,8 +101,8 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
 
                 print("littu");
               }else{
-                isLoading = true;
-                toast(context,"");
+                isLoading = false;
+               // toast(context,"");
                 print("error");
               }
             }else{
@@ -205,7 +205,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                 SizedBox(height: 5.0,),
                 //customer details
                 Container(
-                  height: screenHeight*0.35,
+                  height: screenHeight*0.36,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
@@ -796,7 +796,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                   child: Container(
                       child: InkWell(
                         onTap: () async {
-                          var res  = await Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: gen_id)));
+                          var res  = await Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: gen_id,act_name: "",)));
                           if(res==true){
                             isLoading= true;
                             LoadgeneratorDetailsApifunction();

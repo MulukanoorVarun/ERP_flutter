@@ -905,7 +905,7 @@ class UserApi {
     }
   }
 
-  static Future<UpdateComplaintResponse?> UpdateComplaintPI(empId, session,
+  static Future<UpdateComplaintResponse?> UpdateComplaintAPI(empId, session,
       complaint_id, in_time, feedback, fsr_no, running_hrs, complaint_status,
       fsr_file) async {
     try {

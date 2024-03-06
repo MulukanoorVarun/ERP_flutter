@@ -118,8 +118,7 @@ void initState() {
     empId= await PreferenceService().getString("UserId")??"";
     session= await PreferenceService().getString("Session_id")??"";
     try {
-      UserApi.UpdateComplaintPI(
-          empId, session,widget.complaint_id,selectedTime.hour.toString()+":"+selectedTime.minute.toString(),Feedback.text,FSRNumber.text,RunningHrs.text,statusId,_image).then((data) =>
+      UserApi.UpdateComplaintAPI(empId, session,widget.complaint_id,selectedTime.hour.toString()+":"+selectedTime.minute.toString(),Feedback.text,FSRNumber.text,RunningHrs.text,statusId,_image).then((data) =>
       {
         if(data != null){
           setState(() {
@@ -313,7 +312,8 @@ void initState() {
       ),
       body:SingleChildScrollView(
         child: Container(
-          color: ColorConstant.erp_appColor,
+          color: ColorConstant.edit_bg_color,
+          height: screenHeight,
           child: Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
@@ -484,7 +484,7 @@ void initState() {
                         SizedBox(height: 10.0,),
                         DropdownButtonHideUnderline(
                           child: Container(
-                            width: 340,
+                            width: 310,
                             child: DropdownButton2< String>(
                               isExpanded: true,
                               hint: const Row(

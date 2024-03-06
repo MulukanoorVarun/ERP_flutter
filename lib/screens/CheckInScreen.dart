@@ -169,6 +169,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       debugPrint("mmmm: ${e.toString()}");
     }
   }
+
   String? empId;
   String? sessionId;
   Future<void> CheckIn() async {

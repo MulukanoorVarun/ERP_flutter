@@ -10,11 +10,12 @@ import '../../Utils/storage.dart';
 import '../../models/generatorComplaintResponse.dart';
 
 class ComplaintDetails extends StatefulWidget {
-  final gen_id;
+  final gen_id,act_name;
 
   const ComplaintDetails({
     Key? key,
     required this.gen_id,
+    required this.act_name,
   }) : super(key: key);
 
   @override
@@ -31,8 +32,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   var date = "";
   var open_status = "Open";
   List<C_List> comp_List = [];
-  var actname = "";
-  var status = "";
+
   bool isloading = true;
 
   @override
@@ -43,6 +43,13 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   Future<void> LoadgeneratorDetailsApifunction() async {
+    if(widget.act_name=="pendingComplaints"){
+      setState(() {
+        open_status = "Open";
+      });
+    }else{
+      open_status = "All";
+    }
     session = await PreferenceService().getString("Session_id") ?? "";
     empId = await PreferenceService().getString("UserId") ?? "";
     try {
@@ -152,7 +159,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                           1, // 4 items in a row for tablet
                           crossAxisSpacing: 4,
                           mainAxisSpacing: 10,
-                          childAspectRatio: (175 / 115)),
+                          childAspectRatio: (175 / 140)),
                       padding: const EdgeInsets.all(5),
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
@@ -160,9 +167,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                         if (comp_List.length > 0) {
                           return InkWell(
                             onTap: () {
-                              // if(actname == "pendingComplaints"&&status=="Open"){
-                              //   Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id: ,)));
-                              // }
+                              if(widget.act_name == "pendingComplaints"&&open_status=="Open"){
+
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>UpdateComplaint(complaint_id: comp_List![index].compId,)));
+                              }
                             },
                             child: Container(
                               height: screenHeight * 0.3,

@@ -663,7 +663,7 @@ else{
                           SizedBox(height: 10.0,),
                           DropdownButtonHideUnderline(
                             child: Container(
-                              width: 360,
+                              width: 310,
                               child: DropdownButton2<PaymentModeList>(
                                 isExpanded: true,
                                 hint: const Row(

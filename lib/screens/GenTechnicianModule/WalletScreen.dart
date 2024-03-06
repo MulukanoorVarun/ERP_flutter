@@ -46,7 +46,7 @@ class _WalletScreenState extends State<WalletScreen> {
     try {
       print(empId);
       print(sessionId);
-      await UserApi.loadTransactionsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
+      await UserApi.loadTransactionsListAPI(empId,sessionId).then((data) => {
         if (data != null)
           {
             setState(() {
@@ -55,7 +55,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 totalDet=data.totalDet!;
                 isLoading = false;
               }else{
-
+                isLoading = false;
               }
 
             })

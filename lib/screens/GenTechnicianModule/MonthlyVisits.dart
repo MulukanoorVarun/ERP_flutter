@@ -43,8 +43,8 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
       print(empId);
       print(sessionId);
  //     "752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca"
-      //await UserApi.getMonthVisitsListAPI(empId,sessionId).then((data) => {
-      await UserApi.getMonthVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
+      await UserApi.getMonthVisitsListAPI(empId,sessionId).then((data) => {
+      //await UserApi.getMonthVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
         if (data != null)
           {
             setState(() {
@@ -137,6 +137,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           if(monthvisitlist!.length>0){
+                            print("No Data Available");
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -354,6 +355,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                   // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
                                 ));
                           }else{
+                            //print("No Data Available");
                             return Align(
                                 alignment: Alignment.center,
                                 child: Text(

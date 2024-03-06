@@ -4,6 +4,7 @@ import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AddAccount.dart';
 import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/Dashboard.dart';
+import 'package:GenERP/screens/GenTechnicianModule/PendingComplaints.dart';
 import 'package:GenERP/screens/GenTracker/GeneratoraDetails.dart';
 import 'package:GenERP/screens/GenTracker/RegisterComplaint.dart';
 import 'package:GenERP/screens/Login.dart';
@@ -17,6 +18,7 @@ import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 import '../Scanner.dart';
+import 'ComplaintHistory.dart';
 
 class QRScanner extends StatefulWidget {
   final title;
@@ -90,6 +92,7 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
               setState(() {
                 if (data.sessionExists == 1) {
                   if (data.error == 0) {
+
                     if (widget.title == "Generator Details") {
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) =>
@@ -105,6 +108,9 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
                           builder: (context) =>
                               RegisterComplaint(
                                   generator_id: Generator_id.text)));
+                    }
+                    if (widget.title == "pendingComplaints")  {
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: data.genId!,act_name: widget.title,)));
                     }
                   }
                   else if (data.error == 1) {
@@ -221,6 +227,9 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
                           }
                           if(widget.title=="Register Complaint"){
                             Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
+                          }
+                          if(widget.title=="pendingComplaints"){
+                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"pendingComplaints")));
                           }
 
                         },

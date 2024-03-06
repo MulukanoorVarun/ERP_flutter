@@ -107,7 +107,7 @@ Future<String?> postImage3(Map<String, String> body,Map<String, String> headers,
   }
 }
 
-Future<String?> postImage4(Map<String, String> body,Map<String, String> headers, String urlLink,
+Future<String?> postImage4 (Map<String, String> body,Map<String, String> headers, String urlLink,
     File image) async {
   try {
     var req = http.MultipartRequest('POST', Uri.parse(urlLink));

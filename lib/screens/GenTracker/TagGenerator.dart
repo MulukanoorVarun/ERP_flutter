@@ -95,7 +95,7 @@ class _TagGeneratorState extends State<TagGenerator> {
               alignment: Alignment.center,
               width:450,
               height: 50,
-              margin:EdgeInsets.only(left:5.0,right:5.0),
+              // margin:EdgeInsets.only(left:5.0,right:5.0),
               child: TextFormField(
                 controller: Engine_no,
                 cursorColor: ColorConstant.black,
@@ -144,9 +144,8 @@ class _TagGeneratorState extends State<TagGenerator> {
             Row(
               children: [
                 Container(
-                  width:110,
+                  width:100,
                   height: 45,
-                  margin: EdgeInsets.only(left: 10.0,right: 10.0),
                   decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
                   child: TextButton(
                     style: ButtonStyle(
@@ -154,7 +153,6 @@ class _TagGeneratorState extends State<TagGenerator> {
                       overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
                     ),
                     onPressed: () =>Navigator.of(context).pop(false),
-
 
                     child: Text(
                       "Cancel",
@@ -166,13 +164,11 @@ class _TagGeneratorState extends State<TagGenerator> {
                       ),
                     ),
                   ),
-
                 ),
 
                 Container(
-                  width:110,
+                  width:100,
                   height: 45,
-                  margin: EdgeInsets.only(left: 10.0,right: 10.0),
                   decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
                   child:  TextButton(
                     style: ButtonStyle(
@@ -180,7 +176,6 @@ class _TagGeneratorState extends State<TagGenerator> {
                       overlayColor: MaterialStateProperty.all(ColorConstant.erp_appColor),
                     ),
                     onPressed: () =>{
-
                       setState(() {
                         TagGeneratorAPIFunction(id);
                       }),
