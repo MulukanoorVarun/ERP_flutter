@@ -27,7 +27,7 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
 
-  bool isLoading = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -38,6 +38,7 @@ class _WalletScreenState extends State<WalletScreen> {
   String? empId;
   String? sessionId;
   List<HistoryList> historyList=[];
+  TotalDet? totalDet;
   //TotalDet totalDet;
   Future<void> LoadTransactionsListAPI() async {
     empId = await PreferenceService().getString("UserId");
@@ -51,7 +52,7 @@ class _WalletScreenState extends State<WalletScreen> {
             setState(() {
               if(data.error==0){
                 historyList=data.historyList!;
-                //totalDet=data.totalDet!;
+                totalDet=data.totalDet!;
                 isLoading = false;
               }else{
 
@@ -120,8 +121,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                 color: ColorConstant.white,
                               ),
                             ),
-                            Text(
-                              "12345",
+                            Text(totalDet?.balanceAmount ?? "",
                               style:  TextStyle(
                                 fontSize: FontConstant.Size22,
                                 fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                       ),
                                     ),
                                     Text(
-                                      "12345",
+                                      totalDet?.creditAmount ?? "",
                                       style:  TextStyle(
                                         fontSize: FontConstant.Size22,
                                         fontWeight: FontWeight.bold,
@@ -200,7 +200,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                       ),
                                     ),
                                     Text(
-                                      "12345",
+                                      totalDet?.creditAmount ?? "",
                                       style:  TextStyle(
                                         fontSize: FontConstant.Size22,
                                         fontWeight: FontWeight.bold,
@@ -233,7 +233,7 @@ class _WalletScreenState extends State<WalletScreen> {
                           child: Column(// Set max height constraints
                             children: [
                               GridView.builder(
-                                  itemCount: 3,
+                                  itemCount: historyList.length,
                                   gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: (MediaQuery.of(context).size.width < 600)
@@ -265,22 +265,24 @@ class _WalletScreenState extends State<WalletScreen> {
                                                   crossAxisAlignment: CrossAxisAlignment.start,
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
-
-                                                    Text(
-                                                      "Money taken from the customer",
+                                                    Container(
+                                                      width:200,
+                                                      child:Text(
+                                                      historyList[index].description ?? "",
+                                                      maxLines: 2,
                                                       style:  TextStyle(
                                                         fontSize: FontConstant.Size15,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontWeight: FontWeight.w300,
                                                         overflow: TextOverflow.ellipsis,
                                                         color: ColorConstant.black,
                                                       ),
-                                                    ),
-
+                                                    ),),
+                                                    SizedBox(height: 10,),
                                                     Text(
-                                                      "30 Aug 2023",
+                                                      historyList[index].datetime ?? "",
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size15,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontWeight: FontWeight.w300,
                                                         overflow: TextOverflow.ellipsis,
                                                         color: ColorConstant.black,
                                                       ),
@@ -289,24 +291,38 @@ class _WalletScreenState extends State<WalletScreen> {
                                                   ],
                                                 ),
                                                 Spacer(),
-
+                                                if(historyList[index].transactionType=="Credit")...[
                                                 Column(
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      "fgdfg",
+                                                      "+ ₹ ${historyList[index].amount}" ?? "",
                                                       style:  TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.w400,
                                                         overflow: TextOverflow.ellipsis,
-                                                        color: ColorConstant.black,
+                                                        color: ColorConstant.Couponamount,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
+                                                ]else...[
+                                                  Column(
+                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                    children: [
+                                                      Text(
+                                                        "- ₹ ${historyList[index].amount}" ?? "",
+                                                        style:  TextStyle(
+                                                          fontSize: FontConstant.Size15,
+                                                          fontWeight: FontWeight.w400,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          color: ColorConstant.absent_color,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                                 Spacer(),
-
-
                                               ]),
 
 

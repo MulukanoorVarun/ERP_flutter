@@ -18,8 +18,8 @@ import '../splash.dart';
 
 class ViewVisitDetails extends StatefulWidget {
 
-  final complaint_id;
-  const ViewVisitDetails({Key? key, required this.complaint_id,}) : super(key: key);
+  final complaintId;
+  const ViewVisitDetails({Key? key, required this.complaintId,}) : super(key: key);
   @override
   State<ViewVisitDetails> createState() => _ViewVisitDetailsState();
 }
@@ -48,9 +48,8 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    LoadgeneratorDetailsApifunction();
+    LoadVisitDetailsAPI();
   }
 
   @override
@@ -58,11 +57,11 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
     super.dispose();
   }
 
-  Future<void> LoadgeneratorDetailsApifunction() async{
+  Future<void> LoadVisitDetailsAPI() async{
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
     try{
-      await UserApi.LoadGeneratorDetailsAPI(empId, session,"").then((data)=>{
+      await UserApi.loadVisitDetailsAPI(empId, session,"").then((data)=>{
         if(data!=null){
           setState((){
             if(data.sessionExists==1){

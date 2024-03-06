@@ -13,6 +13,7 @@ import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 import '../../models/TodayVisitResponse.dart';
+import 'PaymentDetails.dart';
 import 'ViewVisitDetails.dart';
 
 class TodayVisitsScreen extends StatefulWidget {
@@ -310,7 +311,15 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             SizedBox(width: 10,),
                                             InkWell(
                                               onTap: (){
-                                                //paymentDetails_navigation
+                                                Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PaymentDetails(
+                                                        account_name: "generator",
+                                                        name: todayvisitlist![index].companyName,
+                                                        genId: todayvisitlist![index].genId,
+                                                        refId: todayvisitlist![index].complaintId,
+                                                      ),
+                                                ));
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_payments.svg",
@@ -321,7 +330,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             SizedBox(width: 10,),
                                             InkWell(
                                               onTap: (){
-                                                Navigator.push(context,MaterialPageRoute(builder: (context)=>ViewVisitDetails(complaint_id:todayvisitlist[index].complaintId)));
+                                                Navigator.push(context,MaterialPageRoute(builder: (context)=>ViewVisitDetails(complaintId:todayvisitlist[index].complaintId)));
                                                 //viewVisitDetails_navigation
                                               },
                                               child: SvgPicture.asset(

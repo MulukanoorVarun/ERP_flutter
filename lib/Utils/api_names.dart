@@ -45,5 +45,7 @@ const updatePaymentDetails = "${baseUrl}home/technician_add_payment_collection";
 const validateOTPApi = "${baseUrl}home/technician_payment_collection_validate_otp";
 const paymentCollectionListApi = "${baseUrl}home/technician_payment_collection_list";
 const loadTransactionsListApi = "${baseUrl}home/technician_payment_collection_wallet";
+const technician_complaint_detailsAPI = "${baseUrl}home/technician_complaint_details";
+const technician_complaint_followup_listAPI = "${baseUrl}home/technician_complaint_followup_list";
 
 

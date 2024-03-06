@@ -87,7 +87,12 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
                     if (widget.title == "Generator Details") {
                       Navigator.push(context, MaterialPageRoute(
                           builder: (context) =>
-                              GeneratorDetails(generator_id: Generator_id.text)));
+                        GeneratorDetails(
+                        actName: "",
+                        location: "",
+                        generatorId: Generator_id.text
+                      ),
+                      ));
                     }
                     if (widget.title == "Register Complaint") {
                       Navigator.push(context, MaterialPageRoute(

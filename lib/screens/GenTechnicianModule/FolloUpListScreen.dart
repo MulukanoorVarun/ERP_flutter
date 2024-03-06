@@ -7,9 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 
+import '../../Services/other_services.dart';
+import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../../models/NearbyGeneratorsResponse.dart';
 
 class FollowUpList extends StatefulWidget {
   const FollowUpList({Key? key}) : super(key: key);
@@ -25,6 +28,35 @@ class _FollowUpListState extends State<FollowUpList> {
   @override
   void initState() {
     super.initState();
+  }
+
+  String? empId;
+  String? sessionId;
+  String? complaintId;
+  Future<void> LoadFollowupListAPI() async {
+    empId = await PreferenceService().getString("UserId");
+    sessionId = await PreferenceService().getString("Session_id");
+    print(empId);
+    print(sessionId);
+    try {
+      await UserApi.loadFollowupListAPI(empId,sessionId,complaintId).then((data) => {
+        if (data != null)
+          {
+            setState(() {
+              if (data.error == 0) {
+                isLoading = false;
+              } else {
+
+              }
+            })
+          } else {
+          toast(context,"Something went wrong, Please try again.")
+        }
+      });
+
+    } on Exception catch (e) {
+      print("$e");
+    }
   }
 
   @override

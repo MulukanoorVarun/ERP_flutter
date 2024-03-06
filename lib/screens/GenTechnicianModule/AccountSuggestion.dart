@@ -179,7 +179,14 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                             return InkWell(
                                 onTap: () {
                                   // if(actname == "pendingComplaints"&&status=="Open"){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetails(account_name: "Account",refId: accountList![index].accountId,)));
+                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                      PaymentDetails(
+                                      account_name: "Account",
+                                      name:"",
+                                      genId: "",
+                                      refId: accountList![index].accountId,
+                                    ),
+                                    ));
                                   // }
                                 },
                                 child:Container(

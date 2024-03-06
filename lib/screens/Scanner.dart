@@ -146,7 +146,12 @@ class _ScannerState extends State<Scanner> {
           Navigator.pop(context);
           Navigator.push(context, MaterialPageRoute(
               builder: (context) =>
-                  GeneratorDetails(generator_id:scanData.code)));
+            GeneratorDetails(
+            actName: "",
+            location: "",
+            generatorId: scanData.code,
+          ),
+          ));
 
           // LoadgeneratorDetailsApifunction(scanData.code!);
         }

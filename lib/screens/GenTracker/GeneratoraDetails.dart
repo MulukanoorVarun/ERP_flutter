@@ -16,8 +16,10 @@ import '../../Utils/FontConstant.dart';
 import '../splash.dart';
 
 class GeneratorDetails extends StatefulWidget {
-  final generator_id;
-  const GeneratorDetails({Key? key, required this.generator_id,}) : super(key: key);
+  final generatorId;
+  final actName;
+  final location;
+  const GeneratorDetails({Key? key, required this.actName, required this.location, required this.generatorId}) : super(key: key);
 
   @override
   State<GeneratorDetails> createState() => _GeneratorDetailsState();
@@ -47,7 +49,6 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     LoadgeneratorDetailsApifunction();
   }
@@ -61,7 +62,8 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     session= await PreferenceService().getString("Session_id")??"";
     empId= await PreferenceService().getString("UserId")??"";
     try{
-      await UserApi.LoadGeneratorDetailsAPI(empId, session,widget.generator_id).then((data)=>{
+      print("generatorid:${widget.generatorId}");
+      await UserApi.LoadGeneratorDetailsAPI(empId, session,widget.generatorId).then((data)=>{
         if(data!=null){
           setState((){
             if(data.sessionExists==1){

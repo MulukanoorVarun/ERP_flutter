@@ -351,7 +351,14 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             InkWell(
                                               onTap: (){
                                                 //paymentDetails_navigation
-                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>PaymentDetails(account_name: "generator",refId: tpech_comp_list![index].complaintId!,)));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                                  PaymentDetails(
+                                                  account_name: "generator",
+                                                  name: "",
+                                                  genId:"",
+                                                  refId: tpech_comp_list![index].complaintId!,
+                                                ),
+                                                ));
                                                 PreferenceService().saveString("genId", tpech_comp_list![index].genId!);
                                               },
                                               child: SvgPicture.asset(

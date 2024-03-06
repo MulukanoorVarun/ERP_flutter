@@ -1,4 +1,6 @@
 import 'package:GenERP/Utils/storage.dart';
+import 'package:GenERP/screens/GenTechnicianModule/PaymentDetails.dart';
+import 'package:GenERP/screens/GenTechnicianModule/ViewVisitDetails.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
@@ -309,7 +311,15 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             SizedBox(width: 10,),
                                             InkWell(
                                               onTap: (){
-                                                //paymentDetails_navigation
+                                                Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PaymentDetails(
+                                                        account_name: "generator",
+                                                          name: monthvisitlist![index].companyName,
+                                                          genId: monthvisitlist![index].genId,
+                                                        refId: monthvisitlist![index].complaintId,
+                                                      ),
+                                                ));
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_payments.svg",
@@ -320,7 +330,11 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             SizedBox(width: 10,),
                                             InkWell(
                                               onTap: (){
-                                                //viewVisitDetails_navigation
+                                                Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) => ViewVisitDetails(
+                                                        complaintId:monthvisitlist![index].complaintId,
+                                                      ),
+                                                ));
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_back_button.svg",

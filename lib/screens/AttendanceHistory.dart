@@ -198,10 +198,11 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
               // Split the key string to extract the date part
               List<String> parts = key.split("-");
               String date = parts[2];
+              print("date:${date}");
               // Remove leading zeros
            //   date = int.parse(date).toString();
               dateArrayList.add({date: value});
-              //  print('Date: $date, Value: $value');
+                print('Date: $date, Value: $value');
             });
           }
 
@@ -395,8 +396,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
 
     if (parsedDate != null) {
       formattedDayOfWeek = DateFormat('EEEE').format(parsedDate);
-      print(
-          "formattedDayOfWeek:${formattedDayOfWeek}"); // prints the day of the week (e.g., Tuesday)
+      print("formattedDayOfWeek:${formattedDayOfWeek}"); // prints the day of the week (e.g., Tuesday)
     } else {
       print('Error: Unable to parse the date');
     }
@@ -767,8 +767,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                         return SizedBox.shrink();
                       } else {
                         final adjustedIndex = index - startingIndex;
-                        final dateKeys =
-                            dateArrayList[adjustedIndex].keys.toList();
+                        final dateKeys = dateArrayList[adjustedIndex].keys.toList();
                         final dateColors =
                             dateArrayList[adjustedIndex].values.toList();
                         final datePenalities =
@@ -861,8 +860,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                 // Conditional rendering to highlight selected and current dates
                                 Center(
                                     child: SizedBox(
-                                        width: 21,
-                                        height: 21,
+                                        width: 20,
+                                        height: 20,
                                         child: Container(
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
@@ -873,8 +872,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                                 date ?? "",
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
                                                     color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? Colors.white : Colors.black
                                                 ),
                                               ),

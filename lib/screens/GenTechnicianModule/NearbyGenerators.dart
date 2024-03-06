@@ -26,6 +26,8 @@ import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../../models/NearbyGeneratorsResponse.dart';
+import '../GenTracker/GeneratoraDetails.dart';
 import '../background_service.dart';
 
 
@@ -47,8 +49,8 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   String locationdd = "Search Location";
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
-  var radius = "";
-  Set<Marker> markers = {};
+  var radius = "1";
+  List<Marker> markers = [];
   List<String> addresses = [];
   var address_loading = true;
   Location.Location currentLocation1 = Location.Location();
@@ -63,7 +65,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   @override
   void initState() {
     _getLocationPermission();
-  //  LoadNearbyGeneratorsAPI();
+    //LoadNearbyGeneratorsAPI();
     super.initState();
   }
 
@@ -115,20 +117,20 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           currentLocation!.longitude!,
         )),
       );
-
-      markers.add(Marker(
-        markerId: MarkerId('current_location'),
-        position:
-        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        infoWindow: InfoWindow(title: 'Current Location'),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
+      //
+      // markers.add(Marker(
+      //   markerId: MarkerId('current_location'),
+      //   position:
+      //   LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+      //   infoWindow: InfoWindow(title: 'Current Location'),
+      //   icon: BitmapDescriptor.defaultMarker,
+      // ));
 
       setState(() {
         final lat = currentLocation!.latitude;
         final lang = currentLocation!.longitude!;
         latlongs = '$lat,$lang';
-       // LoadNearbyGeneratorsAPI();
+        LoadNearbyGeneratorsAPI();
       });
     }
   }
@@ -143,6 +145,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
 
   String? empId;
   String? sessionId;
+  List<Nearbygenerators> generatorslist=[];
   Future<void> LoadNearbyGeneratorsAPI() async {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
@@ -157,7 +160,8 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           {
             setState(() {
               if (data.error == 0) {
-
+                generatorslist=data.list!;
+                _updateMarkersFromApiResponse(data.list!);
                 isLoading = false;
               } else {
 
@@ -171,6 +175,109 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     } on Exception catch (e) {
       print("$e");
     }
+  }
+  Future<void> _updateMarkersFromApiResponse(
+      List<Nearbygenerators> generatorslist) async {
+    markers = await _createMarkersFromApiResponse(generatorslist);
+
+    await Future.forEach(generatorslist, (store) async {
+      String address = await _getAddressFromLatLng(store.loc);
+      addresses.add(address);
+    });
+    for (int i = 0; i < addresses.length; i++) {
+      print('List of Addresses:' "${addresses[i]}");
+      // print('List of Addresses:' "${addresses[1]}" );
+    }
+  }
+
+  Future<List<Marker>> _createMarkersFromApiResponse(
+      List<Nearbygenerators> generatorslist ) async {
+    List<Marker> markers = [];
+
+    // print("Hello Nutsby!");
+    ByteData data = await rootBundle.load("assets/images/navigation_pin.png");
+    Uint8List bytes = data.buffer.asUint8List();
+
+    await Future.forEach(generatorslist, (generator) async {
+      ui.Codec codec = await ui.instantiateImageCodec(bytes,
+          targetWidth: 75, targetHeight: 95);
+      ui.FrameInfo fi = await codec.getNextFrame();
+      Uint8List resizedBytes =
+      (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+          .buffer
+          .asUint8List();
+
+      markers.add(Marker(
+        markerId: MarkerId(generator.generatorId.toString()),
+        position: _parseLatLng(generator.loc),
+        icon: BitmapDescriptor.fromBytes(resizedBytes),
+        infoWindow: InfoWindow(
+          title: "Customer Name: ${generator.accName}",
+          snippet: "Product Name: ${generator.productName}",
+        ),
+        onTap: () {
+        int index = generatorslist.indexWhere((techResponse) => techResponse.generatorId == generator.generatorId);
+        print("index:${index}");
+        if (index != -1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => GeneratorDetails(
+                actName: generator.accName,
+                location: generator.loc,
+                generatorId: generator.generatorId,
+              ),
+            ),
+          );
+        }
+      },
+      ));
+    });
+
+    return markers;
+  }
+
+
+  LatLng _parseLatLng(String? location) {
+    if (location != null) {
+      List<String> parts = location.split(',');
+      if (parts.length == 2) {
+        double lat = double.tryParse(parts[0]) ?? 0.0;
+        double lng = double.tryParse(parts[1]) ?? 0.0;
+        return LatLng(lat, lng);
+      }
+    }
+    return const LatLng(0.0, 0.0);
+  }
+
+
+  Future<String> _getAddressFromLatLng(String? location) async {
+    if (location != null) {
+      List<String> parts = location.split(',');
+      if (parts.length == 2) {
+        double lat = double.tryParse(parts[0]) ?? 0.0;
+        double lng = double.tryParse(parts[1]) ?? 0.0;
+
+        List<geocoding.Placemark> placemarks =
+        await geocoding.placemarkFromCoordinates(lat, lng);
+
+        if (placemarks.isNotEmpty) {
+          final placemark = placemarks.first;
+          String address = '${placemark.street ?? ''}, '
+              '${placemark.thoroughfare ?? ''} '
+          // '${placemark.subThoroughfare ?? ''}, '
+          // '${placemark.name ?? ''}, '
+              '${placemark.subLocality ?? ''}, '
+              '${placemark.locality ?? ''}, '
+              '${placemark.administrativeArea ?? ''}, '
+              '${placemark.subAdministrativeArea ?? ''} '
+              '${placemark.postalCode ?? ''}, '
+              '${placemark.country ?? ''}';
+          return address.trim();
+        }
+      }
+    }
+    return "Address not found";
   }
   
   InfoDialogue(BuildContext context) {
@@ -209,7 +316,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
               Slider(
                 value: _currentValue,
                 max: 100,
-                // divisions: 5, // Optional: Creates discrete steps in the SeekBar
+                divisions: 5, // Optional: Creates discrete steps in the SeekBar
                 label: _currentValue.round().toString(), // Optional: Displays a label above the current value
                 activeColor: Colors.blue, // Color for the active part of the SeekBar
                 inactiveColor: Colors.grey, // Color for the inactive part of the SeekBar

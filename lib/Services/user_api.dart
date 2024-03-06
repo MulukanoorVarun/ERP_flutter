@@ -25,6 +25,7 @@ import '../models/ComplaintsSelectionResponse.dart';
 import '../models/DayWiseAttendance.dart';
 import '../models/Inventory_Part_details_response.dart';
 import '../models/LoginQRResponse.dart';
+import '../models/NearbyGeneratorsResponse.dart';
 import '../models/PaymentCollectionResponse.dart';
 import '../models/PaymentCollectionValidateOTPResponse.dart';
 import '../models/SubmitComplaintResponse.dart';
@@ -593,7 +594,7 @@ class UserApi {
   }
 
 
-  static Future<TechnicianResponse?> loadNearbyGeneratorsAPI(empId, session,tech_loc,radius) async {
+  static Future<NearbyGeneratorsResponse?> loadNearbyGeneratorsAPI(empId, session,tech_loc,radius) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -604,7 +605,7 @@ class UserApi {
       final res = await post(data,technician_nearby_generatorsAPI, {});
       if (res != null) {
         print(res.body);
-        return TechnicianResponse.fromJson(jsonDecode(res.body));
+        return NearbyGeneratorsResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;
@@ -768,6 +769,48 @@ static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,se
       if (res != null) {
         print(res.body);
         return PaymentCollectionWalletResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<loadGeneratorDetailsResponse?> loadVisitDetailsAPI(empId, session, comp_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'comp_id':(comp_id).toString(),
+      };
+      final res = await post(data, technician_complaint_detailsAPI, {});
+      if (res != null) {
+        print(res.body);
+        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
+  static Future<loadGeneratorDetailsResponse?>loadFollowupListAPI(empId, session, comp_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'comp_id':(comp_id).toString(),
+      };
+      final res = await post(data, technician_complaint_followup_listAPI, {});
+      if (res != null) {
+        print(res.body);
+        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
         return null;

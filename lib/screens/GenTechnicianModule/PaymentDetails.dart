@@ -22,8 +22,8 @@ import '../Login.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PaymentDetails extends StatefulWidget {
-final account_name,refId;
-  const PaymentDetails({Key? key, required this.account_name,required this.refId}) : super(key: key);
+final account_name,refId,name,genId;
+  const PaymentDetails({Key? key, required this.account_name,required this.name,required this.genId,required this.refId}) : super(key: key);
 
   @override
   State<PaymentDetails> createState() => _PaymentDetailsState();
