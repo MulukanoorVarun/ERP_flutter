@@ -59,7 +59,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   File? _image;
   var image_picked = 0;
   bool isLoading = true;
-
+  late Set<Circle> circles;
   @override
   void initState() {
     _getLocationPermission();
@@ -123,6 +123,12 @@ class _CheckInScreenState extends State<CheckInScreen> {
         infoWindow: InfoWindow(title: 'Current Location'),
         icon: BitmapDescriptor.defaultMarker,
       ));
+
+      circles = Set.from([Circle( circleId: CircleId("value"),
+        center: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        radius: 200, strokeColor: Colors.blue,strokeWidth: 1,
+      )]);
+
 
       setState(() {
         final lat = currentLocation!.latitude;
@@ -263,22 +269,28 @@ class _CheckInScreenState extends State<CheckInScreen> {
                   child: Stack(
                     children: [
                       GoogleMap(
-                    myLocationEnabled: true,
-                    zoomGesturesEnabled: true,
-                    initialCameraPosition: CameraPosition(
-                      target: startLocation,
-                      zoom: 14.0,
-                    ),
-                    markers: markers.toSet(),
-                    mapType: MapType.normal,
-                    onMapCreated: (controller) {
-                      setState(() {
-                        mapController = controller;
+                        myLocationEnabled: true,
+                        zoomGesturesEnabled: true,
 
-                      });
-                    },
-                    onCameraMove: _onCameraMove,
-                  ),
+                        initialCameraPosition: CameraPosition(
+                          target: startLocation,
+                          zoom: 14.0,
+                        ),
+                        markers: markers.toSet(),
+                        zoomControlsEnabled:false,
+                        minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                        scrollGesturesEnabled: false,
+                        liteModeEnabled: true,
+                        circles: circles,
+                        mapType: MapType.normal,
+                        onMapCreated: (controller) {
+                          setState(() {
+                            mapController = controller;
+                          });
+                        },
+
+                        onCameraMove: _onCameraMove,
+                      ),
                       Positioned(
                         left: 0,
                         right: 0,

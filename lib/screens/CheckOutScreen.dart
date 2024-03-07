@@ -254,6 +254,12 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             zoom: 14.0,
                           ),
                           markers: markers.toSet(),
+                          zoomControlsEnabled:false,
+                          minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                          scrollGesturesEnabled: false,
+
+                          liteModeEnabled: false,
+                          myLocationButtonEnabled: true,
                           circles: circles,
                           mapType: MapType.normal,
                           onMapCreated: (controller) {
