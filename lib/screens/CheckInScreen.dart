@@ -152,13 +152,19 @@ class _CheckInScreenState extends State<CheckInScreen> {
         imageQuality: imageQuality,
         preferredCameraDevice: CameraDevice.front,
       );
-      print("added");
+      print("added1");
       setState(() {
+        print("added2");
         _image = File(galleryImage!.path);
+        print("added3");
         image_picked = 1;
+        print("added4");
         if (_image != null) {
+          print("added5");
           var file = FlutterImageCompress.compressWithFile(galleryImage!.path);{
+            print("added6");
             if (file != null) {
+              print("added7");
               CheckIn();
             }
             }

@@ -52,6 +52,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   bool hasLocationPermission = false;
   Timer? _timer;
   final ImagePicker _picker = ImagePicker();
+  late Set<Circle> circles;
   File? _image;
   var image_picked = 0;
   bool isLoading = true;
@@ -109,6 +110,11 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         icon: BitmapDescriptor.defaultMarker,
       ));
 
+      circles = Set.from([Circle( circleId: CircleId("value"),
+        center: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        radius: 200, strokeColor: Colors.blue,strokeWidth: 1,
+      )]);
+
       setState(() {
         final lat = currentLocation!.latitude;
         final lang = currentLocation!.longitude!;
@@ -120,7 +126,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   void _onCameraMove(CameraPosition position) {
     _timer?.cancel(); // Cancel any previous timer
-    _timer = Timer(Duration(seconds: 1), () {
+    _timer = Timer(Duration(milliseconds:100), () {
       _getLocationPermission();
     });
   }
@@ -183,6 +189,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -232,17 +240,20 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                         GoogleMap(
                           myLocationEnabled: true,
                           zoomGesturesEnabled: true,
+
                           initialCameraPosition: CameraPosition(
                             target: startLocation,
                             zoom: 14.0,
                           ),
                           markers: markers.toSet(),
+                          circles: circles,
                           mapType: MapType.normal,
                           onMapCreated: (controller) {
                             setState(() {
                               mapController = controller;
                             });
                           },
+                          
                           onCameraMove: _onCameraMove,
                         ),
                         Positioned(

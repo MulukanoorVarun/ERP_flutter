@@ -1,3 +1,4 @@
+import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTechnicianModule/PaymentDetails.dart';
 import 'package:GenERP/screens/GenTechnicianModule/ViewVisitDetails.dart';
@@ -54,6 +55,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
               }else{
                 isLoading = false;
               }
+              // toast(context, monthvisitlist.length.toString());
 
             })
           }
@@ -110,6 +112,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
             color: ColorConstant.erp_appColor,
             child: Column(
               children: [
+                if(monthvisitlist.length>0) ...[
                 Expanded(
                   child: Container(
                     width: double.infinity, // Set width to fill parent width
@@ -136,7 +139,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(monthvisitlist!.length>0){
+
                             print("No Data Available");
                             return Container(
                                 child: Card(
@@ -354,24 +357,37 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
 
                                   // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
                                 ));
-                          }else{
-                            //print("No Data Available");
-                            return Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                ));
-                          }
+
                           return null;
                         }),
+
                   ),
                 ),
+                ] else ...[
+                Expanded(
+                child: Container(
+                width: double.infinity, // Set width to fill parent width
+                decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+                ),
+                ),
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                child: Container(
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "No Data Available",
+                      style: TextStyle(
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.w500,
+                        overflow: TextOverflow.ellipsis,
+                        color: ColorConstant.black,
+                      ),
+                    )),
+              )))]
 
               ],
             ),
