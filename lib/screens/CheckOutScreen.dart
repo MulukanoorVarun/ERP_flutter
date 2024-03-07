@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'dart:ui' as ui;
+import 'package:GenERP/screens/FrontCameraCapture.dart';
 import 'package:GenERP/screens/Login.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
@@ -35,11 +37,12 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
+
   TextEditingController _locationController = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
-  LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
+  LatLng startLocation = const LatLng(17.45977250652744, 78.51635191323184);
   String locationdd = "Search Location";
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
@@ -95,18 +98,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     });
 
     if (currentLocation != null) {
-      mapController?.animateCamera(
-        CameraUpdate.newLatLng(LatLng(
-          currentLocation!.latitude!,
-          currentLocation!.longitude!,
-        )),
-      );
+
+          mapController?.animateCamera(
+              CameraUpdate.newLatLng(LatLng(
+                currentLocation!.latitude!,
+                currentLocation!.longitude!,
+              )));
+
 
       markers.add(Marker(
         markerId: MarkerId('current_location'),
-        position:
-        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        infoWindow: InfoWindow(title: 'Current Location'),
+        position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        infoWindow: InfoWindow(title: 'Present Location'),
         icon: BitmapDescriptor.defaultMarker,
       ));
 
@@ -205,26 +208,31 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                 alignment: Alignment.topCenter,
                 color: ColorConstant.erp_appColor,
                 height:50,
-                child: Row(
-                  children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    SvgPicture.asset(
-                      "assets/back_icon.svg",
-                      height: 20,
-                      width: 20,
-                    ),
-                    SizedBox(width: 25),
-                    Center(
-                      child: Text(
-                        "Check Out",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context,true);
+                  },
+                  child: Row(
+                    children: [
+                      Padding(padding: EdgeInsets.only(left: 20)),
+                      SvgPicture.asset(
+                        "assets/back_icon.svg",
+                        height: 20,
+                        width: 20,
+                      ),
+                      SizedBox(width: 25),
+                      Center(
+                        child: Text(
+                          "Check Out",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Expanded(
@@ -253,7 +261,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                               mapController = controller;
                             });
                           },
-                          
+
                           onCameraMove: _onCameraMove,
                         ),
                         Positioned(
@@ -326,8 +334,19 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                   child:InkWell(
-                                    onTap: (){
-                                      _imgFromCamera();
+                                    onTap: () async {
+                                      setState(() {
+
+                                        isLoading = true;
+                                      });
+                                      // _imgFromCamera();
+                                      _image= await Navigator.push(context,MaterialPageRoute(builder: (context)=>FrontCameraCapture()));
+                                      // print("${_image} _image akash");
+                                      setState(() {
+                                        image_picked = 1;
+                                        isLoading = false;
+                                        CheckOut();
+                                      });
                                     },
                                     child:Container(
                                       alignment: Alignment.center,

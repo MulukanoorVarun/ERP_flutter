@@ -26,6 +26,7 @@ import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import 'CheckOutScreen.dart';
+import 'FrontCameraCapture.dart';
 import 'LocationService.dart';
 import 'background_service.dart';
 
@@ -349,9 +350,23 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
                               child:InkWell(
                                 onTap: () async {
-                                 // BackgroundLocation.stopLocationService();
-                                  _imgFromCamera();
+                                  setState(() {
+
+                                    isLoading = true;
+                                  });
+                                  // _imgFromCamera();
+                                  _image= await Navigator.push(context,MaterialPageRoute(builder: (context)=>FrontCameraCapture()));
+                                  print("${_image} _image akash");
+                                  setState(() {
+                                    image_picked = 1;
+                                    CheckIn();
+                                  });
                                 },
+                                // onTap: () async {
+                                //
+                                //  // BackgroundLocation.stopLocationService();
+                                //   _imgFromCamera();
+                                // },
                                 child:Container(
                                   alignment: Alignment.center,
                                   height: 45,
