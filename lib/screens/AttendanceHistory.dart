@@ -26,6 +26,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
   late DateTime month;
   late int monthNo;
 
+  late DateTime present_month;
+
   dynamic presentDays = 0;
   dynamic absentDays = 0;
   dynamic holidays = 0;
@@ -54,7 +56,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
     getMonth(DateFormat('MMMM').format(month));
     String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
     dateWiseAttendance(formattedDate);
-
+    present_month=month;
     super.initState();
   }
 
@@ -67,6 +69,11 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       selectedIndex=0;
       currentDayIndex=0;
       isLoading = true;
+      if(DateFormat('MMMM').format(present_month)==DateFormat('MMMM').format(month))
+        {
+          initialRenderDone=true;
+          month=present_month;
+        }
       getMonth(DateFormat('MMMM').format(month));
     });
   }
@@ -81,6 +88,11 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       initialRenderDone = false;
       currentDayIndex=0;
       isLoading = true;
+      if(DateFormat('MMMM').format(present_month)==DateFormat('MMMM').format(month))
+      {
+        initialRenderDone=true;
+        month=present_month;
+      }
       getMonth(DateFormat('MMMM').format(month));
     });
   }
