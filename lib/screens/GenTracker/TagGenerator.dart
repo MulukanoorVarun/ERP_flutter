@@ -89,8 +89,8 @@ class _TagGeneratorState extends State<TagGenerator> {
         content:
         Container(
           height: 125,
-          child:  Column
-            (children:[
+          child:  Column(
+            children:[
             Container(
               alignment: Alignment.center,
               width:450,

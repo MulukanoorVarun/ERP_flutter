@@ -10,7 +10,7 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
- 
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,7 +30,6 @@ import 'FrontCameraCapture.dart';
 import 'LocationService.dart';
 import 'background_service.dart';
 
-
 class CheckInScreen extends StatefulWidget {
   const CheckInScreen({Key? key}) : super(key: key);
   @override
@@ -39,13 +38,15 @@ class CheckInScreen extends StatefulWidget {
 
 class _CheckInScreenState extends State<CheckInScreen> {
   final ImagePicker _picker = ImagePicker();
- // late LocationService locationService;
+
+  // late LocationService locationService;
   TextEditingController _locationController = TextEditingController();
   String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
   String locationdd = "Search Location";
+
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
   Set<Marker> markers = {};
@@ -59,11 +60,14 @@ class _CheckInScreenState extends State<CheckInScreen> {
   File? _image;
   var image_picked = 0;
   bool isLoading = true;
+  var _validateLocation;
+
   late Set<Circle> circles;
+
   @override
   void initState() {
     _getLocationPermission();
-  //  locationService = LocationService();
+    //  locationService = LocationService();
     super.initState();
   }
 
@@ -96,7 +100,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
     isLoading = false;
     permissionGranted = (await location.hasPermission());
     if (permissionGranted == PermissionStatus) {
-
       permissionGranted = (await location.requestPermission());
       if (permissionGranted != PermissionStatus) {
         return;
@@ -124,11 +127,16 @@ class _CheckInScreenState extends State<CheckInScreen> {
         icon: BitmapDescriptor.defaultMarker,
       ));
 
-      circles = Set.from([Circle( circleId: CircleId("value"),
-        center: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        radius: 200, strokeColor: Colors.blue,strokeWidth: 1,
-      )]);
-
+      circles = Set.from([
+        Circle(
+          circleId: CircleId("value"),
+          center:
+              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+          radius: 200,
+          strokeColor: Colors.blue,
+          strokeWidth: 1,
+        )
+      ]);
 
       setState(() {
         final lat = currentLocation!.latitude;
@@ -152,34 +160,43 @@ class _CheckInScreenState extends State<CheckInScreen> {
   }
 
   _imgFromCamera() async {
-    // Capture a photo
-    try {
-      final XFile? galleryImage = await _picker.pickImage(
-        source: ImageSource.camera,
-        imageQuality: imageQuality,
-        preferredCameraDevice: CameraDevice.front,
-      );
-      print("added1");
+    if (_locationController.text.isEmpty) {
       setState(() {
-        print("added2");
-        _image = File(galleryImage!.path);
-        print("added3");
-        image_picked = 1;
-        print("added4");
-        if (_image != null) {
-          print("added5");
-          var file = FlutterImageCompress.compressWithFile(galleryImage!.path);{
-            print("added6");
-            if (file != null) {
-              print("added7");
-              CheckIn();
-            }
+        _validateLocation = "Please Enter location";
+        print(_validateLocation);
+      });
+    } else {
+      _validateLocation = "";
+      // Capture a photo
+      try {
+        final XFile? galleryImage = await _picker.pickImage(
+          source: ImageSource.camera,
+          imageQuality: imageQuality,
+          preferredCameraDevice: CameraDevice.front,
+        );
+        print("added1");
+        setState(() {
+          print("added2");
+          _image = File(galleryImage!.path);
+          print("added3");
+          image_picked = 1;
+          print("added4");
+          if (_image != null) {
+            print("added5");
+            var file =
+                FlutterImageCompress.compressWithFile(galleryImage!.path);
+            {
+              print("added6");
+              if (file != null) {
+                print("added7");
+                CheckIn();
+              }
             }
           }
-
-      });
-    } catch (e) {
-      debugPrint("mmmm: ${e.toString()}");
+        });
+      } catch (e) {
+        debugPrint("mmmm: ${e.toString()}");
+      }
     }
   }
 
@@ -194,25 +211,27 @@ class _CheckInScreenState extends State<CheckInScreen> {
     print(latlongs);
     print(_image);
     try {
-        await UserApi.CheckInApi(empId,sessionId,_locationController.text,latlongs,_image).then((data) => {
-          if (data != null)
-            {
-              setState(() {
-                if (data.error == 0) {
-                  toast(context, "CheckedIn Successfully");
-                  BackgroundLocation.startLocationService();
-                  Navigator.pop(context, true);
-                  isLoading = false;
-                } else {
-                  toast(context, "CheckedIn UnSuccessfull");
-                  print(data.error.toString());
-                }
-              })
-            } else {
-            toast(context,"Something went wrong, Please try again.")
-          }
-        });
-
+      await UserApi.CheckInApi(
+              empId, sessionId, _locationController.text, latlongs, _image)
+          .then((data) => {
+                if (data != null)
+                  {
+                    setState(() {
+                      if (data.error == 0) {
+                        toast(context, "CheckedIn Successfully");
+                        BackgroundLocation.startLocationService();
+                        Navigator.pop(context, true);
+                        isLoading = false;
+                      } else {
+                        isLoading = false;
+                        toast(context, "CheckedIn UnSuccessfull");
+                        print(data.error.toString());
+                      }
+                    })
+                  }
+                else
+                  {toast(context, "Something went wrong, Please try again.")}
+              });
     } on Exception catch (e) {
       print("$e");
     }
@@ -223,199 +242,249 @@ class _CheckInScreenState extends State<CheckInScreen> {
     Size size = MediaQuery.of(context).size;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: (isLoading)?Loaders():SafeArea(
-        child: Container(
-          color: ColorConstant.erp_appColor,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topCenter,
+      body: (isLoading)
+          ? Loaders()
+          : SafeArea(
+              child: Container(
                 color: ColorConstant.erp_appColor,
-                height:50,
-                child: Row(
+                child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    InkWell(
-                      onTap: (){
-                        Navigator.pop(context,true);
-                      },
-                      child:SvgPicture.asset(
-                      "assets/back_icon.svg",
-                      height: 24,
-                      width: 24,
-                    ),),
-                    SizedBox(width: 20),
-                    Center(
-                      child: Text(
-                        "Check In",
-                        style: TextStyle(
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
+                    Container(
+                      alignment: Alignment.topCenter,
+                      color: ColorConstant.erp_appColor,
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Padding(padding: EdgeInsets.only(left: 20)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/back_icon.svg",
+                              height: 24,
+                              width: 24,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Center(
+                            child: Text(
+                              "Check In",
+                              style: TextStyle(
+                                fontSize: FontConstant.Size18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ClipRRect(
+                        // Apply border radius using ClipRRect
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
                         ),
+                        // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                        child: Stack(children: [
+                          GoogleMap(
+                            myLocationEnabled: true,
+                            zoomGesturesEnabled: true,
+                            initialCameraPosition: CameraPosition(
+                              target: startLocation,
+                              zoom: 14.0,
+                            ),
+                            markers: markers.toSet(),
+                            zoomControlsEnabled: false,
+                            minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                            scrollGesturesEnabled: false,
+                            liteModeEnabled: true,
+                            circles: circles,
+                            mapType: MapType.normal,
+                            onMapCreated: (controller) {
+                              setState(() {
+                                mapController = controller;
+                              });
+                            },
+                            onCameraMove: _onCameraMove,
+                          ),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              height: size.height * 0.25,
+                              decoration: BoxDecoration(
+                                color: ColorConstant.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0),
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 25,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Text(
+                                      "Location",
+                                      style: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: Container(
+                                      height: 50,
+                                      width: 320,
+                                      child: TextFormField(
+                                        controller: _locationController,
+                                        cursorColor: ColorConstant.black,
+                                        keyboardType: TextInputType.text,
+                                        decoration: InputDecoration(
+                                          hintText: "Enter Check In Location",
+                                          hintStyle: TextStyle(
+                                              fontSize: FontConstant.Size15,
+                                              color: ColorConstant.grey_153,
+                                              fontWeight: FontWeight.w400),
+                                          filled: true,
+                                          fillColor:
+                                              ColorConstant.edit_bg_color,
+                                          enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(30.0),
+                                            borderSide: BorderSide(
+                                                width: 0,
+                                                color: ColorConstant
+                                                    .edit_bg_color),
+                                          ),
+                                          focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                            borderSide: BorderSide(
+                                                width: 0,
+                                                color: ColorConstant
+                                                    .edit_bg_color),
+                                          ),
+                                          errorBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15.0),
+                                            borderSide: BorderSide(
+                                                width: 0,
+                                                color: ColorConstant
+                                                    .edit_bg_color),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  if (_validateLocation != null) ...[
+                                    Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20.0),
+                                        child: Container(
+                                          alignment: Alignment.topLeft,
+                                          margin: EdgeInsets.only(
+                                              top: 2.5, bottom: 2.5, left: 25),
+                                          child: Text(
+                                            _validateLocation,
+                                            textAlign: TextAlign.start,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: FontConstant.Size10,
+                                            ),
+                                          ),
+                                        )),
+                                  ] else ...[
+                                    SizedBox(
+                                      height: 5.0,
+                                    ),
+                                  ],
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20.0),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        setState(() {
+                                        });
+                                        // _imgFromCamera();
+                                        if (_locationController.text.isEmpty) {
+                                          setState(() {
+                                            _validateLocation =
+                                                "Please Enter location";
+                                            print(_validateLocation);
+                                          });
+                                        } else {
+                                          _validateLocation = "";
+                                          _image = await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      FrontCameraCapture()));
+                                          print("${_image} _image akash");
+                                          setState(() {
+                                            isLoading = true;
+                                            image_picked = 1;
+                                            CheckIn();
+                                          });
+                                        }
+                                      },
+                                      // onTap: () async {
+                                      //
+                                      //  // BackgroundLocation.stopLocationService();
+                                      //   _imgFromCamera();
+                                      // },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        height: 45,
+                                        width: screenWidth,
+                                        margin: EdgeInsets.only(
+                                            left: 30.0, right: 30.0),
+                                        decoration: BoxDecoration(
+                                          color: ColorConstant.erp_appColor,
+                                          borderRadius:
+                                              BorderRadius.circular(30.0),
+                                        ),
+                                        child: Text(
+                                          "Punch In (Upload Selfie)",
+                                          style: TextStyle(
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500,
+                                            overflow: TextOverflow.ellipsis,
+                                            color: ColorConstant.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
                       ),
                     ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ClipRRect(
-                  // Apply border radius using ClipRRect
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  child: Stack(
-                    children: [
-                      GoogleMap(
-                        myLocationEnabled: true,
-                        zoomGesturesEnabled: true,
-
-                        initialCameraPosition: CameraPosition(
-                          target: startLocation,
-                          zoom: 14.0,
-                        ),
-                        markers: markers.toSet(),
-                        zoomControlsEnabled:false,
-                        minMaxZoomPreference: MinMaxZoomPreference(14, 14),
-                        scrollGesturesEnabled: false,
-                        liteModeEnabled: true,
-                        circles: circles,
-                        mapType: MapType.normal,
-                        onMapCreated: (controller) {
-                          setState(() {
-                            mapController = controller;
-                          });
-                        },
-
-                        onCameraMove: _onCameraMove,
-                      ),
-                      Positioned(
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        child: Container(
-                          height: size.height * 0.25,
-                          decoration: BoxDecoration(
-                            color: ColorConstant.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 25,),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            child:Text(
-                                "Location",
-                                style:  TextStyle(
-                                    fontSize: FontConstant.Size15,
-                                    fontWeight: FontWeight.w400,
-                                    overflow: TextOverflow.ellipsis,
-
-                                  color: Colors.grey,
-                                ),
-                              ),),
-                              SizedBox(height: 5,),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child:Container(
-                            height: 50,
-                              width: 320,
-                              child:TextFormField(
-                                controller: _locationController,
-                                cursorColor: ColorConstant.black,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  hintText: "Enter Check In Location",
-                                  hintStyle:  TextStyle(
-                                        fontSize: FontConstant.Size15,
-                                        color: ColorConstant.grey_153,
-                                        fontWeight: FontWeight.w400),
-
-                                  filled: true,
-                                  fillColor: ColorConstant.edit_bg_color,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30.0),
-                                    borderSide: BorderSide(
-                                        width: 0, color: ColorConstant.edit_bg_color),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    borderSide: BorderSide(
-                                        width: 0, color: ColorConstant.edit_bg_color),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    borderSide: BorderSide(
-                                        width: 0, color: ColorConstant.edit_bg_color),
-                                  ),
-                                ),
-                              ),
-                          ),),
-                              SizedBox(height: 30,),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                              child:InkWell(
-                                onTap: () async {
-                                  setState(() {
-
-                                    isLoading = true;
-                                  });
-                                  // _imgFromCamera();
-                                  _image= await Navigator.push(context,MaterialPageRoute(builder: (context)=>FrontCameraCapture()));
-                                  print("${_image} _image akash");
-                                  setState(() {
-                                    image_picked = 1;
-                                    CheckIn();
-                                  });
-                                },
-                                // onTap: () async {
-                                //
-                                //  // BackgroundLocation.stopLocationService();
-                                //   _imgFromCamera();
-                                // },
-                                child:Container(
-                                  alignment: Alignment.center,
-                                  height: 45,
-                                  width: screenWidth,
-                                  margin: EdgeInsets.only(left: 30.0,right: 30.0),
-                                  decoration: BoxDecoration(
-                                    color: ColorConstant.erp_appColor,
-                                    borderRadius: BorderRadius.circular(30.0),
-                                  ),
-                                  child:Text(
-                                    "Punch In (Upload Selfie)",
-                                    style:  TextStyle(
-                                        fontSize: FontConstant.Size18,
-                                        fontWeight: FontWeight.w500,
-                                        overflow: TextOverflow.ellipsis,
-
-                                      color: ColorConstant.white,
-                                    ),
-                                  ),
-
-
-                                ),
-                              ),),
-
-                            ],
-                          ),
-
-                      ),
-                      ),
-                  ]),
-                ),
-
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

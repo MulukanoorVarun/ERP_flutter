@@ -30,7 +30,7 @@ class PaymentCollectionScreen extends StatefulWidget {
 
 class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
 
-  bool isLoading = false;
+  bool isLoading = true;
   var empId = "";
   var session =  "";
   List<PC_List>? pc_list = [];
@@ -53,9 +53,9 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
             if (data.sessionExists == 1) {
               if (data.error == 0) {
                 pc_list = data.list!;
-
+                isLoading = false;
               } else {
-
+                isLoading = false;
               }
             } else {
               PreferenceService().clearPreferences();
@@ -132,6 +132,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
             color: ColorConstant.erp_appColor,
             child: Column(
               children: [
+    if(pc_list!.length>0)...[
                 Expanded(
                   child: Container(
                     width: double.infinity, // Set width to fill parent width
@@ -158,7 +159,6 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(pc_list!.length>0){
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -311,24 +311,36 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
 
                                   // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
                                 ));
-                          }else{
-                            return Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                ));
-                          }
-
                           return null;
                         }),
                   ),
                 ),
+      ]else...[
+      Expanded(
+          child: Container(
+              width: double.infinity, // Set width to fill parent width
+              decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Container(
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "No Data Available",
+                      style: TextStyle(
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                        color: ColorConstant.erp_appColor,
+                      ),
+                    )),
+              )))
+    ]
 
               ],
             ),

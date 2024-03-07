@@ -153,6 +153,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     print(sessionId);
     print(_locationController.text);
     print(latlongs);
+    print(currentValue);
     print(_image);
     try {
       await UserApi.loadNearbyGeneratorsAPI(empId,sessionId,latlongs,currentValue).then((data) => {
@@ -195,7 +196,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     List<Marker> markers = [];
 
     // print("Hello Nutsby!");
-    ByteData data = await rootBundle.load("assets/images/navigation_pin.png");
+    ByteData data = await rootBundle.load("assets/dg.png");
     Uint8List bytes = data.buffer.asUint8List();
 
     await Future.forEach(generatorslist, (generator) async {

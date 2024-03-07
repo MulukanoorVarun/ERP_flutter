@@ -163,8 +163,8 @@ class _AttendanceState extends State<Attendance> {
                             ),
                           ),
                           ]
-                           else...[
-                         // else if(attStatus==1)...[
+                       // else...[
+                         else if(attStatus==1)...[
                             InkWell(
                               onTap: () async{
                                 var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
@@ -174,8 +174,8 @@ class _AttendanceState extends State<Attendance> {
                                   });
                                   getAttendanceList();
                                 }
-                               //  BackgroundLocation.stopLocationService();
-                               // // BackgroundLocation.startLocationService();
+                             //   BackgroundLocation.stopLocationService();
+                              //  BackgroundLocation.startLocationService();
                               },
                               child:Container(
                                 alignment: Alignment.center,

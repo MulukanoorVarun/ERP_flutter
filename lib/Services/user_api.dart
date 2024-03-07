@@ -376,6 +376,30 @@ class UserApi {
     }
   }
 
+
+  static Future<loadGeneratorDetailsResponse?> LoadTechnicianGeneratorDetailsAPI(empId,
+      session, gen_id) async {
+    try {
+      Map<String, String> data = {
+        'emp_id': (empId).toString(),
+        'session_id': (session).toString(),
+        'gen_id':(gen_id).toString(),
+
+      };
+      final res = await post(data, technician_generator_detailsAPI, {});
+      if (res != null) {
+        print(res.body);
+        return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
+      } else {
+        print("Null Response");
+        return null;
+      }
+    } catch (e) {
+      debugPrint('hello bev=bug $e ');
+      return null;
+    }
+  }
+
   static Future<generatorComplaintResponse?> LoadGeneratorComplaintListAPI(
       empId, session, gen_id, open_status) async {
     try {

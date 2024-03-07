@@ -44,8 +44,8 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
       print(empId);
       print(sessionId);
  //     "752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca"
-      await UserApi.getMonthVisitsListAPI(empId,sessionId).then((data) => {
-      //await UserApi.getMonthVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
+       await UserApi.getMonthVisitsListAPI(empId,sessionId).then((data) => {
+    //  await UserApi.getMonthVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
         if (data != null)
           {
             setState(() {
@@ -139,8 +139,6 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-
-                            print("No Data Available");
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -316,16 +314,22 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             ),
                                             SizedBox(width: 10,),
                                             InkWell(
-                                              onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(
+                                              onTap: () async{
+                                                var res =  await  Navigator.push(context, MaterialPageRoute(
                                                   builder: (context) =>
                                                       PaymentDetails(
                                                         account_name: "generator",
-                                                          name: monthvisitlist![index].companyName,
-                                                          genId: monthvisitlist![index].genId,
+                                                        name: monthvisitlist![index].companyName,
+                                                        genId: monthvisitlist![index].genId,
                                                         refId: monthvisitlist![index].complaintId,
                                                       ),
                                                 ));
+                                                if(res==true){
+                                                  setState(() {
+                                                    isLoading = true;
+                                                    LoadMonthVisitsListAPI();
+                                                  });
+                                                }
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_payments.svg",
@@ -335,12 +339,18 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             ),
                                             SizedBox(width: 10,),
                                             InkWell(
-                                              onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(
+                                              onTap: () async{
+                                                var res =  await Navigator.push(context, MaterialPageRoute(
                                                   builder: (context) => ViewVisitDetails(
-                                                        complaintId:monthvisitlist![index].complaintId,
-                                                      ),
+                                                    complaintId:monthvisitlist![index].complaintId,
+                                                  ),
                                                 ));
+                                                if(res==true){
+                                                  setState(() {
+                                                    isLoading = true;
+                                                    LoadMonthVisitsListAPI();
+                                                  });
+                                                }
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_back_button.svg",
@@ -382,12 +392,13 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                       "No Data Available",
                       style: TextStyle(
                         fontSize: FontConstant.Size18,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                         overflow: TextOverflow.ellipsis,
-                        color: ColorConstant.black,
+                        color: ColorConstant.erp_appColor,
                       ),
                     )),
-              )))]
+              )))
+                ]
 
               ],
             ),

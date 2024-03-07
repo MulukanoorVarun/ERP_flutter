@@ -107,6 +107,7 @@ class _FollowUpListState extends State<FollowUpList> {
             color: ColorConstant.erp_appColor,
             child: Column(
               children: [
+    if(followuplist.length>0)...[
                 Expanded(
                   child: Container(
                     width: double.infinity, // Set width to fill parent width
@@ -133,7 +134,6 @@ class _FollowUpListState extends State<FollowUpList> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(followuplist.length>0) {
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -325,11 +325,35 @@ class _FollowUpListState extends State<FollowUpList> {
                                   // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
                                 ));
                             return null;
-                          }
                         }),
                   ),
                 ),
-
+      ]else...[
+      Expanded(
+          child: Container(
+              width: double.infinity, // Set width to fill parent width
+              decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Container(
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "No Data Available",
+                      style: TextStyle(
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                        color: ColorConstant.erp_appColor,
+                      ),
+                    )),
+              )))
+    ]
               ],
             ),
           ),

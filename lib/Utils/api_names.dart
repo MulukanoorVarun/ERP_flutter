@@ -25,6 +25,7 @@ const getSessionExistsApi ="${baseUrl}home/get_session_det";
 const updatePassword= "${baseUrl}home/update_password";
 const qrLoginRequest = "${baseUrl}home/login_qr_code_submit";
 const loadGeneratorDetails = "${baseUrl}home/gen_tracker_generator_details";
+const technician_generator_detailsAPI = "${baseUrl}home/technician_generator_details";
 const getComplaintHistoryList = "${baseUrl}home/gen_tracker_generator_complaints_list";
 const tagLocation = "${baseUrl}home/gen_tracker_tag_location";
 const tagGenerator = "${baseUrl}home/gen_tracker_tag_generator";

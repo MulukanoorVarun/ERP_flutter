@@ -42,9 +42,8 @@ class _PendingComplaintsState extends State<PendingComplaints> {
     empId= await PreferenceService().getString("UserId")??"";
     session= await PreferenceService().getString("Session_id")??"";
     try {
-      UserApi.LoadTechnicianComplaintsAPI(
-          empId, session).then((data) =>
-      {
+      UserApi.LoadTechnicianComplaintsAPI(empId, session).then((data) => {
+      //await UserApi.LoadTechnicianComplaintsAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
         if(data != null){
           setState(() {
             if (data.sessionExists == 1) {
@@ -125,6 +124,7 @@ class _PendingComplaintsState extends State<PendingComplaints> {
             color: ColorConstant.erp_appColor,
             child: Column(
               children: [
+    if(tpech_comp_list?.length!=0)...[
                 Expanded(
                   child: Container(
                     width: double.infinity, // Set width to fill parent width
@@ -151,7 +151,6 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(tpech_comp_list!.length>0){
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -408,24 +407,37 @@ class _PendingComplaintsState extends State<PendingComplaints> {
 
                                   // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
                                 ));
-                          }else{
-                            return Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                ));
-                          }
-
                           return null;
                         }),
                   ),
                 ),
+      ]else...[
+      Expanded(
+          child: Container(
+              width: double.infinity, // Set width to fill parent width
+              decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Container(
+                child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      "No Data Available",
+                      style: TextStyle(
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.bold,
+                        overflow: TextOverflow.ellipsis,
+                        color: ColorConstant.erp_appColor,
+                      ),
+                    )),
+              )))
+
+    ]
 
               ],
             ),

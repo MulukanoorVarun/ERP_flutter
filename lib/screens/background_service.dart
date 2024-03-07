@@ -4,9 +4,14 @@ import 'dart:io' show Platform;
 
 import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Utils/api_names.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:location/location.dart' as loc;
+import 'package:location/location.dart';
+import 'package:location/location.dart';
 import 'package:web_socket_channel/io.dart';
 
 import '../Services/WebSocketManager.dart';
@@ -49,6 +54,11 @@ class BackgroundLocation {
   static Timer? _locationTimer;
 
   static get context => null;
+  static const String customChannelId = 'GEN ERP flutter';
+  static const String customChannelName = 'GEN ERP flutter';
+  static const String customChannelDescription = 'GEN ERP flutter';
+
+  String input="";
 
   WebSocketManager webSocketManager = WebSocketManager(
     onConnectSuccess: () {
@@ -67,24 +77,73 @@ class BackgroundLocation {
 
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // Other existing code...
+  static void init() async {
+    try {
+      final InitializationSettings initializationSettings =
+      InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'));
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  static void init() {
-    final InitializationSettings initializationSettings =
-    InitializationSettings(android: AndroidInitializationSettings('app_icon'));
+      // Disable sound for the default notification channel
+      const AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
+        customChannelId,
+        customChannelName,
+        description: customChannelDescription,
+        importance: Importance.max,
+        playSound: false, // Set this to false to disable playing sound
+      );
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(androidChannel);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      print("Flutter Local Notifications initialized successfully.");
+    } catch (e) {
+      print("Error initializing Flutter Local Notifications: $e");
+      // Handle initialization error as needed
+    }
   }
 
+  static Future<void> checkAndRequestLocationPermissions() async {
 
-  static void showNotification(String title, String? message) async {
+    bool isLocationEnabled = false;
+    bool hasLocationPermission = false;
+    // Check if location services are enabled
+    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+// Check if the app has been granted location permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    hasLocationPermission = permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+
+    final loc.Location location = loc.Location();
+    bool serviceEnabled;
+    PermissionStatus permissionGranted;
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+    permissionGranted = (await location.hasPermission());
+    if (permissionGranted == PermissionStatus) {
+
+      permissionGranted = (await location.requestPermission());
+      if (permissionGranted != PermissionStatus) {
+        return;
+      }
+    }
+  }
+
+  static void showNotification(String title, String message) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
     AndroidNotificationDetails(
-      'your_channel_id',
-      'your_channel_name',
+      customChannelId,
+      customChannelName,
       importance: Importance.max,
       priority: Priority.high,
       ticker: 'ticker',
+      ongoing: true,
+      playSound: false,
     );
     const NotificationDetails platformChannelSpecifics =
     NotificationDetails(android: androidPlatformChannelSpecifics);
@@ -97,7 +156,7 @@ class BackgroundLocation {
   }
 
 
-  static void hideNotification() async {
+  static void hideNotification(int notificationId) async {
     await flutterLocalNotificationsPlugin.cancel(0);
   }
 
@@ -112,6 +171,7 @@ class BackgroundLocation {
   /// Stop receiving location updates
   static stopLocationService() async {
     print("Background location Service stopped");
+    hideNotification(0);
     if (_locationTimer != null) {
       _locationTimer!.cancel();
     }
@@ -123,8 +183,45 @@ class BackgroundLocation {
     return result == true;
   }
 
+  static Future<bool> checkGpsStatus() async {
+    print("Hello");
+    bool isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+    return isGpsEnabled;
+  }
+
+  static Future<bool> checkNetworkStatus() async {
+    print("Hello");
+    var connectivityResult = await Connectivity().checkConnectivity();
+    return connectivityResult != ConnectivityResult.none;
+  }
+
+
   /// Start receiving location updates at 5-second interval
-  static startLocationService() async {
+   static startLocationService() async {
+     init();
+    bool isGpsEnabled = await checkGpsStatus();
+    bool isNetworkAvailable = await checkNetworkStatus();
+    if (isGpsEnabled && isNetworkAvailable) {
+      // Both GPS and network are available, start background location service
+      // Your code to start background location service goes here
+      print("GEN ERP You're Online !");
+      showNotification("GEN ERP","You're Online !");
+    } else {
+
+      // Notify the user to enable GPS or connect to a network
+      if (!isGpsEnabled) {
+        // Notify user to enable GPS
+        checkAndRequestLocationPermissions();
+        showNotification("GEN ERP","You're Offline !, Check your GPS connection.");
+        print('GPS is not enabled. Please enable GPS to start the location service.');
+      }
+      if (!isNetworkAvailable) {
+        // Notify user to connect to a network
+        showNotification("GEN ERP","You're Offline !, Check your network connection.");
+        print('Network is not available. Please connect to a network to start the location service.');
+      }
+    }
+
     print("Background location Service started");
     // Stop previous timer if running
     BackgroundLocation backgroundLocation = BackgroundLocation();
@@ -138,6 +235,7 @@ class BackgroundLocation {
     });
   }
 
+
   // static setAndroidNotification(
   //     {String? title, String? message, String? icon}) async {
   //   if (Platform.isAndroid) {
@@ -148,15 +246,15 @@ class BackgroundLocation {
   //   }
   // }
 
-  static setAndroidConfiguration(int interval) async {
-    if (Platform.isAndroid) {
-      return await _channel.invokeMethod('set_configuration', <String, dynamic>{
-        'interval': interval.toString(),
-      });
-    } else {
-      //return Promise.resolve();
-    }
-  }
+  // static setAndroidConfiguration(int interval) async {
+  //   if (Platform.isAndroid) {
+  //     return await _channel.invokeMethod('set_configuration', <String, dynamic>{
+  //       'interval': interval.toString(),
+  //     });
+  //   } else {
+  //     //return Promise.resolve();
+  //   }
+  // }
 
   String? empId;
   String? sessionId;
@@ -224,9 +322,11 @@ class BackgroundLocation {
               "location_provider": "",
             }
           }));
-          showNotification("You're Online!", "");
+          print("Hello GENERP! You're Online!");
+          showNotification("GEN ERP", "You're Online!");
         } else {
-          showNotification("You're Offline!", "");
+          print("Hello GENERP! You're Offline!");
+          showNotification("GEN ERP", "You're Offline!");
 
           saveLocations(
               empId,

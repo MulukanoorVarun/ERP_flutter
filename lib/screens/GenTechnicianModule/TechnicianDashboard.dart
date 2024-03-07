@@ -199,7 +199,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => TodayVisitsScreen()));
+                                     var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => TodayVisitsScreen()));
+                                     if(res==true){
+                                       setState(() {
+                                         isLoading = true;
+                                         loadTechnicianDashboard();
+                                       });
+                                     }
                                    },
                                    child: Container(
                                      height: 80,
@@ -252,7 +258,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentCollectionScreen()));
+                                     var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentCollectionScreen()));
+                                     if(res==true){
+                                       setState(() {
+                                         isLoading = true;
+                                         loadTechnicianDashboard();
+                                       });
+                                     }
                                    },
                                    child: Container(
                                      height: 80,
@@ -322,7 +334,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                children: [
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => PendingComplaints()));
+                                     var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => PendingComplaints()));
+                                     if(res==true){
+                                       setState(() {
+                                         isLoading = true;
+                                         loadTechnicianDashboard();
+                                       });
+                                     }
                                    },
                                    child: Container(
                                      height: 80,
@@ -381,7 +399,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => MonthlyVisitsScreen()));
+                                     var res = await Navigator.push(context, MaterialPageRoute(builder: (context) => MonthlyVisitsScreen()));
+                                     if(res==true){
+                                       setState(() {
+                                         isLoading = true;
+                                         loadTechnicianDashboard();
+                                       });
+                                     }
                                    },
                                    child: Container(
                                      height: 80,
@@ -434,7 +458,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                                  SizedBox(height: 15,),
                                  InkWell(
                                    onTap: () async {
-                                     await Navigator.push(context, MaterialPageRoute(builder: (context) => WalletScreen()));
+                                     var res =  await Navigator.push(context, MaterialPageRoute(builder: (context) => WalletScreen()));
+                                     if(res==true){
+                                       setState(() {
+                                         isLoading = true;
+                                         loadTechnicianDashboard();
+                                       });
+                                     }
                                    },
                                    child: Container(
                                      height: 80,
@@ -494,7 +524,13 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                           height: 80,
                           child: InkWell(
                             onTap: () async {
-                              await Navigator.push(context, MaterialPageRoute(builder: (context) => NearbyGenerators()));
+                              var res =  await Navigator.push(context, MaterialPageRoute(builder: (context) => NearbyGenerators()));
+                              if(res==true){
+                                setState(() {
+                                  isLoading = true;
+                                  loadTechnicianDashboard();
+                                });
+                              }
                             },
                             child:
                             Container(

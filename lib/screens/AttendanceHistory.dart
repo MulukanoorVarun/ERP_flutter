@@ -885,25 +885,29 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                 ),
                                 // Conditional rendering to highlight selected and current dates
                                 Center(
-                                    child: SizedBox(
-                                        width: 20,
-                                        height: 20,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                             color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? ColorConstant.erp_appColor: null,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                date ?? "",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                    color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? Colors.white : Colors.black
-                                                ),
-                                              ),
-                                            ))))
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? ColorConstant.erp_appColor: null,
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          date ?? "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? Colors.white : Colors.black
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+
                               ],
                             ),
                           ),

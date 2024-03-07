@@ -43,6 +43,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
       print(empId);
       print(sessionId);
       await UserApi.getTodayVisitsListAPI(empId,sessionId).then((data) => {
+     // await UserApi.getTodayVisitsListAPI("752","bb1bd615748920990e679a575b0684cf3f53367620dd775a47e4a771bde22f313f4d7722ce131d65427ce054053aed8eb0ca").then((data) => {
         if (data != null)
           {
             setState(() {
@@ -108,6 +109,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
             color: ColorConstant.erp_appColor,
             child: Column(
               children: [
+          if(todayvisitlist.length>0)...[
                 Expanded(
                   child: Container(
                     width: double.infinity, // Set width to fill parent width
@@ -134,7 +136,6 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          if(todayvisitlist.length>0){
                             return Container(
                                 child: Card(
                                   elevation: 0,
@@ -310,8 +311,8 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             ),
                                             SizedBox(width: 10,),
                                             InkWell(
-                                              onTap: (){
-                                                Navigator.push(context, MaterialPageRoute(
+                                              onTap: () async{
+                                                var res =  await  Navigator.push(context, MaterialPageRoute(
                                                   builder: (context) =>
                                                       PaymentDetails(
                                                         account_name: "generator",
@@ -320,6 +321,12 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                                         refId: todayvisitlist![index].complaintId,
                                                       ),
                                                 ));
+                                                if(res==true){
+                                                  setState(() {
+                                                    isLoading = true;
+                                                    LoadTodayVisitsListAPI();
+                                                  });
+                                                }
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_payments.svg",
@@ -329,9 +336,18 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             ),
                                             SizedBox(width: 10,),
                                             InkWell(
-                                              onTap: (){
-                                                Navigator.push(context,MaterialPageRoute(builder: (context)=>ViewVisitDetails(complaintId:todayvisitlist[index].complaintId)));
-                                                //viewVisitDetails_navigation
+                                              onTap: () async{
+                                                var res =  await Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) => ViewVisitDetails(
+                                                    complaintId:todayvisitlist![index].complaintId,
+                                                  ),
+                                                ));
+                                                if(res==true){
+                                                  setState(() {
+                                                    isLoading = true;
+                                                    LoadTodayVisitsListAPI();
+                                                  });
+                                                }
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/ic_back_button.svg",
@@ -346,26 +362,36 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                       ]),
 
                                 ));
-                          }else{
-                            return Container(
-                              child:Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                )
-                              ),
-                              );
-                          }
-                          return null;
+                            return null;
                         }),
                   ),
                 ),
+      ]else...[
+            Expanded(
+                child: Container(
+                    width: double.infinity, // Set width to fill parent width
+                    decoration: BoxDecoration(
+                      color: ColorConstant.edit_bg_color,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30.0),
+                        topRight: Radius.circular(30.0),
+                      ),
+                    ),
+                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    child: Container(
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "No Data Available",
+                            style: TextStyle(
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.ellipsis,
+                              color: ColorConstant.erp_appColor
+                            ),
+                          )),
+                    )))
+          ],
 
               ],
             ),

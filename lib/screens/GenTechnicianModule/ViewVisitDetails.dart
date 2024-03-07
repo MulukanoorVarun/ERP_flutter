@@ -785,8 +785,15 @@ class _ViewVisitDetailsState extends State<ViewVisitDetails> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                       child: InkWell(
-                        onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>FollowUpList(complaintId:complaintdetails!.complaintId)));
+                        onTap: () async {
+
+                          var res =  await Navigator.push(context, MaterialPageRoute(builder: (context)=>FollowUpList(complaintId:complaintdetails!.complaintId)));
+                          if(res==true){
+                            setState(() {
+                              isLoading = true;
+                              LoadVisitDetailsAPI();
+                            });
+                          }
                         },
                         child: Container(
                           alignment: Alignment.center,
