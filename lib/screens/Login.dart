@@ -332,9 +332,9 @@ class _LoginState extends State<Login> {
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
               physics: NeverScrollableScrollPhysics(),
-              child: Container(
-                child: Expanded(
-                    child: Column(children: [
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
                       Container(
                         margin: EdgeInsets.only(top: 50.0),
                         alignment: Alignment.center,
@@ -348,16 +348,19 @@ class _LoginState extends State<Login> {
                       SizedBox(
                         height: 15.0,
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(5.0),
-                        child: Text(
-                          "Sign In",
-                          style:  TextStyle(
+                          Center( // Center widget added here
+                            child: Padding(
+                              padding: EdgeInsets.all(5.0),
+                              child: Text(
+                                "Sign In",
+                                style: TextStyle(
                                   color: ColorConstant.erp_appColor,
                                   fontSize: FontConstant.Size25,
-                                  decoration: TextDecoration.underline)),
-
-                      ),
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ),
+                          ),
                       SizedBox(
                         height: 10.0,
                       ),
@@ -543,8 +546,7 @@ class _LoginState extends State<Login> {
                           height: 40,
                         ),
                       )
-                    ])),
-              ),
+                    ])
             )));
   }
 

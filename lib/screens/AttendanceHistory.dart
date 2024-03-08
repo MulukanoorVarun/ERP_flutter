@@ -501,8 +501,17 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
             ),
           ),
         ),
-        body:(isLoading)?Loaders(): SafeArea(
-          child: Expanded(
+        body:(isLoading)?Loaders():Container(
+          color: ColorConstant.erp_appColor,
+          child: Container(
+              width: double.infinity, // Set width to fill parent width
+              decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
+                ),
+              ),
               child: Column(
             children: [
               Padding(
@@ -1103,7 +1112,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                 ),
               ),
             ],
-          )),
+          )
+          ),
         ));
   }
 }

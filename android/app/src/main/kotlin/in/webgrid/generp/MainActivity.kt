@@ -1,4 +1,4 @@
-package `in`.webgrid.generpflutter
+package `in`.webgrid.generp
 
 import io.flutter.embedding.android.FlutterActivity
 

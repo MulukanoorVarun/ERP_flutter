@@ -163,10 +163,7 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
 
                       Container(child: InkWell(
                         onTap: () async {
-
-
                             await Navigator.push(context, MaterialPageRoute(builder: (context)=>TagLocation()));
-
                         },
 
                         child: Container(

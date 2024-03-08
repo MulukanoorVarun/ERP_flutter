@@ -107,7 +107,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
           child: Container(
         height: screenHeight,
         color: ColorConstant.erp_appColor,
-        child: Expanded(
           child: Container(
             width: double.infinity, // Set width to fill parent width
             decoration: BoxDecoration(
@@ -304,7 +303,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ],
             ),
           ),
-        ),
       )),
     );
   }

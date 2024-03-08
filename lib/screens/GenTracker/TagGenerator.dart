@@ -442,7 +442,6 @@ class _TagGeneratorState extends State<TagGenerator> {
               topRight: Radius.circular(30.0),
             ),
           ),
-          child: Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
 
@@ -480,8 +479,8 @@ class _TagGeneratorState extends State<TagGenerator> {
                             },
                             child:SvgPicture.asset(
                             "assets/ic_qrcode.svg",
-                            height: 350,
-                            width: 350,
+                            height: 320,
+                            width: 320,
                           )),
                         ),
                         Container(
@@ -609,7 +608,6 @@ class _TagGeneratorState extends State<TagGenerator> {
               ),
 
             ),
-          ),
         ),
       )
     );

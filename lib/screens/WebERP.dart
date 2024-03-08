@@ -139,7 +139,8 @@ class _WebERPState extends State<WebERP> {
                       //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
                       // );
                     },
-                  ))
+                  )
+              )
             ])),
       ),
     );

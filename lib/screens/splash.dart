@@ -86,10 +86,6 @@ class _SplashState extends State<Splash>{
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) =>  UpdatePassword()));
               }
-              // else{
-              //   Navigator.push(context,
-              //       MaterialPageRoute(builder: (context) =>  Login()));
-              // }
             }else{
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) =>  Login()));

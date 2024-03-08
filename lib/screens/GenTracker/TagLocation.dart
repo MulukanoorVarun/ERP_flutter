@@ -214,10 +214,8 @@ class _TagLocationState extends State<TagLocation> {
               topRight: Radius.circular(30.0),
             ),
           ),
-          child: Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
-
               padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
               child: Column(// Set max height constraints
                 children: [
@@ -253,8 +251,8 @@ class _TagLocationState extends State<TagLocation> {
 
                           child: SvgPicture.asset(
                             "assets/ic_qrcode.svg",
-                            height: 350,
-                            width: 350,
+                            height: 320,
+                            width: 320,
                           ),
                         )),
                         Container(
@@ -370,7 +368,6 @@ class _TagLocationState extends State<TagLocation> {
               ),
 
             ),
-          ),
         ),
       )
     );

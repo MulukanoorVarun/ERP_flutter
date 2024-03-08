@@ -501,8 +501,6 @@ else{
           height: screenHeight,
           color: ColorConstant.edit_bg_color,
           child: SingleChildScrollView(
-
-            child: Expanded(
               child: Container(
                 width: double.infinity, // Set width to fill parent width
                 decoration: BoxDecoration(
@@ -887,7 +885,6 @@ else{
                 ),
 
               ),
-            ),
           ),
         )
     );

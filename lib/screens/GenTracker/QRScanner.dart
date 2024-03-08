@@ -187,172 +187,170 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
       child:Container(
         height: screenHeight,
         color: ColorConstant.erp_appColor,
-        child: Expanded(
           child: Container(
-            width: double.infinity, // Set width to fill parent width
-            decoration: BoxDecoration(
-              color: ColorConstant.edit_bg_color,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-            ),
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-            child: Column(// Set max height constraints
-              children: [
-                SizedBox(height: 15.0,),
-                Container(
-                  child: Text("Scan QR Code or Enter ID", style:  TextStyle(
-                    fontSize: FontConstant.Size25,
-                    fontWeight: FontWeight.bold,
-                    overflow: TextOverflow.ellipsis,
+        width: double.infinity, // Set width to fill parent width
+        decoration: BoxDecoration(
+          color: ColorConstant.edit_bg_color,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(30.0),
+            topRight: Radius.circular(30.0),
+          ),
+        ),
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+        child: Column(// Set max height constraints
+          children: [
+            SizedBox(height: 15.0,),
+            Container(
+              child: Text("Scan QR Code or Enter ID", style:  TextStyle(
+                fontSize: FontConstant.Size25,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
 
-                  color: ColorConstant.erp_appColor,
-                ),),),
-                SizedBox(height: 5.0,),
-                Container(
-                  height: screenHeight*0.75,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
+                color: ColorConstant.erp_appColor,
+              ),),),
+            SizedBox(height: 5.0,),
+            Container(
+              height: screenHeight*0.75,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child:
+              Column(
+                children: [
+                  SizedBox(height: 25.0,),
+                  InkWell(
+                    onTap: (){
+                      if(widget.title=="Generator Details"){
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"generatorDetails")));
+                      }
+                      if(widget.title=="Register Complaint"){
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
+                      }
+                      if(widget.title=="pendingComplaints"){
+                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"pendingComplaints")));
+                      }
+
+                    },
+                    child: Container(
+
+                      child: SvgPicture.asset(
+                        "assets/ic_qrcode.svg",
+                        height: 320,
+                        width: 320,
+                      ),
+                    ),
                   ),
-                  child:
-                  Column(
-                    children: [
-                      SizedBox(height: 25.0,),
-                      InkWell(
+                  Container(
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+
+                          Spacer(),
+                          Container(
+                            width:130,
+                            child:Divider(thickness: 1,color: Colors.grey) ,
+                          ),
+                          Spacer(),
+                          Container(
+                            child: Text("OR", style:  TextStyle(
+                              fontSize: FontConstant.Size20,
+                              fontWeight: FontWeight.w300,
+                              overflow: TextOverflow.ellipsis,
+
+                              color: Colors.grey,
+                            ),),),
+                          Spacer(),
+                          Container(
+                            width:130,
+                            child:Divider(thickness: 1,color: Colors.grey) ,
+                          ),
+                          Spacer(),
+                        ],
+                      )
+                  ),
+                  SizedBox(height: 10.0,),
+                  Container(
+                    alignment: Alignment.center,
+                    height: 55,
+                    margin:EdgeInsets.only(left:15.0,right:15.0),
+                    child: TextFormField(
+                      controller: Generator_id,
+                      cursorColor: ColorConstant.black,
+                      keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.characters,
+                      decoration: InputDecoration(
+                        hintText: "Enter Generator ID",
+                        hintStyle:  TextStyle(
+                            fontSize: FontConstant.Size15,
+                            color: ColorConstant.Textfield,
+                            fontWeight: FontWeight.w400),
+
+                        filled: true,
+                        fillColor: ColorConstant.edit_bg_color,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                              width: 0, color: ColorConstant.edit_bg_color),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15.0),
+                          borderSide: BorderSide(
+                              width: 0, color: ColorConstant.edit_bg_color),
+                        ),
+                      ),
+                    ),
+                  ),
+                  if(_Error.isNotEmpty)...[
+                    Container(
+                      alignment: Alignment.topLeft,
+                      margin: EdgeInsets.only(
+                          top: 2.5, bottom: 2.5, left: 25),
+                      child: Text(
+                        "$_Error",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: FontConstant.Size10,
+
+                        ),
+                      ),
+                    )
+                  ]else...[
+                    SizedBox(height: 20.0,),
+                  ],
+                  Container(
+                      child: InkWell(
                         onTap: (){
-                          if(widget.title=="Generator Details"){
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"generatorDetails")));
-                          }
-                          if(widget.title=="Register Complaint"){
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
-                          }
-                          if(widget.title=="pendingComplaints"){
-                            Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"pendingComplaints")));
-                          }
+                          LoadgeneratorDetailsApifunction(empId,session,Generator_id.text);
 
                         },
                         child: Container(
-
-                          child: SvgPicture.asset(
-                            "assets/ic_qrcode.svg",
-                            height: 350,
-                            width: 350,
-                          ),
-                        ),
-                      ),
-                      Container(
-                          child:Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-
-                              Spacer(),
-                              Container(
-                                width:130,
-                                child:Divider(thickness: 1,color: Colors.grey) ,
-                              ),
-                              Spacer(),
-                              Container(
-                                child: Text("OR", style:  TextStyle(
-                                    fontSize: FontConstant.Size20,
-                                    fontWeight: FontWeight.w300,
-                                    overflow: TextOverflow.ellipsis,
-
-                                  color: Colors.grey,
-                                ),),),
-                              Spacer(),
-                              Container(
-                                width:130,
-                                child:Divider(thickness: 1,color: Colors.grey) ,
-                              ),
-                              Spacer(),
-                            ],
-                          )
-                      ),
-                      SizedBox(height: 10.0,),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 55,
-                        margin:EdgeInsets.only(left:15.0,right:15.0),
-                        child: TextFormField(
-                          controller: Generator_id,
-                          cursorColor: ColorConstant.black,
-                          keyboardType: TextInputType.text,
-                          textCapitalization: TextCapitalization.characters,
-                          decoration: InputDecoration(
-                            hintText: "Enter Generator ID",
-                            hintStyle:  TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  color: ColorConstant.Textfield,
-                                  fontWeight: FontWeight.w400),
-
-                            filled: true,
-                            fillColor: ColorConstant.edit_bg_color,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
-                          ),
-                        ),
-                      ),
-                      if(_Error.isNotEmpty)...[
-                        Container(
-                          alignment: Alignment.topLeft,
-                          margin: EdgeInsets.only(
-                              top: 2.5, bottom: 2.5, left: 25),
+                          alignment: Alignment.center,
+                          height: 45,
+                          margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                          decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
                           child: Text(
-                            "$_Error",
-                            textAlign: TextAlign.start,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: FontConstant.Size10,
-
+                            "Submit",
+                            textAlign: TextAlign.center,
+                            style:
+                            TextStyle(
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size15,
                             ),
                           ),
-                        )
-                      ]else...[
-                      SizedBox(height: 20.0,),
-                      ],
-                      Container(
-                          child: InkWell(
-                            onTap: (){
-                              LoadgeneratorDetailsApifunction(empId,session,Generator_id.text);
-
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 45,
-                              margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                              decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
-                              child: Text(
-                                "Submit",
-                                textAlign: TextAlign.center,
-                                style:
-                                  TextStyle(
-                                    color: ColorConstant.white,
-                                    fontSize: FontConstant.Size15,
-                                  ),
-                              ),
-                            ),
-                          )
-                      ),
-                    ],
+                        ),
+                      )
                   ),
+                ],
+              ),
 
-                ),
-
-              ],
             ),
 
-          ),
+          ],
         ),
+
+      ),
       )),
     );
   }

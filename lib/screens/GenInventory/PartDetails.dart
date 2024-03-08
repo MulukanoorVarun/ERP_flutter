@@ -597,7 +597,6 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
       ),
       body: Container(
         color: ColorConstant.erp_appColor,
-        child: Expanded(
           child: Container(
             width: double.infinity, // Set width to fill parent width
             decoration: BoxDecoration(
@@ -608,9 +607,9 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
               ),
             ),
             padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-            child: Column(// Set max height constraints
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,// Set max height constraints
               children: [
-
                 SizedBox(height: 5.0,),
                 //customer details
                 Container(
@@ -1049,9 +1048,6 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
             ),
 
           ),
-        ),
-
-
       ),
     );
   }

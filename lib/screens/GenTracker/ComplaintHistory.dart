@@ -129,31 +129,24 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           ),
         ),
       ),
-      body: (isloading)
-          ? Loaders()
-          : Container(
-              color: ColorConstant.erp_appColor,
-              child: Column(children: [
-                if (comp_List.length > 0) ...[
-                  Expanded(
-      child: SingleChildScrollView(
-                    child: Container(
-                      width: double.infinity, // Set width to fill parent width
-                      decoration: BoxDecoration(
-                        color: ColorConstant.edit_bg_color,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
-                        ),
-                      ),
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                      child: Column(
-                        // Set max height constraints
-                        children: [
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                               GridView.builder(
+      body: (isloading) ? Loaders() :   SafeArea(
+        child: Container(
+          color: ColorConstant.erp_appColor,
+          child: Column(
+              children: [
+              if(comp_List.length>0) ...[
+        Expanded(
+        child: Container(
+        width: double.infinity, // Set width to fill parent width
+          decoration: BoxDecoration(
+            color: ColorConstant.edit_bg_color,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(30.0),
+              topRight: Radius.circular(30.0),
+            ),
+          ),
+          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: GridView.builder(
                                 itemCount: comp_List.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -163,7 +156,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                         mainAxisSpacing: 10,
                                         childAspectRatio: (175 / 140)),
                                 padding: const EdgeInsets.all(5),
-                                physics: const NeverScrollableScrollPhysics(),
+                                physics: const BouncingScrollPhysics(),
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
@@ -522,14 +515,9 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                     ),
                                   );
                                 }),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                        ],
-                      ),
-                    ),
-      ),
-                  ),
+
+    ),
+    ),
                 ] else ...[
                   Expanded(
                       child: Container(
@@ -559,6 +547,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                 ]
               ]),
             ),
+      ),
     );
   }
 }

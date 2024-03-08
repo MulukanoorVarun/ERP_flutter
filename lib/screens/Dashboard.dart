@@ -78,7 +78,7 @@ class _DashboardState extends State<Dashboard> {
     print(WEB_SOCKET_URL);
     webSocketManager.init();
     super.initState();
-    addAutoStartup();
+   // addAutoStartup();
     DashboardApiFunction();
   }
 
@@ -140,7 +140,6 @@ void autostart(){
       default:
         return;
     }
-
     AndroidAutostart.navigateAutoStartSetting;
   }
 
@@ -153,21 +152,20 @@ void autostart(){
       session = await PreferenceService().getString("Session_id")??"";
       roleStatus = await PreferenceService().getString("roles")??"";
       var lastLocationTime = await PreferenceService().getString("lastLocationTime");
+      print("lastLocationTime:${lastLocationTime}");
       if (await PreferenceService().getString("redirectUrl") == null) {
         webPageUrl =
         "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
       } else {
-        webPageUrl =
-        "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
+        webPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
       }
-
       print("s:"+session);
       print("r:"+roleStatus);
       print(roleStatus.length);
     await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
       if (data != null)
         {
-          setState(()  {
+          setState(() {
             if (data.sessionExists == 1) {
               isLoading = false;
               online_status = data.attStatus??0;
@@ -179,8 +177,7 @@ void autostart(){
                   setstatus ="Offline";
                 });
                 print("setstatus:$setstatus");
-              }
-              if(online_status==1){
+              } else if(online_status==1){
                 print("online_status:$online_status");
                 DateTime Date1;
                 DateTime Date2;
@@ -226,8 +223,7 @@ void autostart(){
                 }
                 BackgroundLocation.startLocationService();
                 print("setstatus:$setstatus");
-              }
-              if(online_status==2){
+              }else if(online_status==2){
                 print("online_status:$online_status");
                 webSocketManager.close();
                 BackgroundLocation.stopLocationService();
@@ -342,15 +338,17 @@ void autostart(){
                                 ),
                               ),
                               SizedBox(height: 10),
-                              Text(
-                                "$username",
-                                maxLines: 2,
-                                style:  TextStyle(
+                              Container(
+                                width: 250,// Wrapping username in a Container
+                                child: Text(
+                                  "$username",
+                                  maxLines: 2,
+                                  style: TextStyle(
                                     fontSize: FontConstant.Size20,
                                     fontWeight: FontWeight.bold,
                                     overflow: TextOverflow.ellipsis,
-
-                                  color: Colors.white,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               SizedBox(height: 10),
@@ -393,8 +391,8 @@ void autostart(){
                                       if(res==true){
                                         setState(() {
                                           isLoading = true;
+                                          DashboardApiFunction();
                                         });
-                                        DashboardApiFunction();
                                       }
                                     },
                                     child:SvgPicture.asset(
@@ -412,8 +410,8 @@ void autostart(){
                                       if(res==true){
                                         setState(() {
                                           isLoading = true;
+                                          DashboardApiFunction();
                                         });
-                                        DashboardApiFunction();
                                       }
                                     },
                                     child:SvgPicture.asset(
@@ -447,12 +445,12 @@ void autostart(){
                               Container(child: InkWell(
                                 onTap: () async {
                                   var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
-
                                   if(res == true){
                                     setState(() {
                                       isLoading = true;
+                                      DashboardApiFunction();
                                     });
-                                    DashboardApiFunction();
+
                                   }
                                 },
                                 child:Container(
@@ -497,8 +495,8 @@ void autostart(){
                                   if(res == true){
                                     setState(() {
                                       isLoading = true;
+                                      DashboardApiFunction();
                                     });
-                                    DashboardApiFunction();
                                   }
                                 },
 
@@ -542,6 +540,12 @@ void autostart(){
                                   context,
                                   MaterialPageRoute(builder: (context) => InventoryScreen()),
                                 );
+                                if(res == true){
+                                  setState(() {
+                                    isLoading = true;
+                                    DashboardApiFunction();
+                                  });
+                                }
                               },
 
                               child:Container(
@@ -586,8 +590,8 @@ void autostart(){
                                 if(res == true){
                                   setState(() {
                                     isLoading = true;
+                                    DashboardApiFunction();
                                   });
-                                  DashboardApiFunction();
                                 }
                               },
 
@@ -633,8 +637,8 @@ void autostart(){
                                 if(res == true){
                                   setState(() {
                                     isLoading = true;
+                                    DashboardApiFunction();
                                   });
-                                  DashboardApiFunction();
                                 }
                               },
 
