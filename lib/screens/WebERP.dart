@@ -126,8 +126,8 @@ class _WebERPState extends State<WebERP> {
                 domStorageEnabled: true, // Enables DOM storage
                 builtInZoomControls: true, // Enables the built-in zoom controls
                 displayZoomControls: false, // Disables displaying zoom controls
-                safeBrowsingEnabled: true,
-                clearSessionCache: true,// Enables Safe Browsing
+                safeBrowsingEnabled: true,// Enables Safe Browsing
+                clearSessionCache: true,
               ),
 
               ios: IOSInAppWebViewOptions(
