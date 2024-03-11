@@ -9,6 +9,8 @@ import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
+
 import 'package:google_api_headers/google_api_headers.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -46,6 +48,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
   String locationdd = "Search Location";
+  late LatLng CurrentLocation;
 
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
@@ -67,6 +70,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
   @override
   void initState() {
     _getLocationPermission();
+    _getCurrentLocation();
     //  locationService = LocationService();
     super.initState();
   }
@@ -76,6 +80,16 @@ class _CheckInScreenState extends State<CheckInScreen> {
     _locationController.dispose();
     //  locationService = LocationService();
     super.dispose();
+  }
+
+
+  Future<void> _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: geo_location.LocationAccuracy.high
+    );
+    setState(() {
+      CurrentLocation = LatLng(position.latitude, position.longitude);
+    });
   }
 
   Future<void> _getLocationPermission() async {
@@ -127,16 +141,16 @@ class _CheckInScreenState extends State<CheckInScreen> {
         icon: BitmapDescriptor.defaultMarker,
       ));
 
-      circles = Set.from([
-        Circle(
-          circleId: CircleId("value"),
-          center:
-              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-          radius: 200,
-          strokeColor: Colors.blue,
-          strokeWidth: 1,
-        )
-      ]);
+      // circles = Set.from([
+      //   Circle(
+      //     circleId: CircleId("value"),
+      //     center:
+      //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+      //     radius: 200,
+      //     strokeColor: Colors.blue,
+      //     strokeWidth: 1,
+      //   )
+      // ]);
 
       setState(() {
         final lat = currentLocation!.latitude;
@@ -293,15 +307,15 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             myLocationEnabled: true,
                             zoomGesturesEnabled: true,
                             initialCameraPosition: CameraPosition(
-                              target: startLocation,
-                              zoom: 14.0,
+                              target: CurrentLocation,
+                              zoom: 20.0,
                             ),
                             markers: markers.toSet(),
-                            zoomControlsEnabled: false,
-                            minMaxZoomPreference: MinMaxZoomPreference(14, 14),
-                            scrollGesturesEnabled: false,
-                            liteModeEnabled: true,
-                            circles: circles,
+                          //  zoomControlsEnabled: false,
+                        //    minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                          //  scrollGesturesEnabled: false,
+                          //   liteModeEnabled: true,
+                           // circles: circles,
                             mapType: MapType.normal,
                             onMapCreated: (controller) {
                               setState(() {

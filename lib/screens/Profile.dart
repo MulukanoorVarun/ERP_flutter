@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
 import 'package:GenERP/screens/Login.dart';
@@ -8,6 +11,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
  
 
+import '../Services/TOTP.dart';
 import '../Services/user_api.dart';
 import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
@@ -37,10 +41,11 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
+  var secretKey;
+  var totp;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     ProfileApiFunction();
     VersionApiFunction();
@@ -65,6 +70,8 @@ class _ProfileState extends State<Profile> {
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
                         isLoading = false;
+                        secretKey= utf8.encode("${data.totpSecret}");
+                        totp =initializeTotp(secretKey);
                       } else if (data.sessionExists == 0) {
                         PreferenceService().clearPreferences();
                         Navigator.push(context,
@@ -79,6 +86,16 @@ class _ProfileState extends State<Profile> {
     } on Exception catch (e) {
       print("$e");
     }
+  }
+
+  Totp initializeTotp(List<int> secretKey) {
+    print("secretKey:${secretKey}");
+    return Totp(
+      secret: secretKey,
+      algorithm: Algorithm.sha256,
+      digits: 6,
+      period: 30,
+    );
   }
 
   Future<void> LogoutApiFunction() async {
@@ -203,6 +220,18 @@ class _ProfileState extends State<Profile> {
     }
   }
   Future TOTPDialogue() async {
+    bool isLoading = true;
+    Timer(Duration(seconds: 30), () {
+      if (isLoading) {
+        // Set isLoading to false after 30 seconds
+        isLoading = false;
+        // Update the UI
+        if (context != null && mounted) {
+          Navigator.of(context).pop(); // Dismiss the dialog
+        }
+      }
+    });
+
     return await showDialog(
       useSafeArea: true,
       context: context,
@@ -234,7 +263,7 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '',
+                        '${totp.now()}',
                         style: TextStyle(
                             color: Colors.black,
                             fontSize: FontConstant.Size18,
@@ -244,15 +273,17 @@ class _ProfileState extends State<Profile> {
                         ),
                       ),
                       SizedBox(width: 10,),
-                      Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: ColorConstant.erp_appColor,
-                        ),
-                      ),
 
+                      if (isLoading) // Check if TOTP secret is initialized
+                        SizedBox(
+                          width: 20, // Adjust the width as needed
+                          height: 20, // Adjust the height as needed
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(ColorConstant.erp_appColor),
+                            strokeWidth: 3,
+                            backgroundColor: Colors.grey, // Optional: Change the background color
+                          ),
+                        )
                     ]
                 ),
                 SizedBox(height: 10,),
@@ -301,6 +332,9 @@ class _ProfileState extends State<Profile> {
               child: IconButton(
                 onPressed: () {
                   TOTPDialogue();
+                  setState(() {
+                    totp =initializeTotp(secretKey);
+                  });
                 },
                 icon: const Icon(
                   Icons.security,

@@ -2,9 +2,12 @@ import 'dart:async';
 
 import 'package:GenERP/Services/user_api.dart';
 import 'package:GenERP/screens/UpdatePassword.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
  
 import 'package:permission_handler/permission_handler.dart';
 
@@ -12,8 +15,10 @@ import 'package:permission_handler/permission_handler.dart';
 import '../Services/other_services.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
+import '../main.dart';
 import 'Dashboard.dart';
 import 'Login.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -93,7 +98,7 @@ class _SplashState extends State<Splash>{
             }
           })
         }else{
-          toast(context,"Something went wrong, Please try again later!")
+          //toast(context,"Something went wrong, Please try again later!")
         }
       });
 

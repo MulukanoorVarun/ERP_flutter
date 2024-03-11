@@ -1,14 +1,122 @@
+import 'dart:io';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
+import 'Services/other_services.dart';
+import 'Utils/storage.dart';
 import 'screens/splash.dart';
 
-void main() {
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+  'generp_channel', // id
+  'generp_channel_name', // title
+  importance: Importance.high,
+  playSound: true,
+);
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+FlutterLocalNotificationsPlugin();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('A Background message just showed up: ${message.messageId}');
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  Platform.isAndroid ?
+  await Firebase.initializeApp(
+    options: FirebaseOptions(
+      apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
+      appId: "1:329382566569:android:26dc8519537b04deff67b8",
+      messagingSenderId: "329382566569",
+      projectId: "generp-fe09d",
+    ),
+  )
+  : await Firebase.initializeApp();
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: true,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    PreferenceService().saveString('notification_hit', "1");
+  });
+
+  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+    print('A new onMessageOpenedApp event was published!');
+  });
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+  //   alert: true,
+  //   badge: true,
+  //   sound: true,
+  // );
+
+  FirebaseMessaging.instance.getToken().then((value) {
+    String? token = value;
+    print("fbstoken:{$token}");
+    PreferenceService().saveString("fbstoken", token!);
+  });
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+
+class _MyAppState extends State<MyApp> {
+
+  int _counter = 0;
+  @override
+  void initState() {
+    // initUniLinks();
+    // check_time();
+    // TODO: implement initState
+    super.initState();
+  }
+
+  void showNotification() {
+    setState(() {
+      _counter++;
+    });
+
+    flutterLocalNotificationsPlugin.show(
+        0,
+        "Testing $_counter",
+        "This is an Flutter Push Notification",
+        NotificationDetails(
+            android: AndroidNotificationDetails(channel.id, channel.name,
+                channelDescription: channel.description,
+                importance: Importance.high,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher')));
+  }
 
   // This widget is the root of your application.
   @override

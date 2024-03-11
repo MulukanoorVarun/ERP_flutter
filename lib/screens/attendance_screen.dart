@@ -69,6 +69,16 @@ class _AttendanceState extends State<Attendance> {
   }
 
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      getAttendanceList();
+    });
+  }
+
 
 
 
@@ -82,6 +92,8 @@ class _AttendanceState extends State<Attendance> {
         body:(isLoading)?Loaders():SafeArea(
             child: Container(
               color:ColorConstant.erp_appColor,
+                child:RefreshIndicator(
+                  onRefresh: _refresh,
               child: Column(
                 children: [
                   Container(
@@ -369,6 +381,7 @@ class _AttendanceState extends State<Attendance> {
                   ),
                 ],
               ),
+                ),
             )
         )
 

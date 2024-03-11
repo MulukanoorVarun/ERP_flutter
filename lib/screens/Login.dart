@@ -7,6 +7,7 @@ import 'package:GenERP/screens/splash.dart';
 import 'package:android_id/android_id.dart';
 import 'package:click_to_copy/click_to_copy.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -30,12 +31,12 @@ class _LoginState extends State<Login> {
   TextEditingController password = TextEditingController();
   TextEditingController email = TextEditingController();
   String deviceId = "";
-  String _tokenId = "";
   var _deviceDetails = "";
   bool? _passwordVisible = false;
   bool? _exit;
   var _validateEmail;
   var _validatepassword;
+  String platformname = "";
   var _androidId = 'Unknown';
   static const _androidIdPlugin = AndroidId();
 
@@ -102,7 +103,6 @@ class _LoginState extends State<Login> {
     try {
       print(email.text);
       print(password.text);
-      print(_tokenId);
       print(deviceId);
       print(_deviceDetails);
 
@@ -137,14 +137,20 @@ class _LoginState extends State<Login> {
 
         String? fcmToken = " ";
         if (Platform.isAndroid) {
-
+          // toast(context,"Android");
+          platformname = "Android";
+          fcmToken = await FirebaseMessaging.instance.getToken();
         } else if (Platform.isIOS) {
-
+          // toast(context,"ios");
+          platformname = "iOS";
+          fcmToken = await FirebaseMessaging.instance.getAPNSToken();
         }
+        // String? fcm_token = await FirebaseMessaging.instance.getToken();
+        print("fcmToken:${fcmToken}");
         await UserApi.LoginFunctionApi(
             email.text,
             password.text,
-            _tokenId.toString() ?? "",
+            fcmToken.toString() ?? "",
             deviceId.toString() ?? "",
             _deviceDetails.toString())
             .then((data) =>
@@ -178,10 +184,9 @@ class _LoginState extends State<Login> {
                       "You are not authorized to login in this device !");
                 } else if (data.error == 2) {
                   toast(context, "Invalid login credentials !");
-                }
-                else {
+                } else {
                   print(data.error.toString());
-                  toast(context, "Something went wrong, Please try again.");
+                //  toast(context, "Something went wrong, Please try again.");
                 }
               })
             }

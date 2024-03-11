@@ -31,6 +31,7 @@ import '../Utils/api_names.dart';
 import '../Utils/storage.dart';
 import 'Login.dart';
 import 'Scanner.dart';
+import 'WhizzdomScreen.dart';
 import 'background_service.dart';
 
 
@@ -52,6 +53,7 @@ class _DashboardState extends State<Dashboard> {
   var session="";
   var online_status = 0;
   var webPageUrl = "";
+  var whizzdomPageUrl = "";
   var roleStatus = "";
   bool isLoading = true;
   var Sessionid;
@@ -154,10 +156,11 @@ void autostart(){
       var lastLocationTime = await PreferenceService().getString("lastLocationTime");
       print("lastLocationTime:${lastLocationTime}");
       if (await PreferenceService().getString("redirectUrl") == null) {
-        webPageUrl =
-        "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
+        webPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session";
+        whizzdomPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&login_type=whizzdom&redirect_url=https://whizzdom.gengroup.in";
       } else {
         webPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
+        whizzdomPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&login_type=whizzdom&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
       }
       print("s:"+session);
       print("r:"+roleStatus);
@@ -339,7 +342,7 @@ void autostart(){
                               ),
                               SizedBox(height: 10),
                               Container(
-                                width: 250,// Wrapping username in a Container
+                                width: 220,// Wrapping username in a Container
                                 child: Text(
                                   "$username",
                                   maxLines: 2,
@@ -376,7 +379,7 @@ void autostart(){
                                     ),
                                   ),
                                 ],),
-                              SizedBox(height: 20), // Added SizedBox for spacing
+                              SizedBox(height: 10), // Added SizedBox for spacing
                             ],
                           ),
                           Spacer(),
@@ -531,9 +534,56 @@ void autostart(){
                                 ),
 
                               ),),
+                              SizedBox(height: 15,),
+
+                              Container(child: InkWell(
+                                onTap: () async {
+                                  var res = await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => WhizzdomScreen(url: whizzdomPageUrl)),
+                                  );
+                                  if(res == true){
+                                    setState(() {
+                                      isLoading = true;
+                                      DashboardApiFunction();
+                                    });
+                                  }
+                                },
+
+                                child:Container(
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10,),
+                                      SvgPicture.asset(
+                                        "assets/ic_light_bulb.svg",
+                                        height: 50,
+                                        width: 50,
+                                      ),
+                                      SizedBox(width: 15,),
+                                      Text(
+                                        "Whizzdom",
+                                        style:  TextStyle(
+                                          fontSize: FontConstant.Size20,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+
+                                          color: ColorConstant.erp_appColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                ),
+
+                              ),),
                             ],
-                            SizedBox(height: 15,),
                             if(roleStatus.contains("432"))...[
+                              SizedBox(height: 15,),
                             Container(child: InkWell(
                               onTap: () async {
                                 var res = await Navigator.push(

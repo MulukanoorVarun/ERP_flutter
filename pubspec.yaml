@@ -103,6 +103,8 @@ dependencies:
   auto_start_flutter: ^0.1.1
   android_autostart: ^0.0.3
   camera: ^0.10.5+9
+  webview_flutter: ^4.7.0
+  totp: ^0.0.1
 
 dev_dependencies:
   flutter_test:

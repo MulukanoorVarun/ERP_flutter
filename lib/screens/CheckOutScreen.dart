@@ -17,6 +17,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
 import 'package:geocoding/geocoding.dart' as geocoding;
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
 import 'package:location/location.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Services/other_services.dart';
@@ -42,6 +43,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.45977250652744, 78.51635191323184);
+  late LatLng CurrentLocation;
   String locationdd = "Search Location";
   // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
@@ -62,7 +64,18 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   void initState() {
     _getLocationPermission();
+    _getCurrentLocation();
     super.initState();
+  }
+
+
+  Future<void> _getCurrentLocation() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: geo_location.LocationAccuracy.high
+    );
+    setState(() {
+      CurrentLocation = LatLng(position.latitude, position.longitude);
+    });
   }
 
   Future<void> _getLocationPermission() async {
@@ -264,16 +277,16 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             myLocationEnabled: true,
                             zoomGesturesEnabled: true,
                             initialCameraPosition: CameraPosition(
-                              target: startLocation,
-                              zoom: 14.0,
+                              target: CurrentLocation,
+                              zoom: 20.0,
                             ),
                             markers: markers.toSet(),
-                            zoomControlsEnabled: false,
-                            minMaxZoomPreference: MinMaxZoomPreference(14, 14),
-                            scrollGesturesEnabled: false,
-                            liteModeEnabled: false,
-                            myLocationButtonEnabled: true,
-                            circles: circles,
+                            // zoomControlsEnabled: false,
+                            // minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                            // scrollGesturesEnabled: false,
+                            // liteModeEnabled: false,
+                            // myLocationButtonEnabled: true,
+                            //circles: circles,
                             mapType: MapType.normal,
                             onMapCreated: (controller) {
                               setState(() {

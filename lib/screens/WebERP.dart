@@ -14,18 +14,19 @@ import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
+
 const MAX_PROGRESS = 100;
 
 Future main() async {
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-  );
+      );
   await Permission.storage.request();
 }
 
 class WebERP extends StatefulWidget {
   final String url;
-  const WebERP({Key? key,required this.url}) : super(key: key);
+  const WebERP({Key? key, required this.url}) : super(key: key);
 
   @override
   State<WebERP> createState() => _WebERPState();
@@ -33,30 +34,24 @@ class WebERP extends StatefulWidget {
 
 class _WebERPState extends State<WebERP> {
   final Completer<InAppWebViewController> _controller =
-  Completer<InAppWebViewController>();
+      Completer<InAppWebViewController>();
   var empId = "";
   var sessionId = "";
   bool isLoading = true;
   InAppWebViewController? webViewController;
-
 
   final GlobalKey webViewKey = GlobalKey();
   var dl = DownloadManager();
   @override
   void initState() {
     loadData();
-
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   void dispose() {
-    // TODO: implement initState
-
     super.dispose();
   }
-
 
   Future<void> loadData() async {
     await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
@@ -65,11 +60,9 @@ class _WebERPState extends State<WebERP> {
     print(1724);
     print("Loaded empId: $empId");
     print("Loaded sessionId: $sessionId");
-      setState(() {
-        isLoading = false;
-      });
-
-
+    setState(() {
+      isLoading = false;
+    });
   }
 
   //////////////////testing
@@ -78,82 +71,103 @@ class _WebERPState extends State<WebERP> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-              appBar: AppBar(
-                backgroundColor: ColorConstant.erp_appColor,
-                elevation: 0,
-                title: Container(
-                    child: Row(
-                  children: [
-                    // Spacer(),
-                    Container(
-                      child: InkWell(
-                        onTap: () => Navigator.pop(context, true),
-                        child: Text("ERP",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: ColorConstant.white,
-                              fontSize: FontConstant.Size18,
-                              fontWeight: FontWeight.w500,
-                            )),
-                      ),
-                    ),
-                  ],
-                )),
-                titleSpacing: 0,
-                leading: Container(
-                  margin: const EdgeInsets.only(left: 10),
-                  child: GestureDetector(
-                    onTap: () => Navigator.pop(context, true),
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 24.0,
-                    ),
-                  ),
+        appBar: AppBar(
+          backgroundColor: ColorConstant.erp_appColor,
+          elevation: 0,
+          title: Container(
+              child: Row(
+            children: [
+              // Spacer(),
+              Container(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, true),
+                  child: Text("ERP",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: ColorConstant.white,
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.w500,
+                      )),
                 ),
               ),
+            ],
+          )),
+          titleSpacing: 0,
+          leading: Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context, true),
+              child: const Icon(
+                Icons.arrow_back_ios,
+                color: Colors.white,
+                size: 24.0,
+              ),
+            ),
+          ),
+        ),
         body: Container(
             child: Column(children: <Widget>[
-              Expanded(
-                  child: InAppWebView(
-                    initialUrlRequest: URLRequest(url: WebUri(widget.url),),
-                    onWebViewCreated: (controller) {
-                      _controller.complete(controller);
-                    },
+          Expanded(
+              child: InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(widget.url),),
+            androidOnGeolocationPermissionsShowPrompt:
+                (InAppWebViewController controller, String origin) async {
+              return GeolocationPermissionShowPromptResponse(
+                  origin: origin, allow: true, retain: true);
+            },
+            initialOptions: InAppWebViewGroupOptions(
+              android: AndroidInAppWebViewOptions(
+                useWideViewPort: true,
+                loadWithOverviewMode: true,
+                allowContentAccess: true,
+                geolocationEnabled: true,
+                allowFileAccess: true,
+                databaseEnabled: true, // Enables the WebView database
+                domStorageEnabled: true, // Enables DOM storage
+                builtInZoomControls: true, // Enables the built-in zoom controls
+                displayZoomControls: false, // Disables displaying zoom controls
+                safeBrowsingEnabled: true,
+                clearSessionCache: true,// Enables Safe Browsing
+              ),
 
-                    onLoadStart: (controller, url) {
-
-                    },
-                    onLoadStop: (controller, url) {
-
-                    },
-                    onDownloadStartRequest: (controller, url) async {
-
-                      await UserApi.download_files(empId, sessionId,"${url.url}",context).then((data) => {
-                        print(data)
-                      });
-                      // final taskid = await FlutterDownloader.enqueue(
-                      //   url: url.toString(),
-                      //   savedDir: "/storage/emulated/0/Download",
-                      //   showNotification: true, // show download progress in status bar (for android)
-                      //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
-                      // );
-                    },
-                  )
-              )
-            ])),
+              ios: IOSInAppWebViewOptions(
+                allowsInlineMediaPlayback: true,
+              ),
+            ),
+            androidOnPermissionRequest: (InAppWebViewController controller,
+                String origin, List<String> resources) async {
+              return PermissionRequestResponse(
+                  resources: resources,
+                  action: PermissionRequestResponseAction.GRANT);
+            },
+            onWebViewCreated: (controller) {
+              _controller.complete(controller);
+            },
+            onLoadStart: (controller, url) {},
+            onLoadStop: (controller, url) {},
+            onDownloadStartRequest: (controller, url) async {
+              await UserApi.download_files(
+                      empId, sessionId, "${url.url}", context)
+                  .then((data) => {print(data)});
+              // final taskid = await FlutterDownloader.enqueue(
+              //   url: url.toString(),
+              //   savedDir: "/storage/emulated/0/Download",
+              //   showNotification: true, // show download progress in status bar (for android)
+              //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
+              // );
+            },
+          ))
+        ])),
       ),
     );
   }
   ///////////////////testign
-
 
   // Future<void> downloadFile(String url) async {
   //   // Implement your download logic here
   //   print("Downloading file from: $url");
   //   // Example: Use flutter_downloader package to download the file
   // }
-
 
   // @override
   // Widget build(BuildContext context) {
@@ -388,6 +402,4 @@ class _WebERPState extends State<WebERP> {
   //         ),
   //       ));
   // }
-
-
 }
