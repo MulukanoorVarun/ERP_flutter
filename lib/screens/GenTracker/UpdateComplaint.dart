@@ -5,6 +5,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../Services/other_services.dart';
@@ -454,7 +455,7 @@ void initState() {
                           child: TextFormField(
                             controller: RunningHrs,
                             cursorColor: ColorConstant.black,
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               prefixIcon:const Icon(Icons.access_time_rounded,size: 28,color: Color(0xFF011842)),
 
@@ -581,26 +582,37 @@ void initState() {
                         Container(
                             child: InkWell(
                               onTap: (){
-                                CheckValidations();
+                                SelectAttachmentDialogue();
                               },
                               child: Container(
-                                alignment: Alignment.center,
-                                height: 45,
-                                margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                                decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius:BorderRadius.circular(15.0), ),
-                                child: Text(
-                                  "SCAN NOW",
-                                  textAlign: TextAlign.center,
-                                  style:TextStyle(
-                                      color: ColorConstant.black,
-                                      fontSize: FontConstant.Size15,
-                                      fontWeight: FontWeight.w500
-                                  ),
-                                ),
+                                  alignment: Alignment.center,
+                                  height: 45,
+                                  margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                                  decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius:BorderRadius.circular(15.0), ),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 25,),
+                                      SvgPicture.asset(
+                                        "assets/ic_assignment.svg",
+                                        fit: BoxFit.scaleDown,
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        "SCAN NOW",
+                                        textAlign: TextAlign.center,
+                                        style:TextStyle(
+                                            color: ColorConstant.erp_appColor,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w500
+                                        ),
+                                      ),
+                                      Spacer(),
+
+                                    ],
+                                  )
                               ),
                             )
-                        ),
-                      ],
+                        ),],
                     ),
 
                   ),

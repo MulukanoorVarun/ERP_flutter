@@ -2,6 +2,7 @@ import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTracker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_multi_formatter/formatters/masked_input_formatter.dart';
  
 
 import '../../Services/other_services.dart';
@@ -321,8 +322,12 @@ class _AddContactState extends State<AddContact>{
                             margin:EdgeInsets.only(left:15.0,right:15.0),
                             child: TextFormField(
                               controller: mobile,
+                              inputFormatters: [
+                                MaskedInputFormatter('##########'),
+                              ],
                               cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.number,
+
                               decoration: InputDecoration(
                                 hintText: "Mobile Number*",
                                 hintStyle:  TextStyle(
@@ -376,7 +381,10 @@ class _AddContactState extends State<AddContact>{
                             child: TextFormField(
                               controller: alt_mobile,
                               cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.number,
+                              inputFormatters: [
+                                MaskedInputFormatter('##########'),
+                              ],
                               decoration: InputDecoration(
                                 hintText: "Alternate Mobile Number",
                                 hintStyle:  TextStyle(
@@ -412,7 +420,7 @@ class _AddContactState extends State<AddContact>{
                             child: TextFormField(
                               controller: Tel_num,
                               cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: "Telephone NUmber",
                                 hintStyle:  TextStyle(
@@ -448,7 +456,7 @@ class _AddContactState extends State<AddContact>{
                             child: TextFormField(
                               controller: email,
                               cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 hintText: "Mail ID",
                                 hintStyle: TextStyle(

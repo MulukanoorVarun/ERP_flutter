@@ -771,7 +771,7 @@ else{
                           child: TextFormField(
                             controller: Amount,
                             cursorColor: ColorConstant.black,
-                            keyboardType: TextInputType.text,
+                            keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               hintText: "Enter Amount*",
                               hintStyle: TextStyle(
