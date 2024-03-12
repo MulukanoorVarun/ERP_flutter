@@ -41,6 +41,16 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
     super.initState();
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      LoadPartDetailsApifunction();
+    });
+  }
+
   @override
   void onDispose(){
     issue_quantity.dispose();
@@ -560,7 +570,7 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return  (isLoading)?Loaders(): Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -595,152 +605,192 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
           ),
         ),
       ),
-      body: Container(
+      body: (isLoading)?Loaders(): RefreshIndicator(
+        onRefresh: _refresh,
         color: ColorConstant.erp_appColor,
-          child: Container(
-            width: double.infinity, // Set width to fill parent width
-            decoration: BoxDecoration(
-              color: ColorConstant.edit_bg_color,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
-            ),
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,// Set max height constraints
-              children: [
-                SizedBox(height: 5.0,),
-                //customer details
-                Container(
-                  height: screenHeight*0.18,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
+        child: Container(
+          height:MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              color: ColorConstant.erp_appColor,
+              child: Container(
+                width: double.infinity,
+                height:MediaQuery.of(context).size.height,// Set width to fill parent width
+                decoration: BoxDecoration(
+                  color: ColorConstant.edit_bg_color,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    topRight: Radius.circular(30.0),
                   ),
-                  child:
-                  Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(7.5,7.5,0,0),
-                        child: Text(partdata?.prodName ?? "", style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
-                            fontSize: FontConstant.Size18,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          color: ColorConstant.erp_appColor,
-                        ),),),
-                      Container(
-                          child:Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Spacer(),
-                              Container(
-                                width:screenWidth*0.9,
-                                child:Divider(thickness: 2,color: Colors.grey) ,
-                              ),
-                              Spacer(),
-                            ],
-                          )
-                      ),
-                      SizedBox(height: 5.0,),
-                      Container(
-                          child: Column(
-                            children: [
-                              Text(partdata?.remainingQuantity.toString() ?? "", style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  fontSize: FontConstant.Size22,
-                                  fontWeight: FontWeight.w500,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                color: ColorConstant.erp_appColor,
-                              ),),
-                       SizedBox(height: 15,),
-                              Text("REMAINING QUANTITY", style: GoogleFonts.ubuntu(
-                                textStyle: TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                color: ColorConstant.erp_appColor,
-                              ),),
-                            ],
-                          )
-                      )
-                    ],
-                  ),
-
                 ),
-                SizedBox(height: 15.0,),
-
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,// Set max height constraints
                   children: [
-                  InkWell(
-                    onTap: () {
-                      IssueDialogue();
-                    },
-                    child: Container(
-                      width: 150,
-                      height: 50,
-                      // padding:,
+                    SizedBox(height: 5.0,),
+                    //customer details
+                    Container(
+                      height: screenHeight*0.18,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child:
+                      Column(
                         children: [
-                          Padding(
-                            padding:
-                            const EdgeInsets.all(3.0),
-                            child: SvgPicture.asset("assets/issue_icon.svg",
-                            height: 30,),
-                          ),
-                          SizedBox(width: 20,),
-                           Text(
-                            "ISSUE",
-                            style: GoogleFonts.ubuntu(
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(7.5,7.5,0,0),
+                            child: Text(partdata?.prodName ?? "", style: GoogleFonts.ubuntu(
                               textStyle: TextStyle(
                                 fontSize: FontConstant.Size18,
                                 fontWeight: FontWeight.w500,
                                 overflow: TextOverflow.ellipsis,
                               ),
                               color: ColorConstant.erp_appColor,
-                            ),
+                            ),),),
+                          Container(
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Spacer(),
+                                  Container(
+                                    width:screenWidth*0.9,
+                                    child:Divider(thickness: 2,color: Colors.grey) ,
+                                  ),
+                                  Spacer(),
+                                ],
+                              )
+                          ),
+                          SizedBox(height: 5.0,),
+                          Container(
+                              child: Column(
+                                children: [
+                                  Text(partdata?.remainingQuantity.toString() ?? "", style: GoogleFonts.ubuntu(
+                                    textStyle: TextStyle(
+                                      fontSize: FontConstant.Size22,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    color: ColorConstant.erp_appColor,
+                                  ),),
+                                  SizedBox(height: 15,),
+                                  Text("REMAINING QUANTITY", style: GoogleFonts.ubuntu(
+                                    textStyle: TextStyle(
+                                      fontSize: FontConstant.Size15,
+                                      fontWeight: FontWeight.w400,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    color: ColorConstant.erp_appColor,
+                                  ),),
+                                ],
+                              )
                           )
                         ],
                       ),
+
                     ),
-                  ),
-                    SizedBox(width: 35), // Add some space between the buttons
-                    InkWell(
-                      onTap: () {
-                        ReceiveDialogue();
-                      },
-                      child: Container(
-                        width: 150,
-                        height: 50,
-                        // padding:,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding:
-                              const EdgeInsets
-                                  .all(
-                                  3.0),
-                              child: SvgPicture
-                                  .asset(
-                                  "assets/receive_icon.svg",  height: 30,),
+                    SizedBox(height: 15.0,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            IssueDialogue();
+                          },
+                          child: Container(
+                            width: 150,
+                            height: 50,
+                            // padding:,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding:
+                                  const EdgeInsets.all(3.0),
+                                  child: SvgPicture.asset("assets/issue_icon.svg",
+                                    height: 30,),
+                                ),
+                                SizedBox(width: 20,),
+                                Text(
+                                  "ISSUE",
+                                  style: GoogleFonts.ubuntu(
+                                    textStyle: TextStyle(
+                                      fontSize: FontConstant.Size18,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    color: ColorConstant.erp_appColor,
+                                  ),
+                                )
+                              ],
                             ),
-                            SizedBox(width: 20,),
-                             Text(
-                              "RECEIVE",
+                          ),
+                        ),
+                        SizedBox(width: 35), // Add some space between the buttons
+                        InkWell(
+                          onTap: () {
+                            ReceiveDialogue();
+                          },
+                          child: Container(
+                            width: 150,
+                            height: 50,
+                            // padding:,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding:
+                                  const EdgeInsets
+                                      .all(
+                                      3.0),
+                                  child: SvgPicture
+                                      .asset(
+                                    "assets/receive_icon.svg",  height: 30,),
+                                ),
+                                SizedBox(width: 20,),
+                                Text(
+                                  "RECEIVE",
+                                  style: GoogleFonts.ubuntu(
+                                    textStyle: TextStyle(
+                                      fontSize: FontConstant.Size18,
+                                      fontWeight: FontWeight.w500,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    color: ColorConstant.erp_appColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 15.0,),
+
+                    Container(
+                      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                      height: screenHeight * 0.47,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            alignment: Alignment.topLeft,
+                            margin: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 0),
+                            child: Text(
+                              "Product Details",
                               style: GoogleFonts.ubuntu(
                                 textStyle: TextStyle(
                                   fontSize: FontConstant.Size18,
@@ -749,305 +799,276 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                                 ),
                                 color: ColorConstant.erp_appColor,
                               ),
-                            )
-                          ],
-                        ),
+                            ),
+                          ),
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: screenWidth * 0.86,
+                                  child: Divider(
+                                    thickness: 0.5,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 5.0),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Product Name",
+                                          style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.prodName ?? "",
+                                          style: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Vendor 1",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.vendor1 ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Vendor Code",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.vendorCode ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "project",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.project ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Description",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.prodDesc ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "MSL",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.msl ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        // Add more Text widgets here...
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Product ID",
+                                          style: TextStyle(
+                                            color: ColorConstant.grey_153,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.productCode ?? "",
+                                          style: TextStyle(
+                                            color: ColorConstant.black,
+                                            fontSize: FontConstant.Size15,
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Vendor 2",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.vendor2 ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Units",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.units ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Sub Group",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.subGroup ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          "Branch",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.grey_153,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        Text(
+                                          partdata?.branchName ?? "",
+                                          textAlign: TextAlign.start,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                                color: ColorConstant.black,
+                                                fontSize: FontConstant.Size15,
+                                                fontWeight: FontWeight.w300),
+                                          ),
+                                        ),
+                                        // Add more Text widgets here...
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
+
                   ],
                 ),
-                SizedBox(height: 15.0,),
 
-                Container(
-                  padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                  height: screenHeight * 0.47,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Container(
-                        alignment: Alignment.topLeft,
-                        margin: EdgeInsets.fromLTRB(7.5, 7.5, 7.5, 0),
-                        child: Text(
-                          "Product Details",
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              fontSize: FontConstant.Size18,
-                              fontWeight: FontWeight.w500,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            color: ColorConstant.erp_appColor,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Container(
-                              width: screenWidth * 0.86,
-                              child: Divider(
-                                thickness: 0.5,
-                                color: Colors.grey,
-                              ),
-                            ),
-
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Product Name",
-                                      style: TextStyle(
-                                        color: ColorConstant.grey_153,
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.prodName ?? "",
-                                      style: TextStyle(
-                                        color: ColorConstant.black,
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Vendor 1",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.vendor1 ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Vendor Code",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.vendorCode ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "project",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.project ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Description",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.prodDesc ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "MSL",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.msl ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    // Add more Text widgets here...
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Product ID",
-                                      style: TextStyle(
-                                        color: ColorConstant.grey_153,
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.productCode ?? "",
-                                      style: TextStyle(
-                                        color: ColorConstant.black,
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w300,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Vendor 2",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.vendor2 ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Units",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.units ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Sub Group",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.subGroup ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      "Branch",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.grey_153,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    Text(
-                                      partdata?.branchName ?? "",
-                                      textAlign: TextAlign.start,
-                                      style: GoogleFonts.ubuntu(
-                                        textStyle: TextStyle(
-                                            color: ColorConstant.black,
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w300),
-                                      ),
-                                    ),
-                                    // Add more Text widgets here...
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-
-              ],
+              ),
             ),
-
           ),
+        ),
       ),
     );
   }

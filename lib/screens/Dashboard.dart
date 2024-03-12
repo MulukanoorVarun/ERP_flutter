@@ -355,426 +355,429 @@ void autostart(){
             SafeArea(
                 child: Container(
                   color:ColorConstant.erp_appColor,
-                  child: Column(
-                    children: [
-                      Container(
-                        alignment: Alignment.topCenter,
-                        color: ColorConstant.erp_appColor,
-                        height: MediaQuery.of(context).size.height * 0.20,
-                        child: Row(
-                          children: [
-                            Padding(padding: EdgeInsets.only(left: 20)),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 25),
-                                Text(
-                                  DateFormat.yMMMMd().format(DateTime.now()),
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size13,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Container(
-                                  width: 220,// Wrapping username in a Container
-                                  child: Text(
-                                    "$username",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontSize: FontConstant.Size20,
-                                      fontWeight: FontWeight.bold,
-                                      overflow: TextOverflow.ellipsis,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Row(children: [
-                                  Container(
-                                    width: 20,
-                                    height: 20,
-                                    decoration: (setstatus=="Offline")?BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.yellowAccent,
-                                    ):BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
+                  child:
+                  Container(
+                    child:  Column(
+                      children: [
+                        Container(
+                          alignment: Alignment.topCenter,
+                          color: ColorConstant.erp_appColor,
+                          height: MediaQuery.of(context).size.height * 0.20,
+                          child: Row(
+                            children: [
+                              Padding(padding: EdgeInsets.only(left: 20)),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(height: 25),
                                   Text(
-                                    "$setstatus",
-                                    style:  TextStyle(
-                                      fontSize: FontConstant.Size15,
-                                      fontWeight: FontWeight.w400,
+                                    DateFormat.yMMMMd().format(DateTime.now()),
+                                    style: TextStyle(
+                                      fontSize: FontConstant.Size13,
+                                      fontWeight: FontWeight.w500,
                                       overflow: TextOverflow.ellipsis,
 
-                                      color: Colors.white,
+                                      color: Colors.grey,
                                     ),
                                   ),
-                                ],),
-                                SizedBox(height: 10), // Added SizedBox for spacing
-                              ],
-                            ),
-                            Spacer(),
-                            Column(
-                              children: [
-                                Padding(padding: EdgeInsets.only(top: 30)),
-                                Row(children: [
+                                  SizedBox(height: 10),
                                   Container(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner(from: "dashboard")));
-                                        if(res==true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-                                      child:SvgPicture.asset(
-                                        "assets/images/qr_scanner.svg",
-                                        height: 35,
-                                        width: 35,
+                                    width: 220,// Wrapping username in a Container
+                                    child: Text(
+                                      "$username",
+                                      maxLines: 2,
+                                      style: TextStyle(
+                                        fontSize: FontConstant.Size20,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 20),
-                                  Container(
-                                    child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
-                                        if(res==true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-                                      child:SvgPicture.asset(
-                                        "assets/images/profile_icon.svg",
-                                        height: 30,
-                                        width: 35,
-                                      ) ,
+                                  SizedBox(height: 10),
+                                  Row(children: [
+                                    Container(
+                                      width: 20,
+                                      height: 20,
+                                      decoration: (setstatus=="Offline")?BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.yellowAccent,
+                                      ):BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: Colors.green,
+                                      ),
                                     ),
-                                  ),
-                                  SizedBox(width: 10),
-                                ]),
-                              ],
-                            ),
-                          ],
+                                    SizedBox(width: 10),
+                                    Text(
+                                      "$setstatus",
+                                      style:  TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.ellipsis,
+
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],),
+                                  SizedBox(height: 10), // Added SizedBox for spacing
+                                ],
+                              ),
+                              Spacer(),
+                              Column(
+                                children: [
+                                  Padding(padding: EdgeInsets.only(top: 30)),
+                                  Row(children: [
+                                    Container(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Scanner(from: "dashboard")));
+                                          if(res==true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
+                                        child:SvgPicture.asset(
+                                          "assets/images/qr_scanner.svg",
+                                          height: 35,
+                                          width: 35,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 20),
+                                    Container(
+                                      child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                                          if(res==true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
+                                        child:SvgPicture.asset(
+                                          "assets/images/profile_icon.svg",
+                                          height: 30,
+                                          width: 35,
+                                        ) ,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                  ]),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Container(
+                        Container(
                           child: Expanded(
                             child: SingleChildScrollView(
                               physics: AlwaysScrollableScrollPhysics(),
-                            child: Container(
-                              height: MediaQuery.of(context).size.height * 0.80,
-                              width: double.infinity, // Set width to fill parent width
-                              decoration: BoxDecoration(
-                                color: ColorConstant.edit_bg_color,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0),
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.80,
+                                width: double.infinity, // Set width to fill parent width
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.edit_bg_color,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
+                                  ),
                                 ),
-                              ),
-                              padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-                              child: Column(// Set max height constraints
-                                children: [
-                                  if(roleStatus.contains("430"))...[
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
+                                padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+                                child: Column(// Set max height constraints
+                                  children: [
+                                    if(roleStatus.contains("430"))...[
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>Attendance()));
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
 
-                                        }
-                                      },
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/checkin_out_icon.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "Check In/Out",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                          }
+                                        },
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/checkin_out_icon.svg",
+                                                height: 50,
+                                                width: 50,
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "Check In/Out",
+                                                style: TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
 
-                                      ),
-                                    ),),
-                                  ],
-                                  SizedBox(height: 15,),
-                                  if(roleStatus.contains("431"))...[
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
-                                        );
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/ic_web_erp.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "ERP",
-                                              style:  TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+
                                         ),
-
-                                      ),
-
-                                    ),),
+                                      ),),
+                                    ],
                                     SizedBox(height: 15,),
+                                    if(roleStatus.contains("431"))...[
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => WebERP(url: webPageUrl)),
+                                          );
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
 
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => WhizzdomScreen(url: whizzdomPageUrl)),
-                                        );
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/ic_light_bulb.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "Whizzdom",
-                                              style:  TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/ic_web_erp.svg",
+                                                height: 50,
+                                                width: 50,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "ERP",
+                                                style:  TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
+
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
                                         ),
 
-                                      ),
+                                      ),),
+                                      SizedBox(height: 15,),
 
-                                    ),),
-                                  ],
-                                  if(roleStatus.contains("432"))...[
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => WhizzdomScreen(url: whizzdomPageUrl)),
+                                          );
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
+
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/ic_light_bulb.svg",
+                                                height: 50,
+                                                width: 50,
+                                              ),
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "Whizzdom",
+                                                style:  TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
+
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                        ),
+
+                                      ),),
+                                    ],
+                                    if(roleStatus.contains("432"))...[
+                                      SizedBox(height: 15,),
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => InventoryScreen()),
+                                          );
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
+
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/ic_inventory.svg",
+                                                height: 50,
+                                                width: 50,
+                                              ),
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "Inventory",
+                                                style: TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
+
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                        ),
+
+                                      ),),],
                                     SizedBox(height: 15,),
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => InventoryScreen()),
-                                        );
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
+                                    if(roleStatus.contains("433"))...[
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => GenTechnicianDashboard()),
+                                          );
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
 
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/ic_inventory.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "Inventory",
-                                              style: TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/ic_technician.svg",
+                                                height: 50,
+                                                width: 50,
                                               ),
-                                            ),
-                                          ],
-                                        ),
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "Service Engineers",
+                                                style:  TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
 
-                                      ),
-
-                                    ),),],
-                                  SizedBox(height: 15,),
-                                  if(roleStatus.contains("433"))...[
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => GenTechnicianDashboard()),
-                                        );
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/ic_technician.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "Service Engineers",
-                                              style:  TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
+
                                         ),
 
-                                      ),
+                                      ),)],
+                                    SizedBox(height: 15,),
+                                    if(roleStatus.contains("434"))...[
+                                      Container(child: InkWell(
+                                        onTap: () async {
+                                          var res = await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => GenTrackerDashboard()),
+                                          );
+                                          if(res == true){
+                                            setState(() {
+                                              isLoading = true;
+                                              DashboardApiFunction();
+                                            });
+                                          }
+                                        },
 
-                                    ),)],
-                                  SizedBox(height: 15,),
-                                  if(roleStatus.contains("434"))...[
-                                    Container(child: InkWell(
-                                      onTap: () async {
-                                        var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => GenTrackerDashboard()),
-                                        );
-                                        if(res == true){
-                                          setState(() {
-                                            isLoading = true;
-                                            DashboardApiFunction();
-                                          });
-                                        }
-                                      },
-
-                                      child:Container(
-                                        height: 80,
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(20.0),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(width: 10,),
-                                            SvgPicture.asset(
-                                              "assets/ic_gen_tracker.svg",
-                                              height: 50,
-                                              width: 50,
-                                            ),
-                                            SizedBox(width: 15,),
-                                            Text(
-                                              "Gen Tracker",
-                                              style:  TextStyle(
-                                                fontSize: FontConstant.Size20,
-                                                fontWeight: FontWeight.bold,
-                                                overflow: TextOverflow.ellipsis,
-
-                                                color: ColorConstant.erp_appColor,
+                                        child:Container(
+                                          height: 80,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(20.0),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10,),
+                                              SvgPicture.asset(
+                                                "assets/ic_gen_tracker.svg",
+                                                height: 50,
+                                                width: 50,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(width: 15,),
+                                              Text(
+                                                "Gen Tracker",
+                                                style:  TextStyle(
+                                                  fontSize: FontConstant.Size20,
+                                                  fontWeight: FontWeight.bold,
+                                                  overflow: TextOverflow.ellipsis,
+
+                                                  color: ColorConstant.erp_appColor,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
                                         ),
 
-                                      ),
+                                      ),)],
+                                    SizedBox(height: 15,),
+                                  ],
+                                ),
 
-                                    ),)],
-                                  SizedBox(height: 15,),
-                                ],
                               ),
-
                             ),
-                          ),
 
-                        ),
-                      )
-                    ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 )
             )
