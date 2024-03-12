@@ -125,310 +125,316 @@ class _FollowUpListState extends State<FollowUpList> {
                         if (followuplist.length > 0) ...[
                          SingleChildScrollView(
                            physics: AlwaysScrollableScrollPhysics(),
-                           child:  Expanded(
-                             child: Container(
-                               width: double
-                                   .infinity,
-                                height: MediaQuery.of(context).size.height-56,// Set width to fill parent width
-                               decoration: BoxDecoration(
-                                 color: ColorConstant.edit_bg_color,
-                                 borderRadius: BorderRadius.only(
-                                   topLeft: Radius.circular(30.0),
-                                   topRight: Radius.circular(30.0),
+                           child:  Flex(
+                             direction: Axis.horizontal,
+                             children: [
+                               Expanded(
+                                 flex: 1,
+                                 child: Container(
+                                   width: double
+                                       .infinity,
+                                   height: MediaQuery.of(context).size.height-56,// Set width to fill parent width
+                                   decoration: BoxDecoration(
+                                     color: ColorConstant.edit_bg_color,
+                                     borderRadius: BorderRadius.only(
+                                       topLeft: Radius.circular(30.0),
+                                       topRight: Radius.circular(30.0),
+                                     ),
+                                   ),
+                                   padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                   child: GridView.builder(
+                                       itemCount: followuplist.length,
+                                       gridDelegate:
+                                       SliverGridDelegateWithFixedCrossAxisCount(
+                                           crossAxisCount: (MediaQuery.of(
+                                               context)
+                                               .size
+                                               .width <
+                                               600)
+                                               ? 1 // 2 items in a row for mobile
+                                               : 4, // 4 items in a row for tablet
+                                           crossAxisSpacing: 4,
+                                           mainAxisSpacing: 2,
+                                           childAspectRatio: (255 / 145)),
+                                       padding: const EdgeInsets.all(5),
+                                       physics: const BouncingScrollPhysics(),
+                                       shrinkWrap: true,
+                                       itemBuilder: (context, index) {
+                                         return Container(
+                                             child: Card(
+                                               elevation: 0,
+                                               shadowColor: Colors.white,
+                                               margin: const EdgeInsets.fromLTRB(
+                                                   3.0, 0.0, 0.0, 5.0),
+                                               shape: RoundedRectangleBorder(
+                                                 borderRadius: BorderRadius.circular(20),
+                                               ),
+                                               child: Column(
+                                                   crossAxisAlignment:
+                                                   CrossAxisAlignment.start,
+                                                   children: [
+                                                     Padding(
+                                                       padding:
+                                                       const EdgeInsets.all(8.0),
+                                                     ),
+                                                     Container(
+                                                       child: Row(
+                                                         children: [
+                                                           SizedBox(
+                                                             width: 10,
+                                                           ),
+                                                           Text(
+                                                             followuplist[index].ename ??
+                                                                 "",
+                                                             style: TextStyle(
+                                                               fontSize:
+                                                               FontConstant.Size15,
+                                                               fontWeight:
+                                                               FontWeight.w400,
+                                                               overflow:
+                                                               TextOverflow.ellipsis,
+                                                               color:
+                                                               ColorConstant.black,
+                                                             ),
+                                                           ),
+                                                         ],
+                                                       ),
+                                                     ),
+                                                     SizedBox(
+                                                       height: 10,
+                                                     ),
+                                                     Row(
+                                                       children: [
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 10, 0, 0, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               "Feedback",
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color: ColorConstant
+                                                                     .medium_grey,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                         SizedBox(width: 10),
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 0, 0, 10, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               "Type",
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color: ColorConstant
+                                                                     .medium_grey,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     SizedBox(
+                                                       height: 10,
+                                                     ),
+                                                     Row(
+                                                       children: [
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 10, 0, 0, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               followuplist[index]
+                                                                   .feedback ??
+                                                                   "",
+                                                               maxLines: 1,
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color:
+                                                                 ColorConstant.black,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                         SizedBox(width: 10),
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 0, 0, 10, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               followuplist[index]
+                                                                   .type ??
+                                                                   "",
+                                                               maxLines: 1,
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color:
+                                                                 ColorConstant.black,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     SizedBox(
+                                                       height: 10,
+                                                     ),
+                                                     Row(
+                                                       children: [
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 10, 0, 0, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               "Date",
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color: ColorConstant
+                                                                     .medium_grey,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                         SizedBox(width: 10),
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 0, 0, 10, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               "Time",
+                                                               maxLines: 1,
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color: ColorConstant
+                                                                     .medium_grey,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     SizedBox(
+                                                       height: 10,
+                                                     ),
+                                                     Row(
+                                                       children: [
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 10, 0, 0, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               followuplist[index]
+                                                                   .date ??
+                                                                   "",
+                                                               maxLines: 1,
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color:
+                                                                 ColorConstant.black,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                         SizedBox(width: 10),
+                                                         Expanded(
+                                                           child: Container(
+                                                             padding:
+                                                             EdgeInsets.fromLTRB(
+                                                                 0, 0, 10, 0),
+                                                             alignment:
+                                                             Alignment.centerLeft,
+                                                             child: Text(
+                                                               // "argfyyyyyyyyweriufgywey",
+                                                               followuplist[index]
+                                                                   .time ??
+                                                                   "",
+                                                               maxLines: 1,
+                                                               style: TextStyle(
+                                                                 fontSize:
+                                                                 FontConstant.Size15,
+                                                                 fontWeight:
+                                                                 FontWeight.w400,
+                                                                 overflow: TextOverflow
+                                                                     .ellipsis,
+                                                                 color:
+                                                                 ColorConstant.black,
+                                                               ),
+                                                             ),
+                                                           ),
+                                                         ),
+                                                       ],
+                                                     ),
+                                                     SizedBox(
+                                                       height: 10,
+                                                     ),
+                                                   ]),
+
+                                               // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
+                                             ));
+                                         return null;
+                                       }),
                                  ),
                                ),
-                               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                               child: GridView.builder(
-                                   itemCount: followuplist.length,
-                                   gridDelegate:
-                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                       crossAxisCount: (MediaQuery.of(
-                                           context)
-                                           .size
-                                           .width <
-                                           600)
-                                           ? 1 // 2 items in a row for mobile
-                                           : 4, // 4 items in a row for tablet
-                                       crossAxisSpacing: 4,
-                                       mainAxisSpacing: 2,
-                                       childAspectRatio: (255 / 145)),
-                                   padding: const EdgeInsets.all(5),
-                                   physics: const BouncingScrollPhysics(),
-                                   shrinkWrap: true,
-                                   itemBuilder: (context, index) {
-                                     return Container(
-                                         child: Card(
-                                           elevation: 0,
-                                           shadowColor: Colors.white,
-                                           margin: const EdgeInsets.fromLTRB(
-                                               3.0, 0.0, 0.0, 5.0),
-                                           shape: RoundedRectangleBorder(
-                                             borderRadius: BorderRadius.circular(20),
-                                           ),
-                                           child: Column(
-                                               crossAxisAlignment:
-                                               CrossAxisAlignment.start,
-                                               children: [
-                                                 Padding(
-                                                   padding:
-                                                   const EdgeInsets.all(8.0),
-                                                 ),
-                                                 Container(
-                                                   child: Row(
-                                                     children: [
-                                                       SizedBox(
-                                                         width: 10,
-                                                       ),
-                                                       Text(
-                                                         followuplist[index].ename ??
-                                                             "",
-                                                         style: TextStyle(
-                                                           fontSize:
-                                                           FontConstant.Size15,
-                                                           fontWeight:
-                                                           FontWeight.w400,
-                                                           overflow:
-                                                           TextOverflow.ellipsis,
-                                                           color:
-                                                           ColorConstant.black,
-                                                         ),
-                                                       ),
-                                                     ],
-                                                   ),
-                                                 ),
-                                                 SizedBox(
-                                                   height: 10,
-                                                 ),
-                                                 Row(
-                                                   children: [
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             10, 0, 0, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           "Feedback",
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color: ColorConstant
-                                                                 .medium_grey,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                     SizedBox(width: 10),
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             0, 0, 10, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           "Type",
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color: ColorConstant
-                                                                 .medium_grey,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                   ],
-                                                 ),
-                                                 SizedBox(
-                                                   height: 10,
-                                                 ),
-                                                 Row(
-                                                   children: [
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             10, 0, 0, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           followuplist[index]
-                                                               .feedback ??
-                                                               "",
-                                                           maxLines: 1,
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color:
-                                                             ColorConstant.black,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                     SizedBox(width: 10),
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             0, 0, 10, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           followuplist[index]
-                                                               .type ??
-                                                               "",
-                                                           maxLines: 1,
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color:
-                                                             ColorConstant.black,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                   ],
-                                                 ),
-                                                 SizedBox(
-                                                   height: 10,
-                                                 ),
-                                                 Row(
-                                                   children: [
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             10, 0, 0, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           "Date",
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color: ColorConstant
-                                                                 .medium_grey,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                     SizedBox(width: 10),
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             0, 0, 10, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           "Time",
-                                                           maxLines: 1,
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color: ColorConstant
-                                                                 .medium_grey,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                   ],
-                                                 ),
-                                                 SizedBox(
-                                                   height: 10,
-                                                 ),
-                                                 Row(
-                                                   children: [
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             10, 0, 0, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           followuplist[index]
-                                                               .date ??
-                                                               "",
-                                                           maxLines: 1,
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color:
-                                                             ColorConstant.black,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                     SizedBox(width: 10),
-                                                     Expanded(
-                                                       child: Container(
-                                                         padding:
-                                                         EdgeInsets.fromLTRB(
-                                                             0, 0, 10, 0),
-                                                         alignment:
-                                                         Alignment.centerLeft,
-                                                         child: Text(
-                                                           // "argfyyyyyyyyweriufgywey",
-                                                           followuplist[index]
-                                                               .time ??
-                                                               "",
-                                                           maxLines: 1,
-                                                           style: TextStyle(
-                                                             fontSize:
-                                                             FontConstant.Size15,
-                                                             fontWeight:
-                                                             FontWeight.w400,
-                                                             overflow: TextOverflow
-                                                                 .ellipsis,
-                                                             color:
-                                                             ColorConstant.black,
-                                                           ),
-                                                         ),
-                                                       ),
-                                                     ),
-                                                   ],
-                                                 ),
-                                                 SizedBox(
-                                                   height: 10,
-                                                 ),
-                                               ]),
-
-                                           // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
-                                         ));
-                                     return null;
-                                   }),
-                             ),
-                           ),
+                             ],
+                           )
                          )
                         ] else ...[
                           Expanded(
