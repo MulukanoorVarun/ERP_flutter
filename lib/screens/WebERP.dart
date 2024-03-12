@@ -64,34 +64,43 @@ class _WebERPState extends State<WebERP> {
       isLoading = false;
     });
   }
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      // DashboardApiFunction();
+    });
+  }
 
   //////////////////testing
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return RefreshIndicator(onRefresh: _refresh, child: MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
           elevation: 0,
           title: Container(
               child: Row(
-            children: [
-              // Spacer(),
-              Container(
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, true),
-                  child: Text("ERP",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: ColorConstant.white,
-                        fontSize: FontConstant.Size18,
-                        fontWeight: FontWeight.w500,
-                      )),
-                ),
-              ),
-            ],
-          )),
+                children: [
+                  // Spacer(),
+                  Container(
+                    child: InkWell(
+                      onTap: () => Navigator.pop(context, true),
+                      child: Text("ERP",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            color: ColorConstant.white,
+                            fontSize: FontConstant.Size18,
+                            fontWeight: FontWeight.w500,
+                          )),
+                    ),
+                  ),
+                ],
+              )),
           titleSpacing: 0,
           leading: Container(
             margin: const EdgeInsets.only(left: 10),
@@ -107,59 +116,69 @@ class _WebERPState extends State<WebERP> {
         ),
         body: Container(
             child: Column(children: <Widget>[
-          Expanded(
-              child: InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri(widget.url),),
-            androidOnGeolocationPermissionsShowPrompt:
-                (InAppWebViewController controller, String origin) async {
-              return GeolocationPermissionShowPromptResponse(
-                  origin: origin, allow: true, retain: true);
-            },
-            initialOptions: InAppWebViewGroupOptions(
-              android: AndroidInAppWebViewOptions(
-                useWideViewPort: true,
-                loadWithOverviewMode: true,
-                allowContentAccess: true,
-                geolocationEnabled: true,
-                allowFileAccess: true,
-                databaseEnabled: true, // Enables the WebView database
-                domStorageEnabled: true, // Enables DOM storage
-                builtInZoomControls: true, // Enables the built-in zoom controls
-                displayZoomControls: false, // Disables displaying zoom controls
-                safeBrowsingEnabled: true,// Enables Safe Browsing
-                clearSessionCache: true,
-              ),
+              Expanded(
+                  child: InAppWebView(
+                    initialUrlRequest: URLRequest(url: WebUri(widget.url),
+                    ),
+                    androidOnGeolocationPermissionsShowPrompt:
+                        (InAppWebViewController controller, String origin) async {
+                      return GeolocationPermissionShowPromptResponse(
+                          origin: origin, allow: true, retain: true);
+                    },
+                    initialOptions: InAppWebViewGroupOptions(
+                      android: AndroidInAppWebViewOptions(
+                        useWideViewPort: true,
+                        loadWithOverviewMode: true,
+                        allowContentAccess: true,
+                        geolocationEnabled: true,
+                        allowFileAccess: true,
+                        databaseEnabled: true, // Enables the WebView database
+                        domStorageEnabled: true, // Enables DOM storage
+                        builtInZoomControls: true, // Enables the built-in zoom controls
+                        displayZoomControls: false, // Disables displaying zoom controls
+                        safeBrowsingEnabled: true,// Enables Safe Browsing
+                        clearSessionCache: true,
+                      ),
 
-              ios: IOSInAppWebViewOptions(
-                allowsInlineMediaPlayback: true,
-              ),
-            ),
-            androidOnPermissionRequest: (InAppWebViewController controller,
-                String origin, List<String> resources) async {
-              return PermissionRequestResponse(
-                  resources: resources,
-                  action: PermissionRequestResponseAction.GRANT);
-            },
-            onWebViewCreated: (controller) {
-              _controller.complete(controller);
-            },
-            onLoadStart: (controller, url) {},
-            onLoadStop: (controller, url) {},
-            onDownloadStartRequest: (controller, url) async {
-              await UserApi.download_files(
-                      empId, sessionId, "${url.url}", context)
-                  .then((data) => {print(data)});
-              // final taskid = await FlutterDownloader.enqueue(
-              //   url: url.toString(),
-              //   savedDir: "/storage/emulated/0/Download",
-              //   showNotification: true, // show download progress in status bar (for android)
-              //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
-              // );
-            },
-          ))
-        ])),
+                      ios: IOSInAppWebViewOptions(
+                        allowsInlineMediaPlayback: true,
+                      ),
+                    ),
+                    androidOnPermissionRequest: (InAppWebViewController controller,
+                        String origin, List<String> resources) async {
+                      return PermissionRequestResponse(
+                          resources: resources,
+                          action: PermissionRequestResponseAction.GRANT);
+                    },
+                    onWebViewCreated: (controller) {
+                      _controller.complete(controller);
+                    },
+
+                    onLoadStart: (controller, url) {
+                      setState(() {
+                        isLoading = true;
+                      });
+                    },
+                    onLoadStop: (controller, url) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                    },
+                    onDownloadStartRequest: (controller, url) async {
+                      await UserApi.download_files(
+                          empId, sessionId, "${url.url}", context)
+                          .then((data) => {print(data)});
+                      // final taskid = await FlutterDownloader.enqueue(
+                      //   url: url.toString(),
+                      //   savedDir: "/storage/emulated/0/Download",
+                      //   showNotification: true, // show download progress in status bar (for android)
+                      //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
+                      // );
+                    },
+                  ))
+            ])),
       ),
-    );
+    ));
   }
   ///////////////////testign
 
