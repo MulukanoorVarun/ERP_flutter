@@ -96,43 +96,58 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
         body: Container(
             child: Column(children: <Widget>[
               Expanded(
-                  child: InAppWebView(
-                    initialUrlRequest: URLRequest(url: WebUri(widget.url),),
-                    androidOnGeolocationPermissionsShowPrompt:
-                        (InAppWebViewController controller, String origin) async {
-                      return GeolocationPermissionShowPromptResponse(
-                          origin: origin, allow: true, retain: true);
-                    },
-                    initialOptions: InAppWebViewGroupOptions(
-                      android: AndroidInAppWebViewOptions(
-                        useWideViewPort: true,
-                        loadWithOverviewMode: true,
-                        allowContentAccess: true,
-                        geolocationEnabled: true,
-                        allowFileAccess: true,
-                        databaseEnabled: true, // Enables the WebView database
-                        domStorageEnabled: true, // Enables DOM storage
-                        builtInZoomControls: true, // Enables the built-in zoom controls
-                        displayZoomControls: false, // Disables displaying zoom controls
-                        safeBrowsingEnabled: true, // Enables Safe Browsing
-                        clearSessionCache: true,
-                      ),
+                  child: Stack(
+                    children: [
+                      InAppWebView(
+                        initialUrlRequest: URLRequest(url: WebUri(widget.url),),
+                        androidOnGeolocationPermissionsShowPrompt:
+                            (InAppWebViewController controller, String origin) async {
+                          return GeolocationPermissionShowPromptResponse(
+                              origin: origin, allow: true, retain: true);
+                        },
+                        initialOptions: InAppWebViewGroupOptions(
+                          android: AndroidInAppWebViewOptions(
+                            useWideViewPort: true,
+                            loadWithOverviewMode: true,
+                            allowContentAccess: true,
+                            geolocationEnabled: true,
+                            allowFileAccess: true,
+                            databaseEnabled: true, // Enables the WebView database
+                            domStorageEnabled: true, // Enables DOM storage
+                            builtInZoomControls: true, // Enables the built-in zoom controls
+                            displayZoomControls: false, // Disables displaying zoom controls
+                            safeBrowsingEnabled: true, // Enables Safe Browsing
+                            clearSessionCache: true,
+                          ),
 
-                      ios: IOSInAppWebViewOptions(
-                        allowsInlineMediaPlayback: true,
+                          ios: IOSInAppWebViewOptions(
+                            allowsInlineMediaPlayback: true,
+                          ),
+                        ),
+                        androidOnPermissionRequest: (InAppWebViewController controller,
+                            String origin, List<String> resources) async {
+                          return PermissionRequestResponse(
+                              resources: resources,
+                              action: PermissionRequestResponseAction.GRANT);
+                        },
+                        onWebViewCreated: (controller) {
+                          _controller.complete(controller);
+                        },
+                        onLoadStart: (controller, url) {
+                          return setState(() {
+                            isLoading = true;
+                          });
+                        },
+                        onLoadStop: (controller, url) {
+                          return setState(() {
+                            isLoading = false;
+                          });
+                        },
                       ),
-                    ),
-                    androidOnPermissionRequest: (InAppWebViewController controller,
-                        String origin, List<String> resources) async {
-                      return PermissionRequestResponse(
-                          resources: resources,
-                          action: PermissionRequestResponseAction.GRANT);
-                    },
-                    onWebViewCreated: (controller) {
-                      _controller.complete(controller);
-                    },
-                    onLoadStart: (controller, url) {},
-                    onLoadStop: (controller, url) {},
+                      if(isLoading)...[
+                        Loaders()
+                      ]
+                    ],
                   ))
             ])),
       ),

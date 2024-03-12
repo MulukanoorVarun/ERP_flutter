@@ -40,9 +40,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     super.initState();
     LoadgeneratorDetailsApifunction();
     print("grn_id" + widget.gen_id.toString());
-  }
-
-  Future<void> LoadgeneratorDetailsApifunction() async {
     if (widget.act_name == "pendingComplaints") {
       setState(() {
         open_status = "Open";
@@ -50,6 +47,10 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     } else {
       open_status = "All";
     }
+  }
+
+  Future<void> LoadgeneratorDetailsApifunction() async {
+
     session = await PreferenceService().getString("Session_id") ?? "";
     empId = await PreferenceService().getString("UserId") ?? "";
     try {

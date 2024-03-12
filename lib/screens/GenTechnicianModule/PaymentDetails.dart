@@ -57,6 +57,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
   var empId = "";
   var session =  "";
   String enteredOtp = "";
+  bool isLoading  = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -64,6 +65,16 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     LoadNumbersAPI();
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      LoadNumbersAPI();
+    });
+  }
+  
   Future<void> LoadNumbersAPI() async{
     empId= await PreferenceService().getString("UserId")??"";
     session= await PreferenceService().getString("Session_id")??"";
@@ -93,6 +104,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
               if (data.error == 0) {
                 contacts_drop_down = data.contacts!;
                 payment_mode_drop_down = data.paymentModeList!;
+                
 
               } else {
 
@@ -462,7 +474,9 @@ else{
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     // TODO: implement build
-    return Scaffold(
+    return RefreshIndicator(
+        color: ColorConstant.erp_appColor, onRefresh: _refresh,
+        child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
           elevation: 0,
@@ -501,330 +515,331 @@ else{
           height: screenHeight,
           color: ColorConstant.edit_bg_color,
           child: SingleChildScrollView(
-              child: Container(
-                width: double.infinity, // Set width to fill parent width
-                decoration: BoxDecoration(
-                  color: ColorConstant.edit_bg_color,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
+            physics: AlwaysScrollableScrollPhysics(),
+            child: Container(
+              width: double.infinity, // Set width to fill parent width
+              decoration: BoxDecoration(
+                color: ColorConstant.edit_bg_color,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                child: Column(// Set max height constraints
-                  children: [
-                    Container(
-                      height: 500,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child:
-                      Column(
-                        children: [
-                          SizedBox(height: 10.0,),
-                          Container(
-                              child: InkWell(
-                                onTap: (){
+              ),
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+              child: Column(// Set max height constraints
+                children: [
+                  Container(
+                    height: 500,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child:
+                    Column(
+                      children: [
+                        SizedBox(height: 10.0,),
+                        Container(
+                            child: InkWell(
+                              onTap: (){
 
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                                  decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius:BorderRadius.circular(15.0), ),
-                                  child: Text(
-                                    "${widget.account_name}",
-                                    textAlign: TextAlign.center,
-                                    style:TextStyle(
-                                        color: ColorConstant.erp_appColor,
-                                        fontSize: FontConstant.Size15,
-                                        fontWeight: FontWeight.w500
-                                    ),
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 55,
+                                margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                                decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius:BorderRadius.circular(15.0), ),
+                                child: Text(
+                                  "${widget.account_name}",
+                                  textAlign: TextAlign.center,
+                                  style:TextStyle(
+                                      color: ColorConstant.erp_appColor,
+                                      fontSize: FontConstant.Size15,
+                                      fontWeight: FontWeight.w500
                                   ),
                                 ),
-                              )
-                          ),
-                          SizedBox(height: 10.0,),
-                          Row(
-                            children: [
-                              Spacer(),
-                              DropdownButtonHideUnderline(
-                                child: Container(
-                                  width: 250,
-                                  child: DropdownButton2<Contacts>(
-                                    isExpanded: true,
-                                    hint: const Row(
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            'Select Phone Number',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color:Color(0xFF011842),
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    items:contacts_drop_down.map((contacts) =>
-                                        DropdownMenuItem<Contacts>(
-                                          value: contacts,
-                                          child: Text(
-                                            contacts.name??"",
-                                            style: const
-                                            TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xFF011842),
-                                            ),
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-
-                                        ))
-                                        .toList(),
-                                    value: selectContact,
-                                    onChanged: (Contacts? value) {
-                                      if (value != null) {
-                                        setState(() {
-                                          selectContact = value;
-                                          print("Selected Complaint Type: ${value.name}, ID: ${value.mob1}");
-                                          contact = value?.name;
-                                          contactID = value?.mob1;
-                                          print("hfjkshfg"+contactID.toString());
-                                        });
-                                      }
-                                    },
-
-                                    buttonStyleData: ButtonStyleData(
-                                      height: 50,
-                                      width: 160,
-                                      padding: const EdgeInsets.only(left: 14, right: 14),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Color(0xFFE4EFF9),
-                                      ),
-
-                                    ),
-                                    iconStyleData: const IconStyleData(
-                                      icon: Icon(
-                                        Icons.arrow_drop_down_outlined,
-                                      ),
-                                      iconSize: 30,
-                                      iconEnabledColor: Color(0xFF011842),
-                                      iconDisabledColor: Colors.grey,
-                                    ),
-                                    dropdownStyleData: DropdownStyleData(
-                                      maxHeight: 200,
-                                      width: 350,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(14),
-                                        color: Color(0xFFE4EFF9),
-                                      ),
-
-                                      scrollbarTheme: ScrollbarThemeData(
-                                        radius: const Radius.circular(15),
-                                        thickness: MaterialStateProperty.all<double>(6),
-                                        thumbVisibility: MaterialStateProperty.all<bool>(true),
-                                      ),
-                                    ),
-                                    menuItemStyleData: const MenuItemStyleData(
-                                      height: 40,
-                                      padding: EdgeInsets.only(left: 14, right: 14),
-                                    ),
-                                  ),
-                                ),
-
                               ),
-                              Spacer(),
-                              Container(
-                                height: 45,
-                                width: 45,
+                            )
+                        ),
+                        SizedBox(height: 10.0,),
+                        Row(
+                          children: [
+                            Spacer(),
+                            DropdownButtonHideUnderline(
+                              child: Container(
+                                width: 250,
+                                child: DropdownButton2<Contacts>(
+                                  isExpanded: true,
+                                  hint: const Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          'Select Phone Number',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color:Color(0xFF011842),
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  items:contacts_drop_down.map((contacts) =>
+                                      DropdownMenuItem<Contacts>(
+                                        value: contacts,
+                                        child: Text(
+                                          contacts.name??"",
+                                          style: const
+                                          TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xFF011842),
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
 
-                                decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius: BorderRadius.circular(7.0)),
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact(actName: widget.account_name=="generator",id: widget.refId,)));
+                                      ))
+                                      .toList(),
+                                  value: selectContact,
+                                  onChanged: (Contacts? value) {
+                                    if (value != null) {
+                                      setState(() {
+                                        selectContact = value;
+                                        print("Selected Complaint Type: ${value.name}, ID: ${value.mob1}");
+                                        contact = value?.name;
+                                        contactID = value?.mob1;
+                                        print("hfjkshfg"+contactID.toString());
+                                      });
+                                    }
                                   },
-                                  child: SvgPicture.asset(
-                                    "assets/ic_add.svg",
-                                    fit: BoxFit.scaleDown,
-                                  ),
 
-                                ),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                          SizedBox(height: 10.0,),
-                          DropdownButtonHideUnderline(
-                            child: Container(
-                              width: 310,
-                              child: DropdownButton2<PaymentModeList>(
-                                isExpanded: true,
-                                hint: const Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Select Complaint Type',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color:Color(0xFF011842),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 50,
+                                    width: 160,
+                                    padding: const EdgeInsets.only(left: 14, right: 14),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: Color(0xFFE4EFF9),
                                     ),
-                                  ],
-                                ),
-                                items:payment_mode_drop_down.map((paymentMode) =>
-                                    DropdownMenuItem<PaymentModeList>(
-                                      value: paymentMode,
-                                      child: Text(
-                                        paymentMode.name ?? '',
-                                        style: const
-                                        TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xFF011842),
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
 
-                                    ))
-                                    .toList(),
-                                value: selectPaymentModeList,
-                                onChanged: (PaymentModeList? value) {
-                                  if (value != null) {
-                                    setState(() {
-                                      selectPaymentModeList = value;
-                                      print("Selected Complaint Type: ${value.name}, ID: ${value.id}");
-                                      PaymentMode = value?.name;
-                                      paymentModeID = value?.id;
-                                      print("hfjkshfg"+paymentModeID.toString());
-                                    });
-                                  }
-                                },
+                                  ),
+                                  iconStyleData: const IconStyleData(
+                                    icon: Icon(
+                                      Icons.arrow_drop_down_outlined,
+                                    ),
+                                    iconSize: 30,
+                                    iconEnabledColor: Color(0xFF011842),
+                                    iconDisabledColor: Colors.grey,
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    maxHeight: 200,
+                                    width: 350,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14),
+                                      color: Color(0xFFE4EFF9),
+                                    ),
 
-                                buttonStyleData: ButtonStyleData(
-                                  height: 50,
-                                  width: 160,
-                                  padding: const EdgeInsets.only(left: 14, right: 14),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                    color: Color(0xFFE4EFF9),
+                                    scrollbarTheme: ScrollbarThemeData(
+                                      radius: const Radius.circular(15),
+                                      thickness: MaterialStateProperty.all<double>(6),
+                                      thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                    ),
                                   ),
-
-                                ),
-                                iconStyleData: const IconStyleData(
-                                  icon: Icon(
-                                    Icons.arrow_drop_down_outlined,
+                                  menuItemStyleData: const MenuItemStyleData(
+                                    height: 40,
+                                    padding: EdgeInsets.only(left: 14, right: 14),
                                   ),
-                                  iconSize: 30,
-                                  iconEnabledColor: Color(0xFF011842),
-                                  iconDisabledColor: Colors.grey,
-                                ),
-                                dropdownStyleData: DropdownStyleData(
-                                  maxHeight: 200,
-                                  width: 350,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(14),
-                                    color: Color(0xFFE4EFF9),
-                                  ),
-
-                                  scrollbarTheme: ScrollbarThemeData(
-                                    radius: const Radius.circular(15),
-                                    thickness: MaterialStateProperty.all<double>(6),
-                                    thumbVisibility: MaterialStateProperty.all<bool>(true),
-                                  ),
-                                ),
-                                menuItemStyleData: const MenuItemStyleData(
-                                  height: 40,
-                                  padding: EdgeInsets.only(left: 14, right: 14),
                                 ),
                               ),
-                            ),
 
-                          ),
-                          SizedBox(height: 10.0,),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 55,
-                            margin:EdgeInsets.only(left:15.0,right:15.0),
-                            child: TextFormField(
-                              controller: Amount,
-                              cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: "Enter Amount*",
-                                hintStyle: TextStyle(
-                                    fontSize: FontConstant.Size15,
-                                    color: ColorConstant.erp_appColor,
-                                    fontWeight: FontWeight.w400),
-                                filled: true,
-                                fillColor: ColorConstant.edit_bg_color,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.0,),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 55,
-                            margin:EdgeInsets.only(left:15.0,right:15.0),
-                            child: TextFormField(
-                              controller: Reference,
-                              cursorColor: ColorConstant.black,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                hintText: "Enter Reference Number*",
-                                hintStyle: TextStyle(
-                                    fontSize: FontConstant.Size15,
-                                    color: ColorConstant.erp_appColor,
-                                    fontWeight: FontWeight.w400),
-                                filled: true,
-                                fillColor: ColorConstant.edit_bg_color,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0, color: ColorConstant.edit_bg_color),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: 10.0,),
-                          Container(
+                            Spacer(),
+                            Container(
+                              height: 45,
+                              width: 45,
+
+                              decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius: BorderRadius.circular(7.0)),
                               child: InkWell(
                                 onTap: (){
-                                  SelectAttachmentDialogue();
+                                  Navigator.push(context, MaterialPageRoute(builder: (context)=>AddContact(actName: widget.account_name=="generator",id: widget.refId,)));
                                 },
-                                child: Container(
+                                child: SvgPicture.asset(
+                                  "assets/ic_add.svg",
+                                  fit: BoxFit.scaleDown,
+                                ),
+
+                              ),
+                            ),
+                            Spacer(),
+                          ],
+                        ),
+                        SizedBox(height: 10.0,),
+                        DropdownButtonHideUnderline(
+                          child: Container(
+                            width: 310,
+                            child: DropdownButton2<PaymentModeList>(
+                              isExpanded: true,
+                              hint: const Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Select Complaint Type',
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color:Color(0xFF011842),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              items:payment_mode_drop_down.map((paymentMode) =>
+                                  DropdownMenuItem<PaymentModeList>(
+                                    value: paymentMode,
+                                    child: Text(
+                                      paymentMode.name ?? '',
+                                      style: const
+                                      TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF011842),
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+
+                                  ))
+                                  .toList(),
+                              value: selectPaymentModeList,
+                              onChanged: (PaymentModeList? value) {
+                                if (value != null) {
+                                  setState(() {
+                                    selectPaymentModeList = value;
+                                    print("Selected Complaint Type: ${value.name}, ID: ${value.id}");
+                                    PaymentMode = value?.name;
+                                    paymentModeID = value?.id;
+                                    print("hfjkshfg"+paymentModeID.toString());
+                                  });
+                                }
+                              },
+
+                              buttonStyleData: ButtonStyleData(
+                                height: 50,
+                                width: 160,
+                                padding: const EdgeInsets.only(left: 14, right: 14),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Color(0xFFE4EFF9),
+                                ),
+
+                              ),
+                              iconStyleData: const IconStyleData(
+                                icon: Icon(
+                                  Icons.arrow_drop_down_outlined,
+                                ),
+                                iconSize: 30,
+                                iconEnabledColor: Color(0xFF011842),
+                                iconDisabledColor: Colors.grey,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200,
+                                width: 350,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Color(0xFFE4EFF9),
+                                ),
+
+                                scrollbarTheme: ScrollbarThemeData(
+                                  radius: const Radius.circular(15),
+                                  thickness: MaterialStateProperty.all<double>(6),
+                                  thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                ),
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.only(left: 14, right: 14),
+                              ),
+                            ),
+                          ),
+
+                        ),
+                        SizedBox(height: 10.0,),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 55,
+                          margin:EdgeInsets.only(left:15.0,right:15.0),
+                          child: TextFormField(
+                            controller: Amount,
+                            cursorColor: ColorConstant.black,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              hintText: "Enter Amount*",
+                              hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size15,
+                                  color: ColorConstant.erp_appColor,
+                                  fontWeight: FontWeight.w400),
+                              filled: true,
+                              fillColor: ColorConstant.edit_bg_color,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.0,),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 55,
+                          margin:EdgeInsets.only(left:15.0,right:15.0),
+                          child: TextFormField(
+                            controller: Reference,
+                            cursorColor: ColorConstant.black,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              hintText: "Enter Reference Number*",
+                              hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size15,
+                                  color: ColorConstant.erp_appColor,
+                                  fontWeight: FontWeight.w400),
+                              filled: true,
+                              fillColor: ColorConstant.edit_bg_color,
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                              errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: BorderSide(
+                                    width: 0, color: ColorConstant.edit_bg_color),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10.0,),
+                        Container(
+                            child: InkWell(
+                              onTap: (){
+                                SelectAttachmentDialogue();
+                              },
+                              child: Container(
                                   alignment: Alignment.center,
                                   height: 45,
                                   margin: EdgeInsets.only(left: 15.0,right: 15.0),
@@ -850,44 +865,44 @@ else{
 
                                     ],
                                   )
-                                ),
-                              )
-                          ),
+                              ),
+                            )
+                        ),
 
-                          SizedBox(height: 50.0,),
-                          Container(
-                              child: InkWell(
-                                onTap: (){
-                                  CheckValidations();
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 45,
-                                  margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                                  decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(30.0), ),
-                                  child: Text(
-                                    "Send OTP",
-                                    textAlign: TextAlign.center,
-                                    style:TextStyle(
-                                      color: ColorConstant.white,
-                                      fontSize: FontConstant.Size15,
-                                    ),
+                        SizedBox(height: 50.0,),
+                        Container(
+                            child: InkWell(
+                              onTap: (){
+                                CheckValidations();
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 45,
+                                margin: EdgeInsets.only(left: 15.0,right: 15.0),
+                                decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(30.0), ),
+                                child: Text(
+                                  "Send OTP",
+                                  textAlign: TextAlign.center,
+                                  style:TextStyle(
+                                    color: ColorConstant.white,
+                                    fontSize: FontConstant.Size15,
                                   ),
                                 ),
-                              )
-                          ),
-                        ],
-                      ),
-
+                              ),
+                            )
+                        ),
+                      ],
                     ),
 
-                  ],
-                ),
+                  ),
 
+                ],
               ),
+
+            ),
           ),
         )
-    );
+    ));
   }
 
 }

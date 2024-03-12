@@ -40,6 +40,15 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
     super.initState();
     PaymentCollectionAPI();
   }
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      PaymentCollectionAPI();
+    });
+  }
 
   Future<void> PaymentCollectionAPI() async{
     empId= await PreferenceService().getString("UserId")??"";
@@ -72,7 +81,7 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return RefreshIndicator(onRefresh:_refresh,color: ColorConstant.erp_appColor,child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
           elevation: 0,
@@ -130,222 +139,233 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
         SafeArea(
           child: Container(
             color: ColorConstant.erp_appColor,
-            child: Column(
-              children: [
-    if(pc_list!.length>0)...[
-                Expanded(
-                  child: Container(
-                    width: double.infinity, // Set width to fill parent width
-                    decoration: BoxDecoration(
-                      color: ColorConstant.edit_bg_color,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30.0),
-                        topRight: Radius.circular(30.0),
+            child:SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Container(
+                height: MediaQuery.of(context).size.height,
+                child:  Column(
+                  children: [
+                    if(pc_list!.length>0)...[
+                      Expanded(
+                        child: Container(
+                          width: double.infinity, // Set width to fill parent width
+                          decoration: BoxDecoration(
+                            color: ColorConstant.edit_bg_color,
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30.0),
+                              topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: GridView.builder(
+                              itemCount: pc_list!.length,
+                              gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: (MediaQuery.of(context).size.width < 600)
+                                      ? 1  // 2 items in a row for mobile
+                                      : 4, // 4 items in a row for tablet
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 2,
+                                  childAspectRatio:
+                                  (255 / 115)),
+                              padding: const EdgeInsets.all(5),
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                    child: Card(
+                                      elevation: 0,
+                                      shadowColor: Colors.white,
+                                      margin: const EdgeInsets.fromLTRB(
+                                          3.0, 0.0, 0.0, 5.0),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            20),
+                                      ),
+                                      child: Column(
+                                          crossAxisAlignment:CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(padding:const EdgeInsets.all(8.0),),
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        pc_list![index].accountName??"-",
+                                                        style: TextStyle(
+                                                          fontSize: FontConstant.Size15,
+                                                          fontWeight: FontWeight.w400,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          color: ColorConstant.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        pc_list![index].amount??"-",
+                                                        style: TextStyle(
+                                                          fontSize: FontConstant.Size15,
+                                                          fontWeight: FontWeight.w400,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          color: ColorConstant.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 5,),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        pc_list![index].paymentRefNo??"-",
+                                                        style: TextStyle(
+                                                          fontSize: FontConstant.Size15,
+                                                          fontWeight: FontWeight.w400,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          color: ColorConstant.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                            SizedBox(height: 5,),
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(width: 10),
+                                                      Text(
+                                                        pc_list![index].paymentMode??"-",
+                                                        style: TextStyle(
+                                                          fontSize: FontConstant.Size15,
+                                                          fontWeight: FontWeight.w400,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          color: ColorConstant.black,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      SizedBox(width: 10),
+                                                      InkWell(
+                                                        onTap: (){
+                                                          Navigator.push(context,MaterialPageRoute(builder: (context)=>WebERP(url: pc_list![index].paymentProofFilePath??"")));
+                                                        },
+                                                        child:  Text(
+                                                          "View proof",
+                                                          style: TextStyle(
+                                                            fontSize: FontConstant.Size15,
+                                                            fontWeight: FontWeight.w400,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            color: ColorConstant.erp_appColor,
+                                                            decoration: TextDecoration.underline
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Spacer(),
+                                                Expanded(
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        width:80,
+                                                        padding:EdgeInsets.all(5.0),
+                                                        decoration: BoxDecoration(color: ColorConstant.edit_bg_color,borderRadius: BorderRadius.circular(3.0)),
+                                                        child: Text(
+                                                          pc_list![index].approvalStatus??"-",
+                                                          maxLines: 2,
+                                                          textAlign: TextAlign.center,
+                                                          style: TextStyle(
+                                                            fontSize: FontConstant.Size15,
+                                                            fontWeight: FontWeight.w400,
+                                                            overflow: TextOverflow.ellipsis,
+                                                            color: ColorConstant.black,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ]),
+
+
+                                      // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
+                                    ));
+                                return null;
+                              }),
+                        ),
                       ),
-                    ),
-                    padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                    child: GridView.builder(
-                        itemCount: pc_list!.length,
-                        gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: (MediaQuery.of(context).size.width < 600)
-                                ? 1  // 2 items in a row for mobile
-                                : 4, // 4 items in a row for tablet
-                            crossAxisSpacing: 4,
-                            mainAxisSpacing: 2,
-                            childAspectRatio:
-                            (255 / 120)),
-                        padding: const EdgeInsets.all(5),
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                            return Container(
-                                child: Card(
-                                  elevation: 0,
-                                  shadowColor: Colors.white,
-                                  margin: const EdgeInsets.fromLTRB(
-                                      3.0, 0.0, 0.0, 5.0),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(
-                                        20),
+                    ]else...[
+                      Expanded(
+                          child:
+                          SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            child: Container(
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.height,// Set width to fill parent width
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.edit_bg_color,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
                                   ),
-                                  child: Column(
-                                      crossAxisAlignment:CrossAxisAlignment.start,
-                                      children: [
-                                        Padding(padding:const EdgeInsets.all(8.0),),
+                                ),
+                                padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                child: Container(
+                                  child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        "No Data Available",
+                                        style: TextStyle(
+                                          fontSize: FontConstant.Size18,
+                                          fontWeight: FontWeight.bold,
+                                          overflow: TextOverflow.ellipsis,
+                                          color: ColorConstant.erp_appColor,
+                                        ),
+                                      )),
+                                )),
+                          ))
+                    ]
 
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  pc_list![index].accountName??"-",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  pc_list![index].amount??"-",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 10,),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  pc_list![index].paymentRefNo??"-",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-
-                                      SizedBox(height: 10,),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                Text(
-                                                  pc_list![index].paymentMode??"-",
-                                                  style: TextStyle(
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w400,
-                                                    overflow: TextOverflow.ellipsis,
-                                                    color: ColorConstant.black,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      SizedBox(height: 15,),
-
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                               InkWell(
-                                                 onTap: (){
-                                                   Navigator.push(context,MaterialPageRoute(builder: (context)=>WebERP(url: pc_list![index].paymentProofFilePath??"")));
-                                                 },
-                                                 child:  Text(
-                                                   "View proof",
-                                                   style: TextStyle(
-                                                     fontSize: FontConstant.Size15,
-                                                     fontWeight: FontWeight.w400,
-                                                     overflow: TextOverflow.ellipsis,
-                                                     color: ColorConstant.black,
-                                                   ),
-                                                 ),
-                                               )
-                                              ],
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Expanded(
-                                            child: Row(
-                                              children: [
-                                                Container(
-                                                  width:80,
-                                                  padding:EdgeInsets.all(5.0),
-                                                  decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.circular(3.0)),
-                                                  child: Text(
-                                                    pc_list![index].approvalStatus??"-",
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w400,
-                                                      overflow: TextOverflow.ellipsis,
-                                                      color: ColorConstant.black,
-                                                    ),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ]),
-
-
-                                  // CategoryProductCard(context,UpdateFavoriteFunction,AddToCartFunction,mak,productlist[index])
-                                ));
-                          return null;
-                        }),
-                  ),
-                ),
-      ]else...[
-      Expanded(
-          child: Container(
-              width: double.infinity, // Set width to fill parent width
-              decoration: BoxDecoration(
-                color: ColorConstant.edit_bg_color,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
+                  ],
                 ),
               ),
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Container(
-                child: Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "No Data Available",
-                      style: TextStyle(
-                        fontSize: FontConstant.Size18,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                        color: ColorConstant.erp_appColor,
-                      ),
-                    )),
-              )))
-    ]
-
-              ],
             ),
           ),
         )
-    );
+    ),);
   }
 }

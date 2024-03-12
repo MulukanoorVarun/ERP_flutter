@@ -141,7 +141,7 @@ class _ProfileState extends State<Profile> {
         ),
         content: Container(
                 width:400,
-                height: 75,
+                height: 100,
                 alignment: Alignment.center,
                 child:Text('$username, you are signing out from  $appName app on this device ',
                   maxLines:4,style:  TextStyle(

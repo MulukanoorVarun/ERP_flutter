@@ -45,13 +45,12 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
               if (data.error == 0) {
                 isLoading = false;
                 accountList = data.accountList!;
-                if(accountList!.length.toDouble() <= double.parse(accountList!.last.toString())){
-                  isLoading = false;
-                }else{
-                  isLoading == true;
-                }
+                // if(accountList!.length.toDouble() <= double.parse(accountList!.last.toString())){
+                isLoading = false;
+              // }
 
               } else {
+                isLoading = false;
                 accountList = [];
               }
             } else {
@@ -60,10 +59,25 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                   context, MaterialPageRoute(builder: (context) => Login()));
             }
           })
+        }else{
+          isLoading = false
         }
       });
     } on Error catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    if (searched_string.length >= 3) {
+      print("searched_string:${searched_string}");
+      setState(() {
+        isLoading = true;
+        AccountSuggestionAPI();
+      });
     }
   }
 
@@ -108,9 +122,8 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
           ),
         ),
       ),
-      body: (isLoading)?Loaders():SafeArea(
-        child:
-        Column(
+      body: (isLoading)?Loaders():RefreshIndicator(onRefresh: _refresh,color: ColorConstant.erp_appColor,child: SafeArea(
+        child: Column(
           children: [
             const SizedBox(
               height: 10,
@@ -170,6 +183,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
             ),
             Expanded(
                 child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
                   child: Container(
                     child: GridView.builder(
                         itemCount: accountList!.length,
@@ -187,18 +201,18 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
 
                           if(accountList!.length>0){
                             return InkWell(
-                                onTap: () {
-                                  // if(actname == "pendingComplaints"&&status=="Open"){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>
-                                      PaymentDetails(
+                              onTap: () {
+                                // if(actname == "pendingComplaints"&&status=="Open"){
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>
+                                    PaymentDetails(
                                       account_name: "Account",
                                       name:"",
                                       genId: "",
                                       refId: accountList![index].accountId,
                                     ),
-                                    ));
-                                  // }
-                                },
+                                ));
+                                // }
+                              },
                               child: SizedBox(
                                 child: Container(
                                   width: screenWidth * 0.9,
@@ -218,16 +232,34 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                               ),
                             );
                           }else{
-                            return Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.w500,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
+                            return Expanded(
+                                child:
+                                SingleChildScrollView(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  child: Container(
+                                      width: double.infinity,
+                                      height: MediaQuery.of(context).size.height,// Set width to fill parent width
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.edit_bg_color,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(30.0),
+                                          topRight: Radius.circular(30.0),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                                      child: Container(
+                                        child: Align(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "No Data Available",
+                                              style: TextStyle(
+                                                fontSize: FontConstant.Size18,
+                                                fontWeight: FontWeight.bold,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: ColorConstant.erp_appColor,
+                                              ),
+                                            )),
+                                      )),
                                 ));
                           }
 
@@ -237,7 +269,7 @@ class _AccountSuggestionState extends State<AccountSuggestion>{
                 ))
           ],
         ),
-      ),
+      ),),
     );
   }
 

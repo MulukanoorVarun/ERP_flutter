@@ -860,10 +860,10 @@ packages:
     dependency: "direct main"
     description:
       name: geocoding
-      sha256: "4837e0b957c49b0a795be1d8caa2f51eaeebb7d1945485faafccd510ffe197fb"
+      sha256: d128cabf32b7f8e8a304484fe7ac87d9be1f2cd1b114e6fb8cb79400c7cd2cfb
       url: "https://pub.dev"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.1+1"
   geocoding_android:
     dependency: transitive
     description:
@@ -876,10 +876,10 @@ packages:
     dependency: transitive
     description:
       name: geocoding_ios
-      sha256: "3f79bb7793ff4796a51d18100cee875d5f7b16e1496dbcd6312e3ac8f79d608a"
+      sha256: "8a39bfb650af55209c42e564036a550b32d029e0733af01dc66c5afea50388d3"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.0"
+    version: "2.3.0"
   geocoding_platform_interface:
     dependency: transitive
     description:
