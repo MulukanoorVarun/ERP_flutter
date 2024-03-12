@@ -10,6 +10,7 @@ import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -242,8 +243,18 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
             if (widget.actName == "NearByGenerators") ...[
               Container(
                 child: IconButton(
-                  onPressed: () {
-
+                  onPressed: () async{
+                    if(widget.location!=null){
+                      var loc = widget.location?.split(",").toString();
+                      // var uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", res[0].toDouble(), res[1].toDouble())
+                      var uri = Uri.parse("google.navigation:q=${loc![0]},${loc![1]}&mode=d");
+                      if (await canLaunch(uri.toString())) {
+                    await launch(uri.toString());
+                    } else {
+                    throw 'Could not launch ${uri.toString()}';
+                    }
+                    // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                  }
                   },
                   icon: const Icon(
                     Icons.assistant_direction_sharp,
@@ -393,6 +404,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "$Cust_name",
+                                              maxLines: 2,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstant.black,
@@ -448,6 +460,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "$mob_num",
+                                              maxLines: 2,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstant.black,
@@ -461,6 +474,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "$alt_mob_num",
+                                              maxLines: 2,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstant.black,
@@ -518,6 +532,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "$mail_id",
+                                              maxLines: 2,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
                                                   color: ColorConstant.black,
@@ -531,7 +546,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                             alignment: Alignment.topLeft,
                                             child: Text(
                                               "$address",
-                                              maxLines: 3,
+                                              maxLines: 2,
                                               overflow: TextOverflow.ellipsis,
                                               textAlign: TextAlign.start,
                                               style: TextStyle(
@@ -643,6 +658,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$p_name",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -656,6 +672,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$date_of_eng_sale",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -715,6 +732,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$eng_model",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -728,6 +746,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$disp_date",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -787,6 +806,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$dg_set_num",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -800,6 +820,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$disp_date",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -859,6 +880,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$batt_num",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,
@@ -872,6 +894,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                           alignment: Alignment.topLeft,
                                           child: Text(
                                             "$status",
+                                            maxLines: 2,
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                                 color: ColorConstant.black,

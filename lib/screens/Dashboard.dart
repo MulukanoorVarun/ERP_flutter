@@ -19,6 +19,7 @@ import 'package:flutter_svg/svg.dart';
  
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uni_links/uni_links.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
@@ -77,6 +78,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   void initState()  {
+    initUniLinks();
     print(WEB_SOCKET_URL);
     webSocketManager.init();
     super.initState();
@@ -84,10 +86,43 @@ class _DashboardState extends State<Dashboard> {
     DashboardApiFunction();
   }
 
+  void initUniLinks() async {
+    try {
+      String? initialLink = await getInitialLink();
+      print(initialLink);
+
+      if (initialLink != null) {
+        // Handle the initial deep link
+        handleDeepLink(context, initialLink);
+      }
+    } on PlatformException {
+      // Handle errors
+    }
+  }
+
+  void handleDeepLink(BuildContext context, String link) {
+    final uri = Uri.parse(link);
+    if (uri.pathSegments.length < 2) {
+      print("The pathSegments list does not have enough elements");
+      return;
+    }
+    var route = uri.pathSegments[0];
+    print("path1: $route");
+    var routeId = uri.pathSegments[1];
+    print("path2: $routeId");
+    if (route == "discussion") {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => WhizzdomScreen(url: link)));
+    }
+    // Add your logic to handle the deep link
+    print("Received deep link: $link");
+  }
+
 
 void autostart(){
   var austostart = AndroidAutostart.navigateAutoStartSetting;
-
   AndroidAutostart.customSetComponent(
     manufacturer: "xiaomi",
     pkg: "com.miui.securitycenter",
@@ -220,7 +255,7 @@ void autostart(){
                   }
                 }else{
                   setState(() {
-                    print("offine");
+                    print("Status knlknn offine");
                     setstatus ="Offline";
                   });
                 }

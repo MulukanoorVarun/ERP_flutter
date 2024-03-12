@@ -314,7 +314,9 @@ void initState() {
         child: Container(
           color: ColorConstant.edit_bg_color,
           height: screenHeight,
-          child: Expanded(
+          child: Column(
+            children: [
+         Expanded(
             child: Container(
               width: double.infinity, // Set width to fill parent width
               decoration: BoxDecoration(
@@ -608,6 +610,7 @@ void initState() {
 
             ),
           ),
+        ]),
         ),
       )
     );

@@ -327,7 +327,7 @@ class BackgroundLocation {
         } else {
           print("Hello GENERP! You're Offline!");
           showNotification("GEN ERP", "You're Offline!");
-
+        }
           saveLocations(
               empId,
               sessionId,
@@ -341,7 +341,6 @@ class BackgroundLocation {
               locationData['accuracy'],
               ""
           );
-        }
       }
     });
   }

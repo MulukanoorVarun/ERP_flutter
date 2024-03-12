@@ -90,10 +90,10 @@ class _AttendanceState extends State<Attendance> {
       //backgroundColor: ColorConstant.edit_bg_color,
       // Set your desired height here
         body:(isLoading)?Loaders():SafeArea(
+            child:RefreshIndicator(
+              onRefresh: _refresh,
             child: Container(
               color:ColorConstant.erp_appColor,
-                child:RefreshIndicator(
-                  onRefresh: _refresh,
               child: Column(
                 children: [
                   Container(
