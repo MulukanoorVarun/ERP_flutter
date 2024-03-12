@@ -561,7 +561,7 @@ class _ProfileState extends State<Profile> {
                                             fontSize: FontConstant.Size18,
                                             fontWeight: FontWeight.w500),
 
-                                        maxLines: 2,
+                                        maxLines: 3,
                                       ),
                                     ),
                                   ],
