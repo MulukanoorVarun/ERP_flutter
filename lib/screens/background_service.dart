@@ -420,5 +420,3 @@ class Location {
   }
 
 }
-
-

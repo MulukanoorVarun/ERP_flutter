@@ -4,7 +4,6 @@ import 'package:GenERP/screens/GenInventory/InventoryScreen.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:GenERP/screens/GenTechnicianModule/TechnicianDashboard.dart';
 import 'package:GenERP/screens/GenTracker/GenTrackerDashboard.dart';
-import 'package:GenERP/screens/LocationService.dart';
 import 'package:GenERP/screens/Profile.dart';
 import 'package:GenERP/screens/WebERP.dart';
 import 'package:GenERP/screens/attendance_screen.dart';

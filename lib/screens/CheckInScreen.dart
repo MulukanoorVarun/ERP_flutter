@@ -29,7 +29,6 @@ import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import 'CheckOutScreen.dart';
 import 'FrontCameraCapture.dart';
-import 'LocationService.dart';
 import 'background_service.dart';
 
 class CheckInScreen extends StatefulWidget {

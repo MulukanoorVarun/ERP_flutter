@@ -144,11 +144,23 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
      _Error = "Enter Generator Id";
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return RefreshIndicator(
+        color: ColorConstant.erp_appColor,
+        onRefresh: _refresh,
+      child:Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -352,6 +364,7 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
 
       ),
       )),
+      ),
     );
   }
 

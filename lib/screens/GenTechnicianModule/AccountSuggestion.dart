@@ -1,7 +1,6 @@
 import 'package:GenERP/screens/GenTechnicianModule/PaymentDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';

@@ -172,7 +172,6 @@ class _LoginState extends State<Login> {
                   var roles = data.permissions!.toString();
                   PreferenceService().saveString("roles", roles);
 
-
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -180,18 +179,17 @@ class _LoginState extends State<Login> {
 
 
                 } else if (data.error == 1) {
-                  toast(context,
-                      "You are not authorized to login in this device !");
+                  print(data.error.toString());
+                  toast(context, "You are not authorized to login in this device !");
                 } else if (data.error == 2) {
                   toast(context, "Invalid login credentials !");
+                  print(data.error.toString());
                 } else {
                   print(data.error.toString());
                 //  toast(context, "Something went wrong, Please try again.");
                 }
               })
-            }
-          else
-            {
+            } else {
            // toast(context, "Something went wrong, Please try again."),
               print("Something went wrong, Please try again.")}
         });

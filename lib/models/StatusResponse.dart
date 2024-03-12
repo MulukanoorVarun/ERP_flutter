@@ -40,7 +40,9 @@ class StatusResponse {
     userId = json['user_id'];
     name = json['name'];
     emailId = json['email_id'];
-    permissions = json['permissions'].cast<String>();
+    if (json['permissions'] != null) {
+      permissions = json['permissions'].cast<String>();
+    }
     attStatus = json['att_status'];
     appRequestAutostart = json['app_request_autostart'];
     notificationsCount = json['notifications_count'];

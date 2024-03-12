@@ -91,11 +91,25 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
     }
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isloading = true;
+      comp_List = [];
+      LoadgeneratorDetailsApifunction();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return RefreshIndicator(
+        color: ColorConstant.erp_appColor,
+        onRefresh: _refresh,
+      child:Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -130,15 +144,19 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           ),
         ),
       ),
-      body: (isloading) ? Loaders() :   SafeArea(
+      body: (isloading) ? Loaders() :
+      SafeArea(
         child: Container(
           color: ColorConstant.erp_appColor,
           child: Column(
               children: [
-              if(comp_List.length>0) ...[
-        Expanded(
-        child: Container(
-        width: double.infinity, // Set width to fill parent width
+               if(comp_List.length>0) ...[
+             Expanded(
+               child:SingleChildScrollView(
+                 physics: AlwaysScrollableScrollPhysics(),
+               child: Container(
+        width: double.infinity,
+                 height:screenHeight,// Set width to fill parent width
           decoration: BoxDecoration(
             color: ColorConstant.edit_bg_color,
             borderRadius: BorderRadius.only(
@@ -518,7 +536,8 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 }),
 
     ),
-    ),
+               ),
+               ),
                 ] else ...[
                   Expanded(
                       child: Container(
@@ -549,6 +568,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
               ]),
             ),
       ),
+    ),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:GenERP/Utils/storage.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -39,12 +40,32 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
   var sessionId = "";
   bool isLoading = true;
   InAppWebViewController? webViewController;
+  PullToRefreshController? pullToRefreshController;
+  PullToRefreshSettings pullToRefreshSettings = PullToRefreshSettings(
+    color: ColorConstant.erp_appColor,
+  );
+  bool pullToRefreshEnabled = true;
+
 
   final GlobalKey webViewKey = GlobalKey();
   var dl = DownloadManager();
   @override
   void initState() {
   //  loadData();
+    pullToRefreshController = kIsWeb
+        ? null
+        : PullToRefreshController(
+      settings: pullToRefreshSettings,
+      onRefresh: () async {
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          webViewController?.reload();
+        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+          webViewController?.loadUrl(
+              urlRequest:
+              URLRequest(url: await webViewController?.getUrl()));
+        }
+      },
+    );
     print("URL:${widget.url}");
     super.initState();
   }
@@ -131,17 +152,28 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
                               action: PermissionRequestResponseAction.GRANT);
                         },
                         onWebViewCreated: (controller) {
+                          webViewController = controller;
                           _controller.complete(controller);
                         },
+                        pullToRefreshController: pullToRefreshController,
                         onLoadStart: (controller, url) {
                           return setState(() {
                             isLoading = true;
                           });
                         },
                         onLoadStop: (controller, url) {
+                          pullToRefreshController?.endRefreshing();
                           return setState(() {
                             isLoading = false;
                           });
+                        },
+                        onReceivedError: (controller, request, error) {
+                          pullToRefreshController?.endRefreshing();
+                        },
+                        onProgressChanged: (controller, progress) {
+                          if (progress == 100) {
+                            pullToRefreshController?.endRefreshing();
+                          }
                         },
                       ),
                       if(isLoading)...[

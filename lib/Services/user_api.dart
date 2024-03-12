@@ -71,7 +71,6 @@ class UserApi {
       final res = await post(data, getLoginStatus, {});
       if (res != null) {
         print(res.body);
-
         return StatusResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");
@@ -127,7 +126,6 @@ class UserApi {
       final res = await post(data, getDashboardStatus, {});
       if (res != null) {
         print(res.body);
-
         return DashboardResponse.fromJson(jsonDecode(res.body));
       } else {
         print("Null Response");

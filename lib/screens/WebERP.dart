@@ -40,12 +40,32 @@ class _WebERPState extends State<WebERP> {
   var sessionId = "";
   bool isLoading = true;
   InAppWebViewController? webViewController;
+  PullToRefreshController? pullToRefreshController;
+  PullToRefreshSettings pullToRefreshSettings = PullToRefreshSettings(
+    color: ColorConstant.erp_appColor,
+  );
+  bool pullToRefreshEnabled = true;
+
 
   final GlobalKey webViewKey = GlobalKey();
   var dl = DownloadManager();
   @override
   void initState() {
     // loadData();
+    pullToRefreshController = kIsWeb
+        ? null
+        : PullToRefreshController(
+      settings: pullToRefreshSettings,
+      onRefresh: () async {
+        if (defaultTargetPlatform == TargetPlatform.android) {
+          webViewController?.reload();
+        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+          webViewController?.loadUrl(
+              urlRequest:
+              URLRequest(url: await webViewController?.getUrl()));
+        }
+      },
+    );
     super.initState();
 
   }
@@ -149,23 +169,33 @@ class _WebERPState extends State<WebERP> {
                                   action: PermissionRequestResponseAction.GRANT);
                             },
                             onWebViewCreated: (controller) {
+                              webViewController = controller;
                               _controller.complete(controller);
                             },
-                            pullToRefreshController: PullToRefreshController.new(onRefresh: () {
+                            // pullToRefreshController: PullToRefreshController.new(onRefresh: () {
+                            //  URLRequest(url: WebUri(widget.url),);
+                            // },
+                            // ),
 
-                            },
-                            ),
-
-
+                            pullToRefreshController: pullToRefreshController,
                             onLoadStart: (controller, url) {
                               return setState(() {
                                 isLoading = true;
                               });
                             },
                             onLoadStop: (controller, url) {
+                              pullToRefreshController?.endRefreshing();
                               return setState(() {
                                 isLoading = false;
                               });
+                            },
+                            onReceivedError: (controller, request, error) {
+                              pullToRefreshController?.endRefreshing();
+                            },
+                            onProgressChanged: (controller, progress) {
+                              if (progress == 100) {
+                                pullToRefreshController?.endRefreshing();
+                              }
                             },
                             onDownloadStartRequest: (controller, url) async {
                               await UserApi.download_files(

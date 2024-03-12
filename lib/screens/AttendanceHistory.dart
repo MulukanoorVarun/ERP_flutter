@@ -66,7 +66,10 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
     // Generate new data or update existing data
     setState(() {
       isLoading = true;
-      // DashboardApiFunction();
+      dateArrayList = [];
+      penalityArrayList = [];
+      initialRenderDone = true;
+
       month = DateTime.now();
       getMonth(DateFormat('MMMM').format(month));
       String formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -83,6 +86,12 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       selectedIndex=0;
       currentDayIndex=0;
       isLoading = true;
+      date = "";
+      intime = "";
+      outtime = "";
+      inlocation = "";
+      outlocation = "";
+      penalties = "";
       if(DateFormat('MMMM').format(present_month)==DateFormat('MMMM').format(month))
         {
           initialRenderDone=true;
@@ -102,6 +111,12 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       initialRenderDone = false;
       currentDayIndex=0;
       isLoading = true;
+       date = "";
+       intime = "";
+       outtime = "";
+       inlocation = "";
+       outlocation = "";
+       penalties = "";
       if(DateFormat('MMMM').format(present_month)==DateFormat('MMMM').format(month))
       {
         initialRenderDone=true;
@@ -540,11 +555,11 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                       padding: const EdgeInsets.only(top: 10.0),
                       child: Container(
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
-                              height: 10,
-                              width: 10,
+                              height: 5,
+                              width: 5,
                             ),
                             Container(
                               width: 80,
@@ -734,8 +749,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                               ),
                             ),
                             SizedBox(
-                              height: 10,
-                              width: 10,
+                              height: 5,
+                              width: 5,
                             ),
                           ],
                         ),

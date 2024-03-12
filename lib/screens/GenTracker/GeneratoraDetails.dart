@@ -195,12 +195,9 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                     MaterialPageRoute(builder: (context) => Splash()));
               }
             })
-          }
-        else
-          {
+          } else {
             isLoading = true,
-            toast(context,
-                "No response From the server, Please try Again!"),
+            toast(context,"No response From the server, Please try Again!"),
             print("error2")
           }
       });
@@ -209,11 +206,28 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     }
   }
 
+  Future<void> _refresh() async {
+    // Simulate a delay to mimic fetching new data from an API
+    await Future.delayed(const Duration(seconds: 2));
+    // Generate new data or update existing data
+    setState(() {
+      isLoading = true;
+      if (widget.actName == "NearByGenerators") {
+        LoadTechniciangeneratorDetailsApi();
+      }else{
+        LoadgeneratorDetailsApifunction();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
+    return RefreshIndicator(
+        color: ColorConstant.erp_appColor,
+        onRefresh: _refresh,
+      child:Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -279,685 +293,688 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
           ),
         ),
       ),
-      body: (isLoading)
-          ? Loaders()
-          : Container(
+      body: (isLoading) ? Loaders() :
+             Container(
               color: ColorConstant.erp_appColor,
               child: Column(children: [
                 if (notifier != 0) ...[
                   Expanded(
-                    child: Container(
-                      width: double.infinity, // Set width to fill parent width
-                      decoration: BoxDecoration(
-                        color: ColorConstant.edit_bg_color,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height,// Set width to fill parent width
+                        decoration: BoxDecoration(
+                          color: ColorConstant.edit_bg_color,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                        ),
+                        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                        child: Column(
+                          // Set max height constraints
+                          children: [
+                            SizedBox(
+                              height: 5.0,
+                            ),
+                            //customer details
+                            Container(
+                              height: screenHeight * 0.36,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.fromLTRB(7.5, 7.5, 0, 0),
+                                    child: Text(
+                                      "Customer Details",
+                                      style: TextStyle(
+                                        fontSize: FontConstant.Size18,
+                                        fontWeight: FontWeight.w500,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: screenWidth * 0.9,
+                                            child: Divider(
+                                                thickness: 0.5, color: Colors.grey),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Company",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Customer Name",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer()
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$comp_name",
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$Cust_name",
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Mobile Number",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Alternate Number",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$mob_num",
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$alt_mob_num",
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Mail ID",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "Address",
+                                                maxLines: 3,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.grey_153,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$mail_id",
+                                                maxLines: 2,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: 150,
+                                              alignment: Alignment.topLeft,
+                                              child: Text(
+                                                "$address",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                    color: ColorConstant.black,
+                                                    fontSize: FontConstant.Size15,
+                                                    fontWeight: FontWeight.w300),
+                                              ),
+                                            ),
+                                            Spacer(),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+                            //generator details
+
+                            Container(
+                              height: screenHeight * 0.4,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    margin: EdgeInsets.fromLTRB(7.5, 7.5, 0, 0),
+                                    child: Text(
+                                      "Generator Details",
+                                      style: TextStyle(
+                                        fontSize: FontConstant.Size18,
+                                        fontWeight: FontWeight.w500,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: screenWidth * 0.9,
+                                            child: Divider(
+                                                thickness: 0.5, color: Colors.grey),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      )),
+                                  SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Container(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Product Name",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Date of Engine Sale",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$p_name",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$date_of_eng_sale",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Engine Model",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Dispatch Date",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$eng_model",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$disp_date",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "DG set Number",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Date of Supply",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$dg_set_num",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$disp_date",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Battery Number",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "Status",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.grey_153,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: [
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$batt_num",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Container(
+                                                width: 150,
+                                                alignment: Alignment.topLeft,
+                                                child: Text(
+                                                  "$status",
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                      color: ColorConstant.black,
+                                                      fontSize: FontConstant.Size15,
+                                                      fontWeight: FontWeight.w300),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 5.0,
+                                          ),
+                                        ],
+                                      ))
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15.0,
+                            ),
+
+                            Align(
+                              alignment: Alignment.bottomCenter,
+                              child: Container(
+                                  child: InkWell(
+                                    onTap: () async {
+                                      var res = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => ComplaintDetails(
+                                                gen_id: gen_id,
+                                                act_name: "",
+                                              )));
+                                      if (res == true) {
+                                        isLoading = true;
+                                        LoadgeneratorDetailsApifunction();
+                                      }
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 45,
+                                      margin:
+                                      EdgeInsets.only(left: 15.0, right: 15.0),
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.erp_appColor,
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Text(
+                                        "View Complaint History",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontFamily: 'Nexa',
+                                          color: ColorConstant.white,
+                                          fontSize: FontConstant.Size15,
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            )
+                          ],
                         ),
                       ),
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-                      child: Column(
-                        // Set max height constraints
-                        children: [
-                          SizedBox(
-                            height: 5.0,
-                          ),
-                          //customer details
-                          Container(
-                            height: screenHeight * 0.36,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.fromLTRB(7.5, 7.5, 0, 0),
-                                  child: Text(
-                                    "Customer Details",
-                                    style: TextStyle(
-                                      fontSize: FontConstant.Size18,
-                                      fontWeight: FontWeight.w500,
-                                      overflow: TextOverflow.ellipsis,
-                                      color: ColorConstant.erp_appColor,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      width: screenWidth * 0.9,
-                                      child: Divider(
-                                          thickness: 0.5, color: Colors.grey),
-                                    ),
-                                    Spacer(),
-                                  ],
-                                )),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Company",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Customer Name",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer()
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$comp_name",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$Cust_name",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Mobile Number",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Alternate Number",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$mob_num",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$alt_mob_num",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Mail ID",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "Address",
-                                              maxLines: 3,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.grey_153,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$mail_id",
-                                              maxLines: 2,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Container(
-                                            width: 150,
-                                            alignment: Alignment.topLeft,
-                                            child: Text(
-                                              "$address",
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                  color: ColorConstant.black,
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w300),
-                                            ),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 5.0,
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                          //generator details
-
-                          Container(
-                            height: screenHeight * 0.4,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                            child: Column(
-                              children: [
-                                Container(
-                                  alignment: Alignment.topLeft,
-                                  margin: EdgeInsets.fromLTRB(7.5, 7.5, 0, 0),
-                                  child: Text(
-                                    "Generator Details",
-                                    style: TextStyle(
-                                      fontSize: FontConstant.Size18,
-                                      fontWeight: FontWeight.w500,
-                                      overflow: TextOverflow.ellipsis,
-                                      color: ColorConstant.erp_appColor,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                    child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Spacer(),
-                                    Container(
-                                      width: screenWidth * 0.9,
-                                      child: Divider(
-                                          thickness: 0.5, color: Colors.grey),
-                                    ),
-                                    Spacer(),
-                                  ],
-                                )),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Container(
-                                    child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Product Name",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Date of Engine Sale",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$p_name",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$date_of_eng_sale",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Engine Model",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Dispatch Date",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$eng_model",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$disp_date",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "DG set Number",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Date of Supply",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$dg_set_num",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$disp_date",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Battery Number",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "Status",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.grey_153,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$batt_num",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                        Container(
-                                          width: 150,
-                                          alignment: Alignment.topLeft,
-                                          child: Text(
-                                            "$status",
-                                            maxLines: 2,
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                                color: ColorConstant.black,
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300),
-                                          ),
-                                        ),
-                                        Spacer(),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                  ],
-                                ))
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 15.0,
-                          ),
-
-                          Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                                child: InkWell(
-                              onTap: () async {
-                                var res = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ComplaintDetails(
-                                              gen_id: gen_id,
-                                              act_name: "",
-                                            )));
-                                if (res == true) {
-                                  isLoading = true;
-                                  LoadgeneratorDetailsApifunction();
-                                }
-                              },
-                              child: Container(
-                                alignment: Alignment.center,
-                                height: 45,
-                                margin:
-                                    EdgeInsets.only(left: 15.0, right: 15.0),
-                                decoration: BoxDecoration(
-                                  color: ColorConstant.erp_appColor,
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Text(
-                                  "View Complaint History",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontFamily: 'Nexa',
-                                    color: ColorConstant.white,
-                                    fontSize: FontConstant.Size15,
-                                  ),
-                                ),
-                              ),
-                            )),
-                          )
-                        ],
-                      ),
-                    ),
+                    )
                   ),
                 ] else ...[
                   Expanded(
@@ -988,6 +1005,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                 ]
               ]),
             ),
+      ),
     );
   }
 }

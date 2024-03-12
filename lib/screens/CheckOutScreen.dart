@@ -27,7 +27,6 @@ import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
-import 'LocationService.dart';
 import 'background_service.dart';
 
 class CheckOutScreen extends StatefulWidget {
