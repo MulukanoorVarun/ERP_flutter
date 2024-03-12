@@ -146,7 +146,7 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 2,
                             childAspectRatio:
-                            (255 / 165)),
+                            (255 / 174)),
                         padding: const EdgeInsets.all(5),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
@@ -168,22 +168,23 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                         Padding(padding:const EdgeInsets.all(8.0),),
 
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(width: 10,),
                                             SvgPicture.asset(
                                               "assets/ic_building.svg",
-                                              height: 30,
-                                              width: 30,
+                                              height: 20,
+                                              width: 20,
                                             ),
                                             SizedBox(width: 10,),
                                             Container(
-                                              width: 130,
+                                              width: 250,
                                               child: Text(
                                                 tpech_comp_list![index].companyName??"",
-                                                maxLines: 2,
+                                                maxLines: 1,
                                                 style:  TextStyle(
-                                                  fontSize: FontConstant.Size15,
-                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: FontConstant.Size13,
+                                                  fontWeight: FontWeight.w300,
                                                   overflow: TextOverflow.ellipsis,
                                                   color: ColorConstant.black,
                                                 ),
@@ -191,29 +192,29 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: 10,),
+                                        SizedBox(height: 15,),
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
                                                     "assets/ic_generators.svg",
-                                                    height: 30,
-                                                    width: 30,
+                                                    height: 20,
+                                                    width: 20,
                                                   ),
                                                   SizedBox(width: 10),
                                                   Container(
-                                                    width: 130,
+                                                    width: 120,
                                                     child: Text(
-
                                                       tpech_comp_list![index].productName??"",
-                                                      maxLines: 3,
-
+                                                      maxLines: 2,
                                                       style: TextStyle(
-                                                        fontSize: FontConstant.Size15,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: FontConstant.Size13,
+                                                        fontWeight: FontWeight.w300,
                                                         overflow: TextOverflow.ellipsis,
                                                         color: ColorConstant.black,
                                                       ),
@@ -225,21 +226,22 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             Divider(),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
                                                     "assets/ic_tools.svg",
-                                                    height: 30,
-                                                    width: 30,
+                                                    height: 20,
+                                                    width: 20,
                                                   ),
                                                   SizedBox(width: 10),
                                                  Container(
-                                                   width: 130,
+                                                   width: 120,
                                                    child:  Text(
                                                      tpech_comp_list![index].complaintCategory??"",
                                                      style: TextStyle(
-                                                       fontSize: FontConstant.Size15,
-                                                       fontWeight: FontWeight.w400,
+                                                       fontSize: FontConstant.Size13,
+                                                       fontWeight: FontWeight.w300,
                                                        overflow: TextOverflow.ellipsis,
                                                        color: ColorConstant.black,
                                                      ),
@@ -254,27 +256,28 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                         SizedBox(height: 10,),
 
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
                                                     "assets/ic_location.svg",
-                                                    height: 30,
-                                                    width: 30,
+                                                    height: 25,
+                                                    width: 20,
                                                   ),
                                                   SizedBox(width: 10),
-                                                  Container(
-                                                    width: 130,
-
+                                              Container(
+                                                    width: 120,
                                                     child: Text(
                                                       tpech_comp_list![index].address??"",
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                       style: TextStyle(
-                                                        fontSize: FontConstant.Size15,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: FontConstant.Size13,
+                                                        fontWeight: FontWeight.w300,
                                                         overflow: TextOverflow.ellipsis,
                                                         color: ColorConstant.black,
                                                       ),
@@ -285,21 +288,22 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                             ),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
                                                     "assets/ic_complaint.svg",
-                                                    height: 30,
-                                                    width: 30,
+                                                    height: 20,
+                                                    width: 20,
                                                   ),
                                                   SizedBox(width: 10),
                                                   Container(
-                                                    width: 130,
+                                                    width: 120,
                                                     child: Text(
                                                       tpech_comp_list![index].complaintId??"",
                                                       style: TextStyle(
-                                                        fontSize: FontConstant.Size15,
-                                                        fontWeight: FontWeight.w400,
+                                                        fontSize: FontConstant.Size13,
+                                                        fontWeight: FontWeight.w300,
                                                         overflow: TextOverflow.ellipsis,
                                                         color: ColorConstant.black,
                                                       ),

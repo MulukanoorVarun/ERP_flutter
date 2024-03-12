@@ -160,7 +160,7 @@ class BackgroundLocation {
     await flutterLocalNotificationsPlugin.cancel(0);
   }
 
-    void initWebSocket() {
+  void initWebSocket() {
     Future.delayed(Duration.zero, () {
       webSocketManager.connect();
     });
@@ -197,8 +197,8 @@ class BackgroundLocation {
 
 
   /// Start receiving location updates at 5-second interval
-   static startLocationService() async {
-     init();
+  static startLocationService() async {
+    init();
     bool isGpsEnabled = await checkGpsStatus();
     bool isNetworkAvailable = await checkNetworkStatus();
     if (isGpsEnabled && isNetworkAvailable) {
@@ -283,7 +283,7 @@ class BackgroundLocation {
 
   /// Register a function to recive location updates as long as the location
   /// service has started
-    getLocationUpdates(Function(Location) location) {
+  getLocationUpdates(Function(Location) location) {
     // add a handler on the channel to recive updates from the native classes
     _channel.setMethodCallHandler((MethodCall methodCall) async {
       if (methodCall.method == 'location') {
@@ -328,19 +328,19 @@ class BackgroundLocation {
           print("Hello GENERP! You're Offline!");
           showNotification("GEN ERP", "You're Offline!");
         }
-          saveLocations(
-              empId,
-              sessionId,
-              "${locationData['latitude']},""${locationData['longitude']}",
-              locationData['speed'],
-              locationData['altitude'],
-              locationData['bearing'],
-              locationData['bearingAccuracyDegrees'],
-              locationData['verticalAccuracyMeters'],
-              locationData['speedAccuracyMetersPerSecond'],
-              locationData['accuracy'],
-              ""
-          );
+        saveLocations(
+            empId,
+            sessionId,
+            "${locationData['latitude']},""${locationData['longitude']}",
+            locationData['speed'],
+            locationData['altitude'],
+            locationData['bearing'],
+            locationData['bearingAccuracyDegrees'],
+            locationData['verticalAccuracyMeters'],
+            locationData['speedAccuracyMetersPerSecond'],
+            locationData['accuracy'],
+            ""
+        );
       }
     });
   }

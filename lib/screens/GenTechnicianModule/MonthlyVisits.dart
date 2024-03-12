@@ -154,8 +154,8 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                       crossAxisAlignment:CrossAxisAlignment.start,
                                       children: [
                                         Padding(padding:const EdgeInsets.all(8.0),),
-
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(width: 10,),
                                             SvgPicture.asset(
@@ -179,11 +179,13 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: 10,),
+                                        SizedBox(height: 15,),
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -196,7 +198,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                                     width: 120,
                                                     child: Text(
                                                       monthvisitlist[index].productName??"",
-                                                      maxLines: 3,
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size13,
                                                         fontWeight: FontWeight.w300,
@@ -210,6 +212,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             ),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -222,6 +225,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                                     width: 120,
                                                     child:  Text(
                                                       monthvisitlist[index].complaintCategory??"",
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size13,
                                                         fontWeight: FontWeight.w300,
@@ -239,9 +243,11 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                         SizedBox(height: 10,),
 
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -269,6 +275,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                             ),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -281,6 +288,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                                                     width: 120,
                                                     child: Text(
                                                       monthvisitlist[index].complaintId??"",
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.w400,

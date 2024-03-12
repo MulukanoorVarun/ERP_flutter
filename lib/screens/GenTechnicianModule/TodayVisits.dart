@@ -130,8 +130,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                 : 4, // 4 items in a row for tablet
                             crossAxisSpacing: 4,
                             mainAxisSpacing: 2,
-                            childAspectRatio:
-                            (255 / 160)),
+                            childAspectRatio: (255 / 160)),
                         padding: const EdgeInsets.all(5),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
@@ -153,6 +152,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                         Padding(padding:const EdgeInsets.all(8.0),),
 
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             SizedBox(width: 10,),
                                             SvgPicture.asset(
@@ -165,7 +165,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                               width: 250,
                                               child: Text(
                                                 todayvisitlist[index].companyName??"",
-                                                maxLines: 2,
+                                                maxLines: 1,
                                                 style:  TextStyle(
                                                   fontSize: FontConstant.Size13,
                                                   fontWeight: FontWeight.w300,
@@ -176,11 +176,13 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             )
                                           ],
                                         ),
-                                        SizedBox(height: 10,),
+                                        SizedBox(height: 15,),
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -193,7 +195,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                                     width: 120,
                                                     child: Text(
                                                       todayvisitlist[index].productName??"",
-                                                      maxLines: 3,
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size13,
                                                         fontWeight: FontWeight.w300,
@@ -207,6 +209,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             ),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -219,6 +222,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                                     width: 120,
                                                     child:  Text(
                                                       todayvisitlist[index].complaintCategory??"",
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size13,
                                                         fontWeight: FontWeight.w300,
@@ -232,13 +236,13 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             ),
                                           ],
                                         ),
-
                                         SizedBox(height: 10,),
-
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -266,6 +270,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                             ),
                                             Expanded(
                                               child: Row(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                                 children: [
                                                   SizedBox(width: 10),
                                                   SvgPicture.asset(
@@ -278,6 +283,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                                                     width: 120,
                                                     child: Text(
                                                       todayvisitlist[index].complaintId??"",
+                                                      maxLines: 2,
                                                       style: TextStyle(
                                                         fontSize: FontConstant.Size15,
                                                         fontWeight: FontWeight.w400,
