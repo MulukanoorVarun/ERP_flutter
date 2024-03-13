@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' show Platform;
-
-import 'package:GenERP/Services/other_services.dart';
-import 'package:GenERP/Utils/api_names.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,11 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart' as loc;
 import 'package:location/location.dart';
-import 'package:location/location.dart';
-import 'package:web_socket_channel/io.dart';
-
 import '../Services/WebSocketManager.dart';
-import '../Services/user_api.dart';
 import '../Utils/storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 

@@ -10,9 +10,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
  
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 import '../Services/other_services.dart';
+import '../Utils/ColorConstant.dart';
+import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/storage.dart';
 import '../main.dart';
@@ -30,34 +33,153 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash>{
   void initState(){
     super.initState();
-    getSessiondetailsApiFunction();
+    VersionApiFunction();
     // validate_and_run();
     // navigateAfterDelay();
     requestPermissions();
   }
 
+
+  Future<void> VersionApiFunction() async {
+    var loginStatus= await PreferenceService().getInt("loginstatus");
+    try {
+      await UserApi.versionApi().then((data) => {
+        if (data != null)
+          {
+            setState(() {
+              if(VERSION_CODE < data.latestVersionCode!){
+                AppUpdateDialouge(data.url!,data.releaseNotes!);
+              }else{
+                if(loginStatus==0){
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) =>  Login()));
+                }else{
+                 // AppUpdateDialouge(data.url!,data.releaseNotes!);
+                  getSessiondetailsApiFunction();
+                }
+              }
+            })
+          }
+        else
+          {print("Something went wrong, Please try again.")}
+      });
+    } on Exception catch (e) {
+      print("$e");
+    }
+  }
+
+  Future AppUpdateDialouge(String apkurl,String note) async {
+    return await showDialog<bool>(
+      context: context,
+      builder: (context) =>
+          AlertDialog(
+            title: Text('App Update Available!',
+              style:
+            TextStyle(
+              color: ColorConstant.erp_appColor,
+              fontWeight: FontWeight.w500,
+              fontSize: FontConstant.Size18,
+            ),
+
+            ),
+            content:  Text(note
+            ),
+            actions: [
+              const SizedBox(height: 16),
+              TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(Colors.white),
+                  overlayColor: MaterialStateProperty.all(Colors.white70),
+                ),
+                onPressed: () async{
+                  if (await canLaunchUrl(Uri.parse(apkurl)))
+                  {
+                  await launchUrl(Uri.parse(apkurl),
+                  mode: LaunchMode.externalApplication);
+                  }
+                    },
+                child: Text(
+                  "UPDATE",
+                  style:
+                  TextStyle(
+                    color: ColorConstant.erp_appColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: FontConstant.Size15,
+                  ),
+
+                ),
+              ),
+            ],
+            elevation: 30.0,
+          ),
+      barrierDismissible: false,
+    ) ??
+        false;
+  }
+
   void requestPermissions() async {
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.camera,
-      Permission.storage,
-      Permission.location,
-      Permission.locationWhenInUse,
-      Permission.locationAlways,
-      Permission.accessMediaLocation,
-      Permission.notification,
-      Permission.accessNotificationPolicy
-      // Add more permissions as needed
-    ].request();
+    await getCameraPermissions();
+    await getStoragePermission();
+    await getLocationPermissions();
+  }
 
-    statuses.forEach((permission, status) {
-      if (!status.isGranted) {
-        // Handle denied permissions
-      }
+  Future<void> getStoragePermission() async {
+    if (await Permission.manageExternalStorage.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.storage.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.storage.request().isDenied) {
+      setState(() {});
+    }
+  }
 
+  Future<void> getCameraPermissions() async {
+    if (await Permission.camera.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.camera.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.camera.request().isDenied) {
+      setState(() {});
+    }
+  }
+
+  Future<void> getLocationPermissions() async {
+    if (await Permission.location.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.location.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.location.request().isDenied) {
+      setState(() {});
     }
 
-    );
+    if (await Permission.locationAlways.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.locationAlways.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.locationAlways.request().isDenied) {
+      setState(() {});
+    }
+
+    if (await Permission.locationWhenInUse.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.locationWhenInUse.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.locationWhenInUse.request().isDenied) {
+      setState(() {});
+    }
   }
+
+
+  Future<void> getNotificationsPermissions() async {
+    if (await Permission.notification.request().isGranted) {
+      setState(() {});
+    } else if (await Permission.notification.request().isPermanentlyDenied) {
+      await openAppSettings();
+    } else if (await Permission.notification.request().isDenied) {
+      setState(() {});
+    }
+  }
+
   // void navigateAfterDelay() {
   //   Delay navigation by 5 seconds
   //   Timer(Duration(seconds: 5), () {

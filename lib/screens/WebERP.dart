@@ -167,7 +167,7 @@ class _WebERPState extends State<WebERP> {
                               javaScriptEnabled: true,
                               useOnDownloadStart: true,
                               allowFileAccessFromFileURLs: true,
-                              allowUniversalAccessFromFileURLs: true
+                              allowUniversalAccessFromFileURLs: true,
                               ),
                              ),
                             androidOnPermissionRequest: (InAppWebViewController controller,
@@ -205,6 +205,9 @@ class _WebERPState extends State<WebERP> {
                                 pullToRefreshController?.endRefreshing();
                               }
                             },
+                            onConsoleMessage: (controller, consoleMessage) {
+                              print("JavaScript console message: ${consoleMessage.message}");
+                            },
                             onDownloadStartRequest: (controller, url) async {
                               await UserApi.download_files(
                                   empId, sessionId, "${url.url}", context)
@@ -221,11 +224,10 @@ class _WebERPState extends State<WebERP> {
                               allowUniversalAccessFromFileURLs: true,
                               allowFileAccessFromFileURLs: true,
                               allowFileAccess: true,
-                              iframeAllow: "camera;microphone;",
+                              iframeAllow: "camera;microphone;files;media;",
                               domStorageEnabled: true,
                               allowContentAccess: true,
                               javaScriptEnabled: true,
-                              cacheMode:CacheMode.LOAD_DEFAULT,
                               supportZoom:true,
                               builtInZoomControls:true,
                               displayZoomControls: false,
@@ -238,7 +240,8 @@ class _WebERPState extends State<WebERP> {
                               javaScriptCanOpenWindowsAutomatically: true,
                               mediaPlaybackRequiresUserGesture: false,
                               geolocationEnabled: true,
-                                useOnDownloadStart:true,
+                              useOnDownloadStart:true,
+                              allowsLinkPreview: true,
 
                             ),
                                         // initialUrlRequest: URLRequest(

@@ -39,6 +39,7 @@ import 'background_service.dart';
 
 
 class Dashboard extends StatefulWidget {
+  static const routeName = '/dashboard';
   const Dashboard({Key? key}) : super(key: key);
 
   @override
@@ -211,6 +212,7 @@ void autostart(){
             if (data.sessionExists == 1) {
               isLoading = false;
               online_status = data.attStatus??0;
+              // BatteryOptimisation();
               checkOptimisation();
               if(online_status==0){
                 print("online_status:$online_status");

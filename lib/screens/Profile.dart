@@ -41,11 +41,12 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
-  var secretKey;
+  var secretKey=utf8.encode("TESTINGAPPSECRETKEY");
   var totp;
 
   @override
   void initState() {
+    totp =initializeTotp(secretKey);
     super.initState();
     ProfileApiFunction();
     VersionApiFunction();
@@ -70,7 +71,7 @@ class _ProfileState extends State<Profile> {
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
                         isLoading = false;
-                        secretKey= utf8.encode("${data.totpSecret}");
+                      //  secretKey= utf8.encode("${data.totpSecret}");
                         totp =initializeTotp(secretKey);
                       } else if (data.sessionExists == 0) {
                         PreferenceService().clearPreferences();

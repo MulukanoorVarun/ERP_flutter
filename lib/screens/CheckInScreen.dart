@@ -1,25 +1,17 @@
 import 'dart:async';
 import 'dart:ui';
 import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
-
-import 'package:google_api_headers/google_api_headers.dart';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
-import 'package:geocoding/geocoding.dart' as geocoding;
-import 'package:location/location.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -28,7 +20,9 @@ import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 import '../Utils/storage.dart';
 import 'CheckOutScreen.dart';
+import 'package:app_settings/app_settings.dart';
 import 'FrontCameraCapture.dart';
+import 'attendance_screen.dart';
 import 'background_service.dart';
 
 class CheckInScreen extends StatefulWidget {
@@ -48,13 +42,10 @@ class _CheckInScreenState extends State<CheckInScreen> {
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
   String locationdd = "Search Location";
   late LatLng CurrentLocation;
-
-  // var latlongs = "17.439112226708446, 78.43292499146135";
   var latlongs = "";
   Set<Marker> markers = {};
   List<String> addresses = [];
   var address_loading = true;
-  Location.Location currentLocation1 = Location.Location();
   Location.LocationData? currentLocation;
   bool isLocationEnabled = false;
   bool hasLocationPermission = false;
@@ -91,38 +82,144 @@ class _CheckInScreenState extends State<CheckInScreen> {
     });
   }
 
+//   Future<void> _getLocationPermission() async {
+//     // Check if location services are enabled
+//     isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+//
+// // Check if the app has been granted location permission
+//     LocationPermission permission = await Geolocator.checkPermission();
+//     hasLocationPermission = permission == LocationPermission.always ||
+//         permission == LocationPermission.whileInUse;
+//
+//     final Location.Location location = Location.Location();
+//     bool serviceEnabled;
+//     PermissionStatus permissionGranted;
+//     serviceEnabled = await location.serviceEnabled();
+//     if (!serviceEnabled) {
+//       serviceEnabled = await location.requestService();
+//       if (!serviceEnabled) {
+//         return;
+//       }
+//     }
+//     isLoading = false;
+//     permissionGranted = (await location.hasPermission());
+//     if (permissionGranted == PermissionStatus) {
+//       permissionGranted = (await location.requestPermission());
+//       if (permissionGranted != PermissionStatus) {
+//         toast(context,"Please Allow for location Permission");
+//         return;
+//       }
+//     }
+//     final Location.LocationData locData = await location.getLocation();
+//
+//     setState(() {
+//       currentLocation = locData;
+//       _getCurrentLocation();
+//     });
+//
+//     if (currentLocation != null) {
+//       mapController?.animateCamera(
+//         CameraUpdate.newLatLng(LatLng(
+//           currentLocation!.latitude!,
+//           currentLocation!.longitude!,
+//         )),
+//       );
+//
+//       markers.add(Marker(
+//         markerId: MarkerId('current_location'),
+//         position:
+//             LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+//         infoWindow: InfoWindow(title: 'Current Location'),
+//         icon: BitmapDescriptor.defaultMarker,
+//       ));
+//
+//       // circles = Set.from([
+//       //   Circle(
+//       //     circleId: CircleId("value"),
+//       //     center:
+//       //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+//       //     radius: 200,
+//       //     strokeColor: Colors.blue,
+//       //     strokeWidth: 1,
+//       //   )
+//       // ]);
+//
+//       setState(() {
+//         final lat = currentLocation!.latitude;
+//         final lang = currentLocation!.longitude!;
+//         latlongs = '$lat,$lang';
+//         //Storelocatorfunction(latlongs);
+//       });
+//     }
+//   }
+
+
   Future<void> _getLocationPermission() async {
     // Check if location services are enabled
-    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+    bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
 
-// Check if the app has been granted location permission
+    // Check if the app has been granted location permission
     LocationPermission permission = await Geolocator.checkPermission();
-    hasLocationPermission = permission == LocationPermission.always ||
+    bool hasLocationPermission = permission == LocationPermission.always ||
         permission == LocationPermission.whileInUse;
-
+    // Location services and permissions are enabled, proceed with getting location
     final Location.Location location = Location.Location();
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
-    serviceEnabled = await location.serviceEnabled();
+    bool serviceEnabled = await location.serviceEnabled();
     if (!serviceEnabled) {
       serviceEnabled = await location.requestService();
       if (!serviceEnabled) {
         return;
       }
     }
-    isLoading = false;
-    permissionGranted = (await location.hasPermission());
-    if (permissionGranted == PermissionStatus) {
-      permissionGranted = (await location.requestPermission());
-      if (permissionGranted != PermissionStatus) {
+
+    if (!isLocationEnabled || !hasLocationPermission) {
+      // Location services or permissions are not enabled, request permission
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.always && permission != LocationPermission.whileInUse) {
+        // Permission not granted, handle accordingly
+        // Show a message to the user indicating that location permission is needed
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Location Permission Required'),
+              content: Text('Please allow the app to access your location for core functionality.'),
+              actions: <Widget>[
+                TextButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    overlayColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  onPressed: () async{
+                    await openAppSettings();
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Attendance()),
+                    );
+                    Navigator.pop(context);
+
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
         return;
       }
     }
-    final Location.LocationData locData = await location.getLocation();
 
-    setState(() {
-      currentLocation = locData;
-    });
+    // Get the location data
+    final Location.LocationData locData = await location.getLocation();
+    if (locData != null) {
+      // Location data retrieved successfully, handle accordingly
+      // Note: Ensure that you have initialized mapController and currentLocation properly
+      setState(() {
+        currentLocation = locData;
+        CurrentLocation = LatLng(locData!.latitude!, locData!.longitude!);
+        isLoading = false;
+      });
 
     if (currentLocation != null) {
       mapController?.animateCamera(
@@ -135,7 +232,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       markers.add(Marker(
         markerId: MarkerId('current_location'),
         position:
-            LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
         infoWindow: InfoWindow(title: 'Current Location'),
         icon: BitmapDescriptor.defaultMarker,
       ));
@@ -158,7 +255,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
         //Storelocatorfunction(latlongs);
       });
     }
+    }
   }
+
 
   void _onCameraMove(CameraPosition position) {
     _timer?.cancel(); // Cancel any previous timer
