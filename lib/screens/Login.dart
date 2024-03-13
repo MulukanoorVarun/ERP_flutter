@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_svg/svg.dart';
- 
+
 import 'package:share_plus/share_plus.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
   static const _androidIdPlugin = AndroidId();
 
   final RegExp _emailPattern =
-  RegExp(r'^([\w.\-]+)@([\w\-]+)((\.(\w){2,63}){1,3})$');
+      RegExp(r'^([\w.\-]+)@([\w\-]+)((\.(\w){2,63}){1,3})$');
 
   @override
   void initState() {
@@ -54,6 +54,7 @@ class _LoginState extends State<Login> {
       _getId();
     }
   }
+
   void onDispose() {
     // TODO: implement initState
     super.dispose();
@@ -63,11 +64,10 @@ class _LoginState extends State<Login> {
   validate_and_run() async {
     var SessionAvailable = await PreferenceService().getString("Session_id");
     if (SessionAvailable != null) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => Dashboard()));
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => Dashboard()));
     }
   }
-
 
   Future<String?> _getId() async {
     var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
@@ -80,7 +80,48 @@ class _LoginState extends State<Login> {
     String androidId;
     var deviceInfo = DeviceInfoPlugin(); // import 'dart:io'
     var androidDeviceInfo = await deviceInfo.androidInfo;
-    _deviceDetails = await  "Version Name: " + androidDeviceInfo.version.baseOS.toString().trim()+ ", " + "Version Code: " + androidDeviceInfo.version.codename.toString().trim() + ", " + "OS Version: " + androidDeviceInfo.version.codename.toString().trim() + ", SDK Version: " + androidDeviceInfo.version.sdkInt.toString().trim() + ", Device: " + androidDeviceInfo.device.toString().trim() + ", Model: " + androidDeviceInfo.model.toString().trim() + ", Product: " + androidDeviceInfo.product.toString().trim() + ", Manufacturer: " + androidDeviceInfo.manufacturer.toString().trim() + ", Brand: " + androidDeviceInfo.brand.toString().trim() + ", User: " + androidDeviceInfo.data['user'].toString().trim() + ", Display: " + androidDeviceInfo.display.toString().trim() + ", Hardware: " + androidDeviceInfo.hardware.toString().trim() + ", Board: " + androidDeviceInfo.board.toString().trim()+ ", Host: " + androidDeviceInfo.host.toString().trim() + ", Serial: " + androidDeviceInfo.serialNumber.toString().trim() + ", ID: " + androidDeviceInfo.id.toString().trim() + ", Bootloader: " + androidDeviceInfo.bootloader.toString().trim() + ", CPU ABI1: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", CPU ABI2: " + androidDeviceInfo.supported64BitAbis.toString().trim() + ", FingerPrint: " + androidDeviceInfo.fingerprint.toString().trim();
+    _deviceDetails = await "Version Name: " +
+        androidDeviceInfo.version.baseOS.toString().trim() +
+        ", " +
+        "Version Code: " +
+        androidDeviceInfo.version.codename.toString().trim() +
+        ", " +
+        "OS Version: " +
+        androidDeviceInfo.version.codename.toString().trim() +
+        ", SDK Version: " +
+        androidDeviceInfo.version.sdkInt.toString().trim() +
+        ", Device: " +
+        androidDeviceInfo.device.toString().trim() +
+        ", Model: " +
+        androidDeviceInfo.model.toString().trim() +
+        ", Product: " +
+        androidDeviceInfo.product.toString().trim() +
+        ", Manufacturer: " +
+        androidDeviceInfo.manufacturer.toString().trim() +
+        ", Brand: " +
+        androidDeviceInfo.brand.toString().trim() +
+        ", User: " +
+        androidDeviceInfo.data['user'].toString().trim() +
+        ", Display: " +
+        androidDeviceInfo.display.toString().trim() +
+        ", Hardware: " +
+        androidDeviceInfo.hardware.toString().trim() +
+        ", Board: " +
+        androidDeviceInfo.board.toString().trim() +
+        ", Host: " +
+        androidDeviceInfo.host.toString().trim() +
+        ", Serial: " +
+        androidDeviceInfo.serialNumber.toString().trim() +
+        ", ID: " +
+        androidDeviceInfo.id.toString().trim() +
+        ", Bootloader: " +
+        androidDeviceInfo.bootloader.toString().trim() +
+        ", CPU ABI1: " +
+        androidDeviceInfo.supported64BitAbis.toString().trim() +
+        ", CPU ABI2: " +
+        androidDeviceInfo.supported64BitAbis.toString().trim() +
+        ", FingerPrint: " +
+        androidDeviceInfo.fingerprint.toString().trim();
     // _deviceDetails = androidDeviceInfo.model.toString();
     try {
       androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
@@ -128,9 +169,7 @@ class _LoginState extends State<Login> {
           // print(_validateEmail);
         });
       } else if ((email.text.isNotEmpty) && password.text.isEmpty) {
-        setState(() {
-
-        });
+        setState(() {});
       } else {
         _validatepassword = "";
         _validateEmail = " ";
@@ -148,63 +187,66 @@ class _LoginState extends State<Login> {
         // String? fcm_token = await FirebaseMessaging.instance.getToken();
         print("fcmToken:${fcmToken}");
         await UserApi.LoginFunctionApi(
-            email.text,
-            password.text,
-            fcmToken.toString() ?? "",
-            deviceId.toString() ?? "",
-            _deviceDetails.toString())
-            .then((data) =>
-        {
-          if (data != null)
-            {
-              setState(() {
-                print("${data.error} login error here");
-                if (data.error == 0) {
-                  PreferenceService().saveInt("loginStatus", 1);
-                  PreferenceService().saveString("UserId", data.userId!);
-                  PreferenceService().saveString("UserName", data.name!);
-                  PreferenceService().saveString("UserEmail", data.emailId!);
-                  PreferenceService().saveString("Session_id", data.sessionId!);
-                  print(data.userId);
-                  print(data.name);
-                  print(data.emailId);
-                  print(data.sessionId);
-                  var roles = data.permissions!.toString();
-                  PreferenceService().saveString("roles", roles);
+                email.text,
+                password.text,
+                fcmToken.toString() ?? "",
+                deviceId.toString() ?? "",
+                _deviceDetails.toString())
+            .then((data) => {
+                  if (data != null)
+                    {
+                      setState(() {
+                        print("${data.error} login error here");
+                        if (data.error == 0) {
+                          PreferenceService().saveInt("loginStatus", 1);
+                          PreferenceService()
+                              .saveString("UserId", data.userId!);
+                          PreferenceService()
+                              .saveString("UserName", data.name!);
+                          PreferenceService()
+                              .saveString("UserEmail", data.emailId!);
+                          PreferenceService()
+                              .saveString("Session_id", data.sessionId!);
+                          print(data.userId);
+                          print(data.name);
+                          print(data.emailId);
+                          print(data.sessionId);
+                          var roles = data.permissions!.toString();
+                          PreferenceService().saveString("roles", roles);
 
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Dashboard()));
-
-
-                } else if (data.error == 1) {
-                  print(data.error.toString());
-                  toast(context, "You are not authorized to login in this device !");
-                } else if (data.error == 2) {
-                  toast(context, "Invalid login credentials !");
-                  print(data.error.toString());
-                } else {
-                  print(data.error.toString());
-                //  toast(context, "Something went wrong, Please try again.");
-                }
-              })
-            } else {
-           // toast(context, "Something went wrong, Please try again."),
-              print("Something went wrong, Please try again.")}
-        });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Dashboard()));
+                        } else if (data.error == 1) {
+                          print(data.error.toString());
+                          toast(context,
+                              "You are not authorized to login in this device !");
+                        } else if (data.error == 2) {
+                          toast(context, "Invalid login credentials !");
+                          print(data.error.toString());
+                        } else {
+                          print(data.error.toString());
+                          //  toast(context, "Something went wrong, Please try again.");
+                        }
+                      })
+                    }
+                  else
+                    {
+                      // toast(context, "Something went wrong, Please try again."),
+                      print("Something went wrong, Please try again.")
+                    }
+                });
       }
     } on Exception catch (e) {
       print("$e");
     }
   }
 
-
   Future<bool> _onBackPressed() async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
+          context: context,
+          builder: (context) => AlertDialog(
             title: const Text('Are you sure?'),
             content: const Text('Do you want to exit the App'),
             actions: [
@@ -216,11 +258,11 @@ class _LoginState extends State<Login> {
                 onPressed: () => Navigator.of(context).pop(false),
                 child: Text(
                   "NO",
-                  style:  TextStyle(
-                      color: ColorConstant.erp_appColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontConstant.Size15,
-                    ),
+                  style: TextStyle(
+                    color: ColorConstant.erp_appColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: FontConstant.Size15,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -233,42 +275,37 @@ class _LoginState extends State<Login> {
                     SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
                 child: Text(
                   "YES",
-                  style:
-                    TextStyle(
-                      color: ColorConstant.erp_appColor,
-                      fontWeight: FontWeight.w500,
-                      fontSize: FontConstant.Size15,
-                    ),
-
+                  style: TextStyle(
+                    color: ColorConstant.erp_appColor,
+                    fontWeight: FontWeight.w500,
+                    fontSize: FontConstant.Size15,
+                  ),
                 ),
               ),
             ],
             elevation: 30.0,
           ),
-      barrierDismissible: false,
-    ) ??
+          barrierDismissible: false,
+        ) ??
         false;
   }
 
   Future DeviceDialogue() async {
     return await showDialog(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
+          context: context,
+          builder: (context) => AlertDialog(
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)
-            ),
+                borderRadius: BorderRadius.circular(10.0)),
             title: Align(
                 alignment: Alignment.center,
-                child: Text('Device ID', style:  TextStyle(
+                child: Text(
+                  'Device ID',
+                  style: TextStyle(
                       color: Colors.black,
                       fontSize: FontConstant.Size25,
                       fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.underline
-
-                ),)
-            ),
-
+                      decoration: TextDecoration.underline),
+                )),
             content: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -280,13 +317,13 @@ class _LoginState extends State<Login> {
                     decoration: BoxDecoration(
                         color: ColorConstant.edit_bg_color,
                         borderRadius: BorderRadius.circular(10.0)),
-                    child: Text('$deviceId', style:  TextStyle(
+                    child: Text(
+                      '$deviceId',
+                      style: TextStyle(
                         color: Colors.black,
                         fontSize: FontConstant.Size18,
-
-
-                    ),)
-                ),
+                      ),
+                    )),
                 Spacer(),
                 Container(
                   child: InkWell(
@@ -295,38 +332,34 @@ class _LoginState extends State<Login> {
                       Navigator.pop(context);
                       toast(context, "Device ID has been copied!");
                     },
-                    child: Icon(Icons.file_copy, color: Colors.grey, size: 22,),
+                    child: Icon(
+                      Icons.file_copy,
+                      color: Colors.grey,
+                      size: 22,
+                    ),
                   ),
                 ),
                 Spacer(),
                 Container(
                     child: InkWell(
-                      onTap: () {
-                        Share.share(
-                            "$deviceId");
-                      },
-                      child: Icon(Icons.share, size: 22),
-                    )
-                ),
+                  onTap: () {
+                    Share.share("$deviceId");
+                  },
+                  child: Icon(Icons.share, size: 22),
+                )),
               ],
             ),
           ),
-      barrierDismissible: true,
-    ) ??
+          barrierDismissible: true,
+        ) ??
         false;
   }
 
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
-    double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
 
     return WillPopScope(
         onWillPop: _onBackPressed,
@@ -334,10 +367,10 @@ class _LoginState extends State<Login> {
             resizeToAvoidBottomInset: true,
             backgroundColor: Colors.white,
             body: SingleChildScrollView(
-              physics: NeverScrollableScrollPhysics(),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                physics: NeverScrollableScrollPhysics(),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                       Container(
                         margin: EdgeInsets.only(top: 50.0),
                         alignment: Alignment.center,
@@ -351,19 +384,20 @@ class _LoginState extends State<Login> {
                       SizedBox(
                         height: 15.0,
                       ),
-                          Center( // Center widget added here
-                            child: Padding(
-                              padding: EdgeInsets.all(5.0),
-                              child: Text(
-                                "Sign In",
-                                style: TextStyle(
-                                  color: ColorConstant.erp_appColor,
-                                  fontSize: FontConstant.Size25,
-                                  decoration: TextDecoration.underline,
-                                ),
-                              ),
+                      Center(
+                        // Center widget added here
+                        child: Padding(
+                          padding: EdgeInsets.all(5.0),
+                          child: Text(
+                            "Sign In",
+                            style: TextStyle(
+                              color: ColorConstant.erp_appColor,
+                              fontSize: FontConstant.Size25,
+                              decoration: TextDecoration.underline,
                             ),
                           ),
+                        ),
+                      ),
                       SizedBox(
                         height: 10.0,
                       ),
@@ -377,11 +411,10 @@ class _LoginState extends State<Login> {
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                             hintText: "Enter Email",
-                            hintStyle:  TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  color: ColorConstant.Textfield,
-                                  fontWeight: FontWeight.w400),
-
+                            hintStyle: TextStyle(
+                                fontSize: FontConstant.Size15,
+                                color: ColorConstant.Textfield,
+                                fontWeight: FontWeight.w400),
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -396,8 +429,8 @@ class _LoginState extends State<Login> {
                             ),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
-                              borderSide:
-                              BorderSide(width: 1, color: ColorConstant.red),
+                              borderSide: BorderSide(
+                                  width: 1, color: ColorConstant.red),
                             ),
                           ),
                           minLines: 1,
@@ -407,25 +440,22 @@ class _LoginState extends State<Login> {
                       if (_validateEmail != null) ...[
                         Container(
                           alignment: Alignment.topLeft,
-                          margin: EdgeInsets.only(
-                              top: 2.5, bottom: 2.5, left: 25),
+                          margin:
+                              EdgeInsets.only(top: 2.5, bottom: 2.5, left: 25),
                           child: Text(
                             _validateEmail,
                             textAlign: TextAlign.start,
-                            style:
-                             TextStyle(
-                                color: Colors.red,
-                                fontSize: FontConstant.Size10,
-                              ),
-
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: FontConstant.Size10,
+                            ),
                           ),
                         )
-                      ] else
-                        ...[
-                          SizedBox(
-                            height: 15.0,
-                          ),
-                        ],
+                      ] else ...[
+                        SizedBox(
+                          height: 15.0,
+                        ),
+                      ],
                       Container(
                         height: 45,
                         alignment: Alignment.center,
@@ -450,10 +480,9 @@ class _LoginState extends State<Login> {
                               },
                             ),
                             hintStyle: TextStyle(
-                                  fontSize: FontConstant.Size15,
-                                  color: ColorConstant.Textfield,
-                                  fontWeight: FontWeight.w400),
-
+                                fontSize: FontConstant.Size15,
+                                color: ColorConstant.Textfield,
+                                fontWeight: FontWeight.w400),
                             filled: true,
                             fillColor: ColorConstant.edit_bg_color,
                             enabledBorder: OutlineInputBorder(
@@ -479,50 +508,47 @@ class _LoginState extends State<Login> {
                       if (_validatepassword != null) ...[
                         Container(
                           alignment: Alignment.topLeft,
-                          margin: EdgeInsets.only(
-                              top: 2.5, bottom: 2.5, left: 25),
+                          margin:
+                              EdgeInsets.only(top: 2.5, bottom: 2.5, left: 25),
                           child: Text(
                             _validatepassword,
                             textAlign: TextAlign.start,
-                            style:  TextStyle(
-                                color: Colors.red,
-                                fontSize: FontConstant.Size10,
-
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: FontConstant.Size10,
                             ),
                           ),
                         )
-                      ] else
-                        ...[
-                          SizedBox(
-                            height: 25.0,
-                          ),
-                        ],
+                      ] else ...[
+                        SizedBox(
+                          height: 25.0,
+                        ),
+                      ],
                       Container(
                           child: InkWell(
-                            onTap: () {
-                              LoginApiFunction();
-                              //  Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              height: 45,
-                              width: screenWidth,
-                              margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                              decoration: BoxDecoration(
-                                color: ColorConstant.erp_appColor,
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: Text(
-                                "Login",
-                                textAlign: TextAlign.center,
-                                style:  TextStyle(
-                                    color: ColorConstant.white,
-                                    fontSize: FontConstant.Size20,
-
-                                ),
-                              ),
+                        onTap: () {
+                          LoginApiFunction();
+                          //  Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 45,
+                          width: screenWidth,
+                          margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                          decoration: BoxDecoration(
+                            color: ColorConstant.erp_appColor,
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          child: Text(
+                            "Login",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size20,
                             ),
-                          )),
+                          ),
+                        ),
+                      )),
                       SizedBox(
                         height: 60.0,
                       ),
@@ -549,8 +575,7 @@ class _LoginState extends State<Login> {
                           height: 40,
                         ),
                       )
-                    ])
-            )));
+                    ]))));
   }
 
   @override

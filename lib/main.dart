@@ -17,7 +17,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -27,16 +27,16 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  Platform.isAndroid ?
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
-      appId: "1:329382566569:android:26dc8519537b04deff67b8",
-      messagingSenderId: "329382566569",
-      projectId: "generp-fe09d",
-    ),
-  )
-  : await Firebase.initializeApp();
+  Platform.isAndroid
+      ? await Firebase.initializeApp(
+          options: FirebaseOptions(
+            apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
+            appId: "1:329382566569:android:26dc8519537b04deff67b8",
+            messagingSenderId: "329382566569",
+            projectId: "generp-fe09d",
+          ),
+        )
+      : await Firebase.initializeApp();
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -64,7 +64,7 @@ void main() async {
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -88,9 +88,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
-
   int _counter = 0;
   @override
   void initState() {
@@ -122,11 +120,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
-      [
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown
-      ]
-    );
+        [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
       title: 'Gen ERP',
       debugShowCheckedModeBanner: false,
@@ -162,11 +156,10 @@ class _MyAppState extends State<MyApp> {
           color: Colors.white,
           //),
         ),
-
         textButtonTheme: TextButtonThemeData(
           style: ButtonStyle(
-            // overlayColor: MaterialStateProperty.all(Colors.white),
-          ),
+              // overlayColor: MaterialStateProperty.all(Colors.white),
+              ),
         ),
         bottomSheetTheme: const BottomSheetThemeData(
             surfaceTintColor: Colors.white, backgroundColor: Colors.white),
