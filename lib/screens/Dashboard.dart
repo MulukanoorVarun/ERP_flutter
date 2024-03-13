@@ -17,14 +17,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
  
 import 'package:intl/intl.dart';
+import 'package:optimize_battery/optimize_battery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../Services/WebSocketManager.dart';
+import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
+import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 import '../Utils/api_names.dart';
@@ -43,7 +46,7 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
+  String isBatterIgnoredText = 'Unknown';
   // final WebSocketChannel channel = IOWebSocketChannel.connect(WEB_SOCKET_URL);
   var username="";
   var email="";
@@ -83,6 +86,8 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
    // addAutoStartup();
     DashboardApiFunction();
+
+
   }
 
   void initUniLinks() async {
@@ -206,6 +211,7 @@ void autostart(){
             if (data.sessionExists == 1) {
               isLoading = false;
               online_status = data.attStatus??0;
+              checkOptimisation();
               if(online_status==0){
                 print("online_status:$online_status");
                 webSocketManager.close();
@@ -294,6 +300,7 @@ void autostart(){
       DashboardApiFunction();
     });
   }
+
   Future<bool> _onBackPressed() async {
     return await showDialog<bool>(
       context: context,
@@ -340,6 +347,111 @@ void autostart(){
       barrierDismissible: false,
     ) ??
         false;
+  }
+
+
+  Future BatteryOptimisation() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+        ),
+        elevation: 20,
+        shadowColor: Colors.black,
+        title: Align(
+            alignment: Alignment.topLeft,
+            child:Text('Battery Optimization',style:  TextStyle(
+                color: Colors.black,
+                fontSize: FontConstant.Size22,
+                fontWeight: FontWeight.w200
+
+            ),)
+        ),
+        content: Container(
+            width:400,
+            height: 75,
+            alignment: Alignment.center,
+            child:Text('Please allow ${(appName)} to run in background to stay online ! ',
+              maxLines:4,style:  TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size18,
+                  fontWeight: FontWeight.w100
+
+
+              ),)
+
+        ),
+        actions: [
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white70),
+            ),
+            onPressed: () =>
+            {
+              print("littu"),
+
+            // setState(() {
+            // isBatterIgnoredText = "Unknown";
+            // }),
+              // OptimizeBattery.stopOptimizingBatteryUsage(),
+              Navigator.of(context).pop(false)
+            },
+
+            child: Text(
+              "Don't Allow",
+              style:  TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+
+              ),
+            ),
+          ),
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white),
+            ),
+
+            onPressed: () => {
+            OptimizeBattery.stopOptimizingBatteryUsage(),
+              Navigator.of(context).pop(false)},
+            child: Text(
+              "Allow",
+              style:  TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+
+              ),
+            ),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    ) ??
+        false;
+  }
+
+
+  void checkOptimisation() async {
+     final ignored = await OptimizeBattery
+        .isIgnoringBatteryOptimizations();
+     // BatteryOptimisation();
+    if(ignored){
+      setState(() {
+        isBatterIgnoredText = "Ignored";
+        BatteryOptimisation();
+      });
+      print("isBatterIgnoredText:${isBatterIgnoredText}");
+    }else{
+      setState(() {
+        isBatterIgnoredText = "Not Ignored";
+        print("isBatterIgnoredText:${isBatterIgnoredText}");
+      });
+    }
   }
 
   @override

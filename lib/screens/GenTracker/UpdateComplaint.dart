@@ -507,7 +507,7 @@ void initState() {
                               ),
                               items:CompletedStatus.map((complaintStatus) =>
                                   DropdownMenuItem<String>(
-                                    value: complaintStatus['id'],
+                                    value: complaintStatus['name'],
                                     child: Text(
                                       complaintStatus['name'] ?? '',
                                       style: const

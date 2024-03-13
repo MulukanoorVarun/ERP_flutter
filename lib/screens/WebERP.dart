@@ -157,11 +157,19 @@ class _WebERPState extends State<WebERP> {
                                 displayZoomControls: false, // Disables displaying zoom controls
                                 safeBrowsingEnabled: true,// Enables Safe Browsing
                                 clearSessionCache: true,
+
                               ),
 
                               ios: IOSInAppWebViewOptions(
                                 allowsInlineMediaPlayback: true,
-                              ),),
+                              ),
+                              crossPlatform: InAppWebViewOptions(
+                              javaScriptEnabled: true,
+                              useOnDownloadStart: true,
+                              allowFileAccessFromFileURLs: true,
+                              allowUniversalAccessFromFileURLs: true
+                              ),
+                             ),
                             androidOnPermissionRequest: (InAppWebViewController controller,
                                 String origin, List<String> resources) async {
                               return PermissionRequestResponse(
@@ -208,6 +216,41 @@ class _WebERPState extends State<WebERP> {
                               //   openFileFromNotification: true, // click on notification to open downloaded file (for android)
                               // );
                             },
+
+                            initialSettings: InAppWebViewSettings(
+                              allowUniversalAccessFromFileURLs: true,
+                              allowFileAccessFromFileURLs: true,
+                              allowFileAccess: true,
+                              iframeAllow: "camera;microphone;",
+                              domStorageEnabled: true,
+                              allowContentAccess: true,
+                              javaScriptEnabled: true,
+                              cacheMode:CacheMode.LOAD_DEFAULT,
+                              supportZoom:true,
+                              builtInZoomControls:true,
+                              displayZoomControls: false,
+                              textZoom: 125,
+                              blockNetworkImage: false,
+                              loadsImagesAutomatically: true,
+                              safeBrowsingEnabled: true,
+                              useWideViewPort: true,
+                              loadWithOverviewMode: true,
+                              javaScriptCanOpenWindowsAutomatically: true,
+                              mediaPlaybackRequiresUserGesture: false,
+                              geolocationEnabled: true,
+                                useOnDownloadStart:true,
+
+                            ),
+                                        // initialUrlRequest: URLRequest(
+                                        //   url: WebUri.uri(Uri.parse(webPageUrl))
+                                        // ),
+                                        // onLoadStop: (controller, url) {
+                                        //   setState(() {
+                                        //     isLoading = false;
+                                        //   });
+                                        // },
+                                        //
+
                           ),
                           if(isLoading)...[
                             Loaders()

@@ -105,6 +105,7 @@ dependencies:
   camera: ^0.10.5+9
   webview_flutter: ^4.7.0
   totp: ^0.0.1
+  optimize_battery: ^0.0.4
 
 dev_dependencies:
   flutter_test:

@@ -528,6 +528,11 @@ class _LoginState extends State<Login> {
                           child: InkWell(
                         onTap: () {
                           LoginApiFunction();
+                            var f = FocusScope.of(context);
+
+                            if (!f.hasPrimaryFocus) {
+                              f.unfocus();
+                            }
                           //  Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
                         },
                         child: Container(

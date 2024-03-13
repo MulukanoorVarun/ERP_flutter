@@ -285,6 +285,7 @@ class _TagGeneratorState extends State<TagGenerator> {
                controller: Engine_no,
                cursorColor: ColorConstant.black,
                keyboardType: TextInputType.text,
+               textCapitalization: TextCapitalization.characters,
                decoration: InputDecoration(
                  hintText: "Enter Engine Number",
                  hintStyle: TextStyle(
@@ -520,6 +521,7 @@ class _TagGeneratorState extends State<TagGenerator> {
                             controller: Generator_id,
                             cursorColor: ColorConstant.black,
                             keyboardType: TextInputType.text,
+                            textCapitalization: TextCapitalization.characters,
                             decoration: InputDecoration(
                               hintText: "Enter Generator ID",
                               hintStyle:  TextStyle(
