@@ -167,18 +167,6 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
           title: Container(
               child: Row(
             children: [
-              Padding(padding: EdgeInsets.only(left: 20)),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context, true);
-                },
-                child: SvgPicture.asset(
-                  "assets/back_icon.svg",
-                  height: 24,
-                  width: 24,
-                ),
-              ),
-              SizedBox(width: 10),
               Container(
                 child: InkWell(
                   onTap: () => Navigator.pop(context, true),
@@ -194,6 +182,17 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
             ],
           )),
           titleSpacing: 0,
+          leading: Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context, true),
+              child: const Icon(
+                CupertinoIcons.back,
+                color: Colors.white,
+                size: 24.0,
+              ),
+            ),
+          ),
         ),
         body: (isLoading)
             ? Loaders()

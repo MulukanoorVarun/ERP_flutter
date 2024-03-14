@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:GenERP/screens/GenInventory/InventoryScreen.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
@@ -38,6 +37,7 @@ import 'Login.dart';
 import 'Scanner.dart';
 import 'WhizzdomScreen.dart';
 import 'background_service.dart';
+
 
 class Dashboard extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -198,101 +198,96 @@ class _DashboardState extends State<Dashboard> {
         whizzdomPageUrl =
             "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&login_type=whizzdom&redirect_url=https://whizzdom.gengroup.in";
       } else {
-        webPageUrl =
-            "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
-        whizzdomPageUrl =
-            "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&login_type=whizzdom&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
+        webPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
+        whizzdomPageUrl = "https://erp.gengroup.in/ci/app/home/web_erp?emp_id=$empId&session_id=$session&login_type=whizzdom&redirect_url=${await PreferenceService().getString("redirectUrl").toString()}";
       }
-      print("s:" + session);
-      print("r:" + roleStatus);
+      print("s:"+session);
+      print("r:"+roleStatus);
       print(roleStatus.length);
-      await UserApi.DashboardFunctionApi(empId ?? "", session ?? "")
-          .then((data) => {
-                if (data != null)
-                  {
+    await UserApi.DashboardFunctionApi(empId??"",session??"").then((data) => {
+      if (data != null)
+        {
+          setState(() {
+            if (data.sessionExists == 1) {
+              isLoading = false;
+              online_status = data.attStatus??0;
+              // BatteryOptimisation();
+              checkOptimisation();
+              if(online_status==0){
+                print("online_status:$online_status");
+                webSocketManager.close();
+                BackgroundLocation.stopLocationService();
+                setState(() {
+                  setstatus ="Offline";
+                });
+                print("setstatus:$setstatus");
+              } else if(online_status==1){
+                print("online_status:$online_status");
+                DateTime Date1;
+                DateTime Date2;
+                String getCurrentTime() {
+                  DateTime now = DateTime.now(); // Get current time
+                  DateFormat formatter = DateFormat('HH:mm:ss'); // Define the format
+                  return formatter.format(now); // Format and return the time string
+                }
+
+                String currentTime = getCurrentTime();
+
+                // var currentTime =  DateTime.now();
+                // var df =  DateFormat('HH:mm:ss').format(currentTime);
+
+                if(lastLocationTime!=null){
+                  Date1 = DateFormat('HH:mm:ss').parse(currentTime);
+                  Date2 = DateFormat('HH:mm:ss').parse(lastLocationTime);
+                  print("Date1:${Date1.timeZoneOffset}");
+                  print("Date2:${Date2.timeZoneOffset}");
+
+                  Duration difference = Date1.difference(Date2);
+                  print("difference:${difference.inMilliseconds }");
+                  // var diff = double.parse((Date1.timeZoneOffset - Date2.timeZoneOffset).toString())/1000;
+                  var diff = difference.inSeconds/1000;
+                  print(diff);
+                  if(diff>=20){
                     setState(() {
-                      if (data.sessionExists == 1) {
-                        isLoading = false;
-                        online_status = data.attStatus ?? 0;
-                        // BatteryOptimisation();
-                        checkOptimisation();
-                        if (online_status == 0) {
-                          print("online_status:$online_status");
-                          webSocketManager.close();
-                          BackgroundLocation.stopLocationService();
-                          setState(() {
-                            setstatus = "Offline";
-                          });
-                          print("setstatus:$setstatus");
-                        } else if (online_status == 1) {
-                          print("online_status:$online_status");
-                          DateTime Date1;
-                          DateTime Date2;
-                          String getCurrentTime() {
-                            DateTime now = DateTime.now(); // Get current time
-                            DateFormat formatter =
-                                DateFormat('HH:mm:ss'); // Define the format
-                            return formatter.format(
-                                now); // Format and return the time string
-                          }
+                      print("diff");
+                      setstatus ="Offline";
+                    });
+                  }else{
+                    setState(() {
+                      print("nodiff");
+                      setstatus ="Online";
+                    });
 
-                          String currentTime = getCurrentTime();
-
-                          // var currentTime =  DateTime.now();
-                          // var df =  DateFormat('HH:mm:ss').format(currentTime);
-
-                          if (lastLocationTime != null) {
-                            Date1 = DateFormat('HH:mm:ss').parse(currentTime);
-                            Date2 =
-                                DateFormat('HH:mm:ss').parse(lastLocationTime);
-                            print("Date1:${Date1.timeZoneOffset}");
-                            print("Date2:${Date2.timeZoneOffset}");
-
-                            Duration difference = Date1.difference(Date2);
-                            print("difference:${difference.inMilliseconds}");
-                            // var diff = double.parse((Date1.timeZoneOffset - Date2.timeZoneOffset).toString())/1000;
-                            var diff = difference.inSeconds / 1000;
-                            print(diff);
-                            if (diff >= 20) {
-                              setState(() {
-                                print("diff");
-                                setstatus = "Offline";
-                              });
-                            } else {
-                              setState(() {
-                                print("nodiff");
-                                setstatus = "Online";
-                              });
-                            }
-                          } else {
-                            setState(() {
-                              print("Status knlknn offine");
-                              setstatus = "Offline";
-                            });
-                          }
-                          BackgroundLocation.startLocationService();
-                          print("setstatus:$setstatus");
-                        } else if (online_status == 2) {
-                          print("online_status:$online_status");
-                          webSocketManager.close();
-                          BackgroundLocation.stopLocationService();
-                          setState(() {
-                            setstatus = "Offline";
-                          });
-                          print("setstatus:$setstatus");
-                        }
-                      } else if (data.sessionExists == 0) {
-                        PreferenceService().clearPreferences();
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Login()));
-                        print(data.toString());
-                      }
-                    })
                   }
-                else
-                  {print("Something went wrong, Please try again.")}
-              });
-    } on Exception catch (e) {
+                }else{
+                  setState(() {
+                    print("Status knlknn offine");
+                    setstatus ="Offline";
+                  });
+                }
+                BackgroundLocation.startLocationService();
+                print("setstatus:$setstatus");
+              }else if(online_status==2){
+                print("online_status:$online_status");
+                webSocketManager.close();
+                BackgroundLocation.stopLocationService();
+                setState(() {
+                  setstatus ="Offline";
+                });
+                print("setstatus:$setstatus");
+              }
+
+            } else if (data.sessionExists == 0) {
+              PreferenceService().clearPreferences();
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Login()));
+              print(data.toString());
+            }
+          })
+        }
+      else
+        {print("Something went wrong, Please try again.")}
+    });
+        }on Exception catch (e) {
       print("$e");
     }
   }
@@ -309,146 +304,150 @@ class _DashboardState extends State<Dashboard> {
 
   Future<bool> _onBackPressed() async {
     return await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Are you sure?'),
-            content: const Text('Do you want to exit the App'),
-            actions: [
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  overlayColor: MaterialStateProperty.all(Colors.white),
-                ),
-                onPressed: () => Navigator.of(context).pop(false),
-                child: Text(
-                  "NO",
-                  style: TextStyle(
-                    color: ColorConstant.erp_appColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: FontConstant.Size15,
-                  ),
-                ),
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text('Do you want to exit the App'),
+        actions: [
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white),
+            ),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              "NO",
+              style:  TextStyle(
+                  color: ColorConstant.erp_appColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontConstant.Size15,
               ),
-              const SizedBox(height: 16),
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  overlayColor: MaterialStateProperty.all(Colors.white70),
-                ),
-                onPressed: () =>
-                    SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
-                child: Text(
-                  "YES",
-                  style: TextStyle(
-                    color: ColorConstant.erp_appColor,
-                    fontWeight: FontWeight.w500,
-                    fontSize: FontConstant.Size15,
-                  ),
-                ),
-              ),
-            ],
-            elevation: 30.0,
+            ),
           ),
-          barrierDismissible: false,
-        ) ??
+          const SizedBox(height: 16),
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white70),
+            ),
+            onPressed: () =>
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+            child: Text(
+              "YES",
+              style:  TextStyle(
+                  color: ColorConstant.erp_appColor,
+                  fontWeight: FontWeight.w500,
+                  fontSize: FontConstant.Size15,
+                ),
+
+            ),
+          ),
+        ],
+        elevation: 30.0,
+      ),
+      barrierDismissible: false,
+    ) ??
         false;
   }
+
 
   Future BatteryOptimisation() async {
     return await showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5.0)),
-            elevation: 20,
-            shadowColor: Colors.black,
-            title: Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Battery Optimization',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: FontConstant.Size22,
-                      fontWeight: FontWeight.w200),
-                )),
-            content: Container(
-                width: 400,
-                height: 75,
-                alignment: Alignment.center,
-                child: Text(
-                  'Please allow ${(appName)} to run in background to stay online ! ',
-                  maxLines: 4,
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: FontConstant.Size18,
-                      fontWeight: FontWeight.w100),
-                )),
-            actions: [
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  overlayColor: MaterialStateProperty.all(Colors.white70),
-                ),
-                onPressed: () => {
-                  print("littu"),
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0)
+        ),
+        elevation: 20,
+        shadowColor: Colors.black,
+        title: Align(
+            alignment: Alignment.topLeft,
+            child:Text('Battery Optimization',style:  TextStyle(
+                color: Colors.black,
+                fontSize: FontConstant.Size22,
+                fontWeight: FontWeight.w200
 
-                  // setState(() {
-                  // isBatterIgnoredText = "Unknown";
-                  // }),
-                  // OptimizeBattery.stopOptimizingBatteryUsage(),
-                  Navigator.of(context).pop(false)
-                },
-                child: Text(
-                  "Don't Allow",
-                  style: TextStyle(
-                    color: ColorConstant.black,
-                    fontWeight: FontWeight.w100,
-                    fontSize: FontConstant.Size15,
-                  ),
-                ),
+            ),)
+        ),
+        content: Container(
+            width:400,
+            height: 75,
+            alignment: Alignment.center,
+            child:Text('Please allow ${(appName)} to run in background to stay online ! ',
+              maxLines:4,style:  TextStyle(
+                  color: Colors.black,
+                  fontSize: FontConstant.Size18,
+                  fontWeight: FontWeight.w100
+
+
+              ),)
+
+        ),
+        actions: [
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white70),
+            ),
+            onPressed: () =>
+            {
+              print("littu"),
+
+            // setState(() {
+            // isBatterIgnoredText = "Unknown";
+            // }),
+              // OptimizeBattery.stopOptimizingBatteryUsage(),
+              Navigator.of(context).pop(false)
+            },
+
+            child: Text(
+              "Don't Allow",
+              style:  TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+
               ),
-              TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  overlayColor: MaterialStateProperty.all(Colors.white),
-                ),
-                onPressed: () => {
-                  OptimizeBattery.stopOptimizingBatteryUsage(),
-                  Navigator.of(context).pop(false)
-                },
-                child: Text(
-                  "Allow",
-                  style: TextStyle(
-                    color: ColorConstant.black,
-                    fontWeight: FontWeight.w100,
-                    fontSize: FontConstant.Size15,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-          barrierDismissible: true,
-        ) ??
+          TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              overlayColor: MaterialStateProperty.all(Colors.white),
+            ),
+
+            onPressed: () => {
+            OptimizeBattery.stopOptimizingBatteryUsage(),
+              Navigator.of(context).pop(false)},
+            child: Text(
+              "Allow",
+              style:  TextStyle(
+                color: ColorConstant.black,
+                fontWeight: FontWeight.w100,
+                fontSize: FontConstant.Size15,
+
+              ),
+            ),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+    ) ??
         false;
   }
 
-  void checkOptimisation() async {
-    var ignored;
-    if (Platform.isAndroid) {
-      ignored = await OptimizeBattery.isIgnoringBatteryOptimizations();
-    } else if (Platform.isIOS) {
-      ignored = await OptimizeBattery.isIgnoringBatteryOptimizations();
-      print("ignored:${ignored}");
-    }
 
-    // BatteryOptimisation();
-    if (ignored) {
+  void checkOptimisation() async {
+     final ignored = await OptimizeBattery
+        .isIgnoringBatteryOptimizations();
+     // BatteryOptimisation();
+    if(ignored){
       setState(() {
         isBatterIgnoredText = "Ignored";
         BatteryOptimisation();
       });
       print("isBatterIgnoredText:${isBatterIgnoredText}");
-    } else {
+    }else{
       setState(() {
         isBatterIgnoredText = "Not Ignored";
         print("isBatterIgnoredText:${isBatterIgnoredText}");

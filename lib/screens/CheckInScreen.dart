@@ -37,7 +37,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   // late LocationService locationService;
   TextEditingController _locationController = TextEditingController();
-  String googleApikey = "AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs";
+  String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
@@ -73,9 +73,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
     super.dispose();
   }
 
+
   Future<void> _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: geo_location.LocationAccuracy.high);
+        desiredAccuracy: geo_location.LocationAccuracy.high
+    );
     setState(() {
       CurrentLocation = LatLng(position.latitude, position.longitude);
     });
@@ -152,6 +154,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 //     }
 //   }
 
+
   Future<void> _getLocationPermission() async {
     // Check if location services are enabled
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -173,8 +176,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     if (!isLocationEnabled || !hasLocationPermission) {
       // Location services or permissions are not enabled, request permission
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.always &&
-          permission != LocationPermission.whileInUse) {
+      if (permission != LocationPermission.always && permission != LocationPermission.whileInUse) {
         // Permission not granted, handle accordingly
         // Show a message to the user indicating that location permission is needed
         showDialog(
@@ -182,15 +184,14 @@ class _CheckInScreenState extends State<CheckInScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Location Permission Required'),
-              content: Text(
-                  'Please allow the app to access your location for core functionality.'),
+              content: Text('Please allow the app to access your location for core functionality.'),
               actions: <Widget>[
                 TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     overlayColor: MaterialStateProperty.all(Colors.white),
                   ),
-                  onPressed: () async {
+                  onPressed: () async{
                     await openAppSettings();
                     Navigator.of(context).pop();
                     Navigator.pushReplacement(
@@ -198,6 +199,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       MaterialPageRoute(builder: (context) => Attendance()),
                     );
                     Navigator.pop(context);
+
                   },
                   child: Text('OK'),
                 ),
@@ -218,44 +220,47 @@ class _CheckInScreenState extends State<CheckInScreen> {
         currentLocation = locData;
         CurrentLocation = LatLng(locData!.latitude!, locData!.longitude!);
         isLoading = false;
+        markers.clear();
       });
 
-      if (currentLocation != null) {
-        mapController?.animateCamera(
-          CameraUpdate.newLatLng(LatLng(
-            currentLocation!.latitude!,
-            currentLocation!.longitude!,
-          )),
-        );
+    if (currentLocation != null) {
+      mapController?.animateCamera(
+        CameraUpdate.newLatLng(LatLng(
+          currentLocation!.latitude!,
+          currentLocation!.longitude!,
+        )),
+      );
 
+      setState(() {
         markers.add(Marker(
           markerId: MarkerId('current_location'),
-          position:
-              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+          position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
           infoWindow: InfoWindow(title: 'Current Location'),
           icon: BitmapDescriptor.defaultMarker,
         ));
+      });
 
-        // circles = Set.from([
-        //   Circle(
-        //     circleId: CircleId("value"),
-        //     center:
-        //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        //     radius: 200,
-        //     strokeColor: Colors.blue,
-        //     strokeWidth: 1,
-        //   )
-        // ]);
+      // circles = Set.from([
+      //   Circle(
+      //     circleId: CircleId("value"),
+      //     center:
+      //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+      //     radius: 200,
+      //     strokeColor: Colors.blue,
+      //     strokeWidth: 1,
+      //   )
+      // ]);
 
-        setState(() {
-          final lat = currentLocation!.latitude;
-          final lang = currentLocation!.longitude!;
-          latlongs = '$lat,$lang';
-          //Storelocatorfunction(latlongs);
-        });
-      }
+      setState(() {
+        final lat = currentLocation!.latitude;
+        final lang = currentLocation!.longitude!;
+        latlongs = '$lat,$lang';
+        //Storelocatorfunction(latlongs);
+      });
+    }
     }
   }
+
 
   void _onCameraMove(CameraPosition position) {
     _timer?.cancel(); // Cancel any previous timer
@@ -338,9 +343,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
                         print(data.error.toString());
                       }
                     })
-                  }
-                else
-                  {toast(context, "Something went wrong, Please try again.")}
+                  } else {
+                  toast(context, "Something went wrong, Please try again.")
+                }
               });
     } on Exception catch (e) {
       print("$e");
@@ -407,11 +412,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
                               zoom: 20.0,
                             ),
                             markers: markers.toSet(),
-                            //  zoomControlsEnabled: false,
-                            //    minMaxZoomPreference: MinMaxZoomPreference(14, 14),
-                            //  scrollGesturesEnabled: false,
-                            //   liteModeEnabled: true,
-                            // circles: circles,
+                          //  zoomControlsEnabled: false,
+                        //    minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                          //  scrollGesturesEnabled: false,
+                          //   liteModeEnabled: true,
+                           // circles: circles,
                             mapType: MapType.normal,
                             onMapCreated: (controller) {
                               setState(() {

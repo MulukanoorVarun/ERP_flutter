@@ -70,6 +70,8 @@ class _ProfileState extends State<Profile> {
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
                         isLoading = false;
+                      //  secretKey= utf8.encode("${data.totpSecret}");
+                       // totp =initializeTotp(secretKey);
                         //  secretKey= utf8.encode("${data.totpSecret}");
                         totp = initializeTotp(secretKey);
                       } else if (data.sessionExists == 0) {
@@ -123,7 +125,6 @@ class _ProfileState extends State<Profile> {
       print("$e");
     }
   }
-
   Future LogoutDialogue() async {
     return await showDialog(
           context: context,
@@ -215,7 +216,6 @@ class _ProfileState extends State<Profile> {
       print("$e");
     }
   }
-
   Future TOTPDialogue() async {
     bool isLoading = true;
     Timer(Duration(seconds: 30), () {
@@ -310,69 +310,72 @@ class _ProfileState extends State<Profile> {
       onRefresh: _refresh,
       color: ColorConstant.erp_appColor,
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorConstant.erp_appColor,
-          elevation: 0,
-          title: Container(
-              child: Row(
-            children: [
-              // Spacer(),
-              Container(
-                child: InkWell(
-                  onTap: () => Navigator.pop(context, true),
-                  child: Text("Profile",
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                        color: ColorConstant.white,
-                        fontSize: FontConstant.Size18,
-                        fontWeight: FontWeight.w500,
-                      )),
-                ),
-              ),
-              const Spacer(),
-              Container(
-                child: const SizedBox(
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              Container(
-                child: IconButton(
-                  onPressed: () {
-                    TOTPDialogue();
-                    setState(() {
-                      totp = initializeTotp(secretKey);
-                    });
-                  },
-                  icon: const Icon(
-                    Icons.security,
-                    size: 30,
-                    color: Colors.white,
+
+                    // color: ColorConstant.erp_appColor,
+      appBar: AppBar(
+        backgroundColor: ColorConstant.erp_appColor,
+        elevation: 0,
+        title: Container(
+            child: Row(
+              children: [
+                // Spacer(),
+                Container(
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context, true),
+                    child: Text("Profile",
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          color: ColorConstant.white,
+                          fontSize: FontConstant.Size18,
+                          fontWeight: FontWeight.w500,
+                        )),
                   ),
                 ),
-              ),
-            ],
-          )),
-          titleSpacing: 0,
-          leading: Container(
-            margin: const EdgeInsets.only(left: 10),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context, true),
-              child: const Icon(
-                CupertinoIcons.back,
-                color: Colors.white,
-                size: 24.0,
-              ),
+                const Spacer(),
+                Container(
+                  child: const SizedBox(
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+                Container(
+                  child: IconButton(
+                    onPressed: () {
+                      TOTPDialogue();
+                      setState(() {
+                        // totp =initializeTotp(secretKey);
+                      });
+                    },
+                    icon: const Icon(
+                      Icons.security,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            )),
+        titleSpacing: 0,
+        leading: Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: GestureDetector(
+            onTap: () => Navigator.pop(context, true),
+            child: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+              size: 24.0,
             ),
           ),
         ),
-        body: (isLoading)
-            ? Loaders()
-            : SafeArea(
-                child: SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Container(
-                    // color: ColorConstant.erp_appColor,
+      ),
+      body:(isLoading)?Loaders(): SafeArea(
+
+        child:SingleChildScrollView(
+
+          physics: AlwaysScrollableScrollPhysics(),
+
+          child:  Container(
+            // color: ColorConstant.erp_appColor,
 
                     child: Stack(
                       children: [

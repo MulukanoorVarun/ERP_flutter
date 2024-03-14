@@ -60,10 +60,8 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
 
 
   }
-
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
@@ -81,77 +79,106 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context,true);
           },
         ),
       ),
       body: (isLoading)
           ? Loaders()
-          : ListView( // Wrap the Column with a ListView
-        shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),// Set shrinkWrap to true
-        children: [
-          Container(
-            child: CameraPreview(cam_controller),
-          ),
-          Container(
-            padding: EdgeInsets.all(10),
-            height: size.height * 0.1,
-            child: TextButton(
-
-              style: ButtonStyle(
-                backgroundColor: MaterialStatePropertyAll(Colors.white70),
-                overlayColor:  MaterialStatePropertyAll(Colors.white70),
+          : SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Container(
+               height: size.height * 0.8, // Adjusted height for camera preview
+              child: CameraPreview(cam_controller),
+            ),
+            Container(
+              height: size.height * 0.1,
+              padding: EdgeInsets.all(10),
+              child: Center(
+              child: TextButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.white70),
+                  overlayColor: MaterialStatePropertyAll(Colors.white70),
+                ),
+                onPressed: () async {
+                  final image = await cam_controller.takePicture();
+                  _image = File(image.path);
+                  Navigator.pop(context, _image);
+                  print("${_image} image_path akash");
+                },
+                child: Icon(
+                  Icons.camera,
+                  size: 50,
+                  color: Colors.black,
+                ),
               ),
-              onPressed: () async {
-                final image = await cam_controller.takePicture();
-                _image = File(image.path);
-                Navigator.pop(context, _image);
-                print("${_image} image_path akash");
-              },
-              child: Icon(
-                Icons.camera,
-                size: 35,
-                color: Colors.black,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
 
-
-// @override
-  // Widget build(BuildContext context) {
+// Widget build(BuildContext context) {
   //   Size size = MediaQuery.of(context).size;
-  //   // if (!cam_controller.value.isInitialized) {
-  //   //   return Loaders();
-  //   // }
-  //   return MaterialApp(
-  //     home:(isLoading)?Loaders():
-  //         Column(
-  //           children: [
-  //             Container(
-  //                 child: CameraPreview(cam_controller)),
-  //
-  //             Container(
-  //               padding: EdgeInsets.all(10),
-  //               height: size.height*0.12,
-  //               child: TextButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.white70),),onPressed: () async {
-  //                 final image = await cam_controller.takePicture();
-  //
-  //
-  //                 _image = File(image.path);
-  //                 Navigator.pop(context,_image);
-  //                 print("${_image} image_path akash");
-  //               }, child: Icon(Icons.camera,size: 35,color: Colors.black,),),
-  //             )
-  //           ],
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       backgroundColor: ColorConstant.erp_appColor,
+  //       title: Text(
+  //         'Capture Image',
+  //         style: TextStyle(
+  //           fontSize: FontConstant.Size18,
+  //           fontWeight: FontWeight.bold,
+  //           color: Colors.white,
   //         ),
-  //     // Text("Capture",style: TextStyle(fontWeight: FontWeight.w600,color: Colors.black,fontSize: 25)),
+  //       ),
+  //       leading: IconButton(
+  //         icon: Icon(
+  //           Icons.arrow_back,
+  //           color: Colors.white,
+  //         ),
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //         },
+  //       ),
+  //     ),
+  //     body: (isLoading) ? Loaders()
+  //         : ListView( // Wrap the Column with a ListView
+  //       shrinkWrap: true,
+  //       physics: NeverScrollableScrollPhysics(),// Set shrinkWrap to true
+  //       children: [
+  //         Container(
+  //           height: size.height * 0.8,
+  //           child: CameraPreview(cam_controller),
+  //         ),
+  //         Container(
+  //           padding: EdgeInsets.all(10),
+  //           height: size.height * 0.1,
+  //           child: TextButton(
   //
+  //             style: ButtonStyle(
+  //               backgroundColor: MaterialStatePropertyAll(Colors.white70),
+  //               overlayColor:  MaterialStatePropertyAll(Colors.white70),
+  //             ),
+  //             onPressed: () async {
+  //               final image = await cam_controller.takePicture();
+  //               _image = File(image.path);
+  //               Navigator.pop(context, _image);
+  //               print("${_image} image_path akash");
+  //             },
+  //             child: Icon(
+  //               Icons.camera,
+  //               size: 35,
+  //               color: Colors.black,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
   //   );
   // }
 }

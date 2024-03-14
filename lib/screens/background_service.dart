@@ -256,6 +256,7 @@ class BackgroundLocation {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
     print('Received Location Update: of GEN ERP');
+    saveLastLocationTime();
     var completer = Completer<Location>();
 
     var _location = Location();
@@ -321,52 +322,10 @@ class BackgroundLocation {
           print("Hello GENERP! You're Offline!");
           showNotification("GEN ERP", "You're Offline!");
         }
-        saveLocations(
-            empId,
-            sessionId,
-            "${locationData['latitude']},""${locationData['longitude']}",
-            locationData['speed'],
-            locationData['altitude'],
-            locationData['bearing'],
-            locationData['bearingAccuracyDegrees'],
-            locationData['verticalAccuracyMeters'],
-            locationData['speedAccuracyMetersPerSecond'],
-            locationData['accuracy'],
-            ""
-        );
+        saveLastLocationTime();
       }
     });
   }
-}
-
-Future<void> saveLocations(
-    empId,
-    sessionId,
-    latLng,
-    speed,
-    altitude,
-    bearing,
-    bearingAccuracyDegrees,
-    verticalAccuracyMeters,
-    speedAccuracyMetersPerSecond,
-    accuracy,
-    provider) async {
-  print(empId);
-  print(sessionId);
-  print(latLng);
-  print(speed);
-  print(altitude);
-  print(bearing);
-  print(bearingAccuracyDegrees);
-  print(verticalAccuracyMeters);
-  print(speedAccuracyMetersPerSecond);
-  print(accuracy);
-  print(provider);
-
-
-  print("Saving Location Updates Started!");
-
-  saveLastLocationTime();
 }
 
 saveLastLocationTime(){

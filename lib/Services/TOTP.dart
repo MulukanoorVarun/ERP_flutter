@@ -49,6 +49,7 @@ class Totp {
   /// Generate a new Time-based One-time Password (TOTP) for the
   /// given [dateTime].
   String generate(DateTime dateTime) {
+
     // Convert the [dateTime] to UTC.
     final utc = dateTime.isUtc ? dateTime : dateTime.toUtc();
 
