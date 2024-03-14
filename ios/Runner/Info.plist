@@ -8,6 +8,10 @@
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
 	<string>Gen ERP</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict/>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -26,14 +30,20 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app needs to access camera to scan QR codes.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string>This app needs to access Downloads folder</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs to access your location to keep track of employees.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs to access location in background.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>This app needs to access your location to keep in track of employees.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to access your location to keep track of employees.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires to access your photo library in order to upload image proofs etc.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>This app needs to access notifications.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

@@ -1,5 +1,6 @@
 import 'package:GenERP/screens/GenTracker/UpdateComplaint.dart';
 import 'package:GenERP/screens/splash.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
@@ -50,7 +51,6 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   }
 
   Future<void> LoadgeneratorDetailsApifunction() async {
-
     session = await PreferenceService().getString("Session_id") ?? "";
     empId = await PreferenceService().getString("UserId") ?? "";
     try {
@@ -106,10 +106,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
-    return RefreshIndicator(
-        color: ColorConstant.erp_appColor,
-        onRefresh: _refresh,
-      child:Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorConstant.erp_appColor,
         elevation: 0,
@@ -137,35 +134,39 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
           child: GestureDetector(
             onTap: () => Navigator.pop(context, true),
             child: const Icon(
-              Icons.arrow_back_ios,
+              CupertinoIcons.back,
               color: Colors.white,
               size: 24.0,
             ),
           ),
         ),
       ),
-      body: (isloading) ? Loaders() :
-      SafeArea(
-        child: Container(
-          color: ColorConstant.erp_appColor,
-          child: Column(
-              children: [
-               if(comp_List.length>0) ...[
-             Expanded(
-               child:SingleChildScrollView(
-                 physics: AlwaysScrollableScrollPhysics(),
-               child: Container(
-        width: double.infinity,
-                 height:screenHeight,// Set width to fill parent width
-          decoration: BoxDecoration(
-            color: ColorConstant.edit_bg_color,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-            ),
-          ),
-          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                              child: GridView.builder(
+      body: (isloading)
+          ? Loaders()
+          : RefreshIndicator(
+              color: ColorConstant.erp_appColor,
+              onRefresh: _refresh,
+              child: SafeArea(
+                child: Container(
+                  color: ColorConstant.erp_appColor,
+                  child: Column(children: [
+                    if (comp_List.length > 0) ...[
+                      Expanded(
+                        child: SingleChildScrollView(
+                          physics: AlwaysScrollableScrollPhysics(),
+                          child: Container(
+                            width: double.infinity,
+                            height:
+                                screenHeight, // Set width to fill parent width
+                            decoration: BoxDecoration(
+                              color: ColorConstant.edit_bg_color,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: GridView.builder(
                                 itemCount: comp_List.length,
                                 gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
@@ -534,41 +535,40 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                     ),
                                   );
                                 }),
-
-    ),
-               ),
-               ),
-                ] else ...[
-                  Expanded(
-                      child: Container(
-                          width:
-                              double.infinity, // Set width to fill parent width
-                          decoration: BoxDecoration(
-                            color: ColorConstant.edit_bg_color,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
-                            ),
                           ),
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        ),
+                      ),
+                    ] else ...[
+                      Expanded(
                           child: Container(
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                )),
-                          )))
-                ]
-              ]),
+                              width: double
+                                  .infinity, // Set width to fill parent width
+                              decoration: BoxDecoration(
+                                color: ColorConstant.edit_bg_color,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0),
+                                ),
+                              ),
+                              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Container(
+                                child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "No Data Available",
+                                      style: TextStyle(
+                                        fontSize: FontConstant.Size18,
+                                        fontWeight: FontWeight.bold,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: ColorConstant.erp_appColor,
+                                      ),
+                                    )),
+                              )))
+                    ]
+                  ]),
+                ),
+              ),
             ),
-      ),
-    ),
     );
   }
 }

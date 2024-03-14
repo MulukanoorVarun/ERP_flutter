@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
@@ -111,7 +112,7 @@ AppBar appBar(BuildContext context, String title) {
       child: GestureDetector(
         onTap: () => Navigator.pop(context, true),
         child: const Icon(
-          Icons.arrow_back_ios,
+          CupertinoIcons.back,
           color: Colors.white,
           size: 24.0,
         ),
@@ -431,10 +432,10 @@ Loaders() {
           child: Text(
             "Please wait.......",
             textAlign: TextAlign.center,
-            style:  TextStyle(
-                    decorationThickness: 0,
-                    fontSize: FontConstant.Size15,
-                    fontWeight: FontWeight.normal,
+            style: TextStyle(
+                decorationThickness: 0,
+                fontSize: FontConstant.Size15,
+                fontWeight: FontWeight.normal,
                 color: ColorConstant.erp_appColor),
           ),
         ),
@@ -996,7 +997,8 @@ quantityWidget(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.remove),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "-");
@@ -1012,8 +1014,8 @@ quantityWidget(quantity, productObj, function) {
           width: 3,
         ),
         Text("$quantity",
-            style:
-                const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+            style: const TextStyle(
+                color: Colors.orange, fontWeight: FontWeight.bold)),
         const SizedBox(
           width: 3,
         ),
@@ -1025,7 +1027,8 @@ quantityWidget(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.add),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "+");
@@ -1073,7 +1076,8 @@ quantityWidget1(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.remove),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "-");
@@ -1087,8 +1091,8 @@ quantityWidget1(quantity, productObj, function) {
         ),
         const Spacer(),
         Text("$quantity",
-            style:
-                const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+            style: const TextStyle(
+                color: Colors.orange, fontWeight: FontWeight.bold)),
         const Spacer(),
         Container(
           child: CircleAvatar(
@@ -1103,7 +1107,8 @@ quantityWidget1(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.add),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "+");
@@ -1147,78 +1152,76 @@ quantityWidget_loader() {
   );
 }
 
-loading_image(image,type){
-
+loading_image(image, type) {
   return CachedNetworkImage(
     filterQuality: FilterQuality.none,
-    imageUrl: "${image}",fadeOutCurve: Curves.bounceOut,
+    imageUrl: "${image}",
+    fadeOutCurve: Curves.bounceOut,
     imageBuilder: (context, imageProvider) => Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
         image: DecorationImage(
           image: imageProvider,
           filterQuality: FilterQuality.low,
-
-          fit: type, ),
+          fit: type,
+        ),
       ),
     ),
-    placeholder: (context, url) => Container(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SpinKitSpinningLines(color: Colors.orangeAccent,size: 25),
-        Text("Loading",style:
-            TextStyle(
+    placeholder: (context, url) => Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinKitSpinningLines(color: Colors.orangeAccent, size: 25),
+          Text(
+            "Loading",
+            style: TextStyle(
                 fontSize: 10.0,
                 fontWeight: FontWeight.normal,
-            color: Colors.black),)
-      ],
-    ),),
+                color: Colors.black),
+          )
+        ],
+      ),
+    ),
     errorWidget: (context, url, error) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.error_outline_outlined),
-        Text("Unable to load")
-      ],
+      children: [Icon(Icons.error_outline_outlined), Text("Unable to load")],
     ),
   );
 }
 
-loading_image2(image,type){
-
+loading_image2(image, type) {
   return CachedNetworkImage(
     filterQuality: FilterQuality.none,
-    imageUrl: "${image}",fadeOutCurve: Curves.bounceOut,
+    imageUrl: "${image}",
+    fadeOutCurve: Curves.bounceOut,
     imageBuilder: (context, imageProvider) => Container(
       decoration: BoxDecoration(
-
         image: DecorationImage(
           image: imageProvider,
           filterQuality: FilterQuality.low,
-
-          fit: type, ),
+          fit: type,
+        ),
       ),
     ),
-    placeholder: (context, url) => Container(child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SpinKitSpinningLines(color: Colors.orangeAccent,size: 10),
-        // Text("Loading",style: GoogleFonts.ubuntu(
-        //     textStyle: TextStyle(
-        //         fontSize: 5.0,
-        //         fontWeight: FontWeight.normal),
-        //     color: Colors.black),)
-      ],
-    ),),
+    placeholder: (context, url) => Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SpinKitSpinningLines(color: Colors.orangeAccent, size: 10),
+          // Text("Loading",style: GoogleFonts.ubuntu(
+          //     textStyle: TextStyle(
+          //         fontSize: 5.0,
+          //         fontWeight: FontWeight.normal),
+          //     color: Colors.black),)
+        ],
+      ),
+    ),
     errorWidget: (context, url, error) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(Icons.error_outline_outlined),
-        Text("Unable to load")
-      ],
+      children: [Icon(Icons.error_outline_outlined), Text("Unable to load")],
     ),
   );
 }
-
 
 quantityWidget_loader_pl() {
   // Size size = MediaQuery.of(context).size;
@@ -1301,7 +1304,8 @@ quantityWidget12(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.remove),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "-");
@@ -1315,8 +1319,8 @@ quantityWidget12(quantity, productObj, function) {
         ),
         const Spacer(),
         Text("$quantity",
-            style:
-                const TextStyle(color: Colors.orange, fontWeight: FontWeight.bold)),
+            style: const TextStyle(
+                color: Colors.orange, fontWeight: FontWeight.bold)),
         const Spacer(),
         Container(
           child: CircleAvatar(
@@ -1331,7 +1335,8 @@ quantityWidget12(quantity, productObj, function) {
                 child: IconButton(
               splashColor: Colors.transparent,
               icon: const Icon(Icons.add),
-              padding: const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+              padding:
+                  const EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
               color: Colors.orange,
               onPressed: () {
                 function(productObj, "+");
@@ -1352,30 +1357,29 @@ quantityWidget12(quantity, productObj, function) {
 RatingStars(rate, size) {
   final children = <Widget>[];
   // Display filled stars for the integer part of the rating
-  for (int i = 0; i < double.parse(rate?? "0.0").toInt(); i++) {
+  for (int i = 0; i < double.parse(rate ?? "0.0").toInt(); i++) {
     children.add(Icon(
-  Icons.star_outlined,
-  size: size,
-  color: Colors.orangeAccent,
-  ));
+      Icons.star_outlined,
+      size: size,
+      color: Colors.orangeAccent,
+    ));
   }
   // Display a half-filled star if there is a fractional part
-  if (double.parse(rate?? "0.0") % 1 != 0) {
+  if (double.parse(rate ?? "0.0") % 1 != 0) {
     children.add(Icon(
-  Icons.star_half,
-  size: size,
-  color: Colors.orangeAccent,
-  ));
+      Icons.star_half,
+      size: size,
+      color: Colors.orangeAccent,
+    ));
   }
-
 
   // Ensure that exactly 5 stars are displayed in total
   for (int i = 0; i < 5 - double.parse(rate ?? "0.0").ceil(); i++) {
     children.add(Icon(
-  Icons.star_outline,
-  size: size,
-  color: Colors.orangeAccent,
-  ));
+      Icons.star_outline,
+      size: size,
+      color: Colors.orangeAccent,
+    ));
   }
   // if(rate!="0")
   // {

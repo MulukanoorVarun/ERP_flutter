@@ -30,8 +30,6 @@ import '../../models/NearbyGeneratorsResponse.dart';
 import '../GenTracker/GeneratoraDetails.dart';
 import '../background_service.dart';
 
-
-
 class NearbyGenerators extends StatefulWidget {
   const NearbyGenerators({Key? key}) : super(key: key);
   @override
@@ -42,7 +40,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   final ImagePicker _picker = ImagePicker();
   // late LocationService locationService;
   TextEditingController _locationController = TextEditingController();
-  String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
+  String googleApikey = "AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
@@ -74,6 +72,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     //  locationService = LocationService();
     super.dispose();
   }
+
   double currentValue = 1.0;
 
   Future<void> _getLocationPermission() async {
@@ -98,7 +97,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     isLoading = false;
     permissionGranted = (await location.hasPermission());
     if (permissionGranted == PermissionStatus) {
-
       permissionGranted = (await location.requestPermission());
       if (permissionGranted != PermissionStatus) {
         return;
@@ -142,10 +140,9 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     });
   }
 
-
   String? empId;
   String? sessionId;
-  List<Nearbygenerators> generatorslist=[];
+  List<Nearbygenerators> generatorslist = [];
   Future<void> LoadNearbyGeneratorsAPI() async {
     empId = await PreferenceService().getString("UserId");
     sessionId = await PreferenceService().getString("Session_id");
@@ -156,27 +153,27 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     print(currentValue);
     print(_image);
     try {
-      await UserApi.loadNearbyGeneratorsAPI(empId,sessionId,latlongs,currentValue).then((data) => {
-        if (data != null)
-          {
-            setState(() {
-              if (data.error == 0) {
-                generatorslist=data.list!;
-                _updateMarkersFromApiResponse(data.list!);
-                isLoading = false;
-              } else {
-
-              }
-            })
-          } else {
-          toast(context,"Something went wrong, Please try again.")
-        }
-      });
-
+      await UserApi.loadNearbyGeneratorsAPI(
+              empId, sessionId, latlongs, currentValue)
+          .then((data) => {
+                if (data != null)
+                  {
+                    setState(() {
+                      if (data.error == 0) {
+                        generatorslist = data.list!;
+                        _updateMarkersFromApiResponse(data.list!);
+                        isLoading = false;
+                      } else {}
+                    })
+                  }
+                else
+                  {toast(context, "Something went wrong, Please try again.")}
+              });
     } on Exception catch (e) {
       print("$e");
     }
   }
+
   Future<void> _updateMarkersFromApiResponse(
       List<Nearbygenerators> generatorslist) async {
     markers = await _createMarkersFromApiResponse(generatorslist);
@@ -192,7 +189,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   }
 
   Future<List<Marker>> _createMarkersFromApiResponse(
-      List<Nearbygenerators> generatorslist ) async {
+      List<Nearbygenerators> generatorslist) async {
     List<Marker> markers = [];
 
     // print("Hello Nutsby!");
@@ -204,9 +201,9 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           targetWidth: 75, targetHeight: 95);
       ui.FrameInfo fi = await codec.getNextFrame();
       Uint8List resizedBytes =
-      (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+          (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+              .buffer
+              .asUint8List();
 
       markers.add(Marker(
         markerId: MarkerId(generator.generatorId.toString()),
@@ -217,26 +214,26 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           snippet: "Product Name: ${generator.productName}",
         ),
         onTap: () {
-        int index = generatorslist.indexWhere((techResponse) => techResponse.generatorId == generator.generatorId);
-        print("index:${index}");
-        if (index != -1) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => GeneratorDetails(
-                actName: "NearByGenerators",
-                location: generator.loc,
-                generatorId: generator.generatorId,
+          int index = generatorslist.indexWhere((techResponse) =>
+              techResponse.generatorId == generator.generatorId);
+          print("index:${index}");
+          if (index != -1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => GeneratorDetails(
+                  actName: "NearByGenerators",
+                  location: generator.loc,
+                  generatorId: generator.generatorId,
+                ),
               ),
-            ),
-          );
-        }
-      },
+            );
+          }
+        },
       ));
     });
     return markers;
   }
-
 
   LatLng _parseLatLng(String? location) {
     if (location != null) {
@@ -258,14 +255,14 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
         double lng = double.tryParse(parts[1]) ?? 0.0;
 
         List<geocoding.Placemark> placemarks =
-        await geocoding.placemarkFromCoordinates(lat, lng);
+            await geocoding.placemarkFromCoordinates(lat, lng);
 
         if (placemarks.isNotEmpty) {
           final placemark = placemarks.first;
           String address = '${placemark.street ?? ''}, '
               '${placemark.thoroughfare ?? ''} '
-          // '${placemark.subThoroughfare ?? ''}, '
-          // '${placemark.name ?? ''}, '
+              // '${placemark.subThoroughfare ?? ''}, '
+              // '${placemark.name ?? ''}, '
               '${placemark.subLocality ?? ''}, '
               '${placemark.locality ?? ''}, '
               '${placemark.administrativeArea ?? ''}, '
@@ -278,6 +275,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     }
     return "Address not found";
   }
+
   Future<void> infoDialogue(BuildContext context) async {
     return showDialog(
       context: context,
@@ -305,7 +303,8 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.cancel,
+                  icon: Icon(
+                    Icons.cancel,
                     size: 35,
                   ),
                   onPressed: () {
@@ -345,29 +344,30 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                     SizedBox(height: 25.0),
                     Container(
                         child: InkWell(
-                          onTap: (){
-                            markers = [];
-                            LoadNearbyGeneratorsAPI();
-                            Navigator.pop(context);
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 45,
-                            margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                            decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
-                            child: Text("Serach",
-                              textAlign: TextAlign.center,
-                              style:  TextStyle(
-                                fontFamily: 'Nexa',
-                                color: ColorConstant.white,
-                                fontSize: FontConstant.Size15,
-                              ),
-                            ),
+                      onTap: () {
+                        markers = [];
+                        LoadNearbyGeneratorsAPI();
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 45,
+                        margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.erp_appColor,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          "Serach",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Nexa',
+                            color: ColorConstant.white,
+                            fontSize: FontConstant.Size15,
                           ),
-                        )
-                    ),
-
-
+                        ),
+                      ),
+                    )),
                   ],
                 ),
               ),
@@ -379,94 +379,93 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: (isLoading)?Loaders():SafeArea(
-        child: Container(
-          color: ColorConstant.erp_appColor,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topCenter,
+      body: (isLoading)
+          ? Loaders()
+          : SafeArea(
+              child: Container(
                 color: ColorConstant.erp_appColor,
-                height:50,
-                child: Row(
+                child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    InkWell(
-                      onTap: (){
-                        Navigator.pop(context,true);
-                      },
-                      child:SvgPicture.asset(
-                        "assets/back_icon.svg",
-                        height: 24,
-                        width: 24,
-                      ),),
-                    SizedBox(width: 20),
-                    Center(
-                      child: Text(
-                        "Nearby Generators",
-                        style: TextStyle(
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
+                    Container(
+                      alignment: Alignment.topCenter,
+                      color: ColorConstant.erp_appColor,
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Padding(padding: EdgeInsets.only(left: 20)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/back_icon.svg",
+                              height: 24,
+                              width: 24,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Center(
+                            child: Text(
+                              "Nearby Generators",
+                              style: TextStyle(
+                                fontSize: FontConstant.Size18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          InkWell(
+                            onTap: () {
+                              infoDialogue(context);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/ic_location1.svg",
+                              height: 35,
+                              width: 35,
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                        ],
                       ),
                     ),
-                    Spacer(),
-                    InkWell(
-                      onTap: (){
-                        infoDialogue(context);
-                      },
-                      child:SvgPicture.asset(
-                        "assets/ic_location1.svg",
-                        height: 35,
-                        width: 35,
-                      ),),
-                    SizedBox(width: 20),
+                    Expanded(
+                      child: ClipRRect(
+                        // Apply border radius using ClipRRect
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                        child: Stack(children: [
+                          GoogleMap(
+                            myLocationEnabled: true,
+                            zoomGesturesEnabled: true,
+                            initialCameraPosition: CameraPosition(
+                              target: startLocation,
+                              zoom: 14.0,
+                            ),
+                            markers: markers.toSet(),
+                            mapType: MapType.normal,
+                            onMapCreated: (controller) {
+                              setState(() {
+                                mapController = controller;
+                              });
+                            },
+                            onCameraMove: _onCameraMove,
+                          ),
+                        ]),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ClipRRect(
-                  // Apply border radius using ClipRRect
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  child: Stack(
-                      children: [
-                        GoogleMap(
-                          myLocationEnabled: true,
-                          zoomGesturesEnabled: true,
-                          initialCameraPosition: CameraPosition(
-                            target: startLocation,
-                            zoom: 14.0,
-                          ),
-                          markers: markers.toSet(),
-                          mapType: MapType.normal,
-                          onMapCreated: (controller) {
-                            setState(() {
-                              mapController = controller;
-
-                            });
-                          },
-                          onCameraMove: _onCameraMove,
-                        ),
-                      ]),
-                ),
-
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

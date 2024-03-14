@@ -119,7 +119,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
               child: GestureDetector(
                 onTap: () => Navigator.pop(context, true),
                 child: const Icon(
-                  Icons.arrow_back_ios,
+                  CupertinoIcons.back,
                   color: Colors.white,
                   size: 24.0,
                 ),

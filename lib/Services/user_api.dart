@@ -16,6 +16,7 @@ import 'package:GenERP/models/generatorComplaintResponse.dart';
 import 'package:GenERP/models/loadGeneratorDetailsResponse.dart';
 import 'package:GenERP/screens/GenTechnicianModule/AccountSuggestion.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:path_provider/path_provider.dart';
 import '../Utils/api_names.dart';
 import '../models/AddContactResponse.dart';
 import '../models/AttendanceHistoryresponse.dart';
@@ -39,8 +40,8 @@ import '../models/UpdateComplaintResponse.dart';
 import '../models/ViewVisitDetailsResponse.dart';
 import 'api_calls.dart';
 import 'other_services.dart';
-class UserApi {
 
+class UserApi {
   static Future<VersionsResponse?> versionApi() async {
     try {
       final res = await post({}, getUpdateStatus, {});
@@ -58,8 +59,8 @@ class UserApi {
     }
   }
 
-  static Future<StatusResponse?> LoginFunctionApi(email, password, token,
-      deviceID, deviceInfo) async {
+  static Future<StatusResponse?> LoginFunctionApi(
+      email, password, token, deviceID, deviceInfo) async {
     try {
       Map<String, String> data = {
         'email_id': (email).toString(),
@@ -82,7 +83,7 @@ class UserApi {
     }
   }
 
-  static Future download_files(empId, session,url,cntxt) async {
+  static Future download_files(empId, session, url, cntxt) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -91,22 +92,30 @@ class UserApi {
       final res = await post(data, url, {});
       if (res != null) {
         final bytes = res.bodyBytes;
-        final directory = "/storage/emulated/0/Download";
-
-
+        var directory = "";
+        if (Platform.isAndroid) {
+          directory = "/storage/emulated/0/Download";
+        } else if (Platform.isIOS) {
+          final iosDirectory = await getApplicationSupportDirectory();
+          directory = iosDirectory!.path;
+        }
 
         final contentDisposition = res.headers['content-disposition'];
-        print("contentDisposition ${contentDisposition?.split('filename=')[1]}");
+        print(
+            "contentDisposition ${contentDisposition?.split('filename=')[1]}");
 
         // final filename = contentDisposition != null
         //     ? contentDisposition.split('filename=')[1]
         //     : 'file';
-        var filename=(contentDisposition?.split('filename=')[1])?.replaceAll('"', "");
+        var filename =
+            (contentDisposition?.split('filename=')[1])?.replaceAll('"', "");
+        // ignore: unnecessary_brace_in_string_interps
         final file = File('${directory}/${filename}');
         await file.writeAsBytes(bytes);
-        toast(cntxt, "File saved to your downloads as ${filename}, Successfully");
+        toast(
+            cntxt, "File saved to your downloads as ${filename}, Successfully");
         print('File saved successfully');
-        return  jsonDecode(res.body);
+        return jsonDecode(res.body);
       } else {
         print("Null Response");
         return null;
@@ -179,16 +188,14 @@ class UserApi {
     }
   }
 
-
-  static Future<CheckInResponse?> CheckInApi(empId, sessioId, location, latlngs,
-      check_in_pic) async {
+  static Future<CheckInResponse?> CheckInApi(
+      empId, sessioId, location, latlngs, check_in_pic) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (sessioId).toString(),
         'posit': (latlngs).toString(),
         'location': (location).toString(),
-
       };
       var res;
       if (check_in_pic != null) {
@@ -211,15 +218,14 @@ class UserApi {
     }
   }
 
-  static Future<CheckOutResponse?> CheckOutApi(empId, sessioId, location,
-      latlngs, image) async {
+  static Future<CheckOutResponse?> CheckOutApi(
+      empId, sessioId, location, latlngs, image) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (sessioId).toString(),
         'location': (location).toString(),
         'posit': (latlngs).toString(),
-
       };
       var res;
       if (image != null) {
@@ -241,7 +247,6 @@ class UserApi {
       return null;
     }
   }
-
 
   static Future<AttendanceDashboard?> AttendanceListApi(empId, session) async {
     try {
@@ -286,8 +291,8 @@ class UserApi {
     }
   }
 
-  static Future<AttendanceDaywiseResponse?> DateWiseAttendanceApi(empId,
-      session, date) async {
+  static Future<AttendanceDaywiseResponse?> DateWiseAttendanceApi(
+      empId, session, date) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -328,8 +333,8 @@ class UserApi {
     }
   }
 
-  static Future<UpdatePasswordResponse?> UpdatePasswordApi(empId, session,
-      password, conf_password) async {
+  static Future<UpdatePasswordResponse?> UpdatePasswordApi(
+      empId, session, password, conf_password) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -351,14 +356,13 @@ class UserApi {
     }
   }
 
-  static Future<loadGeneratorDetailsResponse?> LoadGeneratorDetailsAPI(empId,
-      session, gen_hash_id) async {
+  static Future<loadGeneratorDetailsResponse?> LoadGeneratorDetailsAPI(
+      empId, session, gen_hash_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'gen_hash_id':(gen_hash_id).toString(),
-
+        'gen_hash_id': (gen_hash_id).toString(),
       };
       final res = await post(data, loadGeneratorDetails, {});
       if (res != null) {
@@ -374,15 +378,13 @@ class UserApi {
     }
   }
 
-
-  static Future<loadGeneratorDetailsResponse?> LoadTechnicianGeneratorDetailsAPI(empId,
-      session, gen_id) async {
+  static Future<loadGeneratorDetailsResponse?>
+      LoadTechnicianGeneratorDetailsAPI(empId, session, gen_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'gen_id':(gen_id).toString(),
-
+        'gen_id': (gen_id).toString(),
       };
       final res = await post(data, technician_generator_detailsAPI, {});
       if (res != null) {
@@ -421,8 +423,8 @@ class UserApi {
     }
   }
 
-  static Future<TagLocationResponse?> TagLocationAPI(empId, session,
-      gen_hash_id, location) async {
+  static Future<TagLocationResponse?> TagLocationAPI(
+      empId, session, gen_hash_id, location) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -444,17 +446,16 @@ class UserApi {
     }
   }
 
-  static Future<TagGeneratorResponse?> TagGeneratorAPI(empId, session,
-      gen_hash_id, engine_no) async {
+  static Future<TagGeneratorResponse?> TagGeneratorAPI(
+      empId, session, gen_hash_id, engine_no) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'gen_hash_id':(gen_hash_id).toString(),
-        'engine_no':(engine_no).toString()
-
+        'gen_hash_id': (gen_hash_id).toString(),
+        'engine_no': (engine_no).toString()
       };
-      final res = await post(data,tagGenerator, {});
+      final res = await post(data, tagGenerator, {});
       if (res != null) {
         print(res.body);
         return TagGeneratorResponse.fromJson(jsonDecode(res.body));
@@ -468,19 +469,27 @@ class UserApi {
     }
   }
 
-  static Future<SubmitComplaintResponse?> SubmitGeneratorComplaintAPI(empId,session,complaint_type_id,complaint_category_id,complaint_desc_id,running_hrs,gen_id,complaint_note) async {
+  static Future<SubmitComplaintResponse?> SubmitGeneratorComplaintAPI(
+      empId,
+      session,
+      complaint_type_id,
+      complaint_category_id,
+      complaint_desc_id,
+      running_hrs,
+      gen_id,
+      complaint_note) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'complaint_type_id':(complaint_type_id).toString(),
-        'complaint_category_id':(complaint_category_id).toString(),
-        'complaint_desc_id':(complaint_desc_id).toString(),
-        'running_hrs':(running_hrs).toString(),
-        'gen_id':(gen_id).toString(),
-        'complaint_note':(complaint_note).toString()
+        'complaint_type_id': (complaint_type_id).toString(),
+        'complaint_category_id': (complaint_category_id).toString(),
+        'complaint_desc_id': (complaint_desc_id).toString(),
+        'running_hrs': (running_hrs).toString(),
+        'gen_id': (gen_id).toString(),
+        'complaint_note': (complaint_note).toString()
       };
-      final res = await post(data,submitComplaint, {});
+      final res = await post(data, submitComplaint, {});
       if (res != null) {
         print(res.body);
         return SubmitComplaintResponse.fromJson(jsonDecode(res.body));
@@ -494,15 +503,15 @@ class UserApi {
     }
   }
 
-  static Future<ComplaintsSelectionResponse?> ComplaintSelectionAPI(empId,session,gen_hash_id) async {
+  static Future<ComplaintsSelectionResponse?> ComplaintSelectionAPI(
+      empId, session, gen_hash_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'gen_hash_id':(gen_hash_id).toString(),
-
+        'gen_hash_id': (gen_hash_id).toString(),
       };
-      final res = await post(data,ComplaintsSelection, {});
+      final res = await post(data, ComplaintsSelection, {});
       if (res != null) {
         print(res.body);
         return ComplaintsSelectionResponse.fromJson(jsonDecode(res.body));
@@ -516,16 +525,16 @@ class UserApi {
     }
   }
 
-  static Future<LoginQRResponse?> QRLoginRequestAPI(empId,session,type,token) async {
+  static Future<LoginQRResponse?> QRLoginRequestAPI(
+      empId, session, type, token) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'type':(type).toString(),
-        'token':(token).toString(),
-
+        'type': (type).toString(),
+        'token': (token).toString(),
       };
-      final res = await post(data,qrLoginRequest, {});
+      final res = await post(data, qrLoginRequest, {});
       if (res != null) {
         print(res.body);
         return LoginQRResponse.fromJson(jsonDecode(res.body));
@@ -541,16 +550,15 @@ class UserApi {
 
   ///Inventory Module API's
 
-
-  static Future<Inventory_Part_details_response?> LoadPartDetailsAPI(empId,session,part_id) async {
+  static Future<Inventory_Part_details_response?> LoadPartDetailsAPI(
+      empId, session, part_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'part_id':(part_id).toString(),
-
+        'part_id': (part_id).toString(),
       };
-      final res = await post(data,inventory_part_detailsAPI, {});
+      final res = await post(data, inventory_part_detailsAPI, {});
       if (res != null) {
         print(res.body);
         return Inventory_Part_details_response.fromJson(jsonDecode(res.body));
@@ -564,19 +572,18 @@ class UserApi {
     }
   }
 
-
-  static Future<loadGeneratorDetailsResponse?>InventoryUpdateStockAPI(empId,session,qty,descr,part_id,tran_type) async {
+  static Future<loadGeneratorDetailsResponse?> InventoryUpdateStockAPI(
+      empId, session, qty, descr, part_id, tran_type) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
         'qty': (qty).toString(),
         'descr': (descr).toString(),
-        'product_id':(part_id).toString(),
-        'tran_type':(tran_type).toString(),
-
+        'product_id': (part_id).toString(),
+        'tran_type': (tran_type).toString(),
       };
-      final res = await post(data,inventory_stock_updateAPI, {});
+      final res = await post(data, inventory_stock_updateAPI, {});
       if (res != null) {
         print(res.body);
         return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
@@ -590,9 +597,8 @@ class UserApi {
     }
   }
 
-
-  static Future<TechnicianResponse?> loadTechnicianDashboardApi(empId,
-      session) async {
+  static Future<TechnicianResponse?> loadTechnicianDashboardApi(
+      empId, session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -612,8 +618,8 @@ class UserApi {
     }
   }
 
-  static Future<TodayVisitResponse?> getTodayVisitsListAPI(empId,
-      session) async {
+  static Future<TodayVisitResponse?> getTodayVisitsListAPI(
+      empId, session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -633,9 +639,8 @@ class UserApi {
     }
   }
 
-
-  static Future<TodayVisitResponse?> getMonthVisitsListAPI(empId,
-      session) async {
+  static Future<TodayVisitResponse?> getMonthVisitsListAPI(
+      empId, session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -655,8 +660,8 @@ class UserApi {
     }
   }
 
-
-  static Future<NearbyGeneratorsResponse?> loadNearbyGeneratorsAPI(empId, session,tech_loc,radius) async {
+  static Future<NearbyGeneratorsResponse?> loadNearbyGeneratorsAPI(
+      empId, session, tech_loc, radius) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -678,15 +683,13 @@ class UserApi {
     }
   }
 
-  static Future<AccountSuggestionResonse?> AccountSuggestionAPI(empId, session,
-      search_string) async {
+  static Future<AccountSuggestionResonse?> AccountSuggestionAPI(
+      empId, session, search_string) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
         'search_string': (search_string).toString(),
-
-
       };
       final res = await post(data, getAccountSuggestions, {});
       if (res != null) {
@@ -702,9 +705,8 @@ class UserApi {
     }
   }
 
-  static Future<
-      TechnicianPendingComplaintsResponse?> LoadTechnicianComplaintsAPI(empId,
-      session) async {
+  static Future<TechnicianPendingComplaintsResponse?>
+      LoadTechnicianComplaintsAPI(empId, session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -725,8 +727,8 @@ class UserApi {
     }
   }
 
-  static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(empId,
-      session, type, gen_id, account_id) async {
+  static Future<TechnicianLoadNumbersResponse?> LoadContactsTechnicianAPI(
+      empId, session, type, gen_id, account_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -749,10 +751,18 @@ class UserApi {
     }
   }
 
-  static Future<
-      TechnicianAddPaymentCollectionResponse?> TechnicianUpdatepaymentAPI(empId,
-      session, ref_type, ref_id, payment_mode_id, payment_ref_no, amount,
-      otp_validated_name, otp_validated_mobile_number, payment_proof) async {
+  static Future<TechnicianAddPaymentCollectionResponse?>
+      TechnicianUpdatepaymentAPI(
+          empId,
+          session,
+          ref_type,
+          ref_id,
+          payment_mode_id,
+          payment_ref_no,
+          amount,
+          otp_validated_name,
+          otp_validated_mobile_number,
+          payment_proof) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -764,11 +774,10 @@ class UserApi {
         'amount': (amount).toString(),
         'otp_validated_name': (otp_validated_name).toString(),
         'otp_validated_mobile_number': (otp_validated_mobile_number).toString(),
-
       };
       var res;
       if (payment_proof != null) {
-        res = await postImage3(data, {},updatePaymentDetails, payment_proof);
+        res = await postImage3(data, {}, updatePaymentDetails, payment_proof);
         res = jsonDecode(res);
       } else {
         res = await post(data, checkInapi, {});
@@ -787,16 +796,15 @@ class UserApi {
     }
   }
 
-  static Future<
-      PaymentCollectionValidateOTPResponse?> TechnicianPaymentOTPValidateAPI(
-      empId, session, payment_collection_id, otp) async {
+  static Future<PaymentCollectionValidateOTPResponse?>
+      TechnicianPaymentOTPValidateAPI(
+          empId, session, payment_collection_id, otp) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
         'payment_collection_id': (payment_collection_id).toString(),
         'otp': (otp).toString(),
-
       };
       final res = await post(data, validateOTPApi, {});
       if (res != null) {
@@ -813,8 +821,10 @@ class UserApi {
     }
   }
 
-  static Future<PaymentCollectionResponse?> paymentCollectionListAPI(empId,
-      session,) async {
+  static Future<PaymentCollectionResponse?> paymentCollectionListAPI(
+    empId,
+    session,
+  ) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
@@ -834,14 +844,14 @@ class UserApi {
     }
   }
 
-
-  static Future<PaymentCollectionWalletResponse?>loadTransactionsListAPI(empId,session) async {
+  static Future<PaymentCollectionWalletResponse?> loadTransactionsListAPI(
+      empId, session) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
       };
-      final res = await post(data,loadTransactionsListApi, {});
+      final res = await post(data, loadTransactionsListApi, {});
       if (res != null) {
         print(res.body);
         return PaymentCollectionWalletResponse.fromJson(jsonDecode(res.body));
@@ -855,12 +865,13 @@ class UserApi {
     }
   }
 
-  static Future<ViewVisitDetailsResponse?> loadVisitDetailsAPI(empId, session, comp_id) async {
+  static Future<ViewVisitDetailsResponse?> loadVisitDetailsAPI(
+      empId, session, comp_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'comp_id':(comp_id).toString(),
+        'comp_id': (comp_id).toString(),
       };
       final res = await post(data, technician_complaint_detailsAPI, {});
       if (res != null) {
@@ -876,12 +887,13 @@ class UserApi {
     }
   }
 
-  static Future<FollowupListResponse?>loadFollowupListAPI(empId, session, comp_id) async {
+  static Future<FollowupListResponse?> loadFollowupListAPI(
+      empId, session, comp_id) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
-        'comp_id':(comp_id).toString(),
+        'comp_id': (comp_id).toString(),
       };
       final res = await post(data, technician_complaint_followup_listAPI, {});
       if (res != null) {
@@ -927,8 +939,15 @@ class UserApi {
     }
   }
 
-  static Future<UpdateComplaintResponse?> UpdateComplaintAPI(empId, session,
-      complaint_id, in_time, feedback, fsr_no, running_hrs, complaint_status,
+  static Future<UpdateComplaintResponse?> UpdateComplaintAPI(
+      empId,
+      session,
+      complaint_id,
+      in_time,
+      feedback,
+      fsr_no,
+      running_hrs,
+      complaint_status,
       fsr_file) async {
     try {
       Map<String, String> data = {

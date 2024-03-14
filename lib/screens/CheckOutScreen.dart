@@ -17,7 +17,8 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
 import 'package:geocoding/geocoding.dart' as geocoding;
-import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart'
+    as geo_location;
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,7 +41,7 @@ class CheckOutScreen extends StatefulWidget {
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
   TextEditingController _locationController = TextEditingController();
-  String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
+  String googleApikey = "AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.45977250652744, 78.51635191323184);
@@ -69,15 +70,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     super.initState();
   }
 
-
   Future<void> _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: geo_location.LocationAccuracy.high
-    );
+        desiredAccuracy: geo_location.LocationAccuracy.high);
     setState(() {
       CurrentLocation = LatLng(position.latitude, position.longitude);
     });
   }
+
 //
 //   Future<void> _getLocationPermission() async {
 //     // Check if location services are enabled
@@ -165,7 +165,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     if (!isLocationEnabled || !hasLocationPermission) {
       // Location services or permissions are not enabled, request permission
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.always && permission != LocationPermission.whileInUse) {
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
         // Permission not granted, handle accordingly
         // Show a message to the user indicating that location permission is needed
         showDialog(
@@ -173,14 +174,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Location Permission Required'),
-              content: Text('Please allow the app to access your location for core functionality.'),
+              content: Text(
+                  'Please allow the app to access your location for core functionality.'),
               actions: <Widget>[
                 TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     overlayColor: MaterialStateProperty.all(Colors.white),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     await openAppSettings();
                     Navigator.of(context).pop();
                     Navigator.pushReplacement(
@@ -220,7 +222,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         markers.add(Marker(
           markerId: MarkerId('current_location'),
           position:
-          LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
           infoWindow: InfoWindow(title: 'Current Location'),
           icon: BitmapDescriptor.defaultMarker,
         ));
@@ -245,6 +247,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
       }
     }
   }
+
   void _onCameraMove(CameraPosition position) {
     _timer?.cancel(); // Cancel any previous timer
     _timer = Timer(Duration(milliseconds: 100), () {
@@ -401,7 +404,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             right: 0,
                             bottom: 0,
                             child: Container(
-                              height: size.height * 0.25,
+                              height: size.height * 0.3,
                               decoration: BoxDecoration(
                                 color: ColorConstant.white,
                                 borderRadius: BorderRadius.only(
@@ -508,22 +511,26 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                         horizontal: 20.0),
                                     child: InkWell(
                                       onTap: () async {
-                                        setState(() {
-                                        });
+                                        setState(() {});
                                         // _imgFromCamera();
                                         if (_locationController.text.isEmpty) {
                                           setState(() {
-                                            _validateLocation = "Please Enter location";
+                                            _validateLocation =
+                                                "Please Enter location";
                                             print(_validateLocation);
                                           });
                                         } else {
                                           _validateLocation = "";
-                                          _image = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FrontCameraCapture()));
-                                          // print("${_image} _image akash");
+                                          if (Platform.isAndroid) {
+                                            _image = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FrontCameraCapture()));
+                                            // print("${_image} _image akash");
+                                          } else if (Platform.isIOS) {
+                                            _imgFromCamera();
+                                          }
                                           setState(() {
                                             image_picked = 1;
                                             isLoading = true;

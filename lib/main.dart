@@ -16,7 +16,7 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   playSound: true,
 );
 const MethodChannel _channel =
-MethodChannel('com.almoullim.background_location/methods');
+    MethodChannel('com.almoullim.background_location/methods');
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();

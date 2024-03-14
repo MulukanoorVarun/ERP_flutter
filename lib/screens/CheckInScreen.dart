@@ -7,7 +7,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart'
+    as geo_location;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
@@ -36,7 +37,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   // late LocationService locationService;
   TextEditingController _locationController = TextEditingController();
-  String googleApikey = "AIzaSyAA2ukvrb1kWQZ2dttsNIMynLJqVCYYrhw";
+  String googleApikey = "AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs";
   GoogleMapController? mapController;
   CameraPosition? cameraPosition;
   LatLng startLocation = const LatLng(17.439112226708446, 78.43292499146135);
@@ -72,11 +73,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
     super.dispose();
   }
 
-
   Future<void> _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: geo_location.LocationAccuracy.high
-    );
+        desiredAccuracy: geo_location.LocationAccuracy.high);
     setState(() {
       CurrentLocation = LatLng(position.latitude, position.longitude);
     });
@@ -153,7 +152,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
 //     }
 //   }
 
-
   Future<void> _getLocationPermission() async {
     // Check if location services are enabled
     bool isLocationEnabled = await Geolocator.isLocationServiceEnabled();
@@ -175,7 +173,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
     if (!isLocationEnabled || !hasLocationPermission) {
       // Location services or permissions are not enabled, request permission
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.always && permission != LocationPermission.whileInUse) {
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
         // Permission not granted, handle accordingly
         // Show a message to the user indicating that location permission is needed
         showDialog(
@@ -183,14 +182,15 @@ class _CheckInScreenState extends State<CheckInScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Location Permission Required'),
-              content: Text('Please allow the app to access your location for core functionality.'),
+              content: Text(
+                  'Please allow the app to access your location for core functionality.'),
               actions: <Widget>[
                 TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     overlayColor: MaterialStateProperty.all(Colors.white),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     await openAppSettings();
                     Navigator.of(context).pop();
                     Navigator.pushReplacement(
@@ -198,7 +198,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
                       MaterialPageRoute(builder: (context) => Attendance()),
                     );
                     Navigator.pop(context);
-
                   },
                   child: Text('OK'),
                 ),
@@ -221,43 +220,42 @@ class _CheckInScreenState extends State<CheckInScreen> {
         isLoading = false;
       });
 
-    if (currentLocation != null) {
-      mapController?.animateCamera(
-        CameraUpdate.newLatLng(LatLng(
-          currentLocation!.latitude!,
-          currentLocation!.longitude!,
-        )),
-      );
+      if (currentLocation != null) {
+        mapController?.animateCamera(
+          CameraUpdate.newLatLng(LatLng(
+            currentLocation!.latitude!,
+            currentLocation!.longitude!,
+          )),
+        );
 
-      markers.add(Marker(
-        markerId: MarkerId('current_location'),
-        position:
-        LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-        infoWindow: InfoWindow(title: 'Current Location'),
-        icon: BitmapDescriptor.defaultMarker,
-      ));
+        markers.add(Marker(
+          markerId: MarkerId('current_location'),
+          position:
+              LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+          infoWindow: InfoWindow(title: 'Current Location'),
+          icon: BitmapDescriptor.defaultMarker,
+        ));
 
-      // circles = Set.from([
-      //   Circle(
-      //     circleId: CircleId("value"),
-      //     center:
-      //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-      //     radius: 200,
-      //     strokeColor: Colors.blue,
-      //     strokeWidth: 1,
-      //   )
-      // ]);
+        // circles = Set.from([
+        //   Circle(
+        //     circleId: CircleId("value"),
+        //     center:
+        //         LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+        //     radius: 200,
+        //     strokeColor: Colors.blue,
+        //     strokeWidth: 1,
+        //   )
+        // ]);
 
-      setState(() {
-        final lat = currentLocation!.latitude;
-        final lang = currentLocation!.longitude!;
-        latlongs = '$lat,$lang';
-        //Storelocatorfunction(latlongs);
-      });
-    }
+        setState(() {
+          final lat = currentLocation!.latitude;
+          final lang = currentLocation!.longitude!;
+          latlongs = '$lat,$lang';
+          //Storelocatorfunction(latlongs);
+        });
+      }
     }
   }
-
 
   void _onCameraMove(CameraPosition position) {
     _timer?.cancel(); // Cancel any previous timer
@@ -409,11 +407,11 @@ class _CheckInScreenState extends State<CheckInScreen> {
                               zoom: 20.0,
                             ),
                             markers: markers.toSet(),
-                          //  zoomControlsEnabled: false,
-                        //    minMaxZoomPreference: MinMaxZoomPreference(14, 14),
-                          //  scrollGesturesEnabled: false,
-                          //   liteModeEnabled: true,
-                           // circles: circles,
+                            //  zoomControlsEnabled: false,
+                            //    minMaxZoomPreference: MinMaxZoomPreference(14, 14),
+                            //  scrollGesturesEnabled: false,
+                            //   liteModeEnabled: true,
+                            // circles: circles,
                             mapType: MapType.normal,
                             onMapCreated: (controller) {
                               setState(() {
@@ -427,7 +425,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             right: 0,
                             bottom: 0,
                             child: Container(
-                              height: size.height * 0.25,
+                              height: size.height * 0.3,
                               decoration: BoxDecoration(
                                 color: ColorConstant.white,
                                 borderRadius: BorderRadius.only(
@@ -534,8 +532,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
                                         horizontal: 20.0),
                                     child: InkWell(
                                       onTap: () async {
-                                        setState(() {
-                                        });
+                                        setState(() {});
                                         // _imgFromCamera();
                                         if (_locationController.text.isEmpty) {
                                           setState(() {
@@ -545,12 +542,18 @@ class _CheckInScreenState extends State<CheckInScreen> {
                                           });
                                         } else {
                                           _validateLocation = "";
-                                          _image = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      FrontCameraCapture()));
-                                          print("${_image} _image akash");
+                                          if (Platform.isAndroid) {
+                                            _image = await Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        FrontCameraCapture()));
+                                            print("${_image} _image akash");
+                                          } else if (Platform.isIOS) {
+                                            // BackgroundLocation.stopLocationService();
+                                            _imgFromCamera();
+                                          }
+
                                           setState(() {
                                             isLoading = true;
                                             image_picked = 1;
@@ -558,11 +561,6 @@ class _CheckInScreenState extends State<CheckInScreen> {
                                           });
                                         }
                                       },
-                                      // onTap: () async {
-                                      //
-                                      //  // BackgroundLocation.stopLocationService();
-                                      //   _imgFromCamera();
-                                      // },
                                       child: Container(
                                         alignment: Alignment.center,
                                         height: 45,

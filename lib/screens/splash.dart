@@ -1,17 +1,18 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:GenERP/Services/user_api.dart';
 import 'package:GenERP/screens/UpdatePassword.dart';
+import 'package:app_settings/app_settings.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
- 
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 
 import '../Services/other_services.dart';
 import '../Utils/ColorConstant.dart';
@@ -22,7 +23,6 @@ import '../main.dart';
 import 'Dashboard.dart';
 import 'Login.dart';
 
-
 class Splash extends StatefulWidget {
   const Splash({super.key});
 
@@ -30,8 +30,8 @@ class Splash extends StatefulWidget {
   State<Splash> createState() => _SplashState();
 }
 
-class _SplashState extends State<Splash>{
-  void initState(){
+class _SplashState extends State<Splash> {
+  void initState() {
     super.initState();
     VersionApiFunction();
     // validate_and_run();
@@ -39,51 +39,57 @@ class _SplashState extends State<Splash>{
     requestPermissions();
   }
 
-
   Future<void> VersionApiFunction() async {
-    var loginStatus= await PreferenceService().getInt("loginstatus");
+    var loginStatus = await PreferenceService().getInt("loginstatus");
     try {
       await UserApi.versionApi().then((data) => {
-        if (data != null)
-          {
-            setState(() {
-              if(VERSION_CODE < data.latestVersionCode!){
-                AppUpdateDialouge(data.url!,data.releaseNotes!);
-              }else{
-                if(loginStatus==0){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) =>  Login()));
-                }else{
-                 // AppUpdateDialouge(data.url!,data.releaseNotes!);
-                  getSessiondetailsApiFunction();
-                }
+            if (data != null)
+              {
+                setState(() {
+                  if (Platform.isAndroid) {
+                    if (VERSION_CODE < data.latestVersionCode!) {
+                      AppUpdateDialouge(data.url!, data.releaseNotes!);
+                    } else {
+                      if (loginStatus == 0) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      } else {
+                        // AppUpdateDialouge(data.url!,data.releaseNotes!);
+                        getSessiondetailsApiFunction();
+                      }
+                    }
+                  } else if (Platform.isIOS) {
+                    if (loginStatus == 0) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    } else {
+                      // AppUpdateDialouge(data.url!,data.releaseNotes!);
+                      getSessiondetailsApiFunction();
+                    }
+                  }
+                })
               }
-            })
-          }
-        else
-          {print("Something went wrong, Please try again.")}
-      });
+            else
+              {print("Something went wrong, Please try again.")}
+          });
     } on Exception catch (e) {
       print("$e");
     }
   }
 
-  Future AppUpdateDialouge(String apkurl,String note) async {
+  Future AppUpdateDialouge(String apkurl, String note) async {
     return await showDialog<bool>(
-      context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: Text('App Update Available!',
-              style:
-            TextStyle(
-              color: ColorConstant.erp_appColor,
-              fontWeight: FontWeight.w500,
-              fontSize: FontConstant.Size18,
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              'App Update Available!',
+              style: TextStyle(
+                color: ColorConstant.erp_appColor,
+                fontWeight: FontWeight.w500,
+                fontSize: FontConstant.Size18,
+              ),
             ),
-
-            ),
-            content:  Text(note
-            ),
+            content: Text(note),
             actions: [
               const SizedBox(height: 16),
               TextButton(
@@ -91,29 +97,26 @@ class _SplashState extends State<Splash>{
                   backgroundColor: MaterialStateProperty.all(Colors.white),
                   overlayColor: MaterialStateProperty.all(Colors.white70),
                 ),
-                onPressed: () async{
-                  if (await canLaunchUrl(Uri.parse(apkurl)))
-                  {
-                  await launchUrl(Uri.parse(apkurl),
-                  mode: LaunchMode.externalApplication);
+                onPressed: () async {
+                  if (await canLaunchUrl(Uri.parse(apkurl))) {
+                    await launchUrl(Uri.parse(apkurl),
+                        mode: LaunchMode.externalApplication);
                   }
-                    },
+                },
                 child: Text(
                   "UPDATE",
-                  style:
-                  TextStyle(
+                  style: TextStyle(
                     color: ColorConstant.erp_appColor,
                     fontWeight: FontWeight.w500,
                     fontSize: FontConstant.Size15,
                   ),
-
                 ),
               ),
             ],
             elevation: 30.0,
           ),
-      barrierDismissible: false,
-    ) ??
+          barrierDismissible: false,
+        ) ??
         false;
   }
 
@@ -125,50 +128,82 @@ class _SplashState extends State<Splash>{
 
   Future<void> getStoragePermission() async {
     if (await Permission.manageExternalStorage.request().isGranted) {
+      print("Storage");
       setState(() {});
     } else if (await Permission.storage.request().isPermanentlyDenied) {
+      print("Storage");
       await openAppSettings();
     } else if (await Permission.storage.request().isDenied) {
+      print("Storage");
       setState(() {});
     }
   }
 
   Future<void> getCameraPermissions() async {
     if (await Permission.camera.request().isGranted) {
+      print("Camera1");
       setState(() {});
     } else if (await Permission.camera.request().isPermanentlyDenied) {
-      await openAppSettings();
+      print("Camera2");
+      if (Platform.isAndroid) {
+        await openAppSettings();
+      } else if (Platform.isIOS) {
+        setState(() {});
+      }
     } else if (await Permission.camera.request().isDenied) {
+      print("Camera3");
       setState(() {});
     }
   }
 
   Future<void> getLocationPermissions() async {
     if (await Permission.location.request().isGranted) {
+      print("Location1a");
       setState(() {});
     } else if (await Permission.location.request().isPermanentlyDenied) {
-      await openAppSettings();
+      print("Location1b");
+      if (Platform.isAndroid) {
+        await openAppSettings();
+      } else if (Platform.isIOS) {
+        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+      }
     } else if (await Permission.location.request().isDenied) {
+      print("Location1c");
       setState(() {});
     }
 
     if (await Permission.locationAlways.request().isGranted) {
+      print("Location2a");
       setState(() {});
     } else if (await Permission.locationAlways.request().isPermanentlyDenied) {
-      await openAppSettings();
+      print("Location2b");
+      if (Platform.isAndroid) {
+        await openAppSettings();
+      } else if (Platform.isIOS) {
+        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+      }
     } else if (await Permission.locationAlways.request().isDenied) {
+      print("Location2c");
       setState(() {});
     }
 
     if (await Permission.locationWhenInUse.request().isGranted) {
+      print("Location3a");
       setState(() {});
-    } else if (await Permission.locationWhenInUse.request().isPermanentlyDenied) {
-      await openAppSettings();
+    } else if (await Permission.locationWhenInUse
+        .request()
+        .isPermanentlyDenied) {
+      print("Location3b");
+      if (Platform.isAndroid) {
+        await openAppSettings();
+      } else if (Platform.isIOS) {
+        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+      }
     } else if (await Permission.locationWhenInUse.request().isDenied) {
+      print("Location3c");
       setState(() {});
     }
   }
-
 
   Future<void> getNotificationsPermissions() async {
     if (await Permission.notification.request().isGranted) {
@@ -197,34 +232,38 @@ class _SplashState extends State<Splash>{
   //   }
   // }
 
-  Future<void> getSessiondetailsApiFunction() async{
-    var session= await PreferenceService().getString("Session_id");
-    var empId= await PreferenceService().getString("UserId");
-    try{
-      await UserApi.SessionExistsApi(empId, session).then((data)=>{
-        if(data!=null){
-          setState((){
-            if(data.sessionExists==1){
-              if(data.updatePasswordRequired==0){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  Dashboard()));
+  Future<void> getSessiondetailsApiFunction() async {
+    var session = await PreferenceService().getString("Session_id");
+    var empId = await PreferenceService().getString("UserId");
+    try {
+      await UserApi.SessionExistsApi(empId, session).then((data) => {
+            if (data != null)
+              {
+                setState(() {
+                  if (data.sessionExists == 1) {
+                    if (data.updatePasswordRequired == 0) {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Dashboard()));
+                    } else if (data.updatePasswordRequired == 1) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => UpdatePassword()));
+                    }
+                  } else {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
+                    toast(context,
+                        "Your Session has been expired, Please Login Again");
+                  }
+                })
               }
-              else if(data.updatePasswordRequired==1){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) =>  UpdatePassword()));
+            else
+              {
+                //toast(context,"Something went wrong, Please try again later!")
               }
-            }else{
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) =>  Login()));
-              toast(context,"Your Session has been expired, Please Login Again");
-            }
-          })
-        }else{
-          //toast(context,"Something went wrong, Please try again later!")
-        }
-      });
-
-    } on Error catch(e){
+          });
+    } on Error catch (e) {
       print(e.toString());
     }
   }
@@ -253,12 +292,9 @@ class _SplashState extends State<Splash>{
                 height: 300,
                 width: 300,
                 image: AssetImage("assets/images/ic_splash.jpg"),
-              )
-
-          ),
+              )),
         ],
       ),
     );
-
   }
 }

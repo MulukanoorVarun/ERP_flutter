@@ -12,7 +12,6 @@ import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
- 
 
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
@@ -22,13 +21,13 @@ import 'ComplaintHistory.dart';
 
 class QRScanner extends StatefulWidget {
   final title;
-  const QRScanner({Key? key,required this.title}) : super(key: key);
+  const QRScanner({Key? key, required this.title}) : super(key: key);
 
   @override
   State<QRScanner> createState() => _QRScannerState();
 }
 
-class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
+class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
   TextEditingController Generator_id = TextEditingController();
   var session = "";
   var empId = "";
@@ -51,106 +50,107 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-
     if (state == AppLifecycleState.resumed) {
       // This block of code will be executed when the app resumes from the background
       // You can put any logic you want to execute on app resume here
-      LoadgeneratorDetailsApifunction(empId,session,result);
-
+      LoadgeneratorDetailsApifunction(empId, session, result);
     }
   }
 
   check_session() async {
-    session= await PreferenceService().getString("Session_id")??"";
-    empId= await PreferenceService().getString("UserId")??"";
-    result = await PreferenceService().getString("result")??"";
+    session = await PreferenceService().getString("Session_id") ?? "";
+    empId = await PreferenceService().getString("UserId") ?? "";
+    result = await PreferenceService().getString("result") ?? "";
     print("e:$empId");
     print("s:$session");
-    if(empId!=null && session!=null){
+    if (empId != null && session != null) {
       isLoading = false;
     }
-
   }
 
-  Future<void> LoadgeneratorDetailsApifunction(empId,session,gen_hash_id) async{
-
-      try {
-        if(Generator_id.text.isEmpty){
-          setState(() {
-            _Error = "Enter Generator Id";
-          });
-          // toast(context,"Enter Generator Id");
-          print(_Error);
-
-        }else {
-          _Error = "";
-          _Error.isEmpty;
-          await UserApi.LoadGeneratorDetailsAPI(empId,session,gen_hash_id)
-              .then((data) =>
-          {
-            if(data != null){
-              setState(() {
-                if (data.sessionExists == 1) {
-                  if (data.error == 0) {
-
-                    if (widget.title == "Generator Details") {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                        GeneratorDetails(
-                        actName: "",
-                        location: "",
-                        generatorId: Generator_id.text
-                      ),
-                      ));
+  Future<void> LoadgeneratorDetailsApifunction(
+      empId, session, gen_hash_id) async {
+    try {
+      if (Generator_id.text.isEmpty) {
+        setState(() {
+          _Error = "Enter Generator Id";
+        });
+        // toast(context,"Enter Generator Id");
+        print(_Error);
+      } else {
+        _Error = "";
+        _Error.isEmpty;
+        await UserApi.LoadGeneratorDetailsAPI(empId, session, gen_hash_id)
+            .then((data) => {
+                  if (data != null)
+                    {
+                      setState(() {
+                        if (data.sessionExists == 1) {
+                          if (data.error == 0) {
+                            if (widget.title == "Generator Details") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => GeneratorDetails(
+                                        actName: "",
+                                        location: "",
+                                        generatorId: Generator_id.text),
+                                  ));
+                            }
+                            if (widget.title == "Register Complaint") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => RegisterComplaint(
+                                          generator_id: Generator_id.text)));
+                            }
+                            if (widget.title == "pendingComplaints") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ComplaintDetails(
+                                            gen_id: Generator_id.text,
+                                            act_name: widget.title,
+                                          )));
+                            }
+                          } else if (data.error == 1) {
+                            toast(context, "Enter Valid Generator Id");
+                          } else {
+                            toast(context,
+                                "Something went wrong, Please try again later!");
+                          }
+                        } else {
+                          PreferenceService().clearPreferences();
+                          toast(context,
+                              "Your session has expired, please login again");
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Splash()));
+                        }
+                      })
                     }
-                    if (widget.title == "Register Complaint") {
-                      Navigator.push(context, MaterialPageRoute(
-                          builder: (context) =>
-                              RegisterComplaint(
-                                  generator_id: Generator_id.text)));
+                  else
+                    {
+                      toast(context,
+                          "No response from server, Please try again later!")
                     }
-                    if (widget.title == "pendingComplaints")  {
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>ComplaintDetails(gen_id: data.genId!,act_name: widget.title,)));
-                    }
-                  }
-                  else if (data.error == 1) {
-                    toast(context, "Enter Valid Generator Id");
-                  }
-                  else {
-                    toast(
-                        context, "Something went wrong, Please try again later!");
-                  }
-                } else {
-                  PreferenceService().clearPreferences();
-                  toast(context, "Your session has expired, please login again");
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Splash()));
-                }
-              })
-            } else
-              {
-                toast(context, "No response from server, Please try again later!")
-              }
-          });
-        }
-
-      } on Error catch (e) {
-        print(e.toString());
+                });
       }
+    } on Error catch (e) {
+      print(e.toString());
     }
+  }
 
-
-   validations(){
-     _Error = "Enter Generator Id";
+  validations() {
+    _Error = "Enter Generator Id";
   }
 
   Future<void> _refresh() async {
     // Simulate a delay to mimic fetching new data from an API
     await Future.delayed(const Duration(seconds: 2));
     // Generate new data or update existing data
-    setState(() {
-
-    });
+    setState(() {});
   }
 
   @override
@@ -158,214 +158,241 @@ class _QRScannerState extends State<QRScanner>  with WidgetsBindingObserver{
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return RefreshIndicator(
-        color: ColorConstant.erp_appColor,
-        onRefresh: _refresh,
-      child:Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorConstant.erp_appColor,
-        elevation: 0,
-        title: Container(
-            child: Row(
-              children: [
-                // Spacer(),
-                Container(
-                  child: InkWell(
-                    onTap: () => Navigator.pop(context, true),
-                    child: Text(widget.title,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          color: ColorConstant.white,
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                        )),
+      color: ColorConstant.erp_appColor,
+      onRefresh: _refresh,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: ColorConstant.erp_appColor,
+          elevation: 0,
+          title: Container(
+              child: Row(
+            children: [
+              Padding(padding: EdgeInsets.only(left: 20)),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context, true);
+                },
+                child: SvgPicture.asset(
+                  "assets/back_icon.svg",
+                  height: 24,
+                  width: 24,
+                ),
+              ),
+              SizedBox(width: 10),
+              Container(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, true),
+                  child: Text(widget.title,
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: ColorConstant.white,
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ),
+              ),
+            ],
+          )),
+          titleSpacing: 0,
+        ),
+        body: (isLoading)
+            ? Loaders()
+            : SingleChildScrollView(
+                child: Container(
+                height: screenHeight,
+                color: ColorConstant.erp_appColor,
+                child: Container(
+                  width: double.infinity, // Set width to fill parent width
+                  decoration: BoxDecoration(
+                    color: ColorConstant.edit_bg_color,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30.0),
+                      topRight: Radius.circular(30.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
+                  child: Column(
+                    // Set max height constraints
+                    children: [
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                      Container(
+                        child: Text(
+                          "Scan QR Code or Enter ID",
+                          style: TextStyle(
+                            fontSize: FontConstant.Size25,
+                            fontWeight: FontWeight.bold,
+                            overflow: TextOverflow.ellipsis,
+                            color: ColorConstant.erp_appColor,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      Container(
+                        height: screenHeight * 0.75,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 25.0,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                if (widget.title == "Generator Details") {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Scanner(
+                                              from: "generatorDetails")));
+                                }
+                                if (widget.title == "Register Complaint") {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Scanner(
+                                              from: "registerComplaint")));
+                                }
+                                if (widget.title == "pendingComplaints") {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Scanner(
+                                              from: "pendingComplaints")));
+                                }
+                              },
+                              child: Container(
+                                child: SvgPicture.asset(
+                                  "assets/ic_qrcode.svg",
+                                  height: 280,
+                                  width: 280,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Spacer(),
+                                Container(
+                                  width: 130,
+                                  child:
+                                      Divider(thickness: 1, color: Colors.grey),
+                                ),
+                                Spacer(),
+                                Container(
+                                  child: Text(
+                                    "OR",
+                                    style: TextStyle(
+                                      fontSize: FontConstant.Size20,
+                                      fontWeight: FontWeight.w300,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: 130,
+                                  child:
+                                      Divider(thickness: 1, color: Colors.grey),
+                                ),
+                                Spacer(),
+                              ],
+                            )),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Container(
+                              alignment: Alignment.center,
+                              height: 55,
+                              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                controller: Generator_id,
+                                cursorColor: ColorConstant.black,
+                                keyboardType: TextInputType.text,
+                                textCapitalization:
+                                    TextCapitalization.characters,
+                                decoration: InputDecoration(
+                                  hintText: "Enter Generator ID",
+                                  hintStyle: TextStyle(
+                                      fontSize: FontConstant.Size15,
+                                      color: ColorConstant.Textfield,
+                                      fontWeight: FontWeight.w400),
+                                  filled: true,
+                                  fillColor: ColorConstant.edit_bg_color,
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(
+                                        width: 0,
+                                        color: ColorConstant.edit_bg_color),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    borderSide: BorderSide(
+                                        width: 0,
+                                        color: ColorConstant.edit_bg_color),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (_Error.isNotEmpty) ...[
+                              Container(
+                                alignment: Alignment.topLeft,
+                                margin: EdgeInsets.only(
+                                    top: 2.5, bottom: 2.5, left: 25),
+                                child: Text(
+                                  "$_Error",
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: FontConstant.Size10,
+                                  ),
+                                ),
+                              )
+                            ] else ...[
+                              SizedBox(
+                                height: 20.0,
+                              ),
+                            ],
+                            Container(
+                                child: InkWell(
+                              onTap: () {
+                                LoadgeneratorDetailsApifunction(
+                                    empId, session, Generator_id.text);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 45,
+                                margin:
+                                    EdgeInsets.only(left: 15.0, right: 15.0),
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.erp_appColor,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Text(
+                                  "Submit",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: ColorConstant.white,
+                                    fontSize: FontConstant.Size15,
+                                  ),
+                                ),
+                              ),
+                            )),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            )),
-        titleSpacing: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context, true),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24.0,
-            ),
-          ),
-        ),
-      ),
-      body:(isLoading)?Loaders(): SingleChildScrollView(
-      child:Container(
-        height: screenHeight,
-        color: ColorConstant.erp_appColor,
-          child: Container(
-        width: double.infinity, // Set width to fill parent width
-        decoration: BoxDecoration(
-          color: ColorConstant.edit_bg_color,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-        ),
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-        child: Column(// Set max height constraints
-          children: [
-            SizedBox(height: 15.0,),
-            Container(
-              child: Text("Scan QR Code or Enter ID", style:  TextStyle(
-                fontSize: FontConstant.Size25,
-                fontWeight: FontWeight.bold,
-                overflow: TextOverflow.ellipsis,
-
-                color: ColorConstant.erp_appColor,
-              ),),),
-            SizedBox(height: 5.0,),
-            Container(
-              height: screenHeight*0.75,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child:
-              Column(
-                children: [
-                  SizedBox(height: 25.0,),
-                  InkWell(
-                    onTap: (){
-                      if(widget.title=="Generator Details"){
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"generatorDetails")));
-                      }
-                      if(widget.title=="Register Complaint"){
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"registerComplaint")));
-                      }
-                      if(widget.title=="pendingComplaints"){
-                        Navigator.push(context,MaterialPageRoute(builder: (context)=>Scanner(from:"pendingComplaints")));
-                      }
-
-                    },
-                    child: Container(
-
-                      child: SvgPicture.asset(
-                        "assets/ic_qrcode.svg",
-                        height: 320,
-                        width: 320,
-                      ),
-                    ),
-                  ),
-                  Container(
-                      child:Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-
-                          Spacer(),
-                          Container(
-                            width:130,
-                            child:Divider(thickness: 1,color: Colors.grey) ,
-                          ),
-                          Spacer(),
-                          Container(
-                            child: Text("OR", style:  TextStyle(
-                              fontSize: FontConstant.Size20,
-                              fontWeight: FontWeight.w300,
-                              overflow: TextOverflow.ellipsis,
-
-                              color: Colors.grey,
-                            ),),),
-                          Spacer(),
-                          Container(
-                            width:130,
-                            child:Divider(thickness: 1,color: Colors.grey) ,
-                          ),
-                          Spacer(),
-                        ],
-                      )
-                  ),
-                  SizedBox(height: 10.0,),
-                  Container(
-                    alignment: Alignment.center,
-                    height: 55,
-                    margin:EdgeInsets.only(left:15.0,right:15.0),
-                    child: TextFormField(
-                      controller: Generator_id,
-                      cursorColor: ColorConstant.black,
-                      keyboardType: TextInputType.text,
-                      textCapitalization: TextCapitalization.characters,
-                      decoration: InputDecoration(
-                        hintText: "Enter Generator ID",
-                        hintStyle:  TextStyle(
-                            fontSize: FontConstant.Size15,
-                            color: ColorConstant.Textfield,
-                            fontWeight: FontWeight.w400),
-
-                        filled: true,
-                        fillColor: ColorConstant.edit_bg_color,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
-                              width: 0, color: ColorConstant.edit_bg_color),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0),
-                          borderSide: BorderSide(
-                              width: 0, color: ColorConstant.edit_bg_color),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if(_Error.isNotEmpty)...[
-                    Container(
-                      alignment: Alignment.topLeft,
-                      margin: EdgeInsets.only(
-                          top: 2.5, bottom: 2.5, left: 25),
-                      child: Text(
-                        "$_Error",
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontSize: FontConstant.Size10,
-
-                        ),
-                      ),
-                    )
-                  ]else...[
-                    SizedBox(height: 20.0,),
-                  ],
-                  Container(
-                      child: InkWell(
-                        onTap: (){
-                          LoadgeneratorDetailsApifunction(empId,session,Generator_id.text);
-
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          height: 45,
-                          margin: EdgeInsets.only(left: 15.0,right: 15.0),
-                          decoration: BoxDecoration(color: ColorConstant.erp_appColor,borderRadius:BorderRadius.circular(10.0), ),
-                          child: Text(
-                            "Submit",
-                            textAlign: TextAlign.center,
-                            style:
-                            TextStyle(
-                              color: ColorConstant.white,
-                              fontSize: FontConstant.Size15,
-                            ),
-                          ),
-                        ),
-                      )
-                  ),
-                ],
-              ),
-
-            ),
-
-          ],
-        ),
-
-      ),
-      )),
+              )),
       ),
     );
   }
-
 }

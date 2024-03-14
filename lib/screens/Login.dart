@@ -182,7 +182,7 @@ class _LoginState extends State<Login> {
         } else if (Platform.isIOS) {
           // toast(context,"ios");
           platformname = "iOS";
-          fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+          // fcmToken = await FirebaseMessaging.instance.getAPNSToken();
         }
         // String? fcm_token = await FirebaseMessaging.instance.getToken();
         print("fcmToken:${fcmToken}");
@@ -468,10 +468,11 @@ class _LoginState extends State<Login> {
                           decoration: InputDecoration(
                             hintText: "Enter Password",
                             suffixIcon: IconButton(
+                              color: ColorConstant.erp_appColor,
                               icon: Icon(
                                 (_passwordVisible!)
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                                    ? CupertinoIcons.eye_solid
+                                    : CupertinoIcons.eye_slash_fill,
                               ),
                               onPressed: () {
                                 setState(() {
@@ -528,11 +529,11 @@ class _LoginState extends State<Login> {
                           child: InkWell(
                         onTap: () {
                           LoginApiFunction();
-                            var f = FocusScope.of(context);
+                          var f = FocusScope.of(context);
 
-                            if (!f.hasPrimaryFocus) {
-                              f.unfocus();
-                            }
+                          if (!f.hasPrimaryFocus) {
+                            f.unfocus();
+                          }
                           //  Navigator.push(context,MaterialPageRoute(builder: (context)=>Profile()));
                         },
                         child: Container(

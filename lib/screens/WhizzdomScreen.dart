@@ -9,6 +9,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_download_manager/flutter_download_manager.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
@@ -21,7 +22,7 @@ const MAX_PROGRESS = 100;
 Future main() async {
   await FlutterDownloader.initialize(
       debug: true // optional: set false to disable printing logs to console
-  );
+      );
   await Permission.storage.request();
 }
 
@@ -35,7 +36,7 @@ class WhizzdomScreen extends StatefulWidget {
 
 class _WhizzdomScreenState extends State<WhizzdomScreen> {
   final Completer<InAppWebViewController> _controller =
-  Completer<InAppWebViewController>();
+      Completer<InAppWebViewController>();
   var empId = "";
   var sessionId = "";
   bool isLoading = true;
@@ -46,26 +47,25 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
   );
   bool pullToRefreshEnabled = true;
 
-
   final GlobalKey webViewKey = GlobalKey();
   var dl = DownloadManager();
   @override
   void initState() {
-  //  loadData();
+    //  loadData();
     pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
-      settings: pullToRefreshSettings,
-      onRefresh: () async {
-        if (defaultTargetPlatform == TargetPlatform.android) {
-          webViewController?.reload();
-        } else if (defaultTargetPlatform == TargetPlatform.iOS) {
-          webViewController?.loadUrl(
-              urlRequest:
-              URLRequest(url: await webViewController?.getUrl()));
-        }
-      },
-    );
+            settings: pullToRefreshSettings,
+            onRefresh: () async {
+              if (defaultTargetPlatform == TargetPlatform.android) {
+                webViewController?.reload();
+              } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+                webViewController?.loadUrl(
+                    urlRequest:
+                        URLRequest(url: await webViewController?.getUrl()));
+              }
+            },
+          );
     print("URL:${widget.url}");
     super.initState();
   }
@@ -74,7 +74,6 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
   void dispose() {
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,103 +84,104 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
           elevation: 0,
           title: Container(
               child: Row(
-                children: [
-                  // Spacer(),
-                  Container(
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context, true),
-                      child: Text("Whizzdom",
-                          textAlign: TextAlign.left,
-                          style: TextStyle(
-                            color: ColorConstant.white,
-                            fontSize: FontConstant.Size18,
-                            fontWeight: FontWeight.w500,
-                          )),
-                    ),
-                  ),
-                ],
-              )),
-          titleSpacing: 0,
-          leading: Container(
-            margin: const EdgeInsets.only(left: 10),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context, true),
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24.0,
+            children: [
+              Padding(padding: EdgeInsets.only(left: 20)),
+              InkWell(
+                onTap: () {
+                  Navigator.pop(context, true);
+                },
+                child: SvgPicture.asset(
+                  "assets/back_icon.svg",
+                  height: 24,
+                  width: 24,
+                ),
               ),
-            ),
-          ),
+              SizedBox(width: 10),
+              Container(
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, true),
+                  child: Text("Whizzdom",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: ColorConstant.white,
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.w500,
+                      )),
+                ),
+              ),
+            ],
+          )),
+          titleSpacing: 0,
         ),
         body: Container(
             child: Column(children: <Widget>[
-              Expanded(
-                  child: Stack(
-                    children: [
-                      InAppWebView(
-                        initialUrlRequest: URLRequest(url: WebUri(widget.url),),
-                        androidOnGeolocationPermissionsShowPrompt:
-                            (InAppWebViewController controller, String origin) async {
-                          return GeolocationPermissionShowPromptResponse(
-                              origin: origin, allow: true, retain: true);
-                        },
-                        initialOptions: InAppWebViewGroupOptions(
-                          android: AndroidInAppWebViewOptions(
-                            useWideViewPort: true,
-                            loadWithOverviewMode: true,
-                            allowContentAccess: true,
-                            geolocationEnabled: true,
-                            allowFileAccess: true,
-                            databaseEnabled: true, // Enables the WebView database
-                            domStorageEnabled: true, // Enables DOM storage
-                            builtInZoomControls: true, // Enables the built-in zoom controls
-                            displayZoomControls: false, // Disables displaying zoom controls
-                            safeBrowsingEnabled: true, // Enables Safe Browsing
-                            clearSessionCache: true,
-                          ),
-
-                          ios: IOSInAppWebViewOptions(
-                            allowsInlineMediaPlayback: true,
-                          ),
-                        ),
-                        androidOnPermissionRequest: (InAppWebViewController controller,
-                            String origin, List<String> resources) async {
-                          return PermissionRequestResponse(
-                              resources: resources,
-                              action: PermissionRequestResponseAction.GRANT);
-                        },
-                        onWebViewCreated: (controller) {
-                          webViewController = controller;
-                          _controller.complete(controller);
-                        },
-                        pullToRefreshController: pullToRefreshController,
-                        onLoadStart: (controller, url) {
-                          return setState(() {
-                            isLoading = true;
-                          });
-                        },
-                        onLoadStop: (controller, url) {
-                          pullToRefreshController?.endRefreshing();
-                          return setState(() {
-                            isLoading = false;
-                          });
-                        },
-                        onReceivedError: (controller, request, error) {
-                          pullToRefreshController?.endRefreshing();
-                        },
-                        onProgressChanged: (controller, progress) {
-                          if (progress == 100) {
-                            pullToRefreshController?.endRefreshing();
-                          }
-                        },
-                      ),
-                      if(isLoading)...[
-                        Loaders()
-                      ]
-                    ],
-                  ))
-            ])),
+          Expanded(
+              child: Stack(
+            children: [
+              InAppWebView(
+                initialUrlRequest: URLRequest(
+                  url: WebUri(widget.url),
+                ),
+                androidOnGeolocationPermissionsShowPrompt:
+                    (InAppWebViewController controller, String origin) async {
+                  return GeolocationPermissionShowPromptResponse(
+                      origin: origin, allow: true, retain: true);
+                },
+                initialOptions: InAppWebViewGroupOptions(
+                  android: AndroidInAppWebViewOptions(
+                    useWideViewPort: true,
+                    loadWithOverviewMode: true,
+                    allowContentAccess: true,
+                    geolocationEnabled: true,
+                    allowFileAccess: true,
+                    databaseEnabled: true, // Enables the WebView database
+                    domStorageEnabled: true, // Enables DOM storage
+                    builtInZoomControls:
+                        true, // Enables the built-in zoom controls
+                    displayZoomControls:
+                        false, // Disables displaying zoom controls
+                    safeBrowsingEnabled: true, // Enables Safe Browsing
+                    clearSessionCache: true,
+                  ),
+                  ios: IOSInAppWebViewOptions(
+                    allowsInlineMediaPlayback: true,
+                  ),
+                ),
+                androidOnPermissionRequest: (InAppWebViewController controller,
+                    String origin, List<String> resources) async {
+                  return PermissionRequestResponse(
+                      resources: resources,
+                      action: PermissionRequestResponseAction.GRANT);
+                },
+                onWebViewCreated: (controller) {
+                  webViewController = controller;
+                  _controller.complete(controller);
+                },
+                pullToRefreshController: pullToRefreshController,
+                onLoadStart: (controller, url) {
+                  return setState(() {
+                    isLoading = true;
+                  });
+                },
+                onLoadStop: (controller, url) {
+                  pullToRefreshController?.endRefreshing();
+                  return setState(() {
+                    isLoading = false;
+                  });
+                },
+                onReceivedError: (controller, request, error) {
+                  pullToRefreshController?.endRefreshing();
+                },
+                onProgressChanged: (controller, progress) {
+                  if (progress == 100) {
+                    pullToRefreshController?.endRefreshing();
+                  }
+                },
+              ),
+              if (isLoading) ...[Loaders()]
+            ],
+          ))
+        ])),
       ),
     );
   }

@@ -60,7 +60,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     super.initState();
     if (widget.actName == "NearByGenerators") {
       LoadTechniciangeneratorDetailsApi();
-    }else{
+    } else {
       LoadgeneratorDetailsApifunction();
     }
   }
@@ -77,6 +77,77 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
       print("generatorid:${widget.generatorId}");
       print("LoadgeneratorDetailsApifunction");
       await UserApi.LoadGeneratorDetailsAPI(empId, session, widget.generatorId)
+          .then((data) => {
+                if (data != null)
+                  {
+                    setState(() {
+                      if (data.sessionExists == 1) {
+                        if (data.error == 0) {
+                          comp_name = data.aname!;
+                          eng_model = data.emodel!;
+                          p_name = data.spname!;
+                          mob_num = data.mob1!;
+                          alt_mob_num = data.mob2!;
+                          mail_id = data.mail!;
+                          Cust_name = data.cname!;
+                          date_of_eng_sale = data.dateOfEngineSale!;
+                          batt_num = data.btryNo!;
+                          dg_set_num = data.dgSetNo!;
+                          address = data.address!;
+                          date_of_sup = data.dispDate!;
+                          disp_date = data.dispDate!;
+                          status = data.status!;
+                          gen_id = data.genId!;
+                          print("genID:${gen_id.toString()}");
+                          eng_no = data.engineNo!;
+                          PreferenceService()
+                              .saveString("EngineNumber", data.engineNo!);
+                          print("EngineNumber" + data.engineNo!);
+                          isLoading = false;
+                          // data.nextService!;
+                          // data.cmsngDate!;
+                          // data.state!;
+                          // data.district!;
+                          // data.altNo!;
+                          //
+                          notifier = 1;
+                          print("littu");
+                        } else {
+                          notifier = 0;
+                          isLoading = false;
+                          toast(context, "No Data Available");
+                          print("error");
+                        }
+                      } else {
+                        PreferenceService().clearPreferences();
+                        toast(context,
+                            "Your Session expired, Please Login Again!");
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Splash()));
+                      }
+                    })
+                  }
+                else
+                  {
+                    isLoading = true,
+                    toast(context,
+                        "No response From the server, Please try Again!"),
+                    print("error2")
+                  }
+              });
+    } on Error catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> LoadTechniciangeneratorDetailsApi() async {
+    session = await PreferenceService().getString("Session_id") ?? "";
+    empId = await PreferenceService().getString("UserId") ?? "";
+    try {
+      print("generatorid:${widget.generatorId}");
+      print("LoadTechniciangeneratorDetailsApi");
+      await UserApi.LoadTechnicianGeneratorDetailsAPI(
+              empId, session, widget.generatorId)
           .then((data) => {
                 if (data != null)
                   {
@@ -139,73 +210,6 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     }
   }
 
-
-  Future<void> LoadTechniciangeneratorDetailsApi() async {
-    session = await PreferenceService().getString("Session_id") ?? "";
-    empId = await PreferenceService().getString("UserId") ?? "";
-    try {
-      print("generatorid:${widget.generatorId}");
-      print("LoadTechniciangeneratorDetailsApi");
-      await UserApi.LoadTechnicianGeneratorDetailsAPI(empId, session, widget.generatorId)
-          .then((data) => {
-        if (data != null)
-          {
-            setState(() {
-              if (data.sessionExists == 1) {
-                if (data.error == 0) {
-                  comp_name = data.aname!;
-                  eng_model = data.emodel!;
-                  p_name = data.spname!;
-                  mob_num = data.mob1!;
-                  alt_mob_num = data.mob2!;
-                  mail_id = data.mail!;
-                  Cust_name = data.cname!;
-                  date_of_eng_sale = data.dateOfEngineSale!;
-                  batt_num = data.btryNo!;
-                  dg_set_num = data.dgSetNo!;
-                  address = data.address!;
-                  date_of_sup = data.dispDate!;
-                  disp_date = data.dispDate!;
-                  status = data.status!;
-                  gen_id = data.genId!;
-                  eng_no = data.engineNo!;
-                  PreferenceService()
-                      .saveString("EngineNumber", data.engineNo!);
-                  print("EngineNumber" + data.engineNo!);
-                  isLoading = false;
-                  // data.nextService!;
-                  // data.cmsngDate!;
-                  // data.state!;
-                  // data.district!;
-                  // data.altNo!;
-                  //
-                  notifier = 1;
-                  print("littu");
-                } else {
-                  notifier = 0;
-                  isLoading = false;
-                  toast(context, "No Data Available");
-                  print("error");
-                }
-              } else {
-                PreferenceService().clearPreferences();
-                toast(context,
-                    "Your Session expired, Please Login Again!");
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Splash()));
-              }
-            })
-          } else {
-            isLoading = true,
-            toast(context,"No response From the server, Please try Again!"),
-            print("error2")
-          }
-      });
-    } on Error catch (e) {
-      print(e.toString());
-    }
-  }
-
   Future<void> _refresh() async {
     // Simulate a delay to mimic fetching new data from an API
     await Future.delayed(const Duration(seconds: 2));
@@ -214,7 +218,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
       isLoading = true;
       if (widget.actName == "NearByGenerators") {
         LoadTechniciangeneratorDetailsApi();
-      }else{
+      } else {
         LoadgeneratorDetailsApifunction();
       }
     });
@@ -225,85 +229,89 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return RefreshIndicator(
-        color: ColorConstant.erp_appColor,
-        onRefresh: _refresh,
-      child:Scaffold(
-      appBar: AppBar(
-        backgroundColor: ColorConstant.erp_appColor,
-        elevation: 0,
-        title: Container(
-            child: Row(
-          children: [
-            // Spacer(),
-            Container(
-              child: InkWell(
-                onTap: () => Navigator.pop(context, true),
-                child: Text("Generator Details",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      color: ColorConstant.white,
-                      fontSize: FontConstant.Size18,
-                      fontWeight: FontWeight.w500,
-                    )),
-              ),
-            ),
-            const Spacer(),
-            Container(
-              child: const SizedBox(
-                width: 40,
-                height: 40,
-              ),
-            ),
-            if (widget.actName == "NearByGenerators") ...[
+      color: ColorConstant.erp_appColor,
+      onRefresh: _refresh,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: ColorConstant.erp_appColor,
+          elevation: 0,
+          title: Container(
+              child: Row(
+            children: [
+              // Spacer(),
               Container(
-                child: IconButton(
-                  onPressed: () async{
-                    if(widget.location!=null){
-                      var loc = widget.location?.split(",").toString();
-                      // var uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", res[0].toDouble(), res[1].toDouble())
-                      var uri = Uri.parse("google.navigation:q=${loc![0]},${loc![1]}&mode=d");
-                      if (await canLaunch(uri.toString())) {
-                    await launch(uri.toString());
-                    } else {
-                    throw 'Could not launch ${uri.toString()}';
-                    }
-                    // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
-                  }
-                  },
-                  icon: const Icon(
-                    Icons.assistant_direction_sharp,
-                    size: 30,
-                    color: Colors.white,
-                  ),
+                child: InkWell(
+                  onTap: () => Navigator.pop(context, true),
+                  child: Text("Generator Details",
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: ColorConstant.white,
+                        fontSize: FontConstant.Size18,
+                        fontWeight: FontWeight.w500,
+                      )),
                 ),
               ),
-            ]
-          ],
-        )),
-        titleSpacing: 0,
-        leading: Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context, true),
-            child: const Icon(
-              Icons.arrow_back_ios,
-              color: Colors.white,
-              size: 24.0,
+              const Spacer(),
+              Container(
+                child: const SizedBox(
+                  width: 40,
+                  height: 40,
+                ),
+              ),
+              if (widget.actName == "NearByGenerators") ...[
+                Container(
+                  child: IconButton(
+                    onPressed: () async {
+                      if (widget.location != null) {
+                        var loc = widget.location?.split(",").toString();
+                        // var uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", res[0].toDouble(), res[1].toDouble())
+                        var uri = Uri.parse(
+                            "google.navigation:q=${loc![0]},${loc![1]}&mode=d");
+                        if (await canLaunch(uri.toString())) {
+                          await launch(uri.toString());
+                        } else {
+                          throw 'Could not launch ${uri.toString()}';
+                        }
+                        // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.assistant_direction_sharp,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ]
+            ],
+          )),
+          titleSpacing: 0,
+          leading: Container(
+            margin: const EdgeInsets.only(left: 10),
+            child: GestureDetector(
+              onTap: () => Navigator.pop(context, true),
+              child: const Icon(
+                CupertinoIcons.back,
+                color: Colors.white,
+                size: 24.0,
+              ),
             ),
           ),
         ),
-      ),
-      body: (isLoading) ? Loaders() :
-             Container(
-              color: ColorConstant.erp_appColor,
-              child: Column(children: [
-                if (notifier != 0) ...[
-                  Expanded(
-                    child: SingleChildScrollView(
+        body: (isLoading)
+            ? Loaders()
+            : Container(
+                color: ColorConstant.erp_appColor,
+                child: Column(children: [
+                  if (notifier != 0) ...[
+                    Expanded(
+                        child: SingleChildScrollView(
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Container(
                         width: double.infinity,
-                        height: MediaQuery.of(context).size.height,// Set width to fill parent width
+                        height: MediaQuery.of(context)
+                            .size
+                            .height, // Set width to fill parent width
                         decoration: BoxDecoration(
                           color: ColorConstant.edit_bg_color,
                           borderRadius: BorderRadius.only(
@@ -320,7 +328,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                             ),
                             //customer details
                             Container(
-                              height: screenHeight * 0.36,
+                              height: screenHeight * 0.38,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20.0),
@@ -342,17 +350,17 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Container(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: screenWidth * 0.9,
-                                            child: Divider(
-                                                thickness: 0.5, color: Colors.grey),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      )),
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        width: screenWidth * 0.9,
+                                        child: Divider(
+                                            thickness: 0.5, color: Colors.grey),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  )),
                                   SizedBox(
                                     height: 5.0,
                                   ),
@@ -360,11 +368,11 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                     alignment: Alignment.topLeft,
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Row(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                              MainAxisAlignment.start,
                                           children: [
                                             Spacer(),
                                             Container(
@@ -374,9 +382,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 "Company",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -387,9 +398,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 "Customer Name",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer()
@@ -410,8 +424,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -424,8 +440,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -444,9 +462,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 "Mobile Number",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -457,9 +478,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 "Alternate Number",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -480,8 +504,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -494,8 +520,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -514,9 +542,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 "Mail ID",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -529,9 +560,12 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
-                                                    color: ColorConstant.grey_153,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    color:
+                                                        ColorConstant.grey_153,
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -552,8 +586,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -567,8 +603,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                     color: ColorConstant.black,
-                                                    fontSize: FontConstant.Size15,
-                                                    fontWeight: FontWeight.w300),
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight:
+                                                        FontWeight.w300),
                                               ),
                                             ),
                                             Spacer(),
@@ -589,7 +627,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                             //generator details
 
                             Container(
-                              height: screenHeight * 0.4,
+                              height: screenHeight * 0.43,
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(20.0),
@@ -611,321 +649,321 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                                   ),
                                   Container(
                                       child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Spacer(),
-                                          Container(
-                                            width: screenWidth * 0.9,
-                                            child: Divider(
-                                                thickness: 0.5, color: Colors.grey),
-                                          ),
-                                          Spacer(),
-                                        ],
-                                      )),
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Spacer(),
+                                      Container(
+                                        width: screenWidth * 0.9,
+                                        child: Divider(
+                                            thickness: 0.5, color: Colors.grey),
+                                      ),
+                                      Spacer(),
+                                    ],
+                                  )),
                                   SizedBox(
                                     height: 5.0,
                                   ),
                                   Container(
                                       child: Column(
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Product Name",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Date of Engine Sale",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Product Name",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
                                           ),
-                                          SizedBox(
-                                            height: 5.0,
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Date of Engine Sale",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$p_name",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$date_of_eng_sale",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Engine Model",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Dispatch Date",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$eng_model",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$disp_date",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "DG set Number",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Date of Supply",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$dg_set_num",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$disp_date",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Battery Number",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "Status",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.grey_153,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                            children: [
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$batt_num",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: 150,
-                                                alignment: Alignment.topLeft,
-                                                child: Text(
-                                                  "$status",
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                      color: ColorConstant.black,
-                                                      fontSize: FontConstant.Size15,
-                                                      fontWeight: FontWeight.w300),
-                                                ),
-                                              ),
-                                              Spacer(),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 5.0,
-                                          ),
+                                          Spacer(),
                                         ],
-                                      ))
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$p_name",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$date_of_eng_sale",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Engine Model",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Dispatch Date",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$eng_model",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$disp_date",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "DG set Number",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Date of Supply",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$dg_set_num",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$disp_date",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Battery Number",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "Status",
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.grey_153,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$batt_num",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Container(
+                                            width: 150,
+                                            alignment: Alignment.topLeft,
+                                            child: Text(
+                                              "$status",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.start,
+                                              style: TextStyle(
+                                                  color: ColorConstant.black,
+                                                  fontSize: FontConstant.Size15,
+                                                  fontWeight: FontWeight.w300),
+                                            ),
+                                          ),
+                                          Spacer(),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                    ],
+                                  ))
                                 ],
                               ),
                             ),
@@ -937,74 +975,74 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                               alignment: Alignment.bottomCenter,
                               child: Container(
                                   child: InkWell(
-                                    onTap: () async {
-                                      var res = await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => ComplaintDetails(
-                                                gen_id: gen_id,
+                                onTap: () async {
+                                  var res = await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ComplaintDetails(
+                                                gen_id: widget.generatorId,
                                                 act_name: "",
                                               )));
-                                      if (res == true) {
-                                        isLoading = true;
-                                        LoadgeneratorDetailsApifunction();
-                                      }
-                                    },
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      height: 45,
-                                      margin:
+                                  if (res == true) {
+                                    isLoading = true;
+                                    LoadgeneratorDetailsApifunction();
+                                  }
+                                },
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 45,
+                                  margin:
                                       EdgeInsets.only(left: 15.0, right: 15.0),
-                                      decoration: BoxDecoration(
-                                        color: ColorConstant.erp_appColor,
-                                        borderRadius: BorderRadius.circular(10.0),
-                                      ),
-                                      child: Text(
-                                        "View Complaint History",
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontFamily: 'Nexa',
-                                          color: ColorConstant.white,
-                                          fontSize: FontConstant.Size15,
-                                        ),
-                                      ),
+                                  decoration: BoxDecoration(
+                                    color: ColorConstant.erp_appColor,
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Text(
+                                    "View Complaint History",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontFamily: 'Nexa',
+                                      color: ColorConstant.white,
+                                      fontSize: FontConstant.Size15,
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              )),
                             )
                           ],
                         ),
                       ),
-                    )
-                  ),
-                ] else ...[
-                  Expanded(
-                      child: Container(
-                          width:
-                              double.infinity, // Set width to fill parent width
-                          decoration: BoxDecoration(
-                            color: ColorConstant.edit_bg_color,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(30.0),
-                              topRight: Radius.circular(30.0),
+                    )),
+                  ] else ...[
+                    Expanded(
+                        child: Container(
+                            width: double
+                                .infinity, // Set width to fill parent width
+                            decoration: BoxDecoration(
+                              color: ColorConstant.edit_bg_color,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
                             ),
-                          ),
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                          child: Container(
-                            child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "No Data Available",
-                                  style: TextStyle(
-                                    fontSize: FontConstant.Size18,
-                                    fontWeight: FontWeight.bold,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: ColorConstant.erp_appColor,
-                                  ),
-                                )),
-                          )))
-                ]
-              ]),
-            ),
+                            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                            child: Container(
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "No Data Available",
+                                    style: TextStyle(
+                                      fontSize: FontConstant.Size18,
+                                      fontWeight: FontWeight.bold,
+                                      overflow: TextOverflow.ellipsis,
+                                      color: ColorConstant.erp_appColor,
+                                    ),
+                                  )),
+                            )))
+                  ]
+                ]),
+              ),
       ),
     );
   }

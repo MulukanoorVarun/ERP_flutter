@@ -1,24 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
- 
 
 import '../Utils/ColorConstant.dart';
 import '../Utils/FontConstant.dart';
 
-class GenTracker extends StatefulWidget{
-  const GenTracker({Key?key}): super(key:key);
+class GenTracker extends StatefulWidget {
+  const GenTracker({Key? key}) : super(key: key);
 
   @override
   State<GenTracker> createState() => _GenTrackerState();
 }
 
-class _GenTrackerState extends State<GenTracker>{
+class _GenTrackerState extends State<GenTracker> {
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -30,7 +29,7 @@ class _GenTrackerState extends State<GenTracker>{
             child: GestureDetector(
               onTap: () => Navigator.pop(context, true),
               child: const Icon(
-                Icons.arrow_back_ios,
+                CupertinoIcons.back,
                 color: Colors.white,
                 size: 24.0,
               ),
@@ -39,11 +38,10 @@ class _GenTrackerState extends State<GenTracker>{
           title: Text(
             "Gen Tracker",
             textAlign: TextAlign.center,
-            style:  TextStyle(
-                  color: ColorConstant.white,
-                  fontSize: FontConstant.Size20,
-                  fontWeight: FontWeight.w500),
-
+            style: TextStyle(
+                color: ColorConstant.white,
+                fontSize: FontConstant.Size20,
+                fontWeight: FontWeight.w500),
           ),
           backgroundColor: ColorConstant.erp_appColor),
       body: Container(
@@ -59,7 +57,8 @@ class _GenTrackerState extends State<GenTracker>{
               ),
             ),
             padding: EdgeInsets.fromLTRB(10, 10, 10, 20),
-            child: Column(// Set max height constraints
+            child: Column(
+              // Set max height constraints
               children: [
                 Container(
                   height: 80,
@@ -67,72 +66,59 @@ class _GenTrackerState extends State<GenTracker>{
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child:
-                  Row(
+                  child: Row(
                     children: [
                       Icon(Icons.search),
-                      Text("Generator Details",textAlign: TextAlign.center,
-                        style:
-                         TextStyle(
-                                color: ColorConstant.black,
-                                fontSize: FontConstant.Size20,
-                                fontWeight: FontWeight.w500)),
-                      ],
+                      Text("Generator Details",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: ColorConstant.black,
+                              fontSize: FontConstant.Size20,
+                              fontWeight: FontWeight.w500)),
+                    ],
                   ),
-
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   height: 80,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child:
-                  Row(
-                    children: [
-                      Icon(Icons.search),
-                      Text("Generator Details")
-                    ],
+                  child: Row(
+                    children: [Icon(Icons.search), Text("Generator Details")],
                   ),
-
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   height: 80,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child:
-                  Row(
-                    children: [
-                      Icon(Icons.search),
-                      Text("Generator Details")
-                    ],
+                  child: Row(
+                    children: [Icon(Icons.search), Text("Generator Details")],
                   ),
-
                 ),
-                SizedBox(height: 10.0,),
+                SizedBox(
+                  height: 10.0,
+                ),
                 Container(
                   height: 80,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  child:
-                  Row(
-                    children: [
-                      Icon(Icons.search),
-                      Text("Generator Details")
-                    ],
+                  child: Row(
+                    children: [Icon(Icons.search), Text("Generator Details")],
                   ),
-
                 ),
-
               ],
             ),
-
           ),
         ),
       ),
