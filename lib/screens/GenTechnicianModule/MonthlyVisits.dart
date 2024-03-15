@@ -15,6 +15,7 @@ import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 import '../../models/TodayVisitResponse.dart';
+import '../Login.dart';
 
 class MonthlyVisitsScreen extends StatefulWidget {
   const MonthlyVisitsScreen({Key? key}) : super(key: key);
@@ -47,12 +48,18 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
             if (data != null)
               {
                 setState(() {
-                  if (data.error == 0) {
-                    monthvisitlist = data.list!;
-                    isLoading = false;
-                  } else {
-                    isLoading = false;
-                  }
+                 if (data.sessionExists == 1) {
+                   if (data.error == 0) {
+                     monthvisitlist = data.list!;
+                     isLoading = false;
+                   } else {
+                     isLoading = false;
+                   }
+                 }else {
+                   PreferenceService().clearPreferences();
+                   Navigator.push(context,
+                       MaterialPageRoute(builder: (context) => Login()));
+                 }
                   // toast(context, monthvisitlist.length.toString());
                 })
               }

@@ -2,6 +2,7 @@ import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/GenTracker/QRScanner.dart';
 import 'package:GenERP/screens/GenTracker/TagGenerator.dart';
 import 'package:GenERP/screens/GenTracker/TagLocation.dart';
+import 'package:GenERP/screens/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -46,11 +47,17 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
             if (data != null)
               {
                 setState(() {
+                  if (data.sessionExists == 1) {
                   if (data.error == 0) {
                     todayvisitlist = data.list!;
                     isLoading = false;
                   } else {
                     isLoading = false;
+                  }
+                  } else {
+                    PreferenceService().clearPreferences();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
                   }
                 })
               }

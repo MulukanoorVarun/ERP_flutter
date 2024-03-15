@@ -77,15 +77,21 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        if (await webViewController!.canGoBack()) {
+          webViewController!.goBack();
+          return false; // Prevent default back button behavior
+        }
+        return true; // Allow default back button behavior
+      },
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
           elevation: 0,
           title: Container(
               child: Row(
             children: [
-              Padding(padding: EdgeInsets.only(left: 20)),
               InkWell(
                 onTap: () {
                   Navigator.pop(context, true);
@@ -112,6 +118,10 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
             ],
           )),
           titleSpacing: 0,
+          leading: Container(
+            width: 10,
+          ),
+          leadingWidth: 20,
         ),
         body: Container(
             child: Column(children: <Widget>[

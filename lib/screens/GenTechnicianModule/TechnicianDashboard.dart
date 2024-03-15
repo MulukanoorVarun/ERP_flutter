@@ -16,6 +16,7 @@ import '../../Services/user_api.dart';
 import '../../Utils/ColorConstant.dart';
 import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
+import '../Login.dart';
 import 'PaymentDetails.dart';
 
 class GenTechnicianDashboard extends StatefulWidget {
@@ -54,6 +55,7 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                 if (data != null)
                   {
                     setState(() {
+                     if (data.sessionExists == 1) {
                       if (data.error == 0) {
                         avgRating = data.avgRating!;
                         pendingComplaints = data.pendingComplaints!;
@@ -66,6 +68,11 @@ class _GenTechnicianDashboardState extends State<GenTechnicianDashboard> {
                             data.monthlyPaymentCollectionAmount!;
                         isLoading = false;
                       } else {}
+                    }else if (data.sessionExists == 0) {
+                      PreferenceService().clearPreferences();
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Login()));
+                    }
                     })
                   }
                 else

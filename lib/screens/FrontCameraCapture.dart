@@ -83,7 +83,8 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
           },
         ),
       ),
-      body: (isLoading)
+      body: SafeArea(
+     child: (isLoading)
           ? Loaders()
           : SingleChildScrollView(
         child: Column(
@@ -118,6 +119,7 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

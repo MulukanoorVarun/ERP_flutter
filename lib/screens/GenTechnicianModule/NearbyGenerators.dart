@@ -28,6 +28,7 @@ import '../../Utils/FontConstant.dart';
 import '../../Utils/MyWidgets.dart';
 import '../../models/NearbyGeneratorsResponse.dart';
 import '../GenTracker/GeneratoraDetails.dart';
+import '../Login.dart';
 import '../background_service.dart';
 
 class NearbyGenerators extends StatefulWidget {
@@ -159,11 +160,17 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                 if (data != null)
                   {
                     setState(() {
-                      if (data.error == 0) {
-                        generatorslist = data.list!;
-                        _updateMarkersFromApiResponse(data.list!);
-                        isLoading = false;
-                      } else {}
+                      if (data.sessionExists == 1) {
+                        if (data.error == 0) {
+                          generatorslist = data.list!;
+                          _updateMarkersFromApiResponse(data.list!);
+                          isLoading = false;
+                        } else {}
+                      } else {
+                        PreferenceService().clearPreferences();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      }
                     })
                   }
                 else

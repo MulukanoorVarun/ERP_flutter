@@ -22,7 +22,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:label="Gen ERP"
+        android:label="GEN ERP"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -80,7 +80,5 @@
             android:enabled="true"
             android:exported="false"
             android:permission="" />
-
-
     </application>
 </manifest>

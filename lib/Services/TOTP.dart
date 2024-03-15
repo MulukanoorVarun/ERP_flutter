@@ -23,7 +23,7 @@ class Totp {
   /// Create a new TOTP instance for a given [secret].
   Totp({
     required List<int> secret,
-    Algorithm algorithm = Algorithm.sha256,
+    Algorithm algorithm = Algorithm.sha1,
     int digits = 6,
     this.period = 30,
   }) : _hotp = Hotp(
@@ -35,8 +35,8 @@ class Totp {
   /// Create a new TOTP instance for a given Base32 encoded [secret].
   Totp.fromBase32({
     required String secret,
-    Algorithm algorithm = Algorithm.sha256,
-    int digits = 8,
+    Algorithm algorithm = Algorithm.sha1,
+    int digits = 6,
     this.period = 30,
     Encoding encoding = Encoding.standardRFC4648,
   }) : _hotp = Hotp.fromBase32(

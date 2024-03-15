@@ -71,12 +71,18 @@ class _PartDetailsScreenState extends State<PartDetailsScreen> {
                 if (data != null)
                   {
                     setState(() {
-                      if (data.error == 0) {
-                        partdata = data.partData!;
-                        isLoading = false;
-                      } else {
-                        isLoading = false;
-                      }
+                   if(data.sessionExists==1) {
+                     if (data.error == 0) {
+                       partdata = data.partData!;
+                       isLoading = false;
+                     } else {
+                       isLoading = false;
+                     }
+                   }else if (data.sessionExists == 0) {
+                     PreferenceService().clearPreferences();
+                     Navigator.push(context,
+                         MaterialPageRoute(builder: (context) => Login()));
+                   }
                     })
                   }
               });

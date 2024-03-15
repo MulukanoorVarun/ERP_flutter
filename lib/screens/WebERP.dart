@@ -11,6 +11,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_download_manager/flutter_download_manager.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -90,15 +91,21 @@ class _WebERPState extends State<WebERP> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        if (await webViewController!.canGoBack()) {
+          webViewController!.goBack();
+          return false; // Prevent default back button behavior
+        }
+        return true; // Allow default back button behavior
+      },
+      child: Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
           elevation: 0,
           title: Container(
               child: Row(
             children: [
-              Padding(padding: EdgeInsets.only(left: 20)),
               InkWell(
                 onTap: () {
                   Navigator.pop(context, true);
@@ -125,6 +132,10 @@ class _WebERPState extends State<WebERP> {
             ],
           )),
           titleSpacing: 0,
+          leading: Container(
+            width: 10,
+          ),
+          leadingWidth: 10,
         ),
         body: Container(
             child: Column(children: <Widget>[
@@ -196,6 +207,28 @@ class _WebERPState extends State<WebERP> {
                       return setState(() {
                         isLoading = false;
                       });
+                    },
+                    shouldOverrideUrlLoading: (controller, navigationAction) async {
+                      var uri = navigationAction.request.url!;
+                      if (uri.scheme == "tel") {
+                        // Launch the phone dialer app with the specified phone number
+                        if (await canLaunch(uri.toString())) {
+                          await launch(uri.toString());
+                          return NavigationActionPolicy.CANCEL;
+                        }
+                      }else if(uri.scheme == "mailto"){
+                        if (await canLaunch(uri.toString())) {
+                          await launch(uri.toString());
+                          return NavigationActionPolicy.CANCEL;
+                        }
+                      }else if (uri.scheme == "whatsapp") {
+                        // Launch WhatsApp with the specified chat or phone number
+                        if (await canLaunch(uri.toString())) {
+                          await launch(uri.toString());
+                          return NavigationActionPolicy.CANCEL;
+                        }
+                      }
+                      return NavigationActionPolicy.ALLOW;
                     },
                     onReceivedError: (controller, request, error) {
                       pullToRefreshController?.endRefreshing();

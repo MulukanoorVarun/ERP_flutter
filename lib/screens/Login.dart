@@ -332,11 +332,10 @@ class _LoginState extends State<Login> {
                       Navigator.pop(context);
                       toast(context, "Device ID has been copied!");
                     },
-                    child: Icon(
-                      Icons.file_copy,
-                      color: Colors.grey,
-                      size: 22,
-                    ),
+                    child:SvgPicture.asset(
+                      "assets/ic_copy.svg",
+                      height: 22,
+                      width: 22,),
                   ),
                 ),
                 Spacer(),
@@ -345,7 +344,10 @@ class _LoginState extends State<Login> {
                   onTap: () {
                     Share.share("$deviceId");
                   },
-                  child: Icon(Icons.share, size: 22),
+                      child:SvgPicture.asset(
+                        "assets/ic_share.svg",
+                        height: 22,
+                        width: 22,),
                 )),
               ],
             ),
@@ -586,6 +588,11 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
+    var f = FocusScope.of(context);
+    FocusScope.of(context).unfocus();
+    if (!f.hasPrimaryFocus) {
+      f.unfocus();
+    }
     email.dispose();
     password.dispose();
     super.dispose();

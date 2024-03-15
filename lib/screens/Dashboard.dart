@@ -16,6 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:intl/intl.dart';
 import 'package:optimize_battery/optimize_battery.dart';
@@ -36,6 +37,7 @@ import '../Utils/storage.dart';
 import 'Login.dart';
 import 'Scanner.dart';
 import 'WhizzdomScreen.dart';
+import 'package:location/location.dart' as loc;
 import 'background_service.dart';
 
 
@@ -87,6 +89,44 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     // addAutoStartup();
     DashboardApiFunction();
+    requestGpsPermission();
+    }
+
+
+  Future<bool> checkGpsStatus() async {
+    bool isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+    return isGpsEnabled;
+  }
+
+  Future<void> requestGpsPermission() async {
+    bool isLocationEnabled = false;
+    bool hasLocationPermission = false;
+    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+// Check if the app has been granted location permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    hasLocationPermission = permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+
+    final loc.Location location = loc.Location();
+    bool serviceEnabled;
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+  }
+
+  @override
+  void dispose(){
+    var f = FocusScope.of(context);
+
+    if (!f.hasPrimaryFocus) {
+      f.unfocus();
+    }
+    super.dispose();
   }
 
   void initUniLinks() async {
@@ -299,6 +339,7 @@ class _DashboardState extends State<Dashboard> {
     setState(() {
       isLoading = true;
       DashboardApiFunction();
+      requestGpsPermission();
     });
   }
 
@@ -569,8 +610,8 @@ class _DashboardState extends State<Dashboard> {
                                               },
                                               child: SvgPicture.asset(
                                                 "assets/images/qr_scanner.svg",
-                                                height: 35,
-                                                width: 35,
+                                                height: 30,
+                                                width: 30,
                                               ),
                                             ),
                                           ),
@@ -593,7 +634,7 @@ class _DashboardState extends State<Dashboard> {
                                               child: SvgPicture.asset(
                                                 "assets/images/profile_icon.svg",
                                                 height: 30,
-                                                width: 35,
+                                                width: 30,
                                               ),
                                             ),
                                           ),
@@ -692,6 +733,8 @@ class _DashboardState extends State<Dashboard> {
                                             Container(
                                               child: InkWell(
                                                 onTap: () async {
+                                                bool gpsEnabled = await checkGpsStatus();
+                                                if (gpsEnabled) {
                                                   var res =
                                                       await Navigator.push(
                                                     context,
@@ -706,7 +749,9 @@ class _DashboardState extends State<Dashboard> {
                                                       isLoading = true;
                                                       DashboardApiFunction();
                                                     });
-                                                  }
+                                                  } }else {
+                                               await requestGpsPermission();
+                                               }
                                                 },
                                                 child: Container(
                                                   height: MediaQuery.of(context)
@@ -756,21 +801,26 @@ class _DashboardState extends State<Dashboard> {
                                             Container(
                                               child: InkWell(
                                                 onTap: () async {
-                                                  var res =
-                                                      await Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            WhizzdomScreen(
-                                                                url:
-                                                                    whizzdomPageUrl)),
-                                                  );
-                                                  if (res == true) {
-                                                    setState(() {
-                                                      isLoading = true;
-                                                      DashboardApiFunction();
-                                                    });
-                                                  }
+                                         bool gpsEnabled = await checkGpsStatus();
+                                           if (gpsEnabled) {
+                                             var res =
+                                             await Navigator.push(
+                                               context,
+                                               MaterialPageRoute(
+                                                   builder: (context) =>
+                                                       WhizzdomScreen(
+                                                           url:
+                                                           whizzdomPageUrl)),
+                                             );
+                                             if (res == true) {
+                                               setState(() {
+                                                 isLoading = true;
+                                                 DashboardApiFunction();
+                                               });
+                                             }
+                                           }else {
+                                              await requestGpsPermission();
+                                                   }
                                                 },
                                                 child: Container(
                                                   height: MediaQuery.of(context)

@@ -2,11 +2,15 @@ import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/CheckInScreen.dart';
 import 'package:GenERP/screens/CheckOutScreen.dart';
 import 'package:GenERP/screens/Login.dart';
+import 'package:GenERP/screens/OTP.dart';
 import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
- 
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart' as loc;
+import 'package:location/location.dart';
 
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
@@ -32,6 +36,32 @@ class _AttendanceState extends State<Attendance> {
   void initState() {
     getAttendanceList();
     super.initState();
+  }
+
+   Future<bool> checkGpsStatus() async {
+    bool isGpsEnabled = await Geolocator.isLocationServiceEnabled();
+    return isGpsEnabled;
+  }
+
+  Future<void> requestGpsPermission() async {
+    bool isLocationEnabled = false;
+    bool hasLocationPermission = false;
+    isLocationEnabled = await Geolocator.isLocationServiceEnabled();
+
+// Check if the app has been granted location permission
+    LocationPermission permission = await Geolocator.checkPermission();
+    hasLocationPermission = permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse;
+
+    final loc.Location location = loc.Location();
+    bool serviceEnabled;
+    serviceEnabled = await location.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await location.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
   }
 
   String? empId;
@@ -191,12 +221,17 @@ class _AttendanceState extends State<Attendance> {
                                    if(attStatus==0)...[
                                      InkWell(
                                        onTap: () async {
+                                         bool gpsEnabled = await checkGpsStatus();
+                                         if (gpsEnabled) {
                                          var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckInScreen()));
                                          if(res==true){
                                            setState(() {
                                              isLoading = true;
                                            });
                                            getAttendanceList();
+                                         }
+                                         }else {
+                                           await requestGpsPermission();
                                          }
                                        },
                                        child:Container(
@@ -225,6 +260,8 @@ class _AttendanceState extends State<Attendance> {
                                    else if(attStatus==1)...[
                                      InkWell(
                                        onTap: () async{
+                                         bool gpsEnabled = await checkGpsStatus();
+                                       if (gpsEnabled) {
                                          var res = await Navigator.push(context,MaterialPageRoute(builder: (context)=>CheckOutScreen()));
                                          if(res==true){
                                            setState(() {
@@ -232,6 +269,9 @@ class _AttendanceState extends State<Attendance> {
                                            });
                                            getAttendanceList();
                                          }
+                                       }else {
+                                         await requestGpsPermission();
+                                       }
                                          //   BackgroundLocation.stopLocationService();
                                          //  BackgroundLocation.startLocationService();
                                        },
@@ -274,8 +314,14 @@ class _AttendanceState extends State<Attendance> {
                                        ),
                                        Spacer(),
                                        InkWell(
-                                         onTap: (){
-                                           Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+                                         onTap: () async{
+                                           var res= await Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+                                           if(res==true){
+                                             setState(() {
+                                               isLoading = true;
+                                             });
+                                             getAttendanceList();
+                                           }
                                          },
                                          child:Text(
                                            "View History",
@@ -290,8 +336,14 @@ class _AttendanceState extends State<Attendance> {
                                        ),
                                        SizedBox(width: 10,),
                                        InkWell(
-                                         onTap: (){
-                                           Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+                                         onTap: () async{
+                                           var res= await Navigator.push(context,MaterialPageRoute(builder: (context)=>AttendanceHistory()));
+                                           if(res==true){
+                                             setState(() {
+                                               isLoading = true;
+                                             });
+                                             getAttendanceList();
+                                           }
                                          },
                                          child: SvgPicture.asset(
                                            "assets/forward_slash.svg",

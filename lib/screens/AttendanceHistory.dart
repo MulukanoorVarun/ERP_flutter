@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
@@ -286,11 +287,12 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Icons.cancel,
-                    size: 35,
-                  ),
-                  onPressed: () {
+                InkWell(
+                  child:SvgPicture.asset(
+                    "assets/ic_cancel.svg",
+                    height: 35,
+                    width: 35,),
+                  onTap: () {
                     Navigator.pop(context);
                   },
                 ),
@@ -435,7 +437,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
               ),
             ),
           ),
-          barrierDismissible: true,
+          barrierDismissible: false,
         ) ??
         false;
   }
@@ -510,17 +512,17 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                     ),
                   ),
                   Container(
-                    child: IconButton(
-                      onPressed: () {
+                    child: InkWell(
+                      onTap: () {
                         InfoDialogue();
                       },
-                      icon: const Icon(
-                        Icons.info_outline,
-                        size: 30,
-                        color: Colors.white,
-                      ),
+                      child:SvgPicture.asset(
+                        "assets/ic_info.svg",
+                        height: 30,
+                        width: 30,),
                     ),
                   ),
+                  SizedBox(width: 10,)
                 ],
               )),
           titleSpacing: 0,

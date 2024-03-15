@@ -40,12 +40,17 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
-  var secretKey = utf8.encode("TESTINGAPPSECRETKEY");
+  var secretKey = utf8.encode("vsd");
+  var base32Secret ="TESTINGAPPSECRETKEY";
   var totp;
+  late Timer _timer;
+  late Timer _authCodeTimer;
+  int currentProgress = 0;
 
   @override
   void initState() {
     totp = initializeTotp(secretKey);
+  //  totp = initializeTotpFromBase32(base32Secret);
     super.initState();
     ProfileApiFunction();
     VersionApiFunction();
@@ -70,10 +75,8 @@ class _ProfileState extends State<Profile> {
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
                         isLoading = false;
-                      //  secretKey= utf8.encode("${data.totpSecret}");
-                       // totp =initializeTotp(secretKey);
-                        //  secretKey= utf8.encode("${data.totpSecret}");
-                        totp = initializeTotp(secretKey);
+
+                        //totp = initializeTotp(secretKey);
                       } else if (data.sessionExists == 0) {
                         PreferenceService().clearPreferences();
                         Navigator.push(context,
@@ -99,6 +102,16 @@ class _ProfileState extends State<Profile> {
       period: 30,
     );
   }
+
+  Totp initializeTotpFromBase32(String base32Secret) {
+    return Totp.fromBase32(
+      secret: base32Secret,
+      algorithm: Algorithm.sha256,
+      digits: 6,
+      period: 30,
+    );
+  }
+
 
   Future<void> LogoutApiFunction() async {
     print("lohi");
@@ -228,7 +241,6 @@ class _ProfileState extends State<Profile> {
         }
       }
     });
-
     return await showDialog(
           useSafeArea: true,
           context: context,
@@ -256,7 +268,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                       Text(
-                        '${totp.now()}',
+                        totp.now(),
                         style: TextStyle(
                           color: Colors.black,
                           fontSize: FontConstant.Size18,
@@ -266,18 +278,16 @@ class _ProfileState extends State<Profile> {
                       SizedBox(
                         width: 10,
                       ),
-                      if (isLoading) // Check if TOTP secret is initialized
-                        SizedBox(
-                          width: 20, // Adjust the width as needed
-                          height: 20, // Adjust the height as needed
-                          child: CircularProgressIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                                ColorConstant.erp_appColor),
-                            strokeWidth: 3,
-                            backgroundColor: Colors
-                                .grey, // Optional: Change the background color
-                          ),
-                        )
+                       // if (isLoading) // Check if TOTP secret is initialized
+                       //  SizedBox(
+                       //    width: 16, // Adjust the width as needed
+                       //    height: 16, // Adjust the height as needed
+                       //    child: CircularProgressIndicator(
+                       //      strokeWidth: 16,
+                       //      backgroundColor: Colors
+                       //          .grey, // Optional: Change the background color
+                       //    ),
+                       //  )
                     ]),
                     SizedBox(
                       height: 10,
@@ -339,20 +349,20 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
                 Container(
-                  child: IconButton(
-                    onPressed: () {
+                  child: InkWell(
+                    onTap: () {
                       TOTPDialogue();
                       setState(() {
                         // totp =initializeTotp(secretKey);
                       });
                     },
-                    icon: const Icon(
-                      Icons.security,
-                      size: 30,
-                      color: Colors.white,
-                    ),
+                      child:SvgPicture.asset(
+                          "assets/ic_security.svg",
+                      height: 30,
+                      width: 30,),
                   ),
                 ),
+                SizedBox(width: 10,)
               ],
             )),
         titleSpacing: 0,
@@ -374,7 +384,7 @@ class _ProfileState extends State<Profile> {
 
           physics: AlwaysScrollableScrollPhysics(),
 
-          child:  Container(
+          child: Container(
             // color: ColorConstant.erp_appColor,
 
                     child: Stack(
