@@ -2,8 +2,6 @@ import 'package:GenERP/screens/AttendanceHistory.dart';
 import 'package:GenERP/screens/CheckInScreen.dart';
 import 'package:GenERP/screens/CheckOutScreen.dart';
 import 'package:GenERP/screens/Login.dart';
-import 'package:GenERP/screens/OTP.dart';
-import 'package:GenERP/screens/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

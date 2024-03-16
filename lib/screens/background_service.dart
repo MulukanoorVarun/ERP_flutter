@@ -52,6 +52,7 @@ class BackgroundLocation {
   static const String customChannelDescription = 'GEN ERP flutter';
 
   String input="";
+  static const int notificationId = 0;
 
   WebSocketManager webSocketManager = WebSocketManager(
     onConnectSuccess: () {
@@ -74,7 +75,8 @@ class BackgroundLocation {
     try {
       final InitializationSettings initializationSettings =
       InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings
+      );
 
       // Disable sound for the default notification channel
       const AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
@@ -132,20 +134,32 @@ class BackgroundLocation {
     AndroidNotificationDetails(
       customChannelId,
       customChannelName,
-      importance: Importance.max,
-      priority: Priority.high,
+      importance: Importance.defaultImportance,
       ticker: 'ticker',
       ongoing: true,
       playSound: false,
     );
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      title,
-      message,
-      platformChannelSpecifics,
-    );
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+    // Check if the notification with the same ID is already being shown
+    final List<PendingNotificationRequest> pendingNotifications =
+    await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    final notificationAlreadyExists = pendingNotifications.any((notification) => notification.id == notificationId);
+    // If notification already exists, update it; otherwise, show a new one
+    if (notificationAlreadyExists) {
+      await flutterLocalNotificationsPlugin.show(
+        notificationId,
+        title,
+        message,
+        platformChannelSpecifics,
+      );
+    } else {
+      await flutterLocalNotificationsPlugin.show(
+        notificationId,
+        title,
+        message,
+        platformChannelSpecifics,
+      );
+    }
   }
 
 

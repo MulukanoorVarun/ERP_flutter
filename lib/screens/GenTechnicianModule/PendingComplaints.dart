@@ -544,11 +544,10 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                                                             account_name:
                                                                                 "Generator",
                                                                             name:
-                                                                                "",
+                                                                            tpech_comp_list![index].companyName!,
                                                                             genId:
-                                                                                "",
-                                                                            refId:
-                                                                                tpech_comp_list![index].complaintId!,
+                                                                            tpech_comp_list![index].genId!,
+                                                                            refId: tpech_comp_list![index].complaintId!,
                                                                           ),
                                                                         ));
                                                             PreferenceService()

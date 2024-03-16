@@ -49,10 +49,14 @@ void main() async {
     provisional: false,
     sound: true,
   );
-
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
+    // AndroidNotification? android = message.notification?.android;
+    // Extract title and body from the notification
+    String title = notification?.title ?? '';
+    String body = notification?.body ?? '';
+    // Play custom tone and show notification
+    //_playCustomNotificationSound(title, body);
     PreferenceService().saveString('notification_hit', "1");
   });
 
@@ -82,6 +86,32 @@ void main() async {
   runApp(const MyApp());
 }
 
+
+Future<void> _playCustomNotificationSound(String title, String body) async {
+  print("Playing sound;title:${title} and body;${body}");
+  const AndroidNotificationDetails androidPlatformChannelSpecifics =
+  AndroidNotificationDetails(
+    'generp_channel', // Same channel ID as defined above
+    'generp_channel_name',
+    importance: Importance.high,
+    priority: Priority.high,
+    playSound: true,
+    sound: RawResourceAndroidNotificationSound('svindonotificationsound'),
+    // Use the custom sound 'offline_reminder.mp3'
+  );
+  const NotificationDetails platformChannelSpecifics =
+  NotificationDetails(android: androidPlatformChannelSpecifics);
+
+  // Show notification with custom sound
+  await flutterLocalNotificationsPlugin.show(
+    0,
+    title, // Use the provided title
+    body, // Use the provided body
+    platformChannelSpecifics,
+  );
+}
+
+
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -98,23 +128,23 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  void showNotification() {
-    setState(() {
-      _counter++;
-    });
-
-    flutterLocalNotificationsPlugin.show(
-        0,
-        "Testing $_counter",
-        "This is an Flutter Push Notification",
-        NotificationDetails(
-            android: AndroidNotificationDetails(channel.id, channel.name,
-                channelDescription: channel.description,
-                importance: Importance.high,
-                color: Colors.blue,
-                playSound: true,
-                icon: '@mipmap/ic_launcher')));
-  }
+  // void showNotification() {
+  //   setState(() {
+  //     _counter++;
+  //   });
+  //
+  //   flutterLocalNotificationsPlugin.show(
+  //       0,
+  //       "Testing $_counter",
+  //       "This is an Flutter Push Notification",
+  //       NotificationDetails(
+  //           android: AndroidNotificationDetails(channel.id, channel.name,
+  //               channelDescription: channel.description,
+  //               importance: Importance.high,
+  //               color: Colors.blue,
+  //               playSound: true,
+  //               icon: '@mipmap/ic_launcher')));
+  // }
 
   // This widget is the root of your application.
   @override

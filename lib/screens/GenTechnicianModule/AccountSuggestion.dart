@@ -210,10 +210,9 @@ class _AccountSuggestionState extends State<AccountSuggestion> {
                                         MaterialPageRoute(
                                           builder: (context) => PaymentDetails(
                                             account_name: "Account",
-                                            name: "",
+                                            name: accountList![index].accountName,
                                             genId: "",
-                                            refId:
-                                                accountList![index].accountId,
+                                            refId: accountList![index].accountId,
                                           ),
                                         ));
                                     // }
