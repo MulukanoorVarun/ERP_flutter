@@ -4,16 +4,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'Services/other_services.dart';
 import 'Utils/storage.dart';
 import 'screens/splash.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'generp_channel', // id
   'generp_channel_name', // title
   importance: Importance.high,
-  playSound: true,
+  playSound: true
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -51,12 +52,26 @@ void main() async {
   );
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
-    // AndroidNotification? android = message.notification?.android;
+     AndroidNotification? android = message.notification?.android;
     // Extract title and body from the notification
     String title = notification?.title ?? '';
-    String body = notification?.body ?? '';
+    String body = notification?.body   ?? '';
+    // if(notification !=null && android !=null){
+    //   flutterLocalNotificationsPlugin.show(
+    //       notification.hashCode, notification.title, notification.body,
+    //       NotificationDetails(
+    //         android: AndroidNotificationDetails(
+    //           channel.id,
+    //           channel.name,
+    //           playSound: true,
+    //           sound: const RawResourceAndroidNotificationSound('svindonotificationsound'),
+    //           priority: Priority.high
+    //         ),
+    //       )
+    //   );
+    // }
     // Play custom tone and show notification
-    //_playCustomNotificationSound(title, body);
+    _playCustomNotificationSound(title, body);
     PreferenceService().saveString('notification_hit', "1");
   });
 
@@ -89,14 +104,15 @@ void main() async {
 
 Future<void> _playCustomNotificationSound(String title, String body) async {
   print("Playing sound;title:${title} and body;${body}");
+
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
   AndroidNotificationDetails(
     'generp_channel', // Same channel ID as defined above
     'generp_channel_name',
     importance: Importance.high,
     priority: Priority.high,
-    playSound: true,
-    sound: RawResourceAndroidNotificationSound('svindonotificationsound'),
+    playSound: false,
+    sound: RawResourceAndroidNotificationSound('offline_reminder'),
     // Use the custom sound 'offline_reminder.mp3'
   );
   const NotificationDetails platformChannelSpecifics =

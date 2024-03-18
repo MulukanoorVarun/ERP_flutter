@@ -661,13 +661,14 @@ class UserApi {
   }
 
   static Future<NearbyGeneratorsResponse?> loadNearbyGeneratorsAPI(
-      empId, session, tech_loc, radius) async {
+      empId, session, tech_loc, radius,status) async {
     try {
       Map<String, String> data = {
         'emp_id': (empId).toString(),
         'session_id': (session).toString(),
         'tech_loc': (tech_loc).toString(),
         'radius': (radius).toString(),
+        'status': (status).toString(),
       };
       final res = await post(data, technician_nearby_generatorsAPI, {});
       if (res != null) {

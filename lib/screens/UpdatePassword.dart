@@ -108,7 +108,9 @@ class _UpdatePasswordState extends State<UpdatePassword> {
           backgroundColor: ColorConstant.erp_appColor),
       body: Container(
        color: ColorConstant.erp_appColor,
-        child: Expanded(
+        child: Column(
+          children: [
+       Expanded(
           child: Container(
             width: double.infinity, // Set width to fill parent width
             decoration: BoxDecoration(
@@ -260,6 +262,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
 
           ),
         ),
+      ]),
       ),
     );
   }

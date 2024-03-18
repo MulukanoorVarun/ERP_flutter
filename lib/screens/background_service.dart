@@ -13,37 +13,12 @@ import '../Utils/storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
-
-
-class BackgroundService extends StatefulWidget {
-  const BackgroundService({Key? key}) : super(key: key);
-
-  @override
-  State<BackgroundService> createState() => _BackgroundServiceState();
-}
-
-class _BackgroundServiceState extends State<BackgroundService> {
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-
-  @override
-  Widget build(BuildContext context) {
-    throw UnimplementedError();
-  }
-}
-
 /// BackgroundLocation plugin to get background
 /// lcoation updates in iOS and Android
 class BackgroundLocation {
   // The channel to be used for communication.
   // This channel is also refrenced inside both iOS and Abdroid classes
-  static const MethodChannel _channel =
-  MethodChannel('com.almoullim.background_location/methods');
+  static const MethodChannel _channel = MethodChannel('com.almoullim.background_location/methods');
   static Timer? _locationTimer;
 
   static get context => null;
@@ -73,8 +48,7 @@ class BackgroundLocation {
 
   static void init() async {
     try {
-      final InitializationSettings initializationSettings =
-      InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'));
+      final InitializationSettings initializationSettings = InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'));
       await flutterLocalNotificationsPlugin.initialize(initializationSettings
       );
 

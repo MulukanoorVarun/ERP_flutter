@@ -59,6 +59,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   File? _image;
   var image_picked = 0;
   bool isLoading = true;
+  String _selectedItem = 'Active'; // Initial selection
 
   @override
   void initState() {
@@ -116,21 +117,10 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           currentLocation!.longitude!,
         )),
       );
-      //
-      // markers.add(Marker(
-      //   markerId: MarkerId('current_location'),
-      //   position:
-      //   LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-      //   infoWindow: InfoWindow(title: 'Current Location'),
-      //   icon: BitmapDescriptor.defaultMarker,
-      // ));
-
-      setState(() {
         final lat = currentLocation!.latitude;
         final lang = currentLocation!.longitude!;
         latlongs = '$lat,$lang';
         LoadNearbyGeneratorsAPI();
-      });
     }
   }
 
@@ -152,10 +142,10 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     print(_locationController.text);
     print(latlongs);
     print(currentValue);
-    print(_image);
+    print(_selectedItem);
     try {
       await UserApi.loadNearbyGeneratorsAPI(
-              empId, sessionId, latlongs, currentValue)
+              empId, sessionId, latlongs, currentValue,_selectedItem)
           .then((data) => {
                 if (data != null)
                   {
@@ -288,51 +278,79 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
-          return AlertDialog(
+          return
+            WillPopScope(
+              onWillPop: () async {
+            // Prevent dialog from closing on back press
+            return false;
+          },
+          child: AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
             ),
-            title: Row(
+            title:Column(
               children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Radius (Kms)',
-                      style: GoogleFonts.ubuntu(
-                        textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: FontConstant.Size25,
-                          fontWeight: FontWeight.w500,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          'Filter',
+                          style: GoogleFonts.ubuntu(
+                            textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size25,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    InkWell(
+                      child: SvgPicture.asset(
+                        "assets/ic_cancel.svg",
+                        height: 35,
+                        width: 35,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          currentValue = 0.0;
+                          _selectedItem = "Active";
+                        });
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.cancel,
-                    size: 35,
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      currentValue = 0.0;
-                    });
-                    Navigator.pop(context);
-                  },
+                Divider( // Add Divider widget here
+                  color: Colors.grey, // Set the color of the underline
+                  thickness: 1.0, // Set the thickness of the underline
+                  height: 0.0, // Set the height of the divider to 0 to avoid additional space
                 ),
               ],
             ),
             content: Container(
-              height: 120,
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              height: 230,
+              child: ListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
                   children: <Widget>[
-                    // Text(
-                    //   'Value: ${currentValue.toStringAsFixed(2)}', // Display current value
-                    //   style: TextStyle(fontSize: 24.0),
-                    // ),
+                    Row(
+                      children: [
+                        Text("Radius", // Display current value
+                          style: TextStyle(fontSize: 18.0,
+                          fontWeight: FontWeight.w500),
+                        ),
+                        Spacer(),
+                        Text(
+                          '${currentValue.toStringAsFixed(2)} KM', // Display current value
+                          style: TextStyle(fontSize: 18.0,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
+                    ),
+
                     Slider(
                       value: currentValue,
                       max: 100,
@@ -348,13 +366,46 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                         });
                       },
                     ),
-                    SizedBox(height: 25.0),
+                    Text(
+                      'Status',
+                      style: GoogleFonts.ubuntu(
+                        textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: FontConstant.Size20,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+              Container(
+                width: 200, // Set the desired width here
+                child: DropdownButton<String>(
+                  value: _selectedItem,
+                  items: <String>['Active', 'Inactive', 'Suspense']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedItem = newValue!;
+                    });
+                  },
+                  icon: null, // Remove the default dropdown icon
+                ),
+              ),
+                    SizedBox(height: 30.0),
                     Container(
                         child: InkWell(
                       onTap: () {
                         markers = [];
                         LoadNearbyGeneratorsAPI();
                         Navigator.pop(context);
+                        setState(() {
+                          currentValue = 0.0;
+                          _selectedItem = "Active";
+                        });
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -365,12 +416,13 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                         child: Text(
-                          "Serach",
+                          "Search",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Nexa',
                             color: ColorConstant.white,
                             fontSize: FontConstant.Size15,
+                            fontWeight: FontWeight.w700
                           ),
                         ),
                       ),
@@ -382,7 +434,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           );
         },
       ),
-      barrierDismissible: true,
+      barrierDismissible: false,
     );
   }
 
@@ -427,14 +479,14 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                             ),
                           ),
                           Spacer(),
-                          InkWell(
-                            onTap: () {
+                          IconButton(
+                            onPressed: () {
                               infoDialogue(context);
                             },
-                            child: SvgPicture.asset(
-                              "assets/ic_location1.svg",
-                              height: 35,
-                              width: 35,
+                             icon:Icon(
+                              Icons.filter_alt,
+                              color: Colors.white,
+                               size: 35,
                             ),
                           ),
                           SizedBox(width: 20),
