@@ -12,8 +12,9 @@ import 'package:audioplayers/audioplayers.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'generp_channel', // id
-  'generp_channel_name', // title
-  importance: Importance.high,
+  'generp_channel_name',
+    sound: RawResourceAndroidNotificationSound('notification_sound'),
+  importance: Importance.max,
   playSound: true
 );
 
@@ -64,14 +65,14 @@ void main() async {
     //           channel.id,
     //           channel.name,
     //           playSound: true,
-    //           sound: const RawResourceAndroidNotificationSound('svindonotificationsound'),
+    //           sound: const RawResourceAndroidNotificationSound('offline_reminder'),
     //           priority: Priority.high
     //         ),
     //       )
     //   );
     // }
     // Play custom tone and show notification
-    _playCustomNotificationSound(title, body);
+    //_playCustomNotificationSound(title, body);
     PreferenceService().saveString('notification_hit', "1");
   });
 
@@ -102,30 +103,30 @@ void main() async {
 }
 
 
-Future<void> _playCustomNotificationSound(String title, String body) async {
-  print("Playing sound;title:${title} and body;${body}");
-
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-  AndroidNotificationDetails(
-    'generp_channel', // Same channel ID as defined above
-    'generp_channel_name',
-    importance: Importance.high,
-    priority: Priority.high,
-    playSound: false,
-    sound: RawResourceAndroidNotificationSound('offline_reminder'),
-    // Use the custom sound 'offline_reminder.mp3'
-  );
-  const NotificationDetails platformChannelSpecifics =
-  NotificationDetails(android: androidPlatformChannelSpecifics);
-
-  // Show notification with custom sound
-  await flutterLocalNotificationsPlugin.show(
-    0,
-    title, // Use the provided title
-    body, // Use the provided body
-    platformChannelSpecifics,
-  );
-}
+// Future<void> _playCustomNotificationSound(String title, String body) async {
+//   print("Playing sound;title:${title} and body;${body}");
+//
+//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
+//   AndroidNotificationDetails(
+//     'generp_channel', // Same channel ID as defined above
+//     'generp_channel_name',
+//     importance: Importance.high,
+//     priority: Priority.high,
+//     playSound: false,
+//     sound: RawResourceAndroidNotificationSound('offline_reminder'),
+//     // Use the custom sound 'offline_reminder.mp3'
+//   );
+//   const NotificationDetails platformChannelSpecifics =
+//   NotificationDetails(android: androidPlatformChannelSpecifics);
+//
+//   // Show notification with custom sound
+//   await flutterLocalNotificationsPlugin.show(
+//     0,
+//     title, // Use the provided title
+//     body, // Use the provided body
+//     platformChannelSpecifics,
+//   );
+// }
 
 
 class MyApp extends StatefulWidget {

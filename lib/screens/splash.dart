@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -31,12 +32,31 @@ class Splash extends StatefulWidget {
 }
 
 class _SplashState extends State<Splash> {
+  String appName = "";
+  String packageName = "";
+  String version = "";
+  String buildNumber ="";
   void initState() {
     super.initState();
     VersionApiFunction();
     // validate_and_run();
     // navigateAfterDelay();
     requestPermissions();
+    _initPackageInfo();
+  }
+  Future<void> _initPackageInfo() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    setState(() {
+      version = packageInfo.version;
+      appName=  packageInfo.appName;
+      packageName=  packageInfo.packageName;
+      buildNumber=  packageInfo.buildNumber;
+
+      print("version:${version}");
+      print("appName:${appName}");
+      print("packageName:${packageName}");
+      print("buildNumber:${buildNumber}");
+    });
   }
 
   Future<void> VersionApiFunction() async {
@@ -47,7 +67,7 @@ class _SplashState extends State<Splash> {
               {
                 setState(() {
                   if (Platform.isAndroid) {
-                    if (VERSION_CODE < data.latestVersionCode!) {
+                    if (int.parse(buildNumber) < data.latestVersionCode!) {
                       AppUpdateDialouge(data.url!, data.releaseNotes!);
                     } else {
                       if (loginStatus == 0) {

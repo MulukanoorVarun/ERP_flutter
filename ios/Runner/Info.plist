@@ -73,5 +73,10 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	 <key>com.apple.developer.associated-domains</key>
+      <array>
+        <string>applinks:whizzdom.gengroup.in</string>
+      </array>
 </dict>
 </plist>

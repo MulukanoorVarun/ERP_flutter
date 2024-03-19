@@ -40,7 +40,7 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
-  var secretKey = utf8.encode("vsd");
+  var secretKey;
   var base32Secret ="TESTINGAPPSECRETKEY";
   var totp;
   late Timer _timer;
@@ -49,7 +49,7 @@ class _ProfileState extends State<Profile> {
 
   @override
   void initState() {
-    totp = initializeTotp(secretKey);
+ //   totp = initializeTotp(secretKey);
   //  totp = initializeTotpFromBase32(base32Secret);
     super.initState();
     ProfileApiFunction();
@@ -75,8 +75,10 @@ class _ProfileState extends State<Profile> {
                         designation = data.designation ?? "";
                         mobile_num = data.mobileNo ?? "";
                         isLoading = false;
-
-                        //totp = initializeTotp(secretKey);
+                        if(data.totpSecret !=null ) {
+                          secretKey = utf8.encode(data.totpSecret!);
+                          totp = initializeTotp(secretKey);
+                        }
                       } else if (data.sessionExists == 0) {
                         PreferenceService().clearPreferences();
                         Navigator.push(context,
@@ -229,78 +231,110 @@ class _ProfileState extends State<Profile> {
       print("$e");
     }
   }
-  Future TOTPDialogue() async {
-    bool isLoading = true;
-    Timer(Duration(seconds: 30), () {
-      if (isLoading) {
-        // Set isLoading to false after 30 seconds
-        isLoading = false;
-        // Update the UI
-        if (context != null && mounted) {
-          Navigator.of(context).pop(); // Dismiss the dialog
+  // Function to display the TOTP dialog
+  void TOTPDialogue(BuildContext context) {
+    Timer? timer; // Declare a timer variable with nullable type
+    String currentTOTP = ''; // Variable to hold the current TOTP code
+    int remainingSeconds = 30; // Variable to hold the remaining seconds in the timer
+
+    // Function to update the TOTP code
+    void updateTOTP() {
+      currentTOTP = totp.now(); // Assuming 'totp' is your TOTP object
+    }
+
+    // Function to update the remaining seconds in the timer
+    void updateTimer() {
+      remainingSeconds = 30 - DateTime.now().second % 30;
+    }
+
+    late Function setState; // Variable to hold the setState function
+
+    // Start the timer to update the TOTP code every 30 seconds
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      if (Navigator.of(context).canPop()) {
+        updateTOTP(); // Update the TOTP code
+        updateTimer(); // Update the remaining seconds in the timer
+        if (setState != null) {
+          setState(() {}); // Trigger a UI update by calling setState
         }
+      } else {
+        timer?.cancel(); // Cancel the timer if the dialog is closed
       }
     });
-    return await showDialog(
-          useSafeArea: true,
-          context: context,
-          builder: (context) => AlertDialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0)),
-            title: Align(
-              alignment: Alignment.center,
-              child: Text(
-                'TOTP',
-                style: TextStyle(
+
+    // Show the dialog using showDialog
+    showDialog(
+      useSafeArea: true,
+      context: context,
+      barrierDismissible: false, // Prevent the user from closing the dialog
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setStateFunction) {
+            // Assign the setState function provided by StatefulBuilder to the variable
+            setState = setStateFunction;
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+              title: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'TOTP',
+                  style: TextStyle(
                     color: Colors.black,
                     fontSize: FontConstant.Size25,
                     fontWeight: FontWeight.w500,
-                    decoration: TextDecoration.underline),
-              ),
-            ),
-            shadowColor: Colors.black,
-            content: SingleChildScrollView(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxHeight: 50), // Set the maximum height here
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                      Text(
-                        totp.now(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                       // if (isLoading) // Check if TOTP secret is initialized
-                       //  SizedBox(
-                       //    width: 16, // Adjust the width as needed
-                       //    height: 16, // Adjust the height as needed
-                       //    child: CircularProgressIndicator(
-                       //      strokeWidth: 16,
-                       //      backgroundColor: Colors
-                       //          .grey, // Optional: Change the background color
-                       //    ),
-                       //  )
-                    ]),
-                    SizedBox(
-                      height: 10,
-                    ),
-                  ],
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
-            ),
-          ),
-          barrierDismissible: true,
-        ) ??
-        false;
+              shadowColor: Colors.black,
+              content: SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: 100), // Set the maximum height here
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '$currentTOTP', // Display the current TOTP code
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.timer),
+                          SizedBox(width: 5),
+                          Text(
+                            '$remainingSeconds seconds',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: FontConstant.Size18,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
+
 
   Future<void> _refresh() async {
     // Simulate a delay to mimic fetching new data from an API
@@ -351,7 +385,7 @@ class _ProfileState extends State<Profile> {
                 Container(
                   child: InkWell(
                     onTap: () {
-                      TOTPDialogue();
+                      TOTPDialogue(context);
                       setState(() {
                         // totp =initializeTotp(secretKey);
                       });

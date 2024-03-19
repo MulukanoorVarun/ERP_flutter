@@ -210,7 +210,7 @@ class BackgroundLocation {
     backgroundLocation.initWebSocket();
     stopLocationService();
     // Start a new timer for location updates
-    _locationTimer = Timer.periodic(Duration(seconds: 20), (timer) async {
+    _locationTimer = Timer.periodic(Duration(seconds: 10), (timer) async {
       await _channel.invokeMethod('start_location_service');
       var location = await BackgroundLocation().getCurrentLocation();
     });
@@ -314,6 +314,92 @@ class BackgroundLocation {
       }
     });
   }
+
+  // Future<Location> getCurrentLocation() async {
+  //   empId = await PreferenceService().getString("UserId");
+  //   sessionId = await PreferenceService().getString("Session_id");
+  //   print('Requesting Current Location...');
+  //
+  //   // Create a completer to handle the asynchronous nature of obtaining location
+  //   var completer = Completer<Location>();
+  //
+  //   // Define a boolean flag to track if the completer is completed
+  //   var isCompleterCompleted = false;
+  //
+  //   // Define a function to handle the location once obtained
+  //   void handleLocation(Location location) {
+  //     // Complete the completer only if it hasn't been completed before
+  //     if (!isCompleterCompleted) {
+  //       completer.complete(location);
+  //       isCompleterCompleted = true; // Set the flag to true to indicate completion
+  //     }
+  //   }
+  //
+  //   // Start listening for location updates
+  //   getLocationUpdates((location) {
+  //     handleLocation(location);
+  //   });
+  //
+  //   // Return the future from the completer
+  //   return completer.future;
+  // }
+  //
+  //
+  // void getLocationUpdates(Function(Location) location) {
+  //   // Define a function to handle location updates
+  //   void handleLocation(Position position) async {
+  //     // Create a Location object from the Position data
+  //     Location locationData = Location(
+  //       latitude: position.latitude,
+  //       longitude: position.longitude,
+  //       altitude: position.altitude,
+  //       accuracy: position.accuracy,
+  //       bearing: position.heading,
+  //       speed: position.speed,
+  //       time: position.timestamp.millisecondsSinceEpoch,
+  //       isMock: false, // Assuming the position is not mocked
+  //     );
+  //     print('Received Location Update:${locationData}');
+  //     // Call the user passed function with the location data
+  //     location(locationData);
+  //
+  //     // Send location updates using WebSocketManager
+  //     // Assuming webSocketManager and sessionId are defined elsewhere
+  //     if (await webSocketManager.isNetworkAvailable()) {
+  //       webSocketManager.sendMessage(jsonEncode({
+  //         "command": "server_request",
+  //         "route": "attendenece_live_location_update",
+  //         "session_id": sessionId,
+  //         "ref_data": {
+  //           "session_id": sessionId,
+  //           "location": "${position.latitude},${position.longitude}",
+  //           "speed": position.speed,
+  //           "altitude": position.altitude,
+  //           "direction": position.heading,
+  //           "direction_accuracy": position.headingAccuracy,
+  //           "altitude_accuracy":position.altitudeAccuracy,
+  //           "speed_accuracy":position.speedAccuracy,
+  //           "location_accuracy": position.accuracy,
+  //           "location_provider": "",
+  //           // Include additional location attributes as needed
+  //         }
+  //       }));
+  //       print("Hello GENERP! You're Online!");
+  //       showNotification("GEN ERP", "You're Online!");
+  //     } else {
+  //       print("Hello GENERP! You're Offline!");
+  //       showNotification("GEN ERP", "You're Offline!");
+  //     }
+  //     saveLastLocationTime();
+  //   }
+  //
+  //   // Start listening for location updates
+  //   Geolocator.getPositionStream().listen((Position position) {
+  //     // Handle the received location
+  //     handleLocation(position);
+  //   }, onError: (error) => print("Error receiving location: $error"));
+  // }
+
 }
 
 saveLastLocationTime(){
@@ -343,7 +429,8 @@ class Location {
         @required this.bearing,
         @required this.speed,
         @required this.time,
-        @required this.isMock});
+        @required this.isMock
+      });
 
   toMap() {
     var obj = {
