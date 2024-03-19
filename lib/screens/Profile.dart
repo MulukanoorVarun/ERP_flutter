@@ -9,8 +9,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../Services/TOTP.dart';
 import '../Services/user_api.dart';
 import '../Utils/Constants.dart';
 import '../Utils/FontConstant.dart';
@@ -42,7 +40,7 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
-  var secretKey;
+  var secretKey="";
   var base32Secret ="TESTINGAPPSECRETKEY";
   var totp;
   late Timer _timer;

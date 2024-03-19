@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:GenERP/screens/Dashboard.dart';
+import 'package:GenERP/screens/WhizzdomScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -7,15 +10,15 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'Services/other_services.dart';
 import 'Utils/storage.dart';
 import 'screens/splash.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
   'generp_channel', // id
   'generp_channel_name',
-    sound: RawResourceAndroidNotificationSound('notification_sound'),
   importance: Importance.max,
-  playSound: true
+  playSound: false
 );
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -23,6 +26,30 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  String type = message.data['type'] ?? '';
+
+  if (type == 'offline_reminder') {
+    FlutterRingtonePlayer.play(
+      fromAsset: "assets/offline_reminder.mp3",
+      ios: IosSounds.glass, // Specify the iOS sound
+    );
+  }else if(type == 'normal'){
+    FlutterRingtonePlayer.play(
+      fromAsset: "assets/notification_sound.mp3",
+      ios: IosSounds.glass, // Specify the iOS sound
+    );
+  }else if(type == 'web_erp_notification'){
+    FlutterRingtonePlayer.play(
+      fromAsset: "assets/notification_sound.mp3",
+      ios: IosSounds.glass, // Specify the iOS sound
+    );
+  }else {
+    FlutterRingtonePlayer.play(
+        fromAsset: "assets/notification_sound.mp3",
+        // will be the sound on Android
+        ios: IosSounds.glass // will be the sound on iOS
+    );
+  }
   print('A Background message just showed up: ${message.messageId}');
 }
 
@@ -49,35 +76,34 @@ void main() async {
     carPlay: false,
     criticalAlert: false,
     provisional: false,
-    sound: true,
+    sound: false,
   );
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     RemoteNotification? notification = message.notification;
      AndroidNotification? android = message.notification?.android;
-    // Extract title and body from the notification
-    String title = notification?.title ?? '';
-    String body = notification?.body   ?? '';
-    // if(notification !=null && android !=null){
-    //   flutterLocalNotificationsPlugin.show(
-    //       notification.hashCode, notification.title, notification.body,
-    //       NotificationDetails(
-    //         android: AndroidNotificationDetails(
-    //           channel.id,
-    //           channel.name,
-    //           playSound: true,
-    //           sound: const RawResourceAndroidNotificationSound('offline_reminder'),
-    //           priority: Priority.high
-    //         ),
-    //       )
-    //   );
-    // }
-    // Play custom tone and show notification
-    //_playCustomNotificationSound(title, body);
-    PreferenceService().saveString('notification_hit', "1");
-  });
 
-  FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    print('A new onMessageOpenedApp event was published!');
+    String type = message.data['type'] ?? '';
+    if (type == 'offline_reminder') {
+      FlutterRingtonePlayer.play(
+        fromAsset: "assets/offline_reminder.mp3",
+        ios: IosSounds.glass, // Specify the iOS sound
+      );
+    }else if(type == 'normal'){
+      FlutterRingtonePlayer.play(
+        fromAsset: "assets/notification_sound.mp3",
+        ios: IosSounds.glass, // Specify the iOS sound
+      );
+    }else if(type == 'web_erp_notification'){
+      FlutterRingtonePlayer.play(
+        fromAsset: "assets/notification_sound.mp3",
+        ios: IosSounds.glass, // Specify the iOS sound
+      );
+    }else{
+      FlutterRingtonePlayer.play(
+          fromAsset: "assets/notification_sound.mp3", // will be the sound on Android
+          ios: IosSounds.glass 			   // will be the sound on iOS
+      );
+    }
   });
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -102,33 +128,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
-// Future<void> _playCustomNotificationSound(String title, String body) async {
-//   print("Playing sound;title:${title} and body;${body}");
-//
-//   const AndroidNotificationDetails androidPlatformChannelSpecifics =
-//   AndroidNotificationDetails(
-//     'generp_channel', // Same channel ID as defined above
-//     'generp_channel_name',
-//     importance: Importance.high,
-//     priority: Priority.high,
-//     playSound: false,
-//     sound: RawResourceAndroidNotificationSound('offline_reminder'),
-//     // Use the custom sound 'offline_reminder.mp3'
-//   );
-//   const NotificationDetails platformChannelSpecifics =
-//   NotificationDetails(android: androidPlatformChannelSpecifics);
-//
-//   // Show notification with custom sound
-//   await flutterLocalNotificationsPlugin.show(
-//     0,
-//     title, // Use the provided title
-//     body, // Use the provided body
-//     platformChannelSpecifics,
-//   );
-// }
-
-
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
   @override
@@ -136,33 +135,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int _counter = 0;
   @override
   void initState() {
-    // initUniLinks();
-    // check_time();
-    // TODO: implement initState
     super.initState();
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      String type = message.data['type'] ?? '';
+      String redirectUrl = message.data['redirect_url'] ?? '';
+      navigateToScreen(type,redirectUrl);
+      print('A new onMessageOpenedApp event was published!');
+    });
   }
 
-  // void showNotification() {
-  //   setState(() {
-  //     _counter++;
-  //   });
-  //
-  //   flutterLocalNotificationsPlugin.show(
-  //       0,
-  //       "Testing $_counter",
-  //       "This is an Flutter Push Notification",
-  //       NotificationDetails(
-  //           android: AndroidNotificationDetails(channel.id, channel.name,
-  //               channelDescription: channel.description,
-  //               importance: Importance.high,
-  //               color: Colors.blue,
-  //               playSound: true,
-  //               icon: '@mipmap/ic_launcher')));
-  // }
-
+  void navigateToScreen(String type,String redirecturl) {
+    if (type == 'offline_reminder' || type == 'normal') {
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()));
+    }else if(type == 'web_erp_notification'){
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WhizzdomScreen(url: redirecturl)));
+    }else{
+      Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Dashboard()));
+    }
+  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

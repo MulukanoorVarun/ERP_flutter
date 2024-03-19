@@ -111,6 +111,7 @@ dependencies:
   time_machine: ^0.9.17
   audioplayers: ^5.2.1
   package_info_plus: ^4.2.0
+  flutter_ringtone_player: ^3.2.0
 
 
 
