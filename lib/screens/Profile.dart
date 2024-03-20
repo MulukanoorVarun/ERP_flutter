@@ -40,7 +40,7 @@ class _ProfileState extends State<Profile> {
   var releaseNotes = "";
   bool isLoading = true;
   var totpText = "";
-  var secretKey="";
+  var secretKey;
   var base32Secret ="TESTINGAPPSECRETKEY";
   var totp;
   late Timer _timer;
@@ -70,25 +70,13 @@ class _ProfileState extends State<Profile> {
           {
             setState(() {
               if (data.sessionExists == 1) {
-                int interval = 30; // Time interval in seconds
-                int digits = 6; // Number of digits in the generated code
-
-
-
-
                 profileImage = data.profilePic ?? "";
                 company = data.company ?? "";
                 branch = data.branchName ?? "";
                 designation = data.designation ?? "";
                 mobile_num = data.mobileNo ?? "";
                 isLoading = false;
-                if(data.totpSecret !=null ) {
-
-                  secretKey = data.totpSecret!;
-
-                  print("asOTP:${totpCode}");
-                  print("totp${secretKey}");
-                }
+                secretKey = data.totpSecret;
               } else if (data.sessionExists == 0) {
                 PreferenceService().clearPreferences();
                 Navigator.push(context,
@@ -242,45 +230,62 @@ class _ProfileState extends State<Profile> {
   }
   // Function to display the TOTP dialog
   void TOTPDialogue(BuildContext context) {
-    Timer? timer; // Declare a timer variable with nullable type
-    String currentTOTP =  OTP.generateTOTPCodeString(secretKey, DateTime.now().toUtc().millisecondsSinceEpoch,interval: 30,length: 6,isGoogle: true,algorithm: Algorithm.SHA1); // Variable to hold the current TOTP code
-    int remainingSeconds = 30; // Variable to hold the remaining seconds in the timer
+    Timer? timer;
+    String? currentTOTP;
+    int remainingSeconds = 30;
     double? progress;
-    // Function to update the TOTP code
-    void updateTOTP() {
-      currentTOTP =  OTP.generateTOTPCodeString(secretKey, DateTime.now().toUtc().millisecondsSinceEpoch,interval: 30,length: 6,isGoogle: true,algorithm: Algorithm.SHA1);
+    late Function setState;
+
+    if (secretKey != null) {
+      currentTOTP = OTP.generateTOTPCodeString(
+        secretKey!,
+        DateTime.now().toUtc().millisecondsSinceEpoch,
+        interval: 30,
+        length: 6,
+        isGoogle: true,
+        algorithm: Algorithm.SHA1,
+      );
     }
 
-    // Function to update the remaining seconds in the timer
+    void updateTOTP() {
+      if (secretKey != null) {
+        currentTOTP = OTP.generateTOTPCodeString(
+          secretKey!,
+          DateTime.now().toUtc().millisecondsSinceEpoch,
+          interval: 30,
+          length: 6,
+          isGoogle: true,
+          algorithm: Algorithm.SHA1,
+        );
+      }
+    }
+
     void updateTimer() {
       remainingSeconds = 30 - DateTime.now().second % 30;
       progress = 1 - (remainingSeconds / 30);
     }
 
-    late Function setState; // Variable to hold the setState function
-
-    // Start the timer to update the TOTP code every 30 seconds
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       if (Navigator.of(context).canPop()) {
-        updateTOTP(); // Update the TOTP code
-        updateTimer(); // Update the remaining seconds in the timer
+        if (secretKey != null) {
+          updateTOTP();
+        }
+        updateTimer();
         if (setState != null) {
-          setState(() {}); // Trigger a UI update by calling setState
+          setState(() {});
         }
       } else {
-        timer?.cancel(); // Cancel the timer if the dialog is closed
+        timer?.cancel();
       }
     });
 
-    // Show the dialog using showDialog
     showDialog(
       useSafeArea: true,
       context: context,
-      barrierDismissible: false, // Prevent the user from closing the dialog
+      barrierDismissible: false,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setStateFunction) {
-            // Assign the setState function provided by StatefulBuilder to the variable
             setState = setStateFunction;
             return AlertDialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
@@ -299,49 +304,50 @@ class _ProfileState extends State<Profile> {
               shadowColor: Colors.black,
               content: SingleChildScrollView(
                 child: ConstrainedBox(
-                  constraints: BoxConstraints(maxHeight: 100), // Set the maximum height here
+                  constraints: BoxConstraints(maxHeight: 100),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${currentTOTP}', // Display the current TOTP code
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: FontConstant.Size18,
-                              fontWeight: FontWeight.w500,
+                      if (currentTOTP != null && remainingSeconds > 0)...[ // Check if currentTOTP is not null and remaining time is positive
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$currentTOTP',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: FontConstant.Size18,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(
-                              color: ColorConstant.erp_appColor,
-                              value: progress,
-                              valueColor: AlwaysStoppedAnimation<Color>(ColorConstant.erp_appColor),
+                          ],
+                        ),
+                      SizedBox(height: 10),
+                      if (remainingSeconds > 0) // Check if remaining time is positive
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: ColorConstant.erp_appColor,
+                                value: progress,
+                                valueColor: AlwaysStoppedAnimation<Color>(ColorConstant.erp_appColor),
+                              ),
                             ),
-                          ),
-                          SizedBox(width: 5),
-                          Text(
-                            '$remainingSeconds seconds',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontSize: FontConstant.Size18,
-                              fontWeight: FontWeight.w500,
+                            SizedBox(width: 5),
+                            Text(
+                              '$remainingSeconds seconds',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: FontConstant.Size18,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
+                      ]
                     ],
                   ),
                 ),
@@ -352,6 +358,7 @@ class _ProfileState extends State<Profile> {
       },
     );
   }
+
 
 
   Future<void> _refresh() async {

@@ -309,34 +309,25 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
                             ),
                             Container(
                               alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: ColorConstant.edit_bg_color,
+                                borderRadius:
+                                BorderRadius.circular(10),),
                               height: 55,
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: TextFormField(
                                 controller: Generator_id,
                                 cursorColor: ColorConstant.black,
                                 keyboardType: TextInputType.text,
-                                textCapitalization:
-                                    TextCapitalization.characters,
+                                textCapitalization: TextCapitalization.characters,
                                 decoration: InputDecoration(
                                   hintText: "Enter Generator ID",
                                   hintStyle: TextStyle(
                                       fontSize: FontConstant.Size15,
                                       color: ColorConstant.Textfield,
                                       fontWeight: FontWeight.w400),
-                                  filled: true,
-                                  fillColor: ColorConstant.edit_bg_color,
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    borderSide: BorderSide(
-                                        width: 0,
-                                        color: ColorConstant.edit_bg_color),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    borderSide: BorderSide(
-                                        width: 0,
-                                        color: ColorConstant.edit_bg_color),
-                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                 ),
                               ),
                             ),

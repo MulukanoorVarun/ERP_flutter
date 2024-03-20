@@ -404,40 +404,42 @@ class _LoginState extends State<Login> {
                         height: 10.0,
                       ),
                       Container(
-                        height: 45,
-                        alignment: Alignment.center,
+                        height: 48,
+                        decoration: BoxDecoration(
+                            color: ColorConstant.edit_bg_color,
+                            borderRadius:
+                            BorderRadius.circular(30),),
+                      //  alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: TextFormField(
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(10.0,3.0,0,0),
+                        child: TextField(
                           controller: email,
                           cursorColor: ColorConstant.black,
                           keyboardType: TextInputType.emailAddress,
+                          onChanged: (value) {
+                            // Handle onChanged
+                          },
+                          onTapOutside: (event) {
+                            // Handle onTapOutside
+                            FocusScope.of(context).unfocus();
+                          },
                           decoration: InputDecoration(
-                            hintText: "Enter Email",
+                            isDense: true,
                             hintStyle: TextStyle(
-                                fontSize: FontConstant.Size15,
+                                fontSize: FontConstant.Size16,
                                 color: ColorConstant.Textfield,
                                 fontWeight: FontWeight.w400),
-                            filled: true,
-                            fillColor: ColorConstant.edit_bg_color,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 1, color: ColorConstant.edit_bg_color),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 1, color: ColorConstant.edit_bg_color),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 1, color: ColorConstant.red),
-                            ),
+                            //contentPadding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            hintText:
+                            'Enter Email',
                           ),
                           minLines: 1,
-                          autofocus: true,
+                          autofocus: true,// and this
                         ),
+                          ),
                       ),
                       if (_validateEmail != null) ...[
                         Container(
@@ -459,54 +461,48 @@ class _LoginState extends State<Login> {
                         ),
                       ],
                       Container(
-                        height: 45,
-                        alignment: Alignment.center,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: ColorConstant.edit_bg_color,
+                          borderRadius:
+                          BorderRadius.circular(30),),
+                       // alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: TextFormField(
-                          controller: password,
-                          obscureText: !(_passwordVisible!),
-                          cursorColor: ColorConstant.black,
-                          keyboardType: TextInputType.visiblePassword,
-                          decoration: InputDecoration(
-                            hintText: "Enter Password",
-                            suffixIcon: IconButton(
-                              color: ColorConstant.erp_appColor,
-                              icon: Icon(
-                                (_passwordVisible!)
-                                    ? CupertinoIcons.eye_solid
-                                    : CupertinoIcons.eye_slash_fill,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _passwordVisible = !(_passwordVisible!);
-                                });
-                              },
-                            ),
-                            hintStyle: TextStyle(
-                                fontSize: FontConstant.Size15,
-                                color: ColorConstant.Textfield,
-                                fontWeight: FontWeight.w400),
-                            filled: true,
-                            fillColor: ColorConstant.edit_bg_color,
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                              borderSide: BorderSide(
-                                  width: 0, color: ColorConstant.edit_bg_color),
-                            ),
+                          child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0,3.0,0,0),
+                                              child: TextField(
+                                                controller: password,
+                                                obscureText: !(_passwordVisible!),
+                                                cursorColor: ColorConstant.black,
+                                                keyboardType: TextInputType.visiblePassword,
+                                                decoration: InputDecoration(
+                                                  hintText: "Enter Password",
+                                                  suffixIcon: IconButton(
+                                                    color: ColorConstant.erp_appColor,
+                                                    icon: Icon(
+                                                      (_passwordVisible!)
+                                                          ? CupertinoIcons.eye_solid
+                                                          : CupertinoIcons.eye_slash_fill,
+                                                      size: 30,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _passwordVisible = !(_passwordVisible!);
+                                                      });
+                                                    },
+                                                  ),
+                                                  hintStyle: TextStyle(
+                                                      fontSize: FontConstant.Size16,
+                                                      color: ColorConstant.Textfield,
+                                                      fontWeight: FontWeight.w400),
+                                                  isDense: true,
+                                                  enabledBorder: InputBorder.none,
+                                                  focusedBorder: InputBorder.none,
+                                                ),
+                                                minLines: 1,
+                                                autofocus: true,
+                                              ),
                           ),
-                          minLines: 1,
-                          autofocus: true,
-                        ),
                       ),
                       if (_validatepassword != null) ...[
                         Container(
