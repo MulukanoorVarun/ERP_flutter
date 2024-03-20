@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:GenERP/Utils/storage.dart';
 import 'package:dio/dio.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_download_manager/flutter_download_manager.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../Services/other_services.dart';
@@ -52,6 +54,8 @@ class _WebERPState extends State<WebERP> {
   var dl = DownloadManager();
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized
+     FlutterDownloader.initialize();
     // loadData();
     pullToRefreshController = kIsWeb
         ? null
@@ -242,6 +246,17 @@ class _WebERPState extends State<WebERP> {
                       print(
                           "JavaScript console message: ${consoleMessage.message}");
                     },
+                    // onDownloadStart: (controller, url) async {
+                    //   Directory? tempDir = await getExternalStorageDirectory();
+                    //   print("onDownload $url");
+                    //   await FlutterDownloader.enqueue(
+                    //     url: "$url",
+                    //     savedDir: "/storage/emulated/0/Download",
+                    //     showNotification: true,
+                    //     openFileFromNotification: true,
+                    //     saveInPublicStorage: true,
+                    //   );
+                    // },
                     onDownloadStartRequest: (controller, url) async {
                       await UserApi.download_files(
                               empId, sessionId, "${url.url}", context)

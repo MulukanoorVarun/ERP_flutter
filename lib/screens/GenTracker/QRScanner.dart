@@ -315,6 +315,8 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
                                 BorderRadius.circular(10),),
                               height: 55,
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(10.0,0.0,0,0),
                               child: TextFormField(
                                 controller: Generator_id,
                                 cursorColor: ColorConstant.black,
@@ -330,6 +332,7 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
                                   focusedBorder: InputBorder.none,
                                 ),
                               ),
+                                ),
                             ),
                             if (_Error.isNotEmpty) ...[
                               Container(

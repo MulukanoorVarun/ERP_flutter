@@ -405,6 +405,7 @@ class _LoginState extends State<Login> {
                       ),
                       Container(
                         height: 48,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                             color: ColorConstant.edit_bg_color,
                             borderRadius:
@@ -412,7 +413,7 @@ class _LoginState extends State<Login> {
                       //  alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10.0,3.0,0,0),
+                            padding: const EdgeInsets.fromLTRB(10.0,0.0,15,0),
                         child: TextField(
                           controller: email,
                           cursorColor: ColorConstant.black,
@@ -436,8 +437,6 @@ class _LoginState extends State<Login> {
                             hintText:
                             'Enter Email',
                           ),
-                          minLines: 1,
-                          autofocus: true,// and this
                         ),
                           ),
                       ),
@@ -462,6 +461,7 @@ class _LoginState extends State<Login> {
                       ],
                       Container(
                         height: 48,
+                        alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: ColorConstant.edit_bg_color,
                           borderRadius:
@@ -469,7 +469,7 @@ class _LoginState extends State<Login> {
                        // alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
                           child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10.0,3.0,0,0),
+                          padding: const EdgeInsets.fromLTRB(10.0,0.0,0,0),
                                               child: TextField(
                                                 controller: password,
                                                 obscureText: !(_passwordVisible!),
@@ -499,8 +499,6 @@ class _LoginState extends State<Login> {
                                                   enabledBorder: InputBorder.none,
                                                   focusedBorder: InputBorder.none,
                                                 ),
-                                                minLines: 1,
-                                                autofocus: true,
                                               ),
                           ),
                       ),
@@ -582,15 +580,4 @@ class _LoginState extends State<Login> {
                     ]))));
   }
 
-  @override
-  void dispose() {
-    var f = FocusScope.of(context);
-    FocusScope.of(context).unfocus();
-    if (!f.hasPrimaryFocus) {
-      f.unfocus();
-    }
-    email.dispose();
-    password.dispose();
-    super.dispose();
-  }
 }

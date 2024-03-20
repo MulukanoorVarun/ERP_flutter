@@ -666,7 +666,13 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           Container(
                             alignment: Alignment.center,
                             height: 55,
+                            decoration: BoxDecoration(
+                              color: ColorConstant.edit_bg_color,
+                              borderRadius:
+                              BorderRadius.circular(15),),
                             margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
                             child: TextFormField(
                               controller: running_hrs,
                               cursorColor: ColorConstant.black,
@@ -681,28 +687,11 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                     fontSize: FontConstant.Size18,
                                     color: ColorConstant.Textfield,
                                     fontWeight: FontWeight.w400),
-                                filled: true,
-                                fillColor: ColorConstant.edit_bg_color,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0,
-                                      color: ColorConstant.edit_bg_color),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0,
-                                      color: ColorConstant.edit_bg_color),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0),
-                                  borderSide: BorderSide(
-                                      width: 0,
-                                      color: ColorConstant.edit_bg_color),
-                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
                               ),
                             ),
+                              ),
                           ),
                           if (selectedType != null &&
                               selectedCategory != null &&

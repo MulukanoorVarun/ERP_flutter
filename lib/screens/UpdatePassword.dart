@@ -136,7 +136,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         Container(
                           alignment: Alignment.center,
                           height: 55,
-                          margin:EdgeInsets.only(left:15.0,right:15.0),
+                            decoration: BoxDecoration(
+                              color: ColorConstant.edit_bg_color,
+                              borderRadius:
+                              BorderRadius.circular(15),),
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
                           child: TextFormField(
                             controller: password,
                             cursorColor: ColorConstant.black,
@@ -147,25 +153,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                 fontSize: FontConstant.Size15,
                                 color: ColorConstant.Textfield,
                                 fontWeight: FontWeight.w400),
-                              filled: true,
-                              fillColor: ColorConstant.edit_bg_color,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
                           ),
+                            ),
                         ),
                         if(_validate_pwd!=null)...[
                           Container(
@@ -185,7 +177,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                         Container(
                           alignment: Alignment.center,
                           height: 55,
-                          margin:EdgeInsets.only(left:15.0,right:15.0),
+                            decoration: BoxDecoration(
+                              color: ColorConstant.edit_bg_color,
+                              borderRadius:
+                              BorderRadius.circular(15),),
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
                           child: TextFormField(
                             controller: conf_password,
                             cursorColor: ColorConstant.black,
@@ -196,25 +194,11 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                                   fontSize: FontConstant.Size15,
                                   color: ColorConstant.Textfield,
                                   fontWeight: FontWeight.w400),
-                              filled: true,
-                              fillColor: ColorConstant.edit_bg_color,
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                                borderSide: BorderSide(
-                                    width: 0, color: ColorConstant.edit_bg_color),
-                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
                           ),
+                            ),
                         ),
                         if(_validate_confpwd!=null)...[
                           Container(

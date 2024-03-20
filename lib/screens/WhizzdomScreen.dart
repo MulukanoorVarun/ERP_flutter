@@ -146,10 +146,8 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
                     allowFileAccess: true,
                     databaseEnabled: true, // Enables the WebView database
                     domStorageEnabled: true, // Enables DOM storage
-                    builtInZoomControls:
-                        true, // Enables the built-in zoom controls
-                    displayZoomControls:
-                        false, // Disables displaying zoom controls
+                    builtInZoomControls: true, // Enables the built-in zoom controls
+                    displayZoomControls: false, // Disables displaying zoom controls
                     safeBrowsingEnabled: true, // Enables Safe Browsing
                     clearSessionCache: true,
                   ),

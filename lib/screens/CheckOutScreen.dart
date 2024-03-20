@@ -439,6 +439,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                     child: Container(
                                       height: 50,
                                       width: 320,
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.edit_bg_color,
+                                        borderRadius:
+                                        BorderRadius.circular(25),),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
                                       child: TextFormField(
                                         controller: _locationController,
                                         cursorColor: ColorConstant.black,
@@ -449,34 +456,10 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                               fontSize: FontConstant.Size15,
                                               color: ColorConstant.grey_153,
                                               fontWeight: FontWeight.w400),
-                                          filled: true,
-                                          fillColor:
-                                              ColorConstant.edit_bg_color,
-                                          enabledBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30.0),
-                                            borderSide: BorderSide(
-                                                width: 0,
-                                                color: ColorConstant
-                                                    .edit_bg_color),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                            borderSide: BorderSide(
-                                                width: 0,
-                                                color: ColorConstant
-                                                    .edit_bg_color),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(15.0),
-                                            borderSide: BorderSide(
-                                                width: 0,
-                                                color: ColorConstant
-                                                    .edit_bg_color),
-                                          ),
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
                                         ),
+                                      ),
                                       ),
                                     ),
                                   ),
