@@ -180,11 +180,11 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: () {
+                                    onTap: ()  async {
                                       if (widget.act_name ==
                                               "pendingComplaints" &&
                                           open_status == "Open") {
-                                        Navigator.push(
+                                        var res = await Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
@@ -193,6 +193,12 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                                           comp_List![index]
                                                               .compId,
                                                     )));
+                                        if(res==true){
+                                          setState(() {
+                                            isloading = true;
+                                            LoadgeneratorDetailsApifunction();
+                                          });
+                                        }
                                       }
                                     },
                                     child: Container(

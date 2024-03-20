@@ -260,8 +260,9 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
               ),
               if (widget.actName == "NearByGenerators") ...[
                 Container(
-                  child: IconButton(
-                    onPressed: () async {
+                  padding: EdgeInsets.only(right: 10.0),
+                  child: InkWell(
+                    onTap: () async {
                       if (widget.location != null) {
                         var loc = widget.location?.split(",").toString();
                         // var uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", res[0].toDouble(), res[1].toDouble())
@@ -275,10 +276,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                         // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                       }
                     },
-                    icon: const Icon(
-                      Icons.assistant_direction_sharp,
-                      size: 30,
-                      color: Colors.white,
+                    child:  SvgPicture.asset(
+                      "assets/ic_direction.svg",
+                      height: 30,
+                      width: 30,
                     ),
                   ),
                 ),

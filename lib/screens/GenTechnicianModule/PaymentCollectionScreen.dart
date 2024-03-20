@@ -118,10 +118,11 @@ class _PaymentCollectionScreenState extends State<PaymentCollectionScreen> {
                           MaterialPageRoute(
                               builder: (context) => AccountSuggestion()));
                     },
-                    icon: const Icon(
-                      Icons.add_circle_outline_rounded,
-                      size: 30,
-                      color: Colors.white,
+                    icon: SvgPicture.asset(
+                      "assets/ic_add.svg",
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.scaleDown,
                     ),
                   ),
                 ),

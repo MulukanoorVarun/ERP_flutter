@@ -563,7 +563,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                 Spacer(),
                                 DropdownButtonHideUnderline(
                                   child: Container(
-                                    width: 250,
+                                    width: 280,
                                     child: DropdownButton2<Contacts>(
                                       isExpanded: true,
                                       hint: const Row(
@@ -635,16 +635,16 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                         ),
                                       ),
                                       iconStyleData: const IconStyleData(
-                                        icon: Icon(
-                                          Icons.arrow_drop_down_outlined,
-                                        ),
-                                        iconSize: 30,
-                                        iconEnabledColor: Color(0xFF011842),
+                                          icon: Icon(
+                                            CupertinoIcons.arrowtriangle_down_fill,
+                                          ),
+                                          iconSize: 12,
+                                        iconEnabledColor: Colors.black,
                                         iconDisabledColor: Colors.grey,
                                       ),
                                       dropdownStyleData: DropdownStyleData(
                                         maxHeight: 200,
-                                        width: 320,
+                                        width: 280,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(14),
                                           color: Color(0xFFE4EFF9),
@@ -696,7 +696,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                             ),
                             DropdownButtonHideUnderline(
                               child: Container(
-                                width: 310,
+                                width: 340,
                                 child: DropdownButton2<PaymentModeList>(
                                   isExpanded: true,
                                   hint: const Row(
@@ -755,15 +755,15 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                   ),
                                   iconStyleData: const IconStyleData(
                                     icon: Icon(
-                                      Icons.arrow_drop_down_outlined,
+                                      CupertinoIcons.arrowtriangle_down_fill,
                                     ),
-                                    iconSize: 30,
-                                    iconEnabledColor: Color(0xFF011842),
+                                    iconSize: 12,
+                                    iconEnabledColor: Colors.black,
                                     iconDisabledColor: Colors.grey,
                                   ),
                                   dropdownStyleData: DropdownStyleData(
                                     maxHeight: 200,
-                                    width: 320,
+                                    width: 340,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       color: Color(0xFFE4EFF9),

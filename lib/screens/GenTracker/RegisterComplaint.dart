@@ -4,6 +4,7 @@ import 'package:GenERP/screens/splash.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../Services/other_services.dart';
 import '../../Services/user_api.dart';
@@ -396,7 +397,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                           ),
                           DropdownButtonHideUnderline(
                             child: Container(
-                              width: 310,
+                              width: 340,
                               child: DropdownButton2<ComplaintTypeList>(
                                 isExpanded: true,
                                 hint: const Row(
@@ -454,9 +455,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                 ),
                                 iconStyleData: const IconStyleData(
                                   icon: Icon(
-                                    Icons.arrow_drop_down_outlined,
+                                    CupertinoIcons.arrowtriangle_down_fill,
                                   ),
-                                  iconSize: 30,
+                                  iconSize: 12,
                                   iconEnabledColor: Color(0xFF011842),
                                   iconDisabledColor: Colors.grey,
                                 ),
@@ -540,9 +541,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   ),
                                   iconStyleData: const IconStyleData(
                                     icon: Icon(
-                                      Icons.arrow_drop_down_outlined,
+                                      CupertinoIcons.arrowtriangle_down_fill,
                                     ),
-                                    iconSize: 30,
+                                    iconSize: 12,
                                     iconEnabledColor: Color(0xFF011842),
                                     iconDisabledColor: Colors.grey,
                                   ),
@@ -630,9 +631,9 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                                   ),
                                   iconStyleData: const IconStyleData(
                                     icon: Icon(
-                                      Icons.arrow_drop_down_outlined,
+                                      CupertinoIcons.arrowtriangle_down_fill,
                                     ),
-                                    iconSize: 30,
+                                    iconSize: 12,
                                     iconEnabledColor: Color(0xFF011842),
                                     iconDisabledColor: Colors.grey,
                                   ),
@@ -678,10 +679,7 @@ class _RegisterComplaintState extends State<RegisterComplaint> {
                               cursorColor: ColorConstant.black,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                prefixIcon: const Icon(
-                                    Icons.access_time_rounded,
-                                    size: 28,
-                                    color: Color(0xFF011842)),
+                                prefixIcon: Container(child: SvgPicture.asset("assets/ic_time.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
                                 hintText: "Running Hours",
                                 hintStyle: TextStyle(
                                     fontSize: FontConstant.Size18,

@@ -530,6 +530,7 @@ class _TagGeneratorState extends State<TagGenerator> {
                             cursorColor: ColorConstant.black,
                             keyboardType: TextInputType.text,
                             textCapitalization: TextCapitalization.characters,
+                            textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               hintText: "Enter Generator ID",
                               hintStyle: TextStyle(

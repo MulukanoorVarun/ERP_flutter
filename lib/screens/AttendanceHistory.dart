@@ -490,8 +490,19 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
           elevation: 0,
           title: Container(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: SvgPicture.asset(
+                      "assets/back_icon.svg",
+                      height: 24,
+                      width: 24,
+                    ),
+                  ),
                   Container(
                     child: InkWell(
                       onTap: () => Navigator.pop(context, true),
@@ -527,16 +538,9 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
               )),
           titleSpacing: 0,
           leading: Container(
-            margin: const EdgeInsets.only(left: 10),
-            child: GestureDetector(
-              onTap: () => Navigator.pop(context, true),
-              child: const Icon(
-                Icons.arrow_back_ios,
-                color: Colors.white,
-                size: 24.0,
-              ),
-            ),
+            width: 10,
           ),
+          leadingWidth: 10,
         ),
           body:(isLoading)?Loaders():Container(
           color: ColorConstant.erp_appColor,
@@ -766,7 +770,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                             GestureDetector(
                               onTap: setPreviousMonth,
                               child: const Icon(
-                                Icons.arrow_back_ios,
+                                CupertinoIcons.back,
                                 color: Colors.black,
                                 size: 30.0,
                               ),
@@ -786,7 +790,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                             GestureDetector(
                               onTap: setNextMonth,
                               child: const Icon(
-                                Icons.arrow_forward_ios,
+                                CupertinoIcons.forward,
                                 color: Colors.black,
                                 size: 30.0,
                               ),

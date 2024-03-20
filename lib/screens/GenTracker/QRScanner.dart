@@ -321,6 +321,7 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
                                 controller: Generator_id,
                                 cursorColor: ColorConstant.black,
                                 keyboardType: TextInputType.text,
+                                textAlign: TextAlign.center,
                                 textCapitalization: TextCapitalization.characters,
                                 decoration: InputDecoration(
                                   hintText: "Enter Generator ID",

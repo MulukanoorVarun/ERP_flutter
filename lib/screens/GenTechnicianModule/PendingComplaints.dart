@@ -106,12 +106,18 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                   Container(
                     child: InkWell(
                       onTap: () async {
-                        await Navigator.push(
+                       var res =  await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => QRScanner(
                                       title: "pendingComplaints",
                                     )));
+                       if(res==true){
+                         setState(() {
+                           isLoading = true;
+                           TechnicianPendingComplaints();
+                         });
+                       }
                       },
                       child: SvgPicture.asset(
                         "assets/images/qr_scanner.svg",

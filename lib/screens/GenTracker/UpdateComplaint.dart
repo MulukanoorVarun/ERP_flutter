@@ -361,10 +361,10 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Icon(
-                                    Icons.access_time,
-                                    size: 28,
-                                  ),
+                                  SvgPicture.asset(
+                                    "assets/ic_time.svg",
+                                    height: 28,
+                                    width: 28,color: ColorConstant.black,),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -400,8 +400,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                 cursorColor: ColorConstant.black,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.feedback,
-                                      size: 28, color: Color(0xFF011842)),
+                                  prefixIcon:Container(child: SvgPicture.asset("assets/ic_feedback.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
                                   hintText: "Enter Feedback",
                                   hintStyle: TextStyle(
                                       fontSize: FontConstant.Size15,
@@ -431,8 +430,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                 cursorColor: ColorConstant.black,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(Icons.speaker_notes,
-                                      size: 28, color: Color(0xFF011842)),
+                                  prefixIcon: Container(child: SvgPicture.asset("assets/ic_note.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
                                   hintText: "Enter FSR Number",
                                   hintStyle: TextStyle(
                                       fontSize: FontConstant.Size15,
@@ -462,10 +460,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                 cursorColor: ColorConstant.black,
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
-                                  prefixIcon: const Icon(
-                                      Icons.access_time_rounded,
-                                      size: 28,
-                                      color: Color(0xFF011842)),
+                                  prefixIcon: Container(child: SvgPicture.asset("assets/ic_time.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
                                   hintText: "Enter Running Hours",
                                   hintStyle: TextStyle(
                                       fontSize: FontConstant.Size15,
@@ -480,6 +475,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                             SizedBox(
                               height: 10.0,
                             ),
+
                             DropdownButtonHideUnderline(
                               child: Container(
                                 width: 310,
@@ -539,15 +535,15 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                   ),
                                   iconStyleData: const IconStyleData(
                                     icon: Icon(
-                                      Icons.arrow_drop_down_outlined,
+                                      CupertinoIcons.arrowtriangle_down_fill,
                                     ),
-                                    iconSize: 30,
+                                    iconSize: 12,
                                     iconEnabledColor: Color(0xFF011842),
                                     iconDisabledColor: Colors.grey,
                                   ),
                                   dropdownStyleData: DropdownStyleData(
                                     maxHeight: 200,
-                                    width: 350,
+                                    width: 310,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(14),
                                       color: Color(0xFFE4EFF9),

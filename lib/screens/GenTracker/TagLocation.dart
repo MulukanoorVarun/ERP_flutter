@@ -315,6 +315,7 @@ class _TagLocationState extends State<TagLocation> {
                             cursorColor: ColorConstant.black,
                             keyboardType: TextInputType.text,
                             textCapitalization: TextCapitalization.characters,
+                            textAlign: TextAlign.center,
                             decoration: InputDecoration(
                               hintText: "Enter Generator ID",
                               hintStyle: TextStyle(

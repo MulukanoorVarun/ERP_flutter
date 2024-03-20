@@ -6,7 +6,6 @@ import 'package:GenERP/Utils/Constants.dart';
 import 'package:GenERP/Utils/storage.dart';
 import 'package:GenERP/screens/Dashboard.dart';
 import 'package:GenERP/screens/GenTechnicianModule/InfoDialogue.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
@@ -33,13 +32,16 @@ import '../GenTracker/GeneratoraDetails.dart';
 import '../Login.dart';
 import '../background_service.dart';
 
-class NearbyGenerators extends StatefulWidget {
-  const NearbyGenerators({Key? key}) : super(key: key);
+
+class InfoDialogue extends StatefulWidget {
+  const InfoDialogue({super.key});
+
   @override
-  State<NearbyGenerators> createState() => _NearbyGeneratorsState();
+  State<InfoDialogue> createState() => _InfoDialogueState();
 }
 
-class _NearbyGeneratorsState extends State<NearbyGenerators> {
+class _InfoDialogueState extends State<InfoDialogue> {
+  double currentValue = 1.0;
   final ImagePicker _picker = ImagePicker();
   // late LocationService locationService;
   TextEditingController _locationController = TextEditingController();
@@ -61,7 +63,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
   File? _image;
   var image_picked = 0;
   bool isLoading = true;
-  String _selectedItem = 'Active'; // Initial selection
+  String _selectedItem = 'Active';
 
   @override
   void initState() {
@@ -77,7 +79,6 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     super.dispose();
   }
 
-  double currentValue = 1.0;
 
   Future<void> _getLocationPermission() async {
     // Check if location services are enabled
@@ -275,256 +276,152 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     return "Address not found";
   }
 
-  Future infoDialogue() async {
-    return await showDialog(
-        context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context,setState) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-            title:Column(
-              children: [
-                Row(
-                  children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Filter',
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: FontConstant.Size25,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    child: SvgPicture.asset(
-                      "assets/ic_cancel.svg",
-                      height: 35,
-                      width: 35,
-                    ),
-                    onTap: () {
-                      setState(() {
-                        currentValue = 0.0;
-                        _selectedItem = "Active";
-                      });
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-              Divider( // Add Divider widget here
-                color: Colors.grey, // Set the color of the underline
-                thickness: 1.0, // Set the thickness of the underline
-                height: 0.0, // Set the height of the divider to 0 to avoid additional space
-              ),
-            ],
-          ),
-          content: Container(
-            height: 230,
-            child: Column(
-              children: [
-
-                    Row(
-                      children: [
-                        Text("Radius", // Display current value
-                          style: TextStyle(fontSize: 18.0,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        Spacer(),
-                        Text(
-                          '${currentValue.toStringAsFixed(2)} KM', // Display current value
-                          style: TextStyle(fontSize: 18.0,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: currentValue,
-                      max: 100,
-                      divisions: 100,
-                      label: currentValue.toStringAsFixed(2),
-                      activeColor: ColorConstant.erp_appColor,
-                      inactiveColor: Colors.grey,
-                      thumbColor: ColorConstant.erp_appColor,
-                      onChanged: (value) {
-                        // Update currentValue when Slider value changes
-                        setState(() {
-                          currentValue = value;
-                        });
-                      },
-                    ),
-                    Text(
-                      'Status',
-                      style: GoogleFonts.ubuntu(
-                        textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: FontConstant.Size20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      width: 200, // Set the desired width here
-                      child: DropdownButton<String>(
-                        value: _selectedItem,
-                        items: <String>['Active', 'Inactive', 'Suspense']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedItem = newValue!;
-                          });
-                        },
-                        icon:  Icon(
-                        CupertinoIcons.arrowtriangle_down_fill,
-                      ),
-                        iconSize: 12,
-                        iconEnabledColor: Colors.black, // Remove the default dropdown icon
-                      ),
-                    ),
-                    SizedBox(height: 30.0),
-                    Container(
-                        child: InkWell(
-                          onTap: () {
-                            markers = [];
-                            LoadNearbyGeneratorsAPI();
-                            Navigator.pop(context);
-                            setState(() {
-                              currentValue = 0.0;
-                              _selectedItem = "Active";
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 45,
-                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            decoration: BoxDecoration(
-                              color: ColorConstant.erp_appColor,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Text(
-                              "Search",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Nexa',
-                                  color: ColorConstant.white,
-                                  fontSize: FontConstant.Size15,
-                                  fontWeight: FontWeight.w700
-                              ),
-                            ),
-                          ),
-                        )),
-
-              ],
-            ),
-          ),
-        ),
-        ),
-      barrierDismissible: true,
-    ) ?? false;
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: (isLoading)
-          ? Loaders()
-          : SafeArea(
-        child: Container(
-          color: ColorConstant.erp_appColor,
-          child: Column(
+    return AlertDialog(
+      alignment: Alignment.center,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      title:Column(
+        children: [
+          Row(
             children: [
-              Container(
-                alignment: Alignment.topCenter,
-                color: ColorConstant.erp_appColor,
-                height: 50,
-                child: Row(
-                  children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context, true);
-                      },
-                      child: SvgPicture.asset(
-                        "assets/back_icon.svg",
-                        height: 24,
-                        width: 24,
-                      ),
+              Expanded(
+                child: Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Filter',
+                    style:  TextStyle(
+                        color: Colors.black,
+                        fontSize: FontConstant.Size25,
+                        fontWeight: FontWeight.w500,
                     ),
-                    SizedBox(width: 20),
-                    Center(
-                      child: Text(
-                        "Nearby Generators",
-                        style: TextStyle(
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                        onTap: ()  {
-                          infoDialogue();
-                          },
-                        child: InkWell(
-
-                          child: SvgPicture.asset(
-
-                            "assets/filter.svg",
-                            height: 30,
-                            width: 30,
-                          ),
-                        )),
-
-                    SizedBox(width: 20),
-                  ],
+                  ),
                 ),
               ),
-              Expanded(
-                child: ClipRRect(
-                  // Apply border radius using ClipRRect
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  child: Stack(children: [
-                    GoogleMap(
-                      myLocationEnabled: true,
-                      zoomGesturesEnabled: true,
-                      initialCameraPosition: CameraPosition(
-                        target: startLocation,
-                        zoom: 14.0,
-                      ),
-                      markers: markers.toSet(),
-                      mapType: MapType.normal,
-                      onMapCreated: (controller) {
-                        setState(() {
-                          mapController = controller;
-                        });
-                      },
-                      onCameraMove: _onCameraMove,
-                    ),
-                  ]),
+              InkWell(
+                child: SvgPicture.asset(
+                  "assets/ic_cancel.svg",
+                  height: 35,
+                  width: 35,
                 ),
+                onTap: () {
+                  setState(() {
+                    currentValue = 0.0;
+                    _selectedItem = "Active";
+                  });
+                  Navigator.pop(context);
+                },
               ),
             ],
           ),
+          Divider( // Add Divider widget here
+            color: Colors.grey, // Set the color of the underline
+            thickness: 1.0, // Set the thickness of the underline
+            height: 0.0, // Set the height of the divider to 0 to avoid additional space
+          ),
+        ],
+      ),
+      content: Container(
+        height: 230,
+        child: Column(
+          children: [
+            ListView(
+              children: <Widget>[
+                Row(
+                  children: [
+                    Text("Radius", // Display current value
+                      style: TextStyle(fontSize: 18.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Spacer(),
+                    Text(
+                      '${currentValue.toStringAsFixed(2)} KM', // Display current value
+                      style: TextStyle(fontSize: 18.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
+
+                Slider(
+                  value: currentValue,
+                  max: 100,
+                  divisions: 100,
+                  label: currentValue.toStringAsFixed(2),
+                  activeColor: ColorConstant.erp_appColor,
+                  inactiveColor: Colors.grey,
+                  thumbColor: ColorConstant.erp_appColor,
+                  onChanged: (value) {
+                    // Update currentValue when Slider value changes
+                    setState(() {
+                      currentValue = value;
+                    });
+                  },
+                ),
+                Text(
+                  'Status',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: FontConstant.Size20,
+                      fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Container(
+                  width: 200, // Set the desired width here
+                  child: DropdownButton<String>(
+                    value: _selectedItem,
+                    items: <String>['Active', 'Inactive', 'Suspense']
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        _selectedItem = newValue!;
+                      });
+                    },
+                    icon: null, // Remove the default dropdown icon
+                  ),
+                ),
+                SizedBox(height: 30.0),
+                Container(
+                    child: InkWell(
+                      onTap: () {
+                        markers = [];
+                        LoadNearbyGeneratorsAPI();
+                        Navigator.pop(context);
+                        setState(() {
+                          currentValue = 0.0;
+                          _selectedItem = "Active";
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 45,
+                        margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.erp_appColor,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          "Search",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Nexa',
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size15,
+                              fontWeight: FontWeight.w700
+                          ),
+                        ),
+                      ),
+                    )),
+              ],
+            )
+          ],
         ),
       ),
     );
