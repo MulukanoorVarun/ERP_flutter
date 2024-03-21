@@ -17,14 +17,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geolocator/geolocator.dart';
-
 import 'package:intl/intl.dart';
 import 'package:optimize_battery/optimize_battery.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
 import '../Services/WebSocketManager.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';

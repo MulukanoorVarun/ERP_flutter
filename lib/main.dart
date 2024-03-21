@@ -79,8 +79,8 @@ void main() async {
     sound: false,
   );
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    RemoteNotification? notification = message.notification;
-     AndroidNotification? android = message.notification?.android;
+    // RemoteNotification? notification = message.notification;
+    //  AndroidNotification? android = message.notification?.android;
 
     String type = message.data['type'] ?? '';
     if (type == 'offline_reminder') {
@@ -135,35 +135,32 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   void initState() {
     super.initState();
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      String type = message.data['type'] ?? '';
-      String redirectUrl = message.data['redirect_url'] ?? '';
-      navigateToScreen(type,redirectUrl);
-      print('A new onMessageOpenedApp event was published!');
-    });
   }
 
-  void navigateToScreen(String type,String redirecturl) {
-    if (type == 'offline_reminder' || type == 'normal') {
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Dashboard()));
-    }else if(type == 'web_erp_notification'){
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => WhizzdomScreen(url: redirecturl)));
-    }else{
-      Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Dashboard()));
-    }
-  }
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      String type = message.data['type'] ?? '';
+      String redirectUrl = message.data['redirect_url'] ?? '';
+      //
+      // if (type == 'offline_reminder' || type == 'normal') {
+      //   navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => Dashboard()));
+      // } else if (type == 'web_erp_notification') {
+      //   navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => WhizzdomScreen(url: redirectUrl)));
+      // } else {
+      //   navigatorKey.currentState?.push(MaterialPageRoute(builder: (context) => Dashboard()));
+      // }
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Dashboard()),
+      );
+      print('A new onMessageOpenedApp event was published!');
+    });
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
