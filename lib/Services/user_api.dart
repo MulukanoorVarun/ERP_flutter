@@ -95,6 +95,15 @@ class UserApi {
         var directory = "";
         if (Platform.isAndroid) {
           directory = "/storage/emulated/0/Download";
+          // final androiddirectory = await getDownloadsDirectory();
+          // directory = androiddirectory!.path;
+          if (directory == null) {
+            // Create downloads directory if it doesn't exist
+            final Directory newDirectory = await Directory('/storage/emulated/0/Download').create(recursive: true);
+            directory = newDirectory.path;
+          } else {
+            directory = directory;
+          }
         } else if (Platform.isIOS) {
           final iosDirectory = await getApplicationSupportDirectory();
           directory = iosDirectory!.path;
@@ -113,7 +122,7 @@ class UserApi {
         final file = File('${directory}/${filename}');
         await file.writeAsBytes(bytes);
         toast(
-            cntxt, "File saved to your downloads as ${filename}, Successfully");
+            cntxt, "File saved to your downloads as ${filename} to ${directory}, Successfully");
         print('File saved successfully');
         return jsonDecode(res.body);
       } else {

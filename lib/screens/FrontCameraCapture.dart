@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:camera/camera.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../Services/other_services.dart';
 import '../Utils/FontConstant.dart';
@@ -74,9 +75,10 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
+          icon: const Icon(
+            CupertinoIcons.back,
             color: Colors.white,
+            size: 24.0,
           ),
           onPressed: () {
             Navigator.pop(context,true);
@@ -110,13 +112,15 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
                   print("${_image} image_path akash");
                 },
                 child: Icon(
-                  Icons.camera,
+                  CupertinoIcons.camera_circle_fill,
+
                   size: 50,
                   color: Colors.black,
                 ),
               ),
               ),
             ),
+
           ],
         ),
       ),
