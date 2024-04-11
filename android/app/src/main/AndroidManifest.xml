@@ -72,7 +72,7 @@
             android:value="2" />
 
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs"/>
+            android:value="AIzaSyCA06NWEP5D-z8WpebENgd4mSOqV-uXIUE"/>
 
         <service
             android:name=".LocationUpdatesService"

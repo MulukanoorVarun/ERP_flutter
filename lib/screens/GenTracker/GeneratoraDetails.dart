@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:GenERP/Services/other_services.dart';
 import 'package:GenERP/Services/user_api.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
@@ -268,6 +270,10 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                         // var uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?q=loc:%f,%f", res[0].toDouble(), res[1].toDouble())
                         var uri = Uri.parse(
                             "google.navigation:q=${loc![0]},${loc![1]}&mode=d");
+                        if (Platform.isIOS) {
+                          uri = Uri.parse(
+                              "maps://?q=${loc![0]},${loc![1]}&z=10&daddr=${loc![0]},${loc![1]}&dirflg=d");
+                        }
                         if (await canLaunch(uri.toString())) {
                           await launch(uri.toString());
                         } else {
@@ -276,7 +282,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
                         // val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
                       }
                     },
-                    child:  SvgPicture.asset(
+                    child: SvgPicture.asset(
                       "assets/ic_direction.svg",
                       height: 30,
                       width: 30,

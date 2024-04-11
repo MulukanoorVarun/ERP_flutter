@@ -363,8 +363,9 @@ class _ScannerState extends State<Scanner> {
                     setState(() {
                       if (data.sessionExists == 1) {
                         if (data.error == 0) {
-                          toast(context, data.message);
+                          print("tagg");
                           Navigator.pop(context, true);
+                          toast(context, data.message);
                         } else if (data.error == 1) {
                           toast(context, data.message);
                         } else if (data.error == 2) {

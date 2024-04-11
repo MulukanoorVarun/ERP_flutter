@@ -13,7 +13,7 @@ import webview_flutter_wkwebview
   ) -> Bool {
     GeneratedPluginRegistrant.register(with: self)
         // FirebaseApp.configure()
-        GMSServices.provideAPIKey("AIzaSyBGzvgMMKwPBAANTwaoRsAnrCpiWCj8wVs")
+        GMSServices.provideAPIKey("AIzaSyCA06NWEP5D-z8WpebENgd4mSOqV-uXIUE")
         UNUserNotificationCenter.current().delegate = self
 
         let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
