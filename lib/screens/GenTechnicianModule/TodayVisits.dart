@@ -48,12 +48,12 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
               {
                 setState(() {
                   if (data.sessionExists == 1) {
-                  if (data.error == 0) {
-                    todayvisitlist = data.list!;
-                    isLoading = false;
-                  } else {
-                    isLoading = false;
-                  }
+                    if (data.error == 0) {
+                      todayvisitlist = data.list!;
+                      isLoading = false;
+                    } else {
+                      isLoading = false;
+                    }
                   } else {
                     PreferenceService().clearPreferences();
                     Navigator.push(context,
@@ -114,7 +114,7 @@ class _TodayVisitsScreenState extends State<TodayVisitsScreen> {
                 child: const Icon(
                   CupertinoIcons.back,
                   color: Colors.white,
-                  size: 24.0,
+                  size: 30.0,
                 ),
               ),
             ),

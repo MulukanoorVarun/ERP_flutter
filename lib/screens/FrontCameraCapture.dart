@@ -8,8 +8,6 @@ import '../Services/other_services.dart';
 import '../Utils/FontConstant.dart';
 import '../Utils/MyWidgets.dart';
 
-
-
 class FrontCameraCapture extends StatefulWidget {
   const FrontCameraCapture({Key? key}) : super(key: key);
 
@@ -20,7 +18,6 @@ class FrontCameraCapture extends StatefulWidget {
 class _CheckOutScreenState extends State<FrontCameraCapture> {
   late List<CameraDescription> _cameras;
   late CameraController cam_controller;
-
 
   File? _image;
   var image_picked = 0;
@@ -36,7 +33,7 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
         return;
       }
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
     }).catchError((Object e) {
       if (e is CameraException) {
@@ -53,14 +50,14 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
       }
     });
   }
+
   @override
   void initState() {
     _getavailableCameras();
     // _getLocationPermission();
     super.initState();
-
-
   }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -78,56 +75,56 @@ class _CheckOutScreenState extends State<FrontCameraCapture> {
           icon: const Icon(
             CupertinoIcons.back,
             color: Colors.white,
-            size: 24.0,
+            size: 30.0,
           ),
           onPressed: () {
-            Navigator.pop(context,true);
+            Navigator.pop(context, true);
           },
         ),
       ),
       body: SafeArea(
-     child: (isLoading)
-          ? Loaders()
-          : SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Container(
-               height: size.height * 0.8, // Adjusted height for camera preview
-              child: CameraPreview(cam_controller),
-            ),
-            Container(
-              height: size.height * 0.1,
-              padding: EdgeInsets.all(10),
-              child: Center(
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStatePropertyAll(Colors.white70),
-                  overlayColor: MaterialStatePropertyAll(Colors.white70),
-                ),
-                onPressed: () async {
-                  final image = await cam_controller.takePicture();
-                  _image = File(image.path);
-                  Navigator.pop(context, _image);
-                  print("${_image} image_path akash");
-                },
-                child: Icon(
-                  CupertinoIcons.camera_circle_fill,
-
-                  size: 50,
-                  color: Colors.black,
+        child: (isLoading)
+            ? Loaders()
+            : SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      height: size.height *
+                          0.8, // Adjusted height for camera preview
+                      child: CameraPreview(cam_controller),
+                    ),
+                    Container(
+                      height: size.height * 0.1,
+                      padding: EdgeInsets.all(10),
+                      child: Center(
+                        child: TextButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.white70),
+                            overlayColor:
+                                MaterialStatePropertyAll(Colors.white70),
+                          ),
+                          onPressed: () async {
+                            final image = await cam_controller.takePicture();
+                            _image = File(image.path);
+                            Navigator.pop(context, _image);
+                            print("${_image} image_path akash");
+                          },
+                          child: Icon(
+                            CupertinoIcons.camera_circle_fill,
+                            size: 50,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              ),
-            ),
-
-          ],
-        ),
-      ),
       ),
     );
   }
-
 
 // Widget build(BuildContext context) {
   //   Size size = MediaQuery.of(context).size;

@@ -48,18 +48,18 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
             if (data != null)
               {
                 setState(() {
-                 if (data.sessionExists == 1) {
-                   if (data.error == 0) {
-                     monthvisitlist = data.list!;
-                     isLoading = false;
-                   } else {
-                     isLoading = false;
-                   }
-                 }else {
-                   PreferenceService().clearPreferences();
-                   Navigator.push(context,
-                       MaterialPageRoute(builder: (context) => Login()));
-                 }
+                  if (data.sessionExists == 1) {
+                    if (data.error == 0) {
+                      monthvisitlist = data.list!;
+                      isLoading = false;
+                    } else {
+                      isLoading = false;
+                    }
+                  } else {
+                    PreferenceService().clearPreferences();
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Login()));
+                  }
                   // toast(context, monthvisitlist.length.toString());
                 })
               }
@@ -114,7 +114,7 @@ class _TodayVisitsScreenState extends State<MonthlyVisitsScreen> {
                 child: const Icon(
                   CupertinoIcons.back,
                   color: Colors.white,
-                  size: 24.0,
+                  size: 30.0,
                 ),
               ),
             ),

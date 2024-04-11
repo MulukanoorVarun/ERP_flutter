@@ -168,7 +168,7 @@ class _AddContactState extends State<AddContact> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),

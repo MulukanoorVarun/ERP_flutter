@@ -31,7 +31,7 @@ class _GenTrackerState extends State<GenTracker> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
@@ -46,8 +46,10 @@ class _GenTrackerState extends State<GenTracker> {
           backgroundColor: ColorConstant.erp_appColor),
       body: Container(
         color: ColorConstant.erp_appColor,
+        height: screenHeight,
         child: Expanded(
           child: Container(
+            height: screenHeight,
             width: double.infinity, // Set width to fill parent width
             decoration: BoxDecoration(
               color: ColorConstant.edit_bg_color,

@@ -520,7 +520,7 @@ class _ScannerState extends State<Scanner> {
             child: const Icon(
               CupertinoIcons.back,
               color: Colors.white,
-              size: 24.0,
+              size: 30.0,
             ),
           ),
         ),

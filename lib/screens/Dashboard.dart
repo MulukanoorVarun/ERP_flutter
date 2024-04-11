@@ -501,13 +501,15 @@ class _DashboardState extends State<Dashboard> {
             child: Scaffold(
                 body: (isLoading)
                     ? Loaders()
-                    : SafeArea(
-                        child: Container(
+                    : Container(
                         color: ColorConstant.erp_appColor,
                         child: Container(
                           child: Column(
                             children: [
                               Container(
+                                margin: (Platform.isIOS)
+                                    ? EdgeInsets.only(top: 25)
+                                    : EdgeInsets.all(0),
                                 alignment: Alignment.topCenter,
                                 color: ColorConstant.erp_appColor,
                                 height:
@@ -1080,6 +1082,6 @@ class _DashboardState extends State<Dashboard> {
                             ],
                           ),
                         ),
-                      )))));
+                      ))));
   }
 }

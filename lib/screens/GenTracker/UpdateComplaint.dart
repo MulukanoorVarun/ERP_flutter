@@ -308,7 +308,7 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
@@ -364,7 +364,9 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                                   SvgPicture.asset(
                                     "assets/ic_time.svg",
                                     height: 28,
-                                    width: 28,color: ColorConstant.black,),
+                                    width: 28,
+                                    color: ColorConstant.black,
+                                  ),
                                   SizedBox(
                                     width: 10,
                                   ),
@@ -390,26 +392,35 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                               height: 55,
                               decoration: BoxDecoration(
                                 color: ColorConstant.edit_bg_color,
-                                borderRadius:
-                                BorderRadius.circular(15),),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(5.0,0.0,10,0),
-                              child: TextFormField(
-                                controller: Feedback,
-                                cursorColor: ColorConstant.black,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  prefixIcon:Container(child: SvgPicture.asset("assets/ic_feedback.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
-                                  hintText: "Enter Feedback",
-                                  hintStyle: TextStyle(
-                                      fontSize: FontConstant.Size15,
-                                      color: ColorConstant.Textfield,
-                                      fontWeight: FontWeight.w400),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                padding:
+                                    const EdgeInsets.fromLTRB(5.0, 0.0, 10, 0),
+                                child: TextFormField(
+                                  controller: Feedback,
+                                  cursorColor: ColorConstant.black,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Container(
+                                      child: SvgPicture.asset(
+                                        "assets/ic_feedback.svg",
+                                        color: ColorConstant.black,
+                                      ),
+                                      height: 12,
+                                      width: 12,
+                                      padding: EdgeInsets.all(10.0),
+                                    ),
+                                    hintText: "Enter Feedback",
+                                    hintStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        color: ColorConstant.Textfield,
+                                        fontWeight: FontWeight.w400),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
                                 ),
-                              ),
                               ),
                             ),
                             SizedBox(
@@ -420,26 +431,35 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                               height: 55,
                               decoration: BoxDecoration(
                                 color: ColorConstant.edit_bg_color,
-                                borderRadius:
-                                BorderRadius.circular(15),),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(5.0,0.0,10,0),
-                              child: TextFormField(
-                                controller: FSRNumber,
-                                cursorColor: ColorConstant.black,
-                                keyboardType: TextInputType.text,
-                                decoration: InputDecoration(
-                                  prefixIcon: Container(child: SvgPicture.asset("assets/ic_note.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
-                                  hintText: "Enter FSR Number",
-                                  hintStyle: TextStyle(
-                                      fontSize: FontConstant.Size15,
-                                      color: ColorConstant.Textfield,
-                                      fontWeight: FontWeight.w400),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                padding:
+                                    const EdgeInsets.fromLTRB(5.0, 0.0, 10, 0),
+                                child: TextFormField(
+                                  controller: FSRNumber,
+                                  cursorColor: ColorConstant.black,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Container(
+                                      child: SvgPicture.asset(
+                                        "assets/ic_note.svg",
+                                        color: ColorConstant.black,
+                                      ),
+                                      height: 12,
+                                      width: 12,
+                                      padding: EdgeInsets.all(10.0),
+                                    ),
+                                    hintText: "Enter FSR Number",
+                                    hintStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        color: ColorConstant.Textfield,
+                                        fontWeight: FontWeight.w400),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
                                 ),
-                              ),
                               ),
                             ),
                             SizedBox(
@@ -450,32 +470,40 @@ class _UpdateComplaintState extends State<UpdateComplaint> {
                               height: 55,
                               decoration: BoxDecoration(
                                 color: ColorConstant.edit_bg_color,
-                                borderRadius:
-                                BorderRadius.circular(15),),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: Padding(
-                                padding: const EdgeInsets.fromLTRB(5.0,0.0,10,0),
-                              child: TextFormField(
-                                controller: RunningHrs,
-                                cursorColor: ColorConstant.black,
-                                keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
-                                  prefixIcon: Container(child: SvgPicture.asset("assets/ic_time.svg",color: ColorConstant.black,),height: 12,width: 12,padding: EdgeInsets.all(10.0),),
-                                  hintText: "Enter Running Hours",
-                                  hintStyle: TextStyle(
-                                      fontSize: FontConstant.Size15,
-                                      color: ColorConstant.Textfield,
-                                      fontWeight: FontWeight.w400),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                                padding:
+                                    const EdgeInsets.fromLTRB(5.0, 0.0, 10, 0),
+                                child: TextFormField(
+                                  controller: RunningHrs,
+                                  cursorColor: ColorConstant.black,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    prefixIcon: Container(
+                                      child: SvgPicture.asset(
+                                        "assets/ic_time.svg",
+                                        color: ColorConstant.black,
+                                      ),
+                                      height: 12,
+                                      width: 12,
+                                      padding: EdgeInsets.all(10.0),
+                                    ),
+                                    hintText: "Enter Running Hours",
+                                    hintStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        color: ColorConstant.Textfield,
+                                        fontWeight: FontWeight.w400),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
                                 ),
-                              ),
                               ),
                             ),
                             SizedBox(
                               height: 10.0,
                             ),
-
                             DropdownButtonHideUnderline(
                               child: Container(
                                 width: 310,

@@ -136,7 +136,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
             child: const Icon(
               CupertinoIcons.back,
               color: Colors.white,
-              size: 24.0,
+              size: 30.0,
             ),
           ),
         ),
@@ -180,7 +180,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
                                   return InkWell(
-                                    onTap: ()  async {
+                                    onTap: () async {
                                       if (widget.act_name ==
                                               "pendingComplaints" &&
                                           open_status == "Open") {
@@ -193,7 +193,7 @@ class _ComplaintDetailsState extends State<ComplaintDetails> {
                                                           comp_List![index]
                                                               .compId,
                                                     )));
-                                        if(res==true){
+                                        if (res == true) {
                                           setState(() {
                                             isloading = true;
                                             LoadgeneratorDetailsApifunction();

@@ -353,9 +353,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     return Scaffold(
       body: (isLoading)
           ? Loaders()
-          : SafeArea(
-              child: Container(
-                color: ColorConstant.erp_appColor,
+          : Container(
+              color: ColorConstant.erp_appColor,
+              child: SafeArea(
                 child: Column(
                   children: [
                     Container(
@@ -371,8 +371,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                             Padding(padding: EdgeInsets.only(left: 20)),
                             SvgPicture.asset(
                               "assets/back_icon.svg",
-                              height: 20,
-                              width: 20,
+                              height: 29,
+                              width: 29,
                             ),
                             SizedBox(width: 25),
                             Center(

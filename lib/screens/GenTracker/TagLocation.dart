@@ -205,7 +205,7 @@ class _TagLocationState extends State<TagLocation> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
@@ -306,28 +306,30 @@ class _TagLocationState extends State<TagLocation> {
                           height: 55,
                           decoration: BoxDecoration(
                             color: ColorConstant.edit_bg_color,
-                            borderRadius: BorderRadius.circular(10),),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                           margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
-                          child: TextFormField(
-                            controller: Generator_id,
-                            cursorColor: ColorConstant.black,
-                            keyboardType: TextInputType.text,
-                            textCapitalization: TextCapitalization.characters,
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration(
-                              hintText: "Enter Generator ID",
-                              hintStyle: TextStyle(
-                                fontSize: FontConstant.Size15,
-                                color: ColorConstant.Textfield,
-                                fontWeight: FontWeight.w400,
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(10.0, 0.0, 10, 0),
+                            child: TextFormField(
+                              controller: Generator_id,
+                              cursorColor: ColorConstant.black,
+                              keyboardType: TextInputType.text,
+                              textCapitalization: TextCapitalization.characters,
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration(
+                                hintText: "Enter Generator ID",
+                                hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size15,
+                                  color: ColorConstant.Textfield,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
                               ),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
                             ),
                           ),
-                            ),
                         ),
                         if (_error_genID != null) ...[
                           Container(

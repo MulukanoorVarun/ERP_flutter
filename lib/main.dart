@@ -88,9 +88,9 @@ void main() async {
     sound: false,
   );
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // RemoteNotification? notification = message.notification;
-    //  AndroidNotification? android = message.notification?.android;
-
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    print("msg");
     String type = message.data['type'] ?? '';
     if (type == 'offline_reminder') {
       FlutterRingtonePlayer().play(

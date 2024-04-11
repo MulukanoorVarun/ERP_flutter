@@ -98,8 +98,8 @@ class _WebERPIOSState extends State<WebERPIOS> {
                 },
                 child: SvgPicture.asset(
                   "assets/back_icon.svg",
-                  height: 24,
-                  width: 24,
+                  height: 29,
+                  width: 29,
                 ),
               ),
               SizedBox(width: 10),

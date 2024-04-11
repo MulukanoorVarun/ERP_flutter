@@ -98,7 +98,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: const Icon(
               CupertinoIcons.back,
               color: Colors.white,
-              size: 24.0,
+              size: 30.0,
             ),
           ),
         ),
@@ -205,30 +205,30 @@ class _InventoryScreenState extends State<InventoryScreen> {
                       height: 55,
                       decoration: BoxDecoration(
                         color: ColorConstant.edit_bg_color,
-                        borderRadius:
-                        BorderRadius.circular(15),),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
-                      child: TextFormField(
-                        controller: part_id,
-                        cursorColor: ColorConstant.black,
-                        keyboardType: TextInputType.text,
-                        textCapitalization: TextCapitalization.characters,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: "Enter Part ID",
-                          hintStyle: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                                fontSize: FontConstant.Size16,
-                                color: ColorConstant.Textfield,
-                                fontWeight: FontWeight.w400),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10.0, 0.0, 10, 0),
+                        child: TextFormField(
+                          controller: part_id,
+                          cursorColor: ColorConstant.black,
+                          keyboardType: TextInputType.text,
+                          textCapitalization: TextCapitalization.characters,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: "Enter Part ID",
+                            hintStyle: GoogleFonts.ubuntu(
+                              textStyle: TextStyle(
+                                  fontSize: FontConstant.Size16,
+                                  color: ColorConstant.Textfield,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
                           ),
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
                         ),
                       ),
-                        ),
                     ),
                     SizedBox(
                       height: 6.0,

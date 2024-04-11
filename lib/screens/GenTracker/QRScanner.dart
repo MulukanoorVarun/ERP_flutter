@@ -189,7 +189,7 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
@@ -311,29 +311,31 @@ class _QRScannerState extends State<QRScanner> with WidgetsBindingObserver {
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: ColorConstant.edit_bg_color,
-                                borderRadius:
-                                BorderRadius.circular(10),),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                               height: 55,
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(10.0,0.0,0,0),
-                              child: TextFormField(
-                                controller: Generator_id,
-                                cursorColor: ColorConstant.black,
-                                keyboardType: TextInputType.text,
-                                textAlign: TextAlign.center,
-                                textCapitalization: TextCapitalization.characters,
-                                decoration: InputDecoration(
-                                  hintText: "Enter Generator ID",
-                                  hintStyle: TextStyle(
-                                      fontSize: FontConstant.Size15,
-                                      color: ColorConstant.Textfield,
-                                      fontWeight: FontWeight.w400),
-                                  enabledBorder: InputBorder.none,
-                                  focusedBorder: InputBorder.none,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+                                child: TextFormField(
+                                  controller: Generator_id,
+                                  cursorColor: ColorConstant.black,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.center,
+                                  textCapitalization:
+                                      TextCapitalization.characters,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter Generator ID",
+                                    hintStyle: TextStyle(
+                                        fontSize: FontConstant.Size15,
+                                        color: ColorConstant.Textfield,
+                                        fontWeight: FontWeight.w400),
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
                                 ),
                               ),
-                                ),
                             ),
                             if (_Error.isNotEmpty) ...[
                               Container(

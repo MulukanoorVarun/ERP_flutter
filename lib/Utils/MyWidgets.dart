@@ -114,7 +114,7 @@ AppBar appBar(BuildContext context, String title) {
         child: const Icon(
           CupertinoIcons.back,
           color: Colors.white,
-          size: 24.0,
+          size: 28.0,
         ),
       ),
     ),

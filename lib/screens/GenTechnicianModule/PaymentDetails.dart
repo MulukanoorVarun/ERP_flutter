@@ -495,7 +495,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   child: const Icon(
                     CupertinoIcons.back,
                     color: Colors.white,
-                    size: 24.0,
+                    size: 30.0,
                   ),
                 ),
               ),
@@ -535,24 +535,25 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                               child: Container(
                                 alignment: Alignment.center,
                                 height: 55,
-                                margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                                margin:
+                                    EdgeInsets.only(left: 15.0, right: 15.0),
                                 padding: EdgeInsets.fromLTRB(10, 3, 10, 3),
                                 decoration: BoxDecoration(
                                   color: ColorConstant.edit_bg_color,
                                   borderRadius: BorderRadius.circular(15.0),
                                 ),
-                                child:Center(
-                                child: Text(
-                                  "${widget.name}",
-                                  maxLines:1,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                      color: ColorConstant.erp_appColor,
-                                      overflow:TextOverflow.ellipsis,
-                                      fontSize: FontConstant.Size15,
-                                      fontWeight: FontWeight.w500),
+                                child: Center(
+                                  child: Text(
+                                    "${widget.name}",
+                                    maxLines: 1,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorConstant.erp_appColor,
+                                        overflow: TextOverflow.ellipsis,
+                                        fontSize: FontConstant.Size15,
+                                        fontWeight: FontWeight.w500),
+                                  ),
                                 ),
-                              ),
                               ),
                             )),
                             SizedBox(
@@ -582,63 +583,73 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                         ],
                                       ),
                                       items: contacts_drop_down
-                                          .map((contacts) =>
-                                          DropdownMenuItem<Contacts>(
-                                            value: contacts,
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  contacts.name ?? "",
-                                                  maxLines: 1,
-                                                  style: const TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Color(0xFF011842),
+                                          .map(
+                                            (contacts) =>
+                                                DropdownMenuItem<Contacts>(
+                                              value: contacts,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    contacts.name ?? "",
+                                                    maxLines: 1,
+                                                    style: const TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: Color(0xFF011842),
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                                Text(
-                                                  contacts.mob1 ?? "",
-                                                  style: const TextStyle(
-                                                    fontSize: 13,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Color(0xFF011842),
+                                                  Text(
+                                                    contacts.mob1 ?? "",
+                                                    style: const TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      color: Color(0xFF011842),
+                                                    ),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                   ),
-                                                  overflow: TextOverflow.ellipsis,
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
-
-                                      )
+                                          )
                                           .toList(),
                                       value: selectContact,
                                       onChanged: (Contacts? value) {
                                         if (value != null) {
                                           setState(() {
                                             selectContact = value;
-                                            print("Selected Complaint Type: ${value.name}, ID: ${value.mob1}");
+                                            print(
+                                                "Selected Complaint Type: ${value.name}, ID: ${value.mob1}");
                                             contact = value?.name;
                                             contactID = value?.mob1;
-                                            print("hfjkshfg" + contactID.toString());
+                                            print("hfjkshfg" +
+                                                contactID.toString());
                                           });
                                         }
                                       },
                                       buttonStyleData: ButtonStyleData(
                                         height: 50,
                                         width: 160,
-                                        padding: const EdgeInsets.only(left: 14, right: 14),
+                                        padding: const EdgeInsets.only(
+                                            left: 14, right: 14),
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           color: Color(0xFFE4EFF9),
                                         ),
                                       ),
                                       iconStyleData: const IconStyleData(
-                                          icon: Icon(
-                                            CupertinoIcons.arrowtriangle_down_fill,
-                                          ),
-                                          iconSize: 12,
+                                        icon: Icon(
+                                          CupertinoIcons
+                                              .arrowtriangle_down_fill,
+                                        ),
+                                        iconSize: 12,
                                         iconEnabledColor: Colors.black,
                                         iconDisabledColor: Colors.grey,
                                       ),
@@ -646,23 +657,29 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                         maxHeight: 200,
                                         width: 280,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(14),
+                                          borderRadius:
+                                              BorderRadius.circular(14),
                                           color: Color(0xFFE4EFF9),
                                         ),
                                         scrollbarTheme: ScrollbarThemeData(
                                           radius: const Radius.circular(15),
-                                          thickness: MaterialStateProperty.all<double>(6),
-                                          thumbVisibility: MaterialStateProperty.all<bool>(true),
+                                          thickness:
+                                              MaterialStateProperty.all<double>(
+                                                  6),
+                                          thumbVisibility:
+                                              MaterialStateProperty.all<bool>(
+                                                  true),
                                         ),
                                       ),
-                                      menuItemStyleData: const MenuItemStyleData(
+                                      menuItemStyleData:
+                                          const MenuItemStyleData(
                                         height: 60,
-                                        padding: EdgeInsets.only(left: 14, right: 14),
+                                        padding: EdgeInsets.only(
+                                            left: 14, right: 14),
                                       ),
                                     ),
                                   ),
                                 ),
-
                                 Spacer(),
                                 Container(
                                   height: 45,

@@ -55,7 +55,7 @@ class _WebERPState extends State<WebERP> {
   @override
   void initState() {
     WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized
-     FlutterDownloader.initialize();
+    FlutterDownloader.initialize();
     // loadData();
     pullToRefreshController = kIsWeb
         ? null
@@ -116,8 +116,8 @@ class _WebERPState extends State<WebERP> {
                 },
                 child: SvgPicture.asset(
                   "assets/back_icon.svg",
-                  height: 24,
-                  width: 24,
+                  height: 29,
+                  width: 29,
                 ),
               ),
               SizedBox(width: 10),
@@ -212,7 +212,8 @@ class _WebERPState extends State<WebERP> {
                         isLoading = false;
                       });
                     },
-                    shouldOverrideUrlLoading: (controller, navigationAction) async {
+                    shouldOverrideUrlLoading:
+                        (controller, navigationAction) async {
                       var uri = navigationAction.request.url!;
                       if (uri.scheme == "tel") {
                         // Launch the phone dialer app with the specified phone number
@@ -220,12 +221,12 @@ class _WebERPState extends State<WebERP> {
                           await launch(uri.toString());
                           return NavigationActionPolicy.CANCEL;
                         }
-                      }else if(uri.scheme == "mailto"){
+                      } else if (uri.scheme == "mailto") {
                         if (await canLaunch(uri.toString())) {
                           await launch(uri.toString());
                           return NavigationActionPolicy.CANCEL;
                         }
-                      }else if (uri.scheme == "whatsapp") {
+                      } else if (uri.scheme == "whatsapp") {
                         // Launch WhatsApp with the specified chat or phone number
                         if (await canLaunch(uri.toString())) {
                           await launch(uri.toString());

@@ -28,6 +28,8 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: ColorConstant.erp_appColor,
@@ -58,22 +60,22 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
         ),
         body: (isLoading)
             ? Loaders()
-            : SafeArea(
-                child: Container(
+            : Container(
+                height: screenHeight,
                 color: ColorConstant.erp_appColor,
                 child: Column(
                   children: [
                     Expanded(
                       child: Container(
-                        width:
-                            double.infinity, // Set width to fill parent width
+                        width: double.infinity,
+                        height: screenHeight, // Set width to fill parent width
                         decoration: BoxDecoration(
                           color: ColorConstant.edit_bg_color,
                           borderRadius: BorderRadius.only(
@@ -271,6 +273,6 @@ class _GenTrackerDashboardState extends State<GenTrackerDashboard> {
                     ),
                   ],
                 ),
-              )));
+              ));
   }
 }

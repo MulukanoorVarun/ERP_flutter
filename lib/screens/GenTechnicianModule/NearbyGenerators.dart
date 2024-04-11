@@ -147,27 +147,27 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     print(_selectedItem);
     try {
       await UserApi.loadNearbyGeneratorsAPI(
-          empId, sessionId, latlongs, currentValue,_selectedItem)
+              empId, sessionId, latlongs, currentValue, _selectedItem)
           .then((data) => {
-        if (data != null)
-          {
-            setState(() {
-              if (data.sessionExists == 1) {
-                if (data.error == 0) {
-                  generatorslist = data.list!;
-                  _updateMarkersFromApiResponse(data.list!);
-                  isLoading = false;
-                } else {}
-              } else {
-                PreferenceService().clearPreferences();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Login()));
-              }
-            })
-          }
-        else
-          {toast(context, "Something went wrong, Please try again.")}
-      });
+                if (data != null)
+                  {
+                    setState(() {
+                      if (data.sessionExists == 1) {
+                        if (data.error == 0) {
+                          generatorslist = data.list!;
+                          _updateMarkersFromApiResponse(data.list!);
+                          isLoading = false;
+                        } else {}
+                      } else {
+                        PreferenceService().clearPreferences();
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      }
+                    })
+                  }
+                else
+                  {toast(context, "Something went wrong, Please try again.")}
+              });
     } on Exception catch (e) {
       print("$e");
     }
@@ -200,9 +200,9 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
           targetWidth: 75, targetHeight: 95);
       ui.FrameInfo fi = await codec.getNextFrame();
       Uint8List resizedBytes =
-      (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-          .buffer
-          .asUint8List();
+          (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+              .buffer
+              .asUint8List();
 
       markers.add(Marker(
         markerId: MarkerId(generator.generatorId.toString()),
@@ -214,7 +214,7 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
         ),
         onTap: () {
           int index = generatorslist.indexWhere((techResponse) =>
-          techResponse.generatorId == generator.generatorId);
+              techResponse.generatorId == generator.generatorId);
           print("index:${index}");
           if (index != -1) {
             Navigator.push(
@@ -254,14 +254,14 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
         double lng = double.tryParse(parts[1]) ?? 0.0;
 
         List<geocoding.Placemark> placemarks =
-        await geocoding.placemarkFromCoordinates(lat, lng);
+            await geocoding.placemarkFromCoordinates(lat, lng);
 
         if (placemarks.isNotEmpty) {
           final placemark = placemarks.first;
           String address = '${placemark.street ?? ''}, '
               '${placemark.thoroughfare ?? ''} '
-          // '${placemark.subThoroughfare ?? ''}, '
-          // '${placemark.name ?? ''}, '
+              // '${placemark.subThoroughfare ?? ''}, '
+              // '${placemark.name ?? ''}, '
               '${placemark.subLocality ?? ''}, '
               '${placemark.locality ?? ''}, '
               '${placemark.administrativeArea ?? ''}, '
@@ -277,70 +277,72 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
 
   Future infoDialogue() async {
     return await showDialog(
-        context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context,setState) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-            title:Column(
-              children: [
-                Row(
-                  children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        'Filter',
-                        style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
-                            color: Colors.black,
-                            fontSize: FontConstant.Size25,
-                            fontWeight: FontWeight.w500,
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              title: Column(
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Filter',
+                            style: GoogleFonts.ubuntu(
+                              textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: FontConstant.Size25,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                      InkWell(
+                        child: SvgPicture.asset(
+                          "assets/ic_cancel.svg",
+                          height: 35,
+                          width: 35,
+                        ),
+                        onTap: () {
+                          setState(() {
+                            currentValue = 0.0;
+                            _selectedItem = "Active";
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
                   ),
-                  InkWell(
-                    child: SvgPicture.asset(
-                      "assets/ic_cancel.svg",
-                      height: 35,
-                      width: 35,
-                    ),
-                    onTap: () {
-                      setState(() {
-                        currentValue = 0.0;
-                        _selectedItem = "Active";
-                      });
-                      Navigator.pop(context);
-                    },
+                  Divider(
+                    // Add Divider widget here
+                    color: Colors.grey, // Set the color of the underline
+                    thickness: 1.0, // Set the thickness of the underline
+                    height:
+                        0.0, // Set the height of the divider to 0 to avoid additional space
                   ),
                 ],
               ),
-              Divider( // Add Divider widget here
-                color: Colors.grey, // Set the color of the underline
-                thickness: 1.0, // Set the thickness of the underline
-                height: 0.0, // Set the height of the divider to 0 to avoid additional space
-              ),
-            ],
-          ),
-          content: Container(
-            height: 230,
-            child: Column(
-              children: [
-
+              content: Container(
+                height: 230,
+                child: Column(
+                  children: [
                     Row(
                       children: [
-                        Text("Radius", // Display current value
-                          style: TextStyle(fontSize: 18.0,
-                              fontWeight: FontWeight.w500),
+                        Text(
+                          "Radius", // Display current value
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w500),
                         ),
                         Spacer(),
                         Text(
                           '${currentValue.toStringAsFixed(2)} KM', // Display current value
-                          style: TextStyle(fontSize: 18.0,
-                              fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                              fontSize: 18.0, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -385,56 +387,54 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
                             _selectedItem = newValue!;
                           });
                         },
-                        icon:  Icon(
-                        CupertinoIcons.arrowtriangle_down_fill,
-                      ),
+                        icon: Icon(
+                          CupertinoIcons.arrowtriangle_down_fill,
+                        ),
                         iconSize: 12,
-                        iconEnabledColor: Colors.black, // Remove the default dropdown icon
+                        iconEnabledColor:
+                            Colors.black, // Remove the default dropdown icon
                       ),
                     ),
                     SizedBox(height: 30.0),
                     Container(
                         child: InkWell(
-                          onTap: () {
-                            markers = [];
-                            LoadNearbyGeneratorsAPI();
-                            Navigator.pop(context);
-                            setState(() {
-                              currentValue = 0.0;
-                              _selectedItem = "Active";
-                            });
-                          },
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 45,
-                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            decoration: BoxDecoration(
-                              color: ColorConstant.erp_appColor,
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Text(
-                              "Search",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontFamily: 'Nexa',
-                                  color: ColorConstant.white,
-                                  fontSize: FontConstant.Size15,
-                                  fontWeight: FontWeight.w700
-                              ),
-                            ),
-                          ),
-                        )),
-
-              ],
+                      onTap: () {
+                        markers = [];
+                        LoadNearbyGeneratorsAPI();
+                        Navigator.pop(context);
+                        setState(() {
+                          currentValue = 0.0;
+                          _selectedItem = "Active";
+                        });
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 45,
+                        margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                        decoration: BoxDecoration(
+                          color: ColorConstant.erp_appColor,
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Text(
+                          "Search",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontFamily: 'Nexa',
+                              color: ColorConstant.white,
+                              fontSize: FontConstant.Size15,
+                              fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                    )),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-        ),
-      barrierDismissible: true,
-    ) ?? false;
+          barrierDismissible: true,
+        ) ??
+        false;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -443,90 +443,87 @@ class _NearbyGeneratorsState extends State<NearbyGenerators> {
     return Scaffold(
       body: (isLoading)
           ? Loaders()
-          : SafeArea(
-        child: Container(
-          color: ColorConstant.erp_appColor,
-          child: Column(
-            children: [
-              Container(
-                alignment: Alignment.topCenter,
-                color: ColorConstant.erp_appColor,
-                height: 50,
-                child: Row(
+          : Container(
+              color: ColorConstant.erp_appColor,
+              child: SafeArea(
+                child: Column(
                   children: [
-                    Padding(padding: EdgeInsets.only(left: 20)),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context, true);
-                      },
-                      child: SvgPicture.asset(
-                        "assets/back_icon.svg",
-                        height: 24,
-                        width: 24,
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                    Center(
-                      child: Text(
-                        "Nearby Generators",
-                        style: TextStyle(
-                          fontSize: FontConstant.Size18,
-                          fontWeight: FontWeight.w500,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                        onTap: ()  {
-                          infoDialogue();
-                          },
-                        child: InkWell(
-
-                          child: SvgPicture.asset(
-
-                            "assets/filter.svg",
-                            height: 30,
-                            width: 30,
+                    Container(
+                      alignment: Alignment.topCenter,
+                      color: ColorConstant.erp_appColor,
+                      height: 50,
+                      child: Row(
+                        children: [
+                          Padding(padding: EdgeInsets.only(left: 20)),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context, true);
+                            },
+                            child: SvgPicture.asset(
+                              "assets/back_icon.svg",
+                              height: 29,
+                              width: 29,
+                            ),
                           ),
-                        )),
-
-                    SizedBox(width: 20),
+                          SizedBox(width: 20),
+                          Center(
+                            child: Text(
+                              "Nearby Generators",
+                              style: TextStyle(
+                                fontSize: FontConstant.Size18,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                              onTap: () {
+                                infoDialogue();
+                              },
+                              child: InkWell(
+                                child: SvgPicture.asset(
+                                  "assets/filter.svg",
+                                  height: 30,
+                                  width: 30,
+                                ),
+                              )),
+                          SizedBox(width: 20),
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: ClipRRect(
+                        // Apply border radius using ClipRRect
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30.0),
+                          topRight: Radius.circular(30.0),
+                        ),
+                        // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+                        child: Stack(children: [
+                          GoogleMap(
+                            myLocationEnabled: true,
+                            zoomGesturesEnabled: true,
+                            initialCameraPosition: CameraPosition(
+                              target: startLocation,
+                              zoom: 14.0,
+                            ),
+                            markers: markers.toSet(),
+                            mapType: MapType.normal,
+                            onMapCreated: (controller) {
+                              setState(() {
+                                mapController = controller;
+                              });
+                            },
+                            onCameraMove: _onCameraMove,
+                          ),
+                        ]),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              Expanded(
-                child: ClipRRect(
-                  // Apply border radius using ClipRRect
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
-                  ),
-                  // padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
-                  child: Stack(children: [
-                    GoogleMap(
-                      myLocationEnabled: true,
-                      zoomGesturesEnabled: true,
-                      initialCameraPosition: CameraPosition(
-                        target: startLocation,
-                        zoom: 14.0,
-                      ),
-                      markers: markers.toSet(),
-                      mapType: MapType.normal,
-                      onMapCreated: (controller) {
-                        setState(() {
-                          mapController = controller;
-                        });
-                      },
-                      onCameraMove: _onCameraMove,
-                    ),
-                  ]),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

@@ -106,18 +106,18 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                   Container(
                     child: InkWell(
                       onTap: () async {
-                       var res =  await Navigator.push(
+                        var res = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => QRScanner(
                                       title: "pendingComplaints",
                                     )));
-                       if(res==true){
-                         setState(() {
-                           isLoading = true;
-                           TechnicianPendingComplaints();
-                         });
-                       }
+                        if (res == true) {
+                          setState(() {
+                            isLoading = true;
+                            TechnicianPendingComplaints();
+                          });
+                        }
                       },
                       child: SvgPicture.asset(
                         "assets/images/qr_scanner.svg",
@@ -139,7 +139,7 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                   child: const Icon(
                     CupertinoIcons.back,
                     color: Colors.white,
-                    size: 24.0,
+                    size: 30.0,
                   ),
                 ),
               ),
@@ -550,10 +550,11 @@ class _PendingComplaintsState extends State<PendingComplaints> {
                                                                             account_name:
                                                                                 "Generator",
                                                                             name:
-                                                                            tpech_comp_list![index].companyName!,
+                                                                                tpech_comp_list![index].companyName!,
                                                                             genId:
-                                                                            tpech_comp_list![index].genId!,
-                                                                            refId: tpech_comp_list![index].complaintId!,
+                                                                                tpech_comp_list![index].genId!,
+                                                                            refId:
+                                                                                tpech_comp_list![index].complaintId!,
                                                                           ),
                                                                         ));
                                                             PreferenceService()

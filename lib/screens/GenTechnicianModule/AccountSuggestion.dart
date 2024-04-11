@@ -113,7 +113,7 @@ class _AccountSuggestionState extends State<AccountSuggestion> {
             child: const Icon(
               CupertinoIcons.back,
               color: Colors.white,
-              size: 24.0,
+              size: 30.0,
             ),
           ),
         ),
@@ -210,9 +210,11 @@ class _AccountSuggestionState extends State<AccountSuggestion> {
                                         MaterialPageRoute(
                                           builder: (context) => PaymentDetails(
                                             account_name: "Account",
-                                            name: accountList![index].accountName,
+                                            name:
+                                                accountList![index].accountName,
                                             genId: "",
-                                            refId: accountList![index].accountId,
+                                            refId:
+                                                accountList![index].accountId,
                                           ),
                                         ));
                                     // }

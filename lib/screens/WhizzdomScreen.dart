@@ -98,8 +98,8 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
                 },
                 child: SvgPicture.asset(
                   "assets/back_icon.svg",
-                  height: 24,
-                  width: 24,
+                  height: 29,
+                  width: 29,
                 ),
               ),
               SizedBox(width: 10),
@@ -146,8 +146,10 @@ class _WhizzdomScreenState extends State<WhizzdomScreen> {
                     allowFileAccess: true,
                     databaseEnabled: true, // Enables the WebView database
                     domStorageEnabled: true, // Enables DOM storage
-                    builtInZoomControls: true, // Enables the built-in zoom controls
-                    displayZoomControls: false, // Disables displaying zoom controls
+                    builtInZoomControls:
+                        true, // Enables the built-in zoom controls
+                    displayZoomControls:
+                        false, // Disables displaying zoom controls
                     safeBrowsingEnabled: true, // Enables Safe Browsing
                     clearSessionCache: true,
                   ),

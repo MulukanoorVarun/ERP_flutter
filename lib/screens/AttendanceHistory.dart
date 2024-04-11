@@ -93,8 +93,10 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       inlocation = "";
       outlocation = "";
       penalties = "";
-      if (DateFormat('MMMM').format(present_month) == DateFormat('MMMM').format(month) &&
-          DateFormat('yyyy').format(present_month) == DateFormat('yyyy').format(month)) {
+      if (DateFormat('MMMM').format(present_month) ==
+              DateFormat('MMMM').format(month) &&
+          DateFormat('yyyy').format(present_month) ==
+              DateFormat('yyyy').format(month)) {
         initialRenderDone = true;
         month = present_month;
       }
@@ -112,14 +114,16 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
       initialRenderDone = false;
       currentDayIndex = 0;
       isLoading = true;
-       date = "";
-       intime = "";
-       outtime = "";
-       inlocation = "";
-       outlocation = "";
-       penalties = "";
-      if (DateFormat('MMMM').format(present_month) == DateFormat('MMMM').format(month) &&
-          DateFormat('yyyy').format(present_month) == DateFormat('yyyy').format(month)) {
+      date = "";
+      intime = "";
+      outtime = "";
+      inlocation = "";
+      outlocation = "";
+      penalties = "";
+      if (DateFormat('MMMM').format(present_month) ==
+              DateFormat('MMMM').format(month) &&
+          DateFormat('yyyy').format(present_month) ==
+              DateFormat('yyyy').format(month)) {
         initialRenderDone = true;
         month = present_month;
       }
@@ -242,9 +246,9 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
               String date = parts[2];
               print("date:${date}");
               // Remove leading zeros
-           //   date = int.parse(date).toString();
+              //   date = int.parse(date).toString();
               dateArrayList.add({date: value});
-                print('Date: $date, Value: $value');
+              print('Date: $date, Value: $value');
             });
           }
 
@@ -255,7 +259,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
             });
           }
         });
-        isLoading =false;
+        isLoading = false;
       } else {
         print("Null Response");
       }
@@ -288,10 +292,11 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                   ),
                 ),
                 InkWell(
-                  child:SvgPicture.asset(
+                  child: SvgPicture.asset(
                     "assets/ic_cancel.svg",
                     height: 35,
-                    width: 35,),
+                    width: 35,
+                  ),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -311,7 +316,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                         height: 20,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color:ColorConstant.erp_appColor,
+                          color: ColorConstant.erp_appColor,
                         ),
                       ),
                       SizedBox(
@@ -442,8 +447,6 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
         false;
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     DateTime? parsedDate;
@@ -455,7 +458,8 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
 
     if (parsedDate != null) {
       formattedDayOfWeek = DateFormat('EEEE').format(parsedDate);
-      print("formattedDayOfWeek:${formattedDayOfWeek}"); // prints the day of the week (e.g., Tuesday)
+      print(
+          "formattedDayOfWeek:${formattedDayOfWeek}"); // prints the day of the week (e.g., Tuesday)
     } else {
       print('Error: Unable to parse the date');
     }
@@ -480,690 +484,836 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
     }
 
     return RefreshIndicator(
-        onRefresh:_refresh,
-
-        color: ColorConstant.erp_appColor,
-        child: Scaffold(
-        backgroundColor: ColorConstant.edit_bg_color,
-        appBar: AppBar(
-          backgroundColor: ColorConstant.erp_appColor,
-          elevation: 0,
-          title: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  // Spacer(),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context, true);
-                    },
-                    child: SvgPicture.asset(
-                      "assets/back_icon.svg",
-                      height: 24,
-                      width: 24,
-                    ),
-                  ),
-                  Container(
-                    child: InkWell(
-                      onTap: () => Navigator.pop(context, true),
-                      child: Text("Attendance History",
-                          textAlign: TextAlign.left,
-                          style: GoogleFonts.ubuntu(
-                            color: ColorConstant.white,
-                            fontSize: FontConstant.Size18,
-                            fontWeight: FontWeight.w500,
-                          )),
-                    ),
-                  ),
-                  const Spacer(),
-                  Container(
-                    child: const SizedBox(
-                      width: 40,
-                      height: 40,
-                    ),
-                  ),
-                  Container(
-                    child: InkWell(
-                      onTap: () {
-                        InfoDialogue();
-                      },
-                      child:SvgPicture.asset(
-                        "assets/ic_info.svg",
-                        height: 30,
-                        width: 30,),
-                    ),
-                  ),
-                  SizedBox(width: 10,)
-                ],
-              )),
-          titleSpacing: 0,
-          leading: Container(
-            width: 10,
-          ),
-          leadingWidth: 10,
-        ),
-          body:(isLoading)?Loaders():Container(
-          color: ColorConstant.erp_appColor,
-            child: SingleChildScrollView(
-              physics: AlwaysScrollableScrollPhysics(),
-              child: Container(
-                width: double.infinity, // Set width to fill parent width
-                decoration: BoxDecoration(
-                  color: ColorConstant.edit_bg_color,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30.0),
-                    topRight: Radius.circular(30.0),
+      onRefresh: _refresh,
+      color: ColorConstant.erp_appColor,
+      child: Scaffold(
+          backgroundColor: ColorConstant.edit_bg_color,
+          appBar: AppBar(
+            backgroundColor: ColorConstant.erp_appColor,
+            elevation: 0,
+            title: Container(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                // Spacer(),
+                InkWell(
+                  onTap: () {
+                    Navigator.pop(context, true);
+                  },
+                  child: SvgPicture.asset(
+                    "assets/back_icon.svg",
+                    height: 29,
+                    width: 29,
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0),
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 5,
-                              width: 5,
-                            ),
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: ColorConstant.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                children: [
-                                  Padding(padding: EdgeInsets.only(top: 5)),
-                                  Center(
-                                    child: Text(
-                                      "${presentDays}",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Present",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Days",
-                                      maxLines: 2,
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: ColorConstant.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                children: [
-                                  Padding(padding: EdgeInsets.only(top: 5)),
-                                  Center(
-                                    child: Text(
-                                      "${absentDays}",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Absent",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Days",
-                                      maxLines: 2,
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: ColorConstant.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                children: [
-                                  Padding(padding: EdgeInsets.only(top: 12)),
-                                  Center(
-                                    child: Text(
-                                      "${holidays}",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Holidays",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                              width: 90,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                color: ColorConstant.white,
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                              child: Column(
-                                children: [
-                                  Padding(padding: EdgeInsets.only(top: 12)),
-                                  Center(
-                                    child: Text(
-                                      "${latePenalties}",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Penalities",
-                                      style: GoogleFonts.ubuntu(
-                                          textStyle: TextStyle(
-                                            fontSize: FontConstant.Size15,
-                                            fontWeight: FontWeight.w400,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5,
-                              width: 5,
-                            ),
-                          ],
-                        ),
-                      ),
+                Container(
+                  child: InkWell(
+                    onTap: () => Navigator.pop(context, true),
+                    child: Text("Attendance History",
+                        textAlign: TextAlign.left,
+                        style: GoogleFonts.ubuntu(
+                          color: ColorConstant.white,
+                          fontSize: FontConstant.Size18,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ),
+                ),
+                const Spacer(),
+                Container(
+                  child: const SizedBox(
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+                Container(
+                  child: InkWell(
+                    onTap: () {
+                      InfoDialogue();
+                    },
+                    child: SvgPicture.asset(
+                      "assets/ic_info.svg",
+                      height: 30,
+                      width: 30,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                      child: Container(
-                        child: Row(
+                  ),
+                ),
+                SizedBox(
+                  width: 10,
+                )
+              ],
+            )),
+            titleSpacing: 0,
+            leading: Container(
+              width: 10,
+            ),
+            leadingWidth: 10,
+          ),
+          body: (isLoading)
+              ? Loaders()
+              : Container(
+                  color: ColorConstant.erp_appColor,
+                  child: SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Container(
+                        width:
+                            double.infinity, // Set width to fill parent width
+                        decoration: BoxDecoration(
+                          color: ColorConstant.edit_bg_color,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            topRight: Radius.circular(30.0),
+                          ),
+                        ),
+                        child: Column(
                           children: [
-                            GestureDetector(
-                              onTap: setPreviousMonth,
-                              child: const Icon(
-                                CupertinoIcons.back,
-                                color: Colors.black,
-                                size: 30.0,
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10.0),
+                              child: Container(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 5,
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 5)),
+                                          Center(
+                                            child: Text(
+                                              "${presentDays}",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Present",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Days",
+                                              maxLines: 2,
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(top: 5)),
+                                          Center(
+                                            child: Text(
+                                              "${absentDays}",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Absent",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Days",
+                                              maxLines: 2,
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 12)),
+                                          Center(
+                                            child: Text(
+                                              "${holidays}",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Holidays",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 90,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color: ColorConstant.white,
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      padding:
+                                          EdgeInsets.fromLTRB(10, 0, 10, 0),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                              padding:
+                                                  EdgeInsets.only(top: 12)),
+                                          Center(
+                                            child: Text(
+                                              "${latePenalties}",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Penalities",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                      width: 5,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: setPreviousMonth,
+                                      child: const Icon(
+                                        CupertinoIcons.back,
+                                        color: Colors.black,
+                                        size: 30.0,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Text(
+                                      DateFormat('MMMM yyyy').format(month),
+                                      style: GoogleFonts.ubuntu(
+                                          textStyle: TextStyle(
+                                            fontSize: FontConstant.Size18,
+                                            fontWeight: FontWeight.w500,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          color: Colors.black),
+                                    ),
+                                    Spacer(),
+                                    GestureDetector(
+                                      onTap: setNextMonth,
+                                      child: const Icon(
+                                        CupertinoIcons.forward,
+                                        color: Colors.black,
+                                        size: 30.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
+                              child: Container(
+                                child: Row(
+                                  children: [
+                                    // Add the day labels
+                                    for (var day in [
+                                      'S',
+                                      'M',
+                                      'T',
+                                      'W',
+                                      'T',
+                                      'F',
+                                      'S'
+                                    ])
+                                      Expanded(
+                                        child: Text(
+                                          day,
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.ubuntu(
+                                            textStyle: TextStyle(
+                                              fontSize: FontConstant.Size18,
+                                              fontWeight: FontWeight.w500,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Divider(
+                              thickness: 0.8,
+                              color: Colors.white,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Container(
+                                height: 280,
+                                color: Colors.white,
+                                child: GridView.builder(
+                                  itemCount:
+                                      dateArrayList.length + startingIndex,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 7,
+                                    crossAxisSpacing: 2,
+                                    mainAxisSpacing: 1,
+                                    childAspectRatio: (255 / 245),
+                                  ),
+                                  padding:
+                                      const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    if (index < startingIndex) {
+                                      // Add empty spaces before the start of the month
+                                      return SizedBox.shrink();
+                                    } else {
+                                      final adjustedIndex =
+                                          index - startingIndex;
+                                      final dateKeys =
+                                          dateArrayList[adjustedIndex]
+                                              .keys
+                                              .toList();
+                                      final dateColors =
+                                          dateArrayList[adjustedIndex]
+                                              .values
+                                              .toList();
+                                      final datePenalities =
+                                          penalityArrayList[adjustedIndex]
+                                              .values
+                                              .toList();
+                                      final Penalitykeys =
+                                          penalityArrayList[adjustedIndex]
+                                              .keys
+                                              .toList();
+
+                                      String? date;
+                                      String? dateColor;
+                                      String? penalitykeys;
+                                      int? datePenality;
+
+                                      if (dateKeys.isNotEmpty) {
+                                        date = dateKeys[0];
+                                      }
+                                      if (dateColors.isNotEmpty) {
+                                        dateColor = dateColors[0];
+                                      }
+                                      if (Penalitykeys.isNotEmpty) {
+                                        penalitykeys = Penalitykeys[0];
+                                      }
+                                      if (datePenalities.isNotEmpty) {
+                                        datePenality = datePenalities[0];
+                                      }
+                                      // Get the current date
+                                      DateTime currentDate = DateTime.now();
+
+                                      currentDayIndex =
+                                          dateArrayList.indexWhere((dateMap) {
+                                        String? date = dateMap.keys.first;
+                                        return date != null &&
+                                            int.parse(date) ==
+                                                currentDate.day +
+                                                    1; // Subtract 1 from the current day
+                                      });
+
+                                      return InkWell(
+                                        onTap: () {
+                                          selectedIndex = index;
+                                          initialRenderDone = false;
+                                          if (penalitykeys != null) {
+                                            dateWiseAttendance(penalitykeys);
+                                            print(
+                                                "Selected date: $penalitykeys");
+                                          }
+                                          setState(() {
+                                            SelectedDate = dateKeys[0]!;
+                                            print(
+                                                "SelectedDate: $SelectedDate");
+                                            print(
+                                                "ParsedDate: ${int.parse(date!)}");
+                                          });
+                                        },
+                                        child: Card(
+                                          elevation: 0,
+                                          shadowColor: Colors.black,
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    (datePenality != 0)
+                                                        ? "(${datePenality.toString()})"
+                                                        : "",
+                                                    style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                          fontSize: FontConstant
+                                                              .Size10,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          color: Colors.black),
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 3),
+                                                  Container(
+                                                    width: 8,
+                                                    height: 8,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: dateColor == 'g'
+                                                          ? Colors.green
+                                                          : dateColor == 'r'
+                                                              ? ColorConstant
+                                                                  .absent_color
+                                                              : dateColor == 'b'
+                                                                  ? ColorConstant
+                                                                      .erp_appColor
+                                                                  : dateColor ==
+                                                                          'br'
+                                                                      ? Colors
+                                                                          .brown
+                                                                      : dateColor ==
+                                                                              'y'
+                                                                          ? Colors
+                                                                              .yellow
+                                                                          : Colors
+                                                                              .transparent,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              // Conditional rendering to highlight selected and current dates
+                                              Center(
+                                                child: SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: (currentDayIndex !=
+                                                                      -1 &&
+                                                                  index ==
+                                                                      currentDayIndex &&
+                                                                  initialRenderDone) ||
+                                                              (selectedIndex !=
+                                                                      null &&
+                                                                  selectedIndex ==
+                                                                      index)
+                                                          ? ColorConstant
+                                                              .erp_appColor
+                                                          : null,
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        date ?? "",
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: (currentDayIndex !=
+                                                                            -1 &&
+                                                                        index ==
+                                                                            currentDayIndex &&
+                                                                        initialRenderDone) ||
+                                                                    (selectedIndex !=
+                                                                            null &&
+                                                                        selectedIndex ==
+                                                                            index)
+                                                                ? Colors.white
+                                                                : Colors.black),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
                             Text(
-                              DateFormat('MMMM yyyy').format(month),
+                              "Attendance Details",
                               style: GoogleFonts.ubuntu(
                                   textStyle: TextStyle(
                                     fontSize: FontConstant.Size18,
                                     fontWeight: FontWeight.w500,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  color: Colors.black),
+                                  color: ColorConstant.erp_appColor),
                             ),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: setNextMonth,
-                              child: const Icon(
-                                CupertinoIcons.forward,
-                                color: Colors.black,
-                                size: 30.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 10, 8, 0),
-                      child: Container(
-                        child: Row(
-                          children: [
-                            // Add the day labels
-                            for (var day in ['S', 'M', 'T', 'W', 'T', 'F', 'S'])
-                              Expanded(
-                                child: Text(
-                                  day,
-                                  textAlign: TextAlign.center,
-                                  style: GoogleFonts.ubuntu(
-                                    textStyle: TextStyle(
-                                      fontSize: FontConstant.Size18,
-                                      fontWeight: FontWeight.w500,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    color: Colors.black,
-                                  ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                              child: Container(
+                                height: 180,
+                                decoration: BoxDecoration(
+                                  color: ColorConstant.white,
+                                  borderRadius: BorderRadius.circular(10.0),
                                 ),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      thickness: 0.8,
-                      color: Colors.white,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: Container(
-                        height: 280,
-                        color: Colors.white,
-                        child: GridView.builder(
-                          itemCount: dateArrayList.length + startingIndex,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 7,
-                            crossAxisSpacing: 2,
-                            mainAxisSpacing: 1,
-                            childAspectRatio: (255 / 245),
-                          ),
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            if (index < startingIndex) {
-                              // Add empty spaces before the start of the month
-                              return SizedBox.shrink();
-                            } else {
-                              final adjustedIndex = index - startingIndex;
-                              final dateKeys = dateArrayList[adjustedIndex].keys.toList();
-                              final dateColors =
-                              dateArrayList[adjustedIndex].values.toList();
-                              final datePenalities =
-                              penalityArrayList[adjustedIndex].values.toList();
-                              final Penalitykeys =
-                              penalityArrayList[adjustedIndex].keys.toList();
-
-                              String? date;
-                              String? dateColor;
-                              String? penalitykeys;
-                              int? datePenality;
-
-                              if (dateKeys.isNotEmpty) {
-                                date = dateKeys[0];
-                              }
-                              if (dateColors.isNotEmpty) {
-                                dateColor = dateColors[0];
-                              }
-                              if (Penalitykeys.isNotEmpty) {
-                                penalitykeys = Penalitykeys[0];
-                              }
-                              if (datePenalities.isNotEmpty) {
-                                datePenality = datePenalities[0];
-                              }
-                              // Get the current date
-                              DateTime currentDate = DateTime.now();
-
-                              currentDayIndex = dateArrayList.indexWhere((dateMap) {
-                                String? date = dateMap.keys.first;
-                                return date != null && int.parse(date) == currentDate.day + 1; // Subtract 1 from the current day
-                              });
-
-                              return InkWell(
-                                onTap: () {
-                                  selectedIndex=index;
-                                  initialRenderDone=false;
-                                  if (penalitykeys != null) {
-                                    dateWiseAttendance(penalitykeys);
-                                    print("Selected date: $penalitykeys");
-                                  }
-                                  setState(() {
-                                    SelectedDate = dateKeys[0]!;
-                                    print("SelectedDate: $SelectedDate");
-                                    print("ParsedDate: ${int.parse(date!)}");
-                                  });
-                                },
-                                child: Card(
-                                  elevation: 0,
-                                  shadowColor: Colors.black,
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            (datePenality != 0)
-                                                ? "(${datePenality.toString()})"
-                                                : "",
-                                            style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                  fontSize: FontConstant.Size10,
-                                                  fontWeight: FontWeight.w400,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  color: Colors.black
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(width: 3),
-                                          Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: dateColor == 'g'
-                                                  ? Colors.green
-                                                  : dateColor == 'r'
-                                                  ? ColorConstant.absent_color
-                                                  : dateColor == 'b'
-                                                  ? ColorConstant.erp_appColor
-                                                  : dateColor == 'br'
-                                                  ? Colors.brown
-                                                  : dateColor == 'y'
-                                                  ? Colors.yellow
-                                                  : Colors
-                                                  .transparent,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      // Conditional rendering to highlight selected and current dates
-                                      Center(
-                                        child: SizedBox(
-                                          width: 20,
-                                          height: 20,
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? ColorConstant.erp_appColor: null,
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                date ?? "",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: (currentDayIndex != -1 && index == currentDayIndex && initialRenderDone) || (selectedIndex != null && selectedIndex == index) ? Colors.white : Colors.black
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(
+                                            8.0), // Adjust padding as needed
+                                        child: Container(
+                                            // Content for the first area
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  "Check In Time",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-
-                                    ],
-                                  ),
+                                                Text(
+                                                  "${intime}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "Check In Location",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
+                                                ),
+                                                Text(
+                                                  "${inlocation}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "Late Penalities",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
+                                                ),
+                                                Text(
+                                                  "${penalties}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width:
+                                            5), // Add some space between the two areas
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(
+                                            8.0), // Adjust padding as needed
+                                        child: Container(
+                                            // Content for the second area
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  "Check Out Time",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
+                                                ),
+                                                Text(
+                                                  "${outtime}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "Check Out Location",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
+                                                ),
+                                                Text(
+                                                  "${outlocation}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  "Date",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w300,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .grey_153),
+                                                ),
+                                                Text(
+                                                  "${date}",
+                                                  style: GoogleFonts.ubuntu(
+                                                      textStyle: TextStyle(
+                                                        fontSize:
+                                                            FontConstant.Size15,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      color: ColorConstant
+                                                          .erp_appColor),
+                                                ),
+                                              ],
+                                            )),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            }
-                          },
-                        ),
-
-                      ),
-                    ),
-                    Text(
-                      "Attendance Details",
-                      style: GoogleFonts.ubuntu(
-                          textStyle: TextStyle(
-                            fontSize: FontConstant.Size18,
-                            fontWeight: FontWeight.w500,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          color: ColorConstant.erp_appColor),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: Container(
-                        height: 180,
-                        decoration: BoxDecoration(
-                          color: ColorConstant.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(
-                                    8.0), // Adjust padding as needed
-                                child: Container(
-                                  // Content for the first area
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Check In Time",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${intime}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Check In Location",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${inlocation}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Late Penalities",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${penalties}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                      ],
-                                    )),
-                              ),
-                            ),
-                            SizedBox(
-                                width: 5), // Add some space between the two areas
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.all(
-                                    8.0), // Adjust padding as needed
-                                child: Container(
-                                  // Content for the second area
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          "Check Out Time",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${outtime}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Check Out Location",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${outlocation}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Date",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w300,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.grey_153),
-                                        ),
-                                        Text(
-                                          "${date}",
-                                          style: GoogleFonts.ubuntu(
-                                              textStyle: TextStyle(
-                                                fontSize: FontConstant.Size15,
-                                                fontWeight: FontWeight.w500,
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              color: ColorConstant.erp_appColor),
-                                        ),
-                                      ],
-                                    )),
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-            ),
-          ),
-        )), );
+                        )),
+                  ),
+                )),
+    );
   }
 }
 

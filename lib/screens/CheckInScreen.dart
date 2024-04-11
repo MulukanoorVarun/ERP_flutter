@@ -361,9 +361,9 @@ class _CheckInScreenState extends State<CheckInScreen> {
     return Scaffold(
       body: (isLoading)
           ? Loaders()
-          : SafeArea(
-              child: Container(
-                color: ColorConstant.erp_appColor,
+          : Container(
+              color: ColorConstant.erp_appColor,
+              child: SafeArea(
                 child: Column(
                   children: [
                     Container(
@@ -379,8 +379,8 @@ class _CheckInScreenState extends State<CheckInScreen> {
                             },
                             child: SvgPicture.asset(
                               "assets/back_icon.svg",
-                              height: 24,
-                              width: 24,
+                              height: 29,
+                              width: 29,
                             ),
                           ),
                           SizedBox(width: 20),

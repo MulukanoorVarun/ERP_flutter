@@ -300,7 +300,7 @@ class _GeneratorDetailsState extends State<GeneratorDetails> {
               child: const Icon(
                 CupertinoIcons.back,
                 color: Colors.white,
-                size: 24.0,
+                size: 30.0,
               ),
             ),
           ),
