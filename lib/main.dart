@@ -1,14 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:GenERP/screens/Dashboard.dart';
+import 'package:GenERP/screens/WhizzdomScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'Services/other_services.dart';
 import 'Utils/storage.dart';
 import 'screens/splash.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'generp_channel', // id
@@ -50,7 +53,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
 
   if (Firebase.apps.isNotEmpty) {
     print("Firebase is initialized");
@@ -58,23 +61,18 @@ void main() async {
     print("Firebase is not initialized");
   }
 
-  // Platform.isAndroid
-  //     ? await Firebase.initializeApp(
-  //         options: FirebaseOptions(
-  //           apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
-  //           appId: "1:329382566569:android:26dc8519537b04deff67b8",
-  //           messagingSenderId: "329382566569",
-  //           projectId: "generp-fe09d",
-  //         ),
-  //       )
-  //     : await Firebase.initializeApp(
-  //         options: FirebaseOptions(
-  //           apiKey: "AIzaSyAgGGcR_FSBMCQhBd_FBv3DNYKzIlI877A",
-  //           appId: "1:329382566569:ios:21fb5dcd0be4ac6bff67b8",
-  //           messagingSenderId: "329382566569",
-  //           projectId: "generp-fe09d",
-  //         ),
-  //       );
+  if(Platform.isAndroid){
+    await Firebase.initializeApp(
+      options: FirebaseOptions(
+        apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
+        appId: "1:329382566569:android:26dc8519537b04deff67b8",
+        messagingSenderId: "329382566569",
+        projectId: "generp-fe09d",
+      ),
+    );
+  } else if(Platform.isIOS){
+    await Firebase.initializeApp();
+  }
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 

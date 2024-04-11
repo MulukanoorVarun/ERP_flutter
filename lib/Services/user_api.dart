@@ -95,15 +95,17 @@ class UserApi {
         var directory = "";
         if (Platform.isAndroid) {
           directory = "/storage/emulated/0/Download";
+          var _directory = Directory(directory);
+          if (!_directory.existsSync()) {
+            // If the directory does not exist, create it
+            _directory.createSync(recursive: true);
+            print('Directory created: $_directory');
+          } else {
+            print('Directory already exists: $_directory');
+          }
           // final androiddirectory = await getDownloadsDirectory();
           // directory = androiddirectory!.path;
-          if (directory == null) {
-            // Create downloads directory if it doesn't exist
-            final Directory newDirectory = await Directory('/storage/emulated/0/Download').create(recursive: true);
-            directory = newDirectory.path;
-          } else {
-            directory = directory;
-          }
+
         } else if (Platform.isIOS) {
           final iosDirectory = await getApplicationSupportDirectory();
           directory = iosDirectory!.path;
