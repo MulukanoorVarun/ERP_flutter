@@ -327,6 +327,7 @@ class _ScannerState extends State<Scanner> {
                               ColorConstant.erp_appColor),
                         ),
                         onPressed: () => {
+                          Navigator.pop(context, true),
                           setState(() {
                             TagGeneratorAPIFunction(id, Engine_no.text);
                           }),
@@ -360,16 +361,18 @@ class _ScannerState extends State<Scanner> {
           .then((data) => {
                 if (data != null)
                   {
+                    print("tagg"),
+                    // Navigator.pop(context, true),
                     setState(() {
                       if (data.sessionExists == 1) {
                         if (data.error == 0) {
-                          print("tagg");
-                          Navigator.pop(context, true);
-                          toast(context, data.message);
+                          toast(context, "Generator Tagged Successfully!");
                         } else if (data.error == 1) {
-                          toast(context, data.message);
+                          toast(context,
+                              "The Generator may already have been Linked or The Engine Number is Incorrect!");
                         } else if (data.error == 2) {
-                          toast(context, data.message);
+                          toast(context,
+                              "This QR Code is already registered with another generator");
                         } else {
                           toast(context,
                               "Something Went wrong, Please Try Again!");

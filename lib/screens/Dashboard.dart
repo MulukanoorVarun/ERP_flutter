@@ -986,7 +986,7 @@ class _DashboardState extends State<Dashboard> {
                                                         width: 15,
                                                       ),
                                                       Text(
-                                                        "Service Engineers",
+                                                        "Service Engineer",
                                                         style: TextStyle(
                                                           fontSize: FontConstant
                                                               .Size20,

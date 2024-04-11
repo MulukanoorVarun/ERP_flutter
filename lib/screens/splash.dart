@@ -35,7 +35,7 @@ class _SplashState extends State<Splash> {
   String appName = "";
   String packageName = "";
   String version = "";
-  String buildNumber ="";
+  String buildNumber = "";
   void initState() {
     super.initState();
     VersionApiFunction();
@@ -44,13 +44,14 @@ class _SplashState extends State<Splash> {
     requestPermissions();
     _initPackageInfo();
   }
+
   Future<void> _initPackageInfo() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
     setState(() {
       version = packageInfo.version;
-      appName=  packageInfo.appName;
-      packageName=  packageInfo.packageName;
-      buildNumber=  packageInfo.buildNumber;
+      appName = packageInfo.appName;
+      packageName = packageInfo.packageName;
+      buildNumber = packageInfo.buildNumber;
 
       print("version:${version}");
       print("appName:${appName}");
@@ -273,8 +274,8 @@ class _SplashState extends State<Splash> {
                   } else {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Login()));
-                    toast(context,
-                        "Your Session has been expired, Please Login Again");
+                    // toast(context,
+                    //     "Your Session has been expired, Please Login Again");
                   }
                 })
               }
