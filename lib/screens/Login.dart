@@ -39,6 +39,7 @@ class _LoginState extends State<Login> {
   String platformname = "";
   var _androidId = 'Unknown';
   static const _androidIdPlugin = AndroidId();
+  String? fcmToken = " ";
 
   final RegExp _emailPattern =
       RegExp(r'^([\w.\-]+)@([\w\-]+)((\.(\w){2,63}){1,3})$');
@@ -173,19 +174,20 @@ class _LoginState extends State<Login> {
       } else {
         _validatepassword = "";
         _validateEmail = " ";
-
-        String? fcmToken = " ";
         if (Platform.isAndroid) {
           // toast(context,"Android");
           platformname = "Android";
           fcmToken = await FirebaseMessaging.instance.getToken();
         } else if (Platform.isIOS) {
           // toast(context,"ios");
+          print("IOS");
           platformname = "iOS";
-          // fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+          fcmToken = await FirebaseMessaging.instance.getAPNSToken();
+          print("iosFCMToken:${fcmToken}");
         }
+        // S
         // String? fcm_token = await FirebaseMessaging.instance.getToken();
-        print("fcmToken:${fcmToken}");
+        print("${fcmToken}");
         await UserApi.LoginFunctionApi(
                 email.text,
                 password.text,
@@ -332,10 +334,11 @@ class _LoginState extends State<Login> {
                       Navigator.pop(context);
                       toast(context, "Device ID has been copied!");
                     },
-                    child:SvgPicture.asset(
+                    child: SvgPicture.asset(
                       "assets/ic_copy.svg",
                       height: 22,
-                      width: 22,),
+                      width: 22,
+                    ),
                   ),
                 ),
                 Spacer(),
@@ -344,10 +347,11 @@ class _LoginState extends State<Login> {
                   onTap: () {
                     Share.share("$deviceId");
                   },
-                      child:SvgPicture.asset(
-                        "assets/ic_share.svg",
-                        height: 22,
-                        width: 22,),
+                  child: SvgPicture.asset(
+                    "assets/ic_share.svg",
+                    height: 22,
+                    width: 22,
+                  ),
                 )),
               ],
             ),
@@ -407,38 +411,37 @@ class _LoginState extends State<Login> {
                         height: 48,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                            color: ColorConstant.edit_bg_color,
-                            borderRadius:
-                            BorderRadius.circular(30),),
-                      //  alignment: Alignment.center,
+                          color: ColorConstant.edit_bg_color,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        //  alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(10.0,0.0,15,0),
-                        child: TextField(
-                          controller: email,
-                          cursorColor: ColorConstant.black,
-                          keyboardType: TextInputType.emailAddress,
-                          onChanged: (value) {
-                            // Handle onChanged
-                          },
-                          onTapOutside: (event) {
-                            // Handle onTapOutside
-                            FocusScope.of(context).unfocus();
-                          },
-                          decoration: InputDecoration(
-                            isDense: true,
-                            hintStyle: TextStyle(
-                                fontSize: FontConstant.Size16,
-                                color: ColorConstant.Textfield,
-                                fontWeight: FontWeight.w400),
-                            //contentPadding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            hintText:
-                            'Enter Email',
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0, 0.0, 15, 0),
+                          child: TextField(
+                            controller: email,
+                            cursorColor: ColorConstant.black,
+                            keyboardType: TextInputType.emailAddress,
+                            onChanged: (value) {
+                              // Handle onChanged
+                            },
+                            onTapOutside: (event) {
+                              // Handle onTapOutside
+                              FocusScope.of(context).unfocus();
+                            },
+                            decoration: InputDecoration(
+                              isDense: true,
+                              hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size16,
+                                  color: ColorConstant.Textfield,
+                                  fontWeight: FontWeight.w400),
+                              //contentPadding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 10.0),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'Enter Email',
+                            ),
                           ),
                         ),
-                          ),
                       ),
                       if (_validateEmail != null) ...[
                         Container(
@@ -464,43 +467,43 @@ class _LoginState extends State<Login> {
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: ColorConstant.edit_bg_color,
-                          borderRadius:
-                          BorderRadius.circular(30),),
-                       // alignment: Alignment.center,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        // alignment: Alignment.center,
                         margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                          child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10.0,0.0,0,0),
-                                              child: TextField(
-                                                controller: password,
-                                                obscureText: !(_passwordVisible!),
-                                                cursorColor: ColorConstant.black,
-                                                keyboardType: TextInputType.visiblePassword,
-                                                decoration: InputDecoration(
-                                                  hintText: "Enter Password",
-                                                  suffixIcon: IconButton(
-                                                    color: ColorConstant.erp_appColor,
-                                                    icon: Icon(
-                                                      (_passwordVisible!)
-                                                          ? CupertinoIcons.eye_solid
-                                                          : CupertinoIcons.eye_slash_fill,
-                                                      size: 30,
-                                                    ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        _passwordVisible = !(_passwordVisible!);
-                                                      });
-                                                    },
-                                                  ),
-                                                  hintStyle: TextStyle(
-                                                      fontSize: FontConstant.Size16,
-                                                      color: ColorConstant.Textfield,
-                                                      fontWeight: FontWeight.w400),
-                                                  isDense: true,
-                                                  enabledBorder: InputBorder.none,
-                                                  focusedBorder: InputBorder.none,
-                                                ),
-                                              ),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10.0, 0.0, 0, 0),
+                          child: TextField(
+                            controller: password,
+                            obscureText: !(_passwordVisible!),
+                            cursorColor: ColorConstant.black,
+                            keyboardType: TextInputType.visiblePassword,
+                            decoration: InputDecoration(
+                              hintText: "Enter Password",
+                              suffixIcon: IconButton(
+                                color: ColorConstant.erp_appColor,
+                                icon: Icon(
+                                  (_passwordVisible!)
+                                      ? CupertinoIcons.eye_solid
+                                      : CupertinoIcons.eye_slash_fill,
+                                  size: 30,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _passwordVisible = !(_passwordVisible!);
+                                  });
+                                },
+                              ),
+                              hintStyle: TextStyle(
+                                  fontSize: FontConstant.Size16,
+                                  color: ColorConstant.Textfield,
+                                  fontWeight: FontWeight.w400),
+                              isDense: true,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
                           ),
+                        ),
                       ),
                       if (_validatepassword != null) ...[
                         Container(
@@ -579,5 +582,4 @@ class _LoginState extends State<Login> {
                       )
                     ]))));
   }
-
 }

@@ -8,6 +8,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_google_places_hoc081098/flutter_google_places_hoc081098.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_api_headers/google_api_headers.dart';
@@ -17,7 +18,8 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart' as Location;
 import 'package:geocoding/geocoding.dart' as geocoding;
-import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart' as geo_location;
+import 'package:geolocator_platform_interface/src/enums/location_accuracy.dart'
+    as geo_location;
 import 'package:location/location.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -69,15 +71,14 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     super.initState();
   }
 
-
   Future<void> _getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: geo_location.LocationAccuracy.high
-    );
+        desiredAccuracy: geo_location.LocationAccuracy.high);
     setState(() {
       CurrentLocation = LatLng(position.latitude, position.longitude);
     });
   }
+
 //
 //   Future<void> _getLocationPermission() async {
 //     // Check if location services are enabled
@@ -165,7 +166,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
     if (!isLocationEnabled || !hasLocationPermission) {
       // Location services or permissions are not enabled, request permission
       permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.always && permission != LocationPermission.whileInUse) {
+      if (permission != LocationPermission.always &&
+          permission != LocationPermission.whileInUse) {
         // Permission not granted, handle accordingly
         // Show a message to the user indicating that location permission is needed
         showDialog(
@@ -173,14 +175,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Location Permission Required'),
-              content: Text('Please allow the app to access your location for core functionality.'),
+              content: Text(
+                  'Please allow the app to access your location for core functionality.'),
               actions: <Widget>[
                 TextButton(
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(Colors.white),
                     overlayColor: MaterialStateProperty.all(Colors.white),
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     await openAppSettings();
                     Navigator.of(context).pop();
                     Navigator.pushReplacement(
@@ -221,7 +224,8 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
         setState(() {
           markers.add(Marker(
             markerId: MarkerId('current_location'),
-            position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+            position:
+                LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
             infoWindow: InfoWindow(title: 'Current Location'),
             icon: BitmapDescriptor.defaultMarker,
           ));
@@ -274,11 +278,29 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
           imageQuality: imageQuality,
           preferredCameraDevice: CameraDevice.front,
         );
-        print("added");
+        print("added1");
         setState(() {
+          print("added2");
           _image = File(galleryImage!.path);
+          print("added3");
           image_picked = 1;
-          CheckOut();
+          print("added4");
+          if (_image != null) {
+            print("added5");
+            var file =
+                FlutterImageCompress.compressWithFile(galleryImage!.path);
+            {
+              print("added6");
+              if (file != null) {
+                print("added7");
+                setState(() {
+                  image_picked = 1;
+                });
+
+                CheckOut();
+              }
+            }
+          }
         });
       } catch (e) {
         debugPrint("mmmm: ${e.toString()}");
@@ -442,24 +464,26 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                         color: ColorConstant.edit_bg_color,
-                                        borderRadius:
-                                        BorderRadius.circular(25),),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(10.0,0.0,10,0),
-                                      child: TextFormField(
-                                        controller: _locationController,
-                                        cursorColor: ColorConstant.black,
-                                        keyboardType: TextInputType.text,
-                                        decoration: InputDecoration(
-                                          hintText: "Enter Check Out Location",
-                                          hintStyle: TextStyle(
-                                              fontSize: FontConstant.Size15,
-                                              color: ColorConstant.grey_153,
-                                              fontWeight: FontWeight.w400),
-                                          enabledBorder: InputBorder.none,
-                                          focusedBorder: InputBorder.none,
-                                        ),
+                                        borderRadius: BorderRadius.circular(25),
                                       ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            10.0, 0.0, 10, 0),
+                                        child: TextFormField(
+                                          controller: _locationController,
+                                          cursorColor: ColorConstant.black,
+                                          keyboardType: TextInputType.text,
+                                          decoration: InputDecoration(
+                                            hintText:
+                                                "Enter Check Out Location",
+                                            hintStyle: TextStyle(
+                                                fontSize: FontConstant.Size15,
+                                                color: ColorConstant.grey_153,
+                                                fontWeight: FontWeight.w400),
+                                            enabledBorder: InputBorder.none,
+                                            focusedBorder: InputBorder.none,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -509,15 +533,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         FrontCameraCapture()));
+                                            setState(() {
+                                              image_picked = 1;
+                                              isLoading = true;
+                                              CheckOut();
+                                            });
                                             // print("${_image} _image akash");
                                           } else if (Platform.isIOS) {
                                             _imgFromCamera();
                                           }
-                                          setState(() {
-                                            image_picked = 1;
-                                            isLoading = true;
-                                            CheckOut();
-                                          });
                                         }
                                       },
                                       child: Container(

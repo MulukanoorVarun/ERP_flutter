@@ -1,25 +1,20 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:GenERP/screens/Dashboard.dart';
-import 'package:GenERP/screens/WhizzdomScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'Services/other_services.dart';
 import 'Utils/storage.dart';
 import 'screens/splash.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
-import 'package:audioplayers/audioplayers.dart';
-
 
 const AndroidNotificationChannel channel = AndroidNotificationChannel(
-  'generp_channel', // id
-  'generp_channel_name',
-  importance: Importance.max,
-  playSound: false
-);
+    'generp_channel', // id
+    'generp_channel_name',
+    importance: Importance.max,
+    playSound: false);
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -29,43 +24,57 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   String type = message.data['type'] ?? '';
 
   if (type == 'offline_reminder') {
-    FlutterRingtonePlayer.play(
+    FlutterRingtonePlayer().play(
       fromAsset: "assets/offline_reminder.mp3",
       ios: IosSounds.glass, // Specify the iOS sound
     );
-  }else if(type == 'normal'){
-    FlutterRingtonePlayer.play(
+  } else if (type == 'normal') {
+    FlutterRingtonePlayer().play(
       fromAsset: "assets/notification_sound.mp3",
       ios: IosSounds.glass, // Specify the iOS sound
     );
-  }else if(type == 'web_erp_notification'){
-    FlutterRingtonePlayer.play(
+  } else if (type == 'web_erp_notification') {
+    FlutterRingtonePlayer().play(
       fromAsset: "assets/notification_sound.mp3",
       ios: IosSounds.glass, // Specify the iOS sound
     );
-  }else {
-    FlutterRingtonePlayer.play(
+  } else {
+    FlutterRingtonePlayer().play(
         fromAsset: "assets/notification_sound.mp3",
         // will be the sound on Android
         ios: IosSounds.glass // will be the sound on iOS
-    );
+        );
   }
   print('A Background message just showed up: ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
-  Platform.isAndroid
-      ? await Firebase.initializeApp(
-          options: FirebaseOptions(
-            apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
-            appId: "1:329382566569:android:26dc8519537b04deff67b8",
-            messagingSenderId: "329382566569",
-            projectId: "generp-fe09d",
-          ),
-        )
-      : await Firebase.initializeApp();
+  if (Firebase.apps.isNotEmpty) {
+    print("Firebase is initialized");
+  } else {
+    print("Firebase is not initialized");
+  }
+
+  // Platform.isAndroid
+  //     ? await Firebase.initializeApp(
+  //         options: FirebaseOptions(
+  //           apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
+  //           appId: "1:329382566569:android:26dc8519537b04deff67b8",
+  //           messagingSenderId: "329382566569",
+  //           projectId: "generp-fe09d",
+  //         ),
+  //       )
+  //     : await Firebase.initializeApp(
+  //         options: FirebaseOptions(
+  //           apiKey: "AIzaSyAgGGcR_FSBMCQhBd_FBv3DNYKzIlI877A",
+  //           appId: "1:329382566569:ios:21fb5dcd0be4ac6bff67b8",
+  //           messagingSenderId: "329382566569",
+  //           projectId: "generp-fe09d",
+  //         ),
+  //       );
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -84,25 +93,26 @@ void main() async {
 
     String type = message.data['type'] ?? '';
     if (type == 'offline_reminder') {
-      FlutterRingtonePlayer.play(
+      FlutterRingtonePlayer().play(
         fromAsset: "assets/offline_reminder.mp3",
         ios: IosSounds.glass, // Specify the iOS sound
       );
-    }else if(type == 'normal'){
-      FlutterRingtonePlayer.play(
+    } else if (type == 'normal') {
+      FlutterRingtonePlayer().play(
         fromAsset: "assets/notification_sound.mp3",
         ios: IosSounds.glass, // Specify the iOS sound
       );
-    }else if(type == 'web_erp_notification'){
-      FlutterRingtonePlayer.play(
+    } else if (type == 'web_erp_notification') {
+      FlutterRingtonePlayer().play(
         fromAsset: "assets/notification_sound.mp3",
         ios: IosSounds.glass, // Specify the iOS sound
       );
-    }else{
-      FlutterRingtonePlayer.play(
-          fromAsset: "assets/notification_sound.mp3", // will be the sound on Android
-          ios: IosSounds.glass 			   // will be the sound on iOS
-      );
+    } else {
+      FlutterRingtonePlayer().play(
+          fromAsset:
+              "assets/notification_sound.mp3", // will be the sound on Android
+          ios: IosSounds.glass // will be the sound on iOS
+          );
     }
   });
 
@@ -113,17 +123,26 @@ void main() async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
-  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  //   alert: true,
-  //   badge: true,
-  //   sound: true,
-  // );
-
-  FirebaseMessaging.instance.getToken().then((value) {
-    String? token = value;
-    print("fbstoken:{$token}");
-    PreferenceService().saveString("fbstoken", token!);
-  });
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  if (Platform.isAndroid) {
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      print("fbstoken:{$token}");
+      PreferenceService().saveString("fbstoken", token!);
+    });
+  } else if (Platform.isIOS) {
+    FirebaseMessaging.instance
+        .requestPermission(alert: true, sound: true, badge: true);
+    FirebaseMessaging.instance.getAPNSToken().then((value) {
+      String? fcmtoken = value;
+      print("fcmtoken:{$fcmtoken}");
+      PreferenceService().saveString("fbstoken", fcmtoken!);
+    });
+  }
 
   runApp(const MyApp());
 }
@@ -161,6 +180,7 @@ class _MyAppState extends State<MyApp> {
       );
       print('A new onMessageOpenedApp event was published!');
     });
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     return MaterialApp(
