@@ -12,13 +12,13 @@ import '../Services/WebSocketManager.dart';
 import '../Utils/storage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-
 /// BackgroundLocation plugin to get background
 /// lcoation updates in iOS and Android
 class BackgroundLocation {
   // The channel to be used for communication.
   // This channel is also refrenced inside both iOS and Abdroid classes
-  static const MethodChannel _channel = MethodChannel('com.almoullim.background_location/methods');
+  static const MethodChannel _channel =
+      MethodChannel('com.almoullim.background_location/methods');
   static Timer? _locationTimer;
 
   static get context => null;
@@ -26,7 +26,7 @@ class BackgroundLocation {
   static const String customChannelName = 'GEN ERP flutter';
   static const String customChannelDescription = 'GEN ERP flutter';
 
-  String input="";
+  String input = "";
   static const int notificationId = 0;
 
   WebSocketManager webSocketManager = WebSocketManager(
@@ -44,16 +44,25 @@ class BackgroundLocation {
     },
   );
 
-  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   static void init() async {
     try {
-      final InitializationSettings initializationSettings = InitializationSettings(android: AndroidInitializationSettings('@mipmap/ic_launcher'));
-      await flutterLocalNotificationsPlugin.initialize(initializationSettings
-      );
+      final InitializationSettings initializationSettings =
+          InitializationSettings(
+              android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+              iOS: DarwinInitializationSettings(
+                  requestAlertPermission: false,
+                  requestBadgePermission: false,
+                  requestSoundPermission: false,
+                  onDidReceiveLocalNotification: ((id, title, body, payload) =>
+                      {})));
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
       // Disable sound for the default notification channel
-      const AndroidNotificationChannel androidChannel = AndroidNotificationChannel(
+      const AndroidNotificationChannel androidChannel =
+          AndroidNotificationChannel(
         customChannelId,
         customChannelName,
         description: customChannelDescription,
@@ -61,7 +70,8 @@ class BackgroundLocation {
         playSound: false, // Set this to false to disable playing sound
       );
       await flutterLocalNotificationsPlugin
-          .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+          .resolvePlatformSpecificImplementation<
+              AndroidFlutterLocalNotificationsPlugin>()
           ?.createNotificationChannel(androidChannel);
 
       print("Flutter Local Notifications initialized successfully.");
@@ -72,7 +82,6 @@ class BackgroundLocation {
   }
 
   static Future<void> checkAndRequestLocationPermissions() async {
-
     bool isLocationEnabled = false;
     bool hasLocationPermission = false;
     // Check if location services are enabled
@@ -95,7 +104,6 @@ class BackgroundLocation {
     }
     permissionGranted = (await location.hasPermission());
     if (permissionGranted == PermissionStatus) {
-
       permissionGranted = (await location.requestPermission());
       if (permissionGranted != PermissionStatus) {
         return;
@@ -105,7 +113,7 @@ class BackgroundLocation {
 
   static void showNotification(String title, String message) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       customChannelId,
       customChannelName,
       importance: Importance.defaultImportance,
@@ -113,11 +121,22 @@ class BackgroundLocation {
       ongoing: true,
       playSound: false,
     );
-    const NotificationDetails platformChannelSpecifics = NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    const DarwinNotificationDetails darwinNotificationDetails =
+        DarwinNotificationDetails(
+      presentSound: false,
+      sound: "",
+      // Set this to false to disable playing sound
+    );
+
+    const NotificationDetails platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: darwinNotificationDetails);
     // Check if the notification with the same ID is already being shown
     final List<PendingNotificationRequest> pendingNotifications =
-    await flutterLocalNotificationsPlugin.pendingNotificationRequests();
-    final notificationAlreadyExists = pendingNotifications.any((notification) => notification.id == notificationId);
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    final notificationAlreadyExists = pendingNotifications
+        .any((notification) => notification.id == notificationId);
     // If notification already exists, update it; otherwise, show a new one
     if (notificationAlreadyExists) {
       await flutterLocalNotificationsPlugin.show(
@@ -136,7 +155,6 @@ class BackgroundLocation {
     }
   }
 
-
   static void hideNotification(int notificationId) async {
     await flutterLocalNotificationsPlugin.cancel(0);
   }
@@ -147,8 +165,6 @@ class BackgroundLocation {
     });
   }
 
-
-
   /// Stop receiving location updates
   static stopLocationService() async {
     print("Background location Service stopped");
@@ -158,6 +174,7 @@ class BackgroundLocation {
     }
     return await _channel.invokeMethod('stop_location_service');
   }
+
   /// Check if the location update service is running
   static Future<bool> isServiceRunning() async {
     var result = await _channel.invokeMethod('is_service_running');
@@ -176,7 +193,6 @@ class BackgroundLocation {
     return connectivityResult != ConnectivityResult.none;
   }
 
-
   /// Start receiving location updates at 5-second interval
   static startLocationService() async {
     init();
@@ -186,20 +202,23 @@ class BackgroundLocation {
       // Both GPS and network are available, start background location service
       // Your code to start background location service goes here
       print("GEN ERP You're Online !");
-      showNotification("GEN ERP","You're Online !");
+      showNotification("GEN ERP", "You're Online !");
     } else {
-
       // Notify the user to enable GPS or connect to a network
       if (!isGpsEnabled) {
         // Notify user to enable GPS
         checkAndRequestLocationPermissions();
-        showNotification("GEN ERP","You're Offline !, Check your GPS connection.");
-        print('GPS is not enabled. Please enable GPS to start the location service.');
+        showNotification(
+            "GEN ERP", "You're Offline !, Check your GPS connection.");
+        print(
+            'GPS is not enabled. Please enable GPS to start the location service.');
       }
       if (!isNetworkAvailable) {
         // Notify user to connect to a network
-        showNotification("GEN ERP","You're Offline !, Check your network connection.");
-        print('Network is not available. Please connect to a network to start the location service.');
+        showNotification(
+            "GEN ERP", "You're Offline !, Check your network connection.");
+        print(
+            'Network is not available. Please connect to a network to start the location service.');
       }
     }
 
@@ -215,7 +234,6 @@ class BackgroundLocation {
       var location = await BackgroundLocation().getCurrentLocation();
     });
   }
-
 
   // static setAndroidNotification(
   //     {String? title, String? message, String? icon}) async {
@@ -239,6 +257,7 @@ class BackgroundLocation {
 
   String? empId;
   String? sessionId;
+
   /// Get the current location once.
   Future<Location> getCurrentLocation() async {
     empId = await PreferenceService().getString("UserId");
@@ -261,7 +280,6 @@ class BackgroundLocation {
 
     return completer.future;
   }
-
 
   /// Register a function to recive location updates as long as the location
   /// service has started
@@ -293,7 +311,8 @@ class BackgroundLocation {
             "session_id": sessionId,
             "ref_data": {
               "session_id": sessionId,
-              "location": "${locationData['latitude']},${locationData['longitude']}",
+              "location":
+                  "${locationData['latitude']},${locationData['longitude']}",
               "speed": locationData['speed'],
               "altitude": locationData['altitude'],
               "direction": locationData['bearing'],
@@ -399,16 +418,14 @@ class BackgroundLocation {
   //     handleLocation(position);
   //   }, onError: (error) => print("Error receiving location: $error"));
   // }
-
 }
 
-saveLastLocationTime(){
-  var currentTime =  DateTime.now();
-  var formatter =  DateFormat('HH:mm:ss').format(currentTime);
+saveLastLocationTime() {
+  var currentTime = DateTime.now();
+  var formatter = DateFormat('HH:mm:ss').format(currentTime);
   PreferenceService().saveString("lastLocationTime", formatter);
   print("formatter:${formatter}");
 }
-
 
 /// about the user current location
 class Location {
@@ -423,14 +440,13 @@ class Location {
 
   Location(
       {@required this.longitude,
-        @required this.latitude,
-        @required this.altitude,
-        @required this.accuracy,
-        @required this.bearing,
-        @required this.speed,
-        @required this.time,
-        @required this.isMock
-      });
+      @required this.latitude,
+      @required this.altitude,
+      @required this.accuracy,
+      @required this.bearing,
+      @required this.speed,
+      @required this.time,
+      @required this.isMock});
 
   toMap() {
     var obj = {
@@ -445,5 +461,4 @@ class Location {
     };
     return obj;
   }
-
 }

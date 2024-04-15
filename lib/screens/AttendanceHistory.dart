@@ -782,7 +782,21 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                           ),
                                           Center(
                                             child: Text(
-                                              "Penalities",
+                                              "Late",
+                                              style: GoogleFonts.ubuntu(
+                                                  textStyle: TextStyle(
+                                                    fontSize:
+                                                        FontConstant.Size15,
+                                                    fontWeight: FontWeight.w400,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              "Points",
                                               style: GoogleFonts.ubuntu(
                                                   textStyle: TextStyle(
                                                     fontSize:
@@ -1168,7 +1182,7 @@ class _AttendanceHistoryState extends State<AttendanceHistory> {
                                                   height: 10,
                                                 ),
                                                 Text(
-                                                  "Late Penalities",
+                                                  "Late Points",
                                                   style: GoogleFonts.ubuntu(
                                                       textStyle: TextStyle(
                                                         fontSize:

@@ -80,12 +80,16 @@ class _SplashState extends State<Splash> {
                       }
                     }
                   } else if (Platform.isIOS) {
-                    if (loginStatus == 0) {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Login()));
+                    if (int.parse(buildNumber) < data.iosLatestVersionCode!) {
+                      AppUpdateDialouge(data.iosUrl!, data.iosReleaseNotes!);
                     } else {
-                      // AppUpdateDialouge(data.url!,data.releaseNotes!);
-                      getSessiondetailsApiFunction();
+                      if (loginStatus == 0) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => Login()));
+                      } else {
+                        // AppUpdateDialouge(data.url!,data.releaseNotes!);
+                        getSessiondetailsApiFunction();
+                      }
                     }
                   }
                 })

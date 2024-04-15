@@ -91,5 +91,7 @@
 	</array>
 	<key>aps-environment</key>
 	<string>production</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 </dict>
 </plist>

@@ -7,6 +7,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:go_router/go_router.dart';
 import 'Services/other_services.dart';
 import 'Utils/storage.dart';
 import 'screens/splash.dart';
@@ -54,14 +55,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   if (Firebase.apps.isNotEmpty) {
     print("Firebase is initialized");
   } else {
     print("Firebase is not initialized");
   }
 
-  if(Platform.isAndroid){
+  if (Platform.isAndroid) {
     await Firebase.initializeApp(
       options: FirebaseOptions(
         apiKey: "AIzaSyBmkmKdYfBt2n5QRlmZJ9MV_Amh9xR3UOY",
@@ -70,7 +70,7 @@ void main() async {
         projectId: "generp-fe09d",
       ),
     );
-  } else if(Platform.isIOS){
+  } else if (Platform.isIOS) {
     await Firebase.initializeApp();
   }
 
@@ -153,6 +153,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();

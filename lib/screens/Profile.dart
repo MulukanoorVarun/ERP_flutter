@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:GenERP/Utils/ColorConstant.dart';
 import 'package:GenERP/Utils/MyWidgets.dart';
@@ -218,7 +219,11 @@ class _ProfileState extends State<Profile> {
               {
                 setState(() {
                   latestversion = data.latestVersion ?? "";
-                  releaseNotes = data.releaseNotes ?? "";
+                  if (Platform.isAndroid) {
+                    releaseNotes = data.releaseNotes ?? "";
+                  } else if (Platform.isIOS) {
+                    releaseNotes = data.iosReleaseNotes ?? "";
+                  }
                 })
               }
             else
@@ -460,7 +465,7 @@ class _ProfileState extends State<Profile> {
           body: (isLoading)
               ? Loaders()
               : Container(
-                  color: ColorConstant.erp_appColor,
+                  // color: ColorConstant.erp_appColor,
                   height: screenHeight,
                   child: SafeArea(
                     child: SingleChildScrollView(

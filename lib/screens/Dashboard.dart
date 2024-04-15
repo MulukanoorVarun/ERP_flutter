@@ -130,6 +130,7 @@ class _DashboardState extends State<Dashboard> {
   void initUniLinks() async {
     try {
       String? initialLink = await getInitialLink();
+      print("initlink");
       print(initialLink);
 
       if (initialLink != null) {
@@ -148,6 +149,7 @@ class _DashboardState extends State<Dashboard> {
       return;
     }
     var route = uri.pathSegments[0];
+    print("deeplink");
     print("path1: $route");
     var routeId = uri.pathSegments[1];
     print("path2: $routeId");
