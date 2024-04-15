@@ -9,8 +9,8 @@ var AppId = "in.webgrid.generp";
 var appName = "GEN ERP";
 double subtextSize = 10;
 const imageQuality = 50;
-String VERSION_NAME = "1.0.58";
-int VERSION_CODE = 58;
+String VERSION_NAME = "1.0.71";
+int VERSION_CODE = 73;
 //"MIRJOMJWC5AUWBMR"
 
 // List<String> Sort_by = ["Default","Popularity","Newest First","Price:Low to High","Price:High to Low","Discount:Low to High","Discount:High to Low","Average Rating"];
