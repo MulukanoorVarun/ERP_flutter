@@ -182,54 +182,54 @@ class _SplashState extends State<Splash> {
     }
   }
 
-  Future<void> getLocationPermissions() async {
-    if (await Permission.location.request().isGranted) {
-      print("Location1a");
-      setState(() {});
-    } else if (await Permission.location.request().isPermanentlyDenied) {
-      print("Location1b");
-      if (Platform.isAndroid) {
-        await openAppSettings();
-      } else if (Platform.isIOS) {
-        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+    Future<void> getLocationPermissions() async {
+      if (await Permission.location.request().isGranted) {
+        print("Location1a");
+        setState(() {});
+      } else if (await Permission.location.request().isPermanentlyDenied) {
+        print("Location1b");
+        if (Platform.isAndroid) {
+          await openAppSettings();
+        } else if (Platform.isIOS) {
+          // await AppSettings.openAppSettings(type: AppSettingsType.location);
+        }
+      } else if (await Permission.location.request().isDenied) {
+        print("Location1c");
+        setState(() {});
       }
-    } else if (await Permission.location.request().isDenied) {
-      print("Location1c");
-      setState(() {});
-    }
 
-    if (await Permission.locationAlways.request().isGranted) {
-      print("Location2a");
-      setState(() {});
-    } else if (await Permission.locationAlways.request().isPermanentlyDenied) {
-      print("Location2b");
-      if (Platform.isAndroid) {
-        await openAppSettings();
-      } else if (Platform.isIOS) {
-        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+      if (await Permission.locationAlways.request().isGranted) {
+        print("Location2a");
+        setState(() {});
+      } else if (await Permission.locationAlways.request().isPermanentlyDenied) {
+        print("Location2b");
+        if (Platform.isAndroid) {
+          await openAppSettings();
+        } else if (Platform.isIOS) {
+          // await AppSettings.openAppSettings(type: AppSettingsType.location);
+        }
+      } else if (await Permission.locationAlways.request().isDenied) {
+        print("Location2c");
+        setState(() {});
       }
-    } else if (await Permission.locationAlways.request().isDenied) {
-      print("Location2c");
-      setState(() {});
-    }
 
-    if (await Permission.locationWhenInUse.request().isGranted) {
-      print("Location3a");
-      setState(() {});
-    } else if (await Permission.locationWhenInUse
-        .request()
-        .isPermanentlyDenied) {
-      print("Location3b");
-      if (Platform.isAndroid) {
-        await openAppSettings();
-      } else if (Platform.isIOS) {
-        // await AppSettings.openAppSettings(type: AppSettingsType.location);
+      if (await Permission.locationWhenInUse.request().isGranted) {
+        print("Location3a");
+        setState(() {});
+      } else if (await Permission.locationWhenInUse
+          .request()
+          .isPermanentlyDenied) {
+        print("Location3b");
+        if (Platform.isAndroid) {
+          await openAppSettings();
+        } else if (Platform.isIOS) {
+          // await AppSettings.openAppSettings(type: AppSettingsType.location);
+        }
+      } else if (await Permission.locationWhenInUse.request().isDenied) {
+        print("Location3c");
+        setState(() {});
       }
-    } else if (await Permission.locationWhenInUse.request().isDenied) {
-      print("Location3c");
-      setState(() {});
     }
-  }
 
   Future<void> getNotificationsPermissions() async {
     if (await Permission.notification.request().isGranted) {
