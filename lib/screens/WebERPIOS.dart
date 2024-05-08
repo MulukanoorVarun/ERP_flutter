@@ -157,6 +157,8 @@ class _WebERPIOSState extends State<WebERPIOS> {
                     allowsInlineMediaPlayback: true,
                   ),
                 ),
+
+
                 androidOnPermissionRequest: (InAppWebViewController controller,
                     String origin, List<String> resources) async {
                   return PermissionRequestResponse(
