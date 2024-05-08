@@ -37,6 +37,7 @@ class _SplashState extends State<Splash> {
   String version = "";
   String buildNumber = "";
   void initState() {
+
     super.initState();
     VersionApiFunction();
     // validate_and_run();
