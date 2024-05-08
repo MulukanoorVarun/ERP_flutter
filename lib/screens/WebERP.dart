@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../Services/other_services.dart';
 import '../Services/user_api.dart';
 import '../Utils/ColorConstant.dart';
@@ -56,7 +57,8 @@ class _WebERPState extends State<WebERP> {
   void initState() {
     WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter is initialized
     FlutterDownloader.initialize();
-    // loadData();
+
+    loadData();
     pullToRefreshController = kIsWeb
         ? null
         : PullToRefreshController(
@@ -80,15 +82,16 @@ class _WebERPState extends State<WebERP> {
   }
 
   Future<void> loadData() async {
-    await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
-    empId = await PreferenceService().getString("UserId") ?? "";
-    sessionId = await PreferenceService().getString("Session_id") ?? "";
-    print(1724);
-    print("Loaded empId: $empId");
-    print("Loaded sessionId: $sessionId");
-    setState(() {
-      isLoading = false;
-    });
+    await Permission.camera.request();
+    // await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
+    // empId = await PreferenceService().getString("UserId") ?? "";
+    // sessionId = await PreferenceService().getString("Session_id") ?? "";
+    // print(1724);
+    // print("Loaded empId: $empId");
+    // print("Loaded sessionId: $sessionId");
+    // setState(() {
+    //   isLoading = false;
+    // });
   }
 
   //////////////////testing
@@ -149,6 +152,7 @@ class _WebERPState extends State<WebERP> {
               child: Stack(
                 children: [
                   InAppWebView(
+
                     initialUrlRequest: URLRequest(
                       url: WebUri(widget.url),
                     ),
@@ -159,7 +163,9 @@ class _WebERPState extends State<WebERP> {
                           origin: origin, allow: true, retain: true);
                     },
                     initialOptions: InAppWebViewGroupOptions(
+
                       android: AndroidInAppWebViewOptions(
+
                         useWideViewPort: true,
                         loadWithOverviewMode: true,
                         allowContentAccess: true,
@@ -173,6 +179,13 @@ class _WebERPState extends State<WebERP> {
                             false, // Disables displaying zoom controls
                         safeBrowsingEnabled: true, // Enables Safe Browsing
                         clearSessionCache: true,
+                        loadsImagesAutomatically: true,
+                        thirdPartyCookiesEnabled: true,
+                        blockNetworkImage: false,
+                        supportMultipleWindows: true,
+
+                        // Enable camera access
+
                       ),
                       ios: IOSInAppWebViewOptions(
                         allowsInlineMediaPlayback: true,
@@ -182,14 +195,23 @@ class _WebERPState extends State<WebERP> {
                         useOnDownloadStart: true,
                         allowFileAccessFromFileURLs: true,
                         allowUniversalAccessFromFileURLs: true,
+                        mediaPlaybackRequiresUserGesture: true,
+
                       ),
                     ),
                     androidOnPermissionRequest:
                         (InAppWebViewController controller, String origin,
                             List<String> resources) async {
+                          if (resources.contains("android.permission.CAMERA")) {
+                            // Grant camera permission
+                            return PermissionRequestResponse(
+                              resources: resources,
+                              action: PermissionRequestResponseAction.GRANT,
+                            );
+                          }
                       return PermissionRequestResponse(
                           resources: resources,
-                          action: PermissionRequestResponseAction.GRANT);
+                          action: PermissionRequestResponseAction.DENY);
                     },
                     onWebViewCreated: (controller) {
                       webViewController = controller;
@@ -199,6 +221,7 @@ class _WebERPState extends State<WebERP> {
                     //  URLRequest(url: WebUri(widget.url),);
                     // },
                     // ),
+
 
                     pullToRefreshController: pullToRefreshController,
                     onLoadStart: (controller, url) {
@@ -233,6 +256,17 @@ class _WebERPState extends State<WebERP> {
                           return NavigationActionPolicy.CANCEL;
                         }
                       }
+                      // // Check if the URL is trying to access the camera for image upload
+                      // if (uri.scheme == 'camera' && uri.path.contains('/camera/')) {
+                      //   // Handle camera image upload here
+                      //   // You might want to display a custom UI for image selection or directly trigger the camera
+                      //   // You can use platform-specific plugins like image_picker for this purpose
+                      //   // Once the image is selected, you can pass it to the web view using JavaScript injection
+                      //   if (await canLaunch(uri.toString())) {
+                      //     await launch(uri.toString());
+                      //     return NavigationActionPolicy.CANCEL;
+                      //   }
+                      // }
                       return NavigationActionPolicy.ALLOW;
                     },
                     onReceivedError: (controller, request, error) {
@@ -244,9 +278,13 @@ class _WebERPState extends State<WebERP> {
                       }
                     },
                     onConsoleMessage: (controller, consoleMessage) {
+                      if (kDebugMode) {
+                        print("consoleMessage${consoleMessage}");
+                      }
                       print(
                           "JavaScript console message: ${consoleMessage.message}");
                     },
+
                     // onDownloadStart: (controller, url) async {
                     //   Directory? tempDir = await getExternalStorageDirectory();
                     //   print("onDownload $url");
@@ -270,10 +308,14 @@ class _WebERPState extends State<WebERP> {
                       // );
                     },
 
+
                     initialSettings: InAppWebViewSettings(
                       allowUniversalAccessFromFileURLs: true,
                       allowFileAccessFromFileURLs: true,
                       allowFileAccess: true,
+                      allowsInlineMediaPlayback: true,
+                      allowsPictureInPictureMediaPlayback: true,
+                      allowsBackForwardNavigationGestures: true,
                       iframeAllow: "camera;microphone;files;media;",
                       domStorageEnabled: true,
                       allowContentAccess: true,
@@ -292,7 +334,14 @@ class _WebERPState extends State<WebERP> {
                       geolocationEnabled: true,
                       useOnDownloadStart: true,
                       allowsLinkPreview: true,
+                      databaseEnabled: true, // Enables the WebView database
+                      clearSessionCache: true,
+                      mediaType:"image/*",
+
+
+
                     ),
+
                     // initialUrlRequest: URLRequest(
                     //   url: WebUri.uri(Uri.parse(webPageUrl))
                     // ),
@@ -553,4 +602,7 @@ class _WebERPState extends State<WebERP> {
   //         ),
   //       ));
   // }
+
+
+
 }
