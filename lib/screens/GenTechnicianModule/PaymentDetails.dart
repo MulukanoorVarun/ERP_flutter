@@ -85,7 +85,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     session = await PreferenceService().getString("Session_id") ?? "";
     gen_id = await PreferenceService().getString("genId") ?? "";
 
-    if (widget.account_name == "generator") {
+    if (widget.account_name == "Generator") {
       type = "generator";
       refType = "Complaint";
       refId = widget.refId;
