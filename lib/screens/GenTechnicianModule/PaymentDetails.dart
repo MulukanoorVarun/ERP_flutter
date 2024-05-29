@@ -90,9 +90,9 @@ class _PaymentDetailsState extends State<PaymentDetails> {
       refType = "Complaint";
       refId = widget.refId;
 
-      print("${type}");
-      print("${refType}");
-      print("${refId}");
+      debugPrint("${type}");
+      debugPrint("${refType}");
+      debugPrint("${refId}");
     } else {
       type = "account";
       refType = "Account";
@@ -119,21 +119,21 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   }
               });
     } on Error catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
   Future<void> PaymentUpdateAPI() async {
-    print(empId);
-    print(session);
-    print(refType);
-    print(refId);
-    print(paymentModeID);
-    print(Reference.text);
-    print(Amount.text);
-    print(contact);
-    print(contactID);
-    print(_image);
+    debugPrint(empId);
+    debugPrint(session);
+    debugPrint(refType);
+    debugPrint(refId);
+    debugPrint(paymentModeID);
+    debugPrint(Reference.text);
+    debugPrint(Amount.text);
+    debugPrint(contact);
+    debugPrint(contactID);
+    debugPrint(_image.toString());
 
     try {
       await UserApi.TechnicianUpdatepaymentAPI(
@@ -165,7 +165,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   }
               });
     } on Error catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -196,7 +196,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                   {}
               });
     } on Error catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -397,7 +397,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
     try {
       final XFile? galleryImage = await _picker.pickImage(
           source: ImageSource.camera, imageQuality: imageQuality);
-      print("added");
+      debugPrint("added");
       setState(() {
         _image = File(galleryImage!.path);
         image_picked = 1;
@@ -624,11 +624,11 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                         if (value != null) {
                                           setState(() {
                                             selectContact = value;
-                                            print(
+                                            debugPrint(
                                                 "Selected Complaint Type: ${value.name}, ID: ${value.mob1}");
                                             contact = value?.name;
                                             contactID = value?.mob1;
-                                            print("hfjkshfg" +
+                                            debugPrint("hfjkshfg" +
                                                 contactID.toString());
                                           });
                                         }
@@ -695,7 +695,7 @@ class _PaymentDetailsState extends State<PaymentDetails> {
                                               builder: (context) => AddContact(
                                                     actName:
                                                         widget.account_name ==
-                                                            "generator",
+                                                            "Generator",
                                                     id: widget.refId,
                                                   )));
                                     },

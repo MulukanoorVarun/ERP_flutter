@@ -19,7 +19,7 @@ import UserNotifications
       if #available(iOS 10.0, *) {
             UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert]) { granted, error in
                 guard error == nil else {
-                    print("Error: \(error!.localizedDescription)")
+                    debugPrint("Error: \(error!.localizedDescription)")
                     return
                 }
                 
@@ -51,7 +51,7 @@ import UserNotifications
 // Handle remote notification registration.
 override func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
             // Handle the received notification
-            print("Received notification: \(userInfo)")
+            debugPrint("Received notification: \(userInfo)")
 }
     
 override func application(_ application: UIApplication,
@@ -65,7 +65,7 @@ override func application(_ application: UIApplication,
 override func application(_ application: UIApplication,
                  didFailToRegisterForRemoteNotificationsWithError error: Error) {
     // The token is not currently available.
-    print("Remote notification support is unavailable due to error: \(error.localizedDescription)")
+    debugPrint("Remote notification support is unavailable due to error: \(error.localizedDescription)")
     disableRemoteNotificationFeatures()
 }
     

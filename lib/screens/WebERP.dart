@@ -155,6 +155,7 @@ class _WebERPState extends State<WebERP> {
 
                     initialUrlRequest: URLRequest(
                       url: WebUri(widget.url),
+
                     ),
                     androidOnGeolocationPermissionsShowPrompt:
                         (InAppWebViewController controller,
@@ -279,9 +280,9 @@ class _WebERPState extends State<WebERP> {
                     },
                     onConsoleMessage: (controller, consoleMessage) {
                       if (kDebugMode) {
-                        print("consoleMessage${consoleMessage}");
+                        debugPrint("consoleMessage${consoleMessage}");
                       }
-                      print(
+                      debugPrint(
                           "JavaScript console message: ${consoleMessage.message}");
                     },
 
@@ -299,7 +300,7 @@ class _WebERPState extends State<WebERP> {
                     onDownloadStartRequest: (controller, url) async {
                       await UserApi.download_files(
                               empId, sessionId, "${url.url}", context)
-                          .then((data) => {print(data)});
+                          .then((data) => {debugPrint(data)});
                       // final taskid = await FlutterDownloader.enqueue(
                       //   url: url.toString(),
                       //   savedDir: "/storage/emulated/0/Download",

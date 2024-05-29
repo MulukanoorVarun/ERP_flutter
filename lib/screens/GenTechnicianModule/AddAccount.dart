@@ -44,7 +44,7 @@ class _AddContactState extends State<AddContact> {
   Future<void> AddContactAPIFunction() async {
     empId = await PreferenceService().getString("UserId") ?? "";
     session = await PreferenceService().getString("Session_id") ?? "";
-    if (widget.actName == "generator") {
+    if (widget.actName == "Generator") {
       saveAgainst = "Generator";
       genId = widget.id;
     } else {

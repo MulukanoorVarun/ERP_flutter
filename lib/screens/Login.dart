@@ -127,8 +127,8 @@ class _LoginState extends State<Login> {
     try {
       androidId = await _androidIdPlugin.getId() ?? 'Unknown ID';
       deviceId = androidId;
-      print("littu" + deviceId);
-      print(_deviceDetails.toString());
+      debugPrint("testing" + deviceId);
+      debugPrint(_deviceDetails.toString());
     } on PlatformException {
       androidId = 'Failed to get Android ID.';
     }
@@ -143,15 +143,15 @@ class _LoginState extends State<Login> {
 
   Future<void> LoginApiFunction() async {
     try {
-      print(email.text);
-      print(password.text);
-      print(deviceId);
-      print(_deviceDetails);
+      debugPrint(email.text);
+      debugPrint(password.text);
+      debugPrint(deviceId);
+      debugPrint(_deviceDetails);
 
       if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text)) {
         setState(() {
           _validateEmail = "*Please Enter a Valid Email Address";
-          print(_validateEmail);
+          debugPrint(_validateEmail);
         });
       } else {
         _validateEmail = "";
@@ -159,7 +159,7 @@ class _LoginState extends State<Login> {
       if (password.text.isEmpty) {
         setState(() {
           _validatepassword = "*Please Enter Your Password";
-          print(_validatepassword);
+          debugPrint(_validatepassword);
         });
       } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(email.text) &&
           password.text.isNotEmpty) {
@@ -180,14 +180,14 @@ class _LoginState extends State<Login> {
           fcmToken = await FirebaseMessaging.instance.getToken();
         } else if (Platform.isIOS) {
           // toast(context,"ios");
-          print("IOS");
+          debugPrint("IOS");
           platformname = "iOS";
           fcmToken = await FirebaseMessaging.instance.getAPNSToken();
-          print("iosFCMToken:${fcmToken}");
+          debugPrint("iosFCMToken:${fcmToken}");
         }
         // S
         // String? fcm_token = await FirebaseMessaging.instance.getToken();
-        print("${fcmToken}");
+        debugPrint("${fcmToken}");
         await UserApi.LoginFunctionApi(
                 email.text,
                 password.text,
@@ -198,7 +198,7 @@ class _LoginState extends State<Login> {
                   if (data != null)
                     {
                       setState(() {
-                        print("${data.error} login error here");
+                        debugPrint("${data.error} login error here");
                         if (data.error == 0) {
                           PreferenceService().saveInt("loginStatus", 1);
                           PreferenceService()
@@ -209,10 +209,10 @@ class _LoginState extends State<Login> {
                               .saveString("UserEmail", data.emailId!);
                           PreferenceService()
                               .saveString("Session_id", data.sessionId!);
-                          print(data.userId);
-                          print(data.name);
-                          print(data.emailId);
-                          print(data.sessionId);
+                          debugPrint(data.userId);
+                          debugPrint(data.name);
+                          debugPrint(data.emailId);
+                          debugPrint(data.sessionId);
                           var roles = data.permissions!.toString();
                           PreferenceService().saveString("roles", roles);
 
@@ -221,14 +221,14 @@ class _LoginState extends State<Login> {
                               MaterialPageRoute(
                                   builder: (context) => Dashboard()));
                         } else if (data.error == 1) {
-                          print(data.error.toString());
+                          debugPrint(data.error.toString());
                           toast(context,
                               "You are not authorized to login in this device !");
                         } else if (data.error == 2) {
                           toast(context, "Invalid login credentials !");
-                          print(data.error.toString());
+                          debugPrint(data.error.toString());
                         } else {
-                          print(data.error.toString());
+                          debugPrint(data.error.toString());
                           //  toast(context, "Something went wrong, Please try again.");
                         }
                       })
@@ -236,12 +236,12 @@ class _LoginState extends State<Login> {
                   else
                     {
                       // toast(context, "Something went wrong, Please try again."),
-                      print("Something went wrong, Please try again.")
+                      debugPrint("Something went wrong, Please try again.")
                     }
                 });
       }
     } on Exception catch (e) {
-      print("$e");
+      debugPrint("$e");
     }
   }
 

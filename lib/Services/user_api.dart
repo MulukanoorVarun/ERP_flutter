@@ -46,11 +46,11 @@ class UserApi {
     try {
       final res = await post({}, getUpdateStatus, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
 
         return VersionsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -71,10 +71,10 @@ class UserApi {
       };
       final res = await post(data, getLoginStatus, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return StatusResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -99,9 +99,9 @@ class UserApi {
           if (!_directory.existsSync()) {
             // If the directory does not exist, create it
             _directory.createSync(recursive: true);
-            print('Directory created: $_directory');
+            debugPrint('Directory created: $_directory');
           } else {
-            print('Directory already exists: $_directory');
+            debugPrint('Directory already exists: $_directory');
           }
           // final androiddirectory = await getDownloadsDirectory();
           // directory = androiddirectory!.path;
@@ -112,7 +112,7 @@ class UserApi {
         }
 
         final contentDisposition = res.headers['content-disposition'];
-        print(
+        debugPrint(
             "contentDisposition ${contentDisposition?.split('filename=')[1]}");
 
         // final filename = contentDisposition != null
@@ -125,10 +125,10 @@ class UserApi {
         await file.writeAsBytes(bytes);
         toast(
             cntxt, "File saved to your downloads as ${filename} to ${directory}, Successfully");
-        print('File saved successfully');
+        debugPrint('File saved successfully');
         return jsonDecode(res.body);
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -145,10 +145,10 @@ class UserApi {
       };
       final res = await post(data, getDashboardStatus, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return DashboardResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -165,11 +165,11 @@ class UserApi {
       };
       final res = await post(data, loadProfileDetails, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
 
         return ProfileResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -186,11 +186,11 @@ class UserApi {
       };
       final res = await post(data, getLogoutStatus, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
 
         return LogoutResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -217,10 +217,10 @@ class UserApi {
         res = jsonDecode(res);
       }
       if (res != null) {
-        print(res);
+        debugPrint(res);
         return CheckInResponse.fromJson(res);
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -247,10 +247,10 @@ class UserApi {
         res = jsonDecode(res);
       }
       if (res != null) {
-        print(res);
+        debugPrint(res);
         return CheckOutResponse.fromJson(res);
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -267,10 +267,10 @@ class UserApi {
       };
       final res = await post(data, attendanceListapi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return AttendanceDashboard.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -289,11 +289,11 @@ class UserApi {
       };
       final res = await post(data, loadAttendanceDetailsapi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         // return AttendanceHistory.fromJson(jsonDecode(res.body));
         return res.body;
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -312,10 +312,10 @@ class UserApi {
       };
       final res = await post(data, DayAttendanceDetailsapi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return AttendanceDaywiseResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -332,10 +332,10 @@ class UserApi {
       };
       final res = await post(data, getSessionExistsApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return SessionResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -355,10 +355,10 @@ class UserApi {
       };
       final res = await post(data, updatePassword, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return UpdatePasswordResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -377,10 +377,10 @@ class UserApi {
       };
       final res = await post(data, loadGeneratorDetails, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -399,10 +399,10 @@ class UserApi {
       };
       final res = await post(data, technician_generator_detailsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -422,10 +422,10 @@ class UserApi {
       };
       final res = await post(data, getComplaintHistoryList, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return generatorComplaintResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -445,10 +445,10 @@ class UserApi {
       };
       final res = await post(data, tagLocation, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TagLocationResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -468,10 +468,10 @@ class UserApi {
       };
       final res = await post(data, tagGenerator, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TagGeneratorResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -502,10 +502,10 @@ class UserApi {
       };
       final res = await post(data, submitComplaint, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return SubmitComplaintResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -524,10 +524,10 @@ class UserApi {
       };
       final res = await post(data, ComplaintsSelection, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return ComplaintsSelectionResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -547,10 +547,10 @@ class UserApi {
       };
       final res = await post(data, qrLoginRequest, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return LoginQRResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -571,10 +571,10 @@ class UserApi {
       };
       final res = await post(data, inventory_part_detailsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return Inventory_Part_details_response.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -596,10 +596,10 @@ class UserApi {
       };
       final res = await post(data, inventory_stock_updateAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return loadGeneratorDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -617,10 +617,10 @@ class UserApi {
       };
       final res = await post(data, technician_dashboardAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TechnicianResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -638,10 +638,10 @@ class UserApi {
       };
       final res = await post(data, technician_todays_visitsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TodayVisitResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -659,10 +659,10 @@ class UserApi {
       };
       final res = await post(data, technician_monthly_visitsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TodayVisitResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -683,10 +683,10 @@ class UserApi {
       };
       final res = await post(data, technician_nearby_generatorsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return NearbyGeneratorsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -705,10 +705,10 @@ class UserApi {
       };
       final res = await post(data, getAccountSuggestions, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return AccountSuggestionResonse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -726,11 +726,11 @@ class UserApi {
       };
       final res = await post(data, getPendingComplaintsList, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TechnicianPendingComplaintsResponse.fromJson(
             jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -751,10 +751,10 @@ class UserApi {
       };
       final res = await post(data, loadNumbersApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return TechnicianLoadNumbersResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -796,10 +796,10 @@ class UserApi {
         res = jsonDecode(res);
       }
       if (res != null) {
-        print(res);
+        debugPrint(res);
         return TechnicianAddPaymentCollectionResponse.fromJson(res);
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -820,11 +820,11 @@ class UserApi {
       };
       final res = await post(data, validateOTPApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return PaymentCollectionValidateOTPResponse.fromJson(
             jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -844,10 +844,10 @@ class UserApi {
       };
       final res = await post(data, paymentCollectionListApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return PaymentCollectionResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -865,10 +865,10 @@ class UserApi {
       };
       final res = await post(data, loadTransactionsListApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return PaymentCollectionWalletResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -887,10 +887,10 @@ class UserApi {
       };
       final res = await post(data, technician_complaint_detailsAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return ViewVisitDetailsResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -909,10 +909,10 @@ class UserApi {
       };
       final res = await post(data, technician_complaint_followup_listAPI, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return FollowupListResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -939,10 +939,10 @@ class UserApi {
       };
       final res = await post(data, saveContactApi, {});
       if (res != null) {
-        print(res.body);
+        debugPrint(res.body);
         return AddContactResponse.fromJson(jsonDecode(res.body));
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
@@ -981,10 +981,10 @@ class UserApi {
         res = jsonDecode(res);
       }
       if (res != null) {
-        print(res);
+        debugPrint(res);
         return UpdateComplaintResponse.fromJson(res);
       } else {
-        print("Null Response");
+        debugPrint("Null Response");
         return null;
       }
     } catch (e) {
