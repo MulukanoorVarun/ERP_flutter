@@ -3,7 +3,7 @@ class AttendanceDaywiseResponse {
   String? intime;
   String? outtime;
   String? inlocation;
-  String? outlocation;
+  dynamic? outlocation;
   String? latePenalties;
   int? sessionExists;
 
